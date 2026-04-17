@@ -23,12 +23,23 @@ DO $$ BEGIN
   END IF;
 END $$;
 
--- Thêm từng bảng vào tính năng phát Realtime (bỏ qua nếu đã được thêm)
-ALTER PUBLICATION supabase_realtime ADD TABLE public.affiliate_links;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.leads;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.conversions;
-ALTER PUBLICATION supabase_realtime ADD TABLE public.profiles;
+-- Thêm từng bảng vào tính năng phát Realtime một cách an toàn (tránh lỗi đã tồn tại)
+DO $$ 
+BEGIN 
+  -- Từng bảng một
+  IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'affiliate_links') THEN 
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.affiliate_links; 
+  END IF;
 
--- Nếu có bảng nào bị lỗi do đã tồn tại trong publication, có thể bỏ qua bước trên, 
--- chạy cú pháp này để an toàn hơn:
--- SELECT set_config('realtime.subscription_active', 'on', false);
+  IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'leads') THEN 
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.leads; 
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'conversions') THEN 
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.conversions; 
+  END IF;
+
+  IF NOT EXISTS (SELECT 1 FROM pg_publication_tables WHERE pubname = 'supabase_realtime' AND tablename = 'profiles') THEN 
+    ALTER PUBLICATION supabase_realtime ADD TABLE public.profiles; 
+  END IF;
+END $$;
