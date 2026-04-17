@@ -27,6 +27,7 @@ import AdminStaffManagement from './pages/admin/StaffManagement';
 import AdminCampaignManager from './pages/admin/CampaignManager';
 import AdminLeadsCRM from './pages/admin/LeadsCRM';
 import AdminConversions from './pages/admin/Conversions';
+import AdminPaymentSettings from './pages/admin/PaymentSettings';
 
 import ClickTracker from './pages/public/ClickTracker';
 import Checkout from './pages/public/Checkout';
@@ -173,6 +174,13 @@ const App = () => {
             <ProtectedRoute requiredRole="admin">
               <MainLayout title="Quản Lý Đơn Hàng & Hoa Hồng">
                 <AdminConversions />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/payment-settings" element={
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Cấu Hình Thanh Toán">
+                <AdminPaymentSettings />
               </MainLayout>
             </ProtectedRoute>
           } />

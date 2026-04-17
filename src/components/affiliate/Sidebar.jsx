@@ -162,6 +162,9 @@ const Sidebar = ({ onClose }) => {
                 <NavLink to="/admin/conversions" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Đơn Hàng & Hoa Hồng</span>
                 </NavLink>
+                <NavLink to="/admin/payment-settings" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Cấu Hình Thanh Toán</span>
+                </NavLink>
               </div>
             )}
           </div>

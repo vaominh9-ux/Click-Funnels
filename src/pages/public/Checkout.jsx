@@ -32,6 +32,7 @@ const Checkout = () => {
   const timerRef = useRef(null);
 
   const course = FUNNEL_COURSES[courseId];
+  const [bankConfig, setBankConfig] = useState(BANK_CONFIG);
 
   // Load lead info from sessionStorage
   useEffect(() => {
@@ -52,6 +53,20 @@ const Checkout = () => {
   // Sinh mã thanh toán 1 lần khi component mount
   useEffect(() => {
     setPaymentCode(generatePaymentCode());
+    // Load bank config từ DB (nếu admin đã cấu hình)
+    const loadBankConfig = async () => {
+      try {
+        const { data } = await supabase
+          .from('system_settings')
+          .select('value')
+          .eq('key', 'bank_config')
+          .single();
+        if (data?.value) setBankConfig(data.value);
+      } catch(err) {
+        // Fallback dùng BANK_CONFIG từ config.js
+      }
+    };
+    loadBankConfig();
   }, []);
 
   // Polling: kiểm tra trạng thái thanh toán mỗi 3 giây
@@ -96,7 +111,7 @@ const Checkout = () => {
   const amount = course.price;
   // Nội dung CK: chứa mã thanh toán để SePay nhận diện
   const transferMessage = paymentCode;
-  const qrImage = `https://img.vietqr.io/image/${BANK_CONFIG.bankId}-${BANK_CONFIG.accountNo}-print.png?amount=${amount}&addInfo=${transferMessage}&accountName=${encodeURIComponent(BANK_CONFIG.accountName)}`;
+  const qrImage = `https://img.vietqr.io/image/${bankConfig.bankId}-${bankConfig.accountNo}-print.png?amount=${amount}&addInfo=${transferMessage}&accountName=${encodeURIComponent(bankConfig.accountName)}`;
 
   const handleCreateOrder = async () => {
     if (!leadInfo) {
@@ -224,15 +239,15 @@ const Checkout = () => {
           <div className="bank-details">
             <div className="bank-info-row">
               <span>Ngân hàng:</span>
-              <strong>BIDV</strong>
+              <strong>{bankConfig.bankName || 'BIDV'}</strong>
             </div>
             <div className="bank-info-row">
               <span>Chủ tài khoản:</span>
-              <strong>{BANK_CONFIG.accountName}</strong>
+              <strong>{bankConfig.accountName}</strong>
             </div>
             <div className="bank-info-row">
               <span>Số tài khoản:</span>
-              <strong>{BANK_CONFIG.accountNo}</strong>
+              <strong>{bankConfig.accountNo}</strong>
             </div>
             <div className="bank-info-row">
               <span>Số tiền:</span>
