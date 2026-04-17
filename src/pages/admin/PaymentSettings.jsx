@@ -192,8 +192,7 @@ const PaymentSettings = () => {
           </div>
         </div>
 
-        {/* SePay API Config */}
-        <div className="ps-card" style={{marginTop: '24px'}}>
+        <div className="ps-card">
           <div className="ps-card-header">
             <Webhook size={20} />
             <h3>Kết Nối Hệ Thống SePay</h3>
