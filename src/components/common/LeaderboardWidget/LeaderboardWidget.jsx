@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../../lib/supabase';
-import { Trophy, Users, TrendingUp, Medal, ChevronDown } from 'lucide-react';
+import { Trophy, Users, TrendingUp, Medal, ChevronDown, Crown } from 'lucide-react';
 import './LeaderboardWidget.css';
 
 const RANK_STYLES = [
-  { bg: 'linear-gradient(135deg, #F59E0B, #D97706)', color: '#fff', icon: '🥇', shadow: '0 4px 15px rgba(245,158,11,0.4)' },
-  { bg: 'linear-gradient(135deg, #94A3B8, #64748B)', color: '#fff', icon: '🥈', shadow: '0 4px 15px rgba(148,163,184,0.4)' },
-  { bg: 'linear-gradient(135deg, #D97706, #92400E)', color: '#fff', icon: '🥉', shadow: '0 4px 15px rgba(217,119,6,0.3)' },
+  { rank: 1, bg: 'linear-gradient(135deg, #F59E0B, #D97706)',     color: '#fff', icon: <Crown size={18} />, shadow: '0 8px 25px rgba(245,158,11,0.5)' },
+  { rank: 2, bg: 'linear-gradient(135deg, #94A3B8, #64748B)',     color: '#fff', icon: <Medal size={16} />, shadow: '0 4px 15px rgba(148,163,184,0.4)' },
+  { rank: 3, bg: 'linear-gradient(135deg, #D97706, #92400E)',     color: '#fff', icon: <Medal size={16} />, shadow: '0 4px 15px rgba(217,119,6,0.3)' },
 ];
 
 const LeaderboardWidget = ({ currentUserId }) => {
@@ -61,6 +61,13 @@ const LeaderboardWidget = ({ currentUserId }) => {
     return name.split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
   };
 
+  // Reorder for podium: [Rank 2, Rank 1, Rank 3]
+  const top3 = data.slice(0, 3);
+  let podiumOrder = [];
+  if (top3.length === 1) podiumOrder = [null, top3[0], null];
+  else if (top3.length === 2) podiumOrder = [top3[1], top3[0], null];
+  else if (top3.length === 3) podiumOrder = [top3[1], top3[0], top3[2]];
+
   return (
     <div className="lb-widget">
       <div className="lb-header">
@@ -105,19 +112,28 @@ const LeaderboardWidget = ({ currentUserId }) => {
         <>
           {/* TOP 3 PODIUM */}
           <div className="lb-podium">
-            {data.slice(0, 3).map((item, idx) => (
-              <div key={item.affiliate_id} className={`lb-podium-card rank-${idx + 1}`} style={{ boxShadow: RANK_STYLES[idx]?.shadow }}>
-                <div className="lb-podium-rank" style={{ background: RANK_STYLES[idx]?.bg }}>
-                  {RANK_STYLES[idx]?.icon}
+            {podiumOrder.map((item, idx) => {
+              // original rank index: index 0 -> rank 2, index 1 -> rank 1, index 2 -> rank 3
+              const styleIdx = idx === 0 ? 1 : idx === 1 ? 0 : 2; 
+              
+              if (!item) {
+                return <div key={`empty-${idx}`} className="lb-podium-card-empty"></div>;
+              }
+              
+              return (
+                <div key={item.affiliate_id} className={`lb-podium-card rank-${styleIdx + 1}`} style={{ boxShadow: RANK_STYLES[styleIdx]?.shadow }}>
+                  <div className={`lb-podium-rank r-${styleIdx+1}`} style={{ background: RANK_STYLES[styleIdx]?.bg, color: RANK_STYLES[styleIdx]?.color }}>
+                    {RANK_STYLES[styleIdx]?.icon}
+                  </div>
+                  <div className={`lb-podium-avatar a-${styleIdx+1}`} style={{ background: RANK_STYLES[styleIdx]?.bg }}>
+                    {getInitials(item.full_name)}
+                  </div>
+                  <div className="lb-podium-name">{item.full_name || 'Ẩn danh'}</div>
+                  <div className="lb-podium-value">{formatValue(item)}{tab === 'revenue' && ' đ'}</div>
+                  <div className="lb-podium-tier">{item.tier?.toUpperCase() || 'STARTER'}</div>
                 </div>
-                <div className="lb-podium-avatar" style={{ background: RANK_STYLES[idx]?.bg }}>
-                  {getInitials(item.full_name)}
-                </div>
-                <div className="lb-podium-name">{item.full_name || 'Ẩn danh'}</div>
-                <div className="lb-podium-value">{formatValue(item)}</div>
-                <div className="lb-podium-tier">{item.tier?.toUpperCase() || 'STARTER'}</div>
-              </div>
-            ))}
+              );
+            })}
           </div>
 
           {/* REST OF LIST */}
