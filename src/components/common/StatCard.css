@@ -1,0 +1,62 @@
+.stat-card {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.stat-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.stat-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--cf-text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.stat-icon {
+  color: var(--cf-primary);
+  opacity: 0.8;
+}
+
+.stat-value {
+  font-size: 32px;
+  font-weight: 700;
+  color: var(--cf-text-main);
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
+.currency-symbol {
+  font-size: 0.6em;
+  font-weight: 500;
+  color: var(--cf-text-muted);
+  vertical-align: super; /* Makes it look like a superscript */
+  margin-left: 2px;
+}
+
+.stat-footer {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+  margin-top: 4px;
+}
+
+.stat-trend.positive {
+  color: #10B981; /* Emerald green */
+  font-weight: 600;
+}
+
+.stat-trend.negative {
+  color: #EF4444; /* Red */
+  font-weight: 600;
+}
+
+.stat-subtitle {
+  color: var(--cf-text-muted);
+}

@@ -1,0 +1,114 @@
+.campaigns-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+  gap: 24px;
+}
+
+.campaign-card {
+  padding: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.campaign-image {
+  height: 160px;
+  background-size: cover;
+  background-position: center;
+  background-color: #E2E8F0;
+  border-bottom: 1px solid var(--cf-border);
+}
+
+.campaign-body {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.campaign-name {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--cf-text-main);
+  margin: 0;
+}
+
+.campaign-desc {
+  font-size: 14px;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.campaign-link-box {
+  display: flex;
+  background: var(--cf-bg-canvas);
+  border: 1px solid var(--cf-border);
+  border-radius: 6px;
+  overflow: hidden;
+  align-items: center;
+}
+
+.link-text {
+  flex: 1;
+  padding: 10px 12px;
+  font-size: 13px;
+  font-family: monospace;
+  color: var(--cf-text-main);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.copy-btn {
+  background: white;
+  border-left: 1px solid var(--cf-border);
+  padding: 0 16px;
+  height: 100%;
+  align-self: stretch;
+  color: var(--cf-text-muted);
+  font-weight: 500;
+  transition: all 0.2s;
+}
+
+.copy-btn:hover {
+  background: var(--cf-bg-canvas);
+  color: var(--cf-primary);
+}
+
+.copy-btn.copied {
+  color: #10B981;
+  background: #ECFDF5;
+}
+
+.cf-btn-outline {
+  background: transparent;
+  border: 1px solid var(--cf-border);
+  padding: 8px 16px;
+  border-radius: 6px;
+  color: var(--cf-text-main);
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+}
+
+.cf-btn-outline:hover {
+  background: var(--cf-bg-canvas);
+}
+
+.cf-btn-icon {
+  background: transparent;
+  color: var(--cf-text-muted);
+  display: flex;
+  padding: 8px;
+  border-radius: 6px;
+}
+
+.cf-btn-icon:hover {
+  background: var(--cf-bg-canvas);
+  color: var(--cf-primary);
+}
+
+.text-sm {
+  font-size: 13px;
+}

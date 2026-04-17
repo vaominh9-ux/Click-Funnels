@@ -1,0 +1,120 @@
+.settings-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+
+@media (max-width: 900px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.settings-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid var(--cf-border);
+  padding-bottom: 16px;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.form-group label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cf-text-main);
+}
+
+.cf-input {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--cf-border);
+  background: var(--cf-bg-surface);
+  color: var(--cf-text-main);
+  font-family: inherit;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.cf-input:focus {
+  border-color: var(--cf-primary);
+  box-shadow: 0 0 0 3px rgba(37,99,235, 0.1);
+}
+
+.cf-input:disabled {
+  background: var(--cf-bg-canvas);
+  color: var(--cf-text-muted);
+  cursor: not-allowed;
+}
+
+.w-100 {
+  width: 100%;
+}
+
+.cf-btn-primary {
+  background: var(--cf-primary);
+  color: white;
+  padding: 10px 20px;
+  border-radius: 6px;
+  font-weight: 500;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  transition: background 0.2s;
+}
+
+.cf-btn-primary:hover {
+  background: var(--cf-primary-hover);
+}
+
+.flex-end {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.cf-alert {
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
+  padding: 14px 16px;
+  border-radius: 6px;
+  font-size: 13px;
+  color: #1E3A8A;
+  line-height: 1.5;
+}
+
+.settings-tabs {
+  display: flex;
+  gap: 32px;
+  border-bottom: 1px solid var(--cf-border);
+  margin-bottom: 24px;
+}
+
+.settings-tab-btn {
+  background: transparent;
+  border: none;
+  padding: 0 0 12px 0;
+  font-size: 15px;
+  font-weight: 500;
+  color: var(--cf-text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.settings-tab-btn:hover {
+  color: var(--cf-text-main);
+}
+
+.settings-tab-btn.active {
+  color: var(--cf-primary);
+  font-weight: 600;
+  border-bottom: 2px solid var(--cf-primary);
+}
