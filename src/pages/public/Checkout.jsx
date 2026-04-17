@@ -1,9 +1,20 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { FUNNEL_COURSES, BANK_CONFIG } from '../funnels/config';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
+import { CheckCircle, Clock, AlertCircle, Loader2, Copy, ShieldCheck } from 'lucide-react';
 import './Checkout.css';
+
+// Sinh mã thanh toán duy nhất: CF + 6 ký tự ngẫu nhiên
+const generatePaymentCode = () => {
+  const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Bỏ I,O,0,1 tránh nhầm
+  let code = 'CF';
+  for (let i = 0; i < 6; i++) {
+    code += chars.charAt(Math.floor(Math.random() * chars.length));
+  }
+  return code;
+};
 
 const Checkout = () => {
   const { courseId } = useParams();
@@ -14,20 +25,23 @@ const Checkout = () => {
   
   const [loading, setLoading] = useState(false);
   const [leadInfo, setLeadInfo] = useState(null);
+  const [paymentCode, setPaymentCode] = useState('');
+  const [paymentStatus, setPaymentStatus] = useState('idle'); // idle | waiting | success | error
+  const [conversionId, setConversionId] = useState(null);
+  const [elapsedTime, setElapsedTime] = useState(0);
+  const timerRef = useRef(null);
 
   const course = FUNNEL_COURSES[courseId];
 
+  // Load lead info from sessionStorage
   useEffect(() => {
-    // Kéo thông tin Lead từ SessionStorage (do RLS chặn Select public)
     if (!leadId) return;
-    
     try {
       const cachedLead = sessionStorage.getItem('tempLeadInfo');
       if (cachedLead) {
         const parsed = JSON.parse(cachedLead);
         if (parsed.id === leadId) {
           setLeadInfo(parsed);
-          return;
         }
       }
     } catch(err) {
@@ -35,48 +49,90 @@ const Checkout = () => {
     }
   }, [leadId]);
 
+  // Sinh mã thanh toán 1 lần khi component mount
+  useEffect(() => {
+    setPaymentCode(generatePaymentCode());
+  }, []);
+
+  // Realtime listener: theo dõi khi SePay webhook cập nhật status → approved
+  useEffect(() => {
+    if (!conversionId) return;
+
+    const channel = supabase
+      .channel(`payment_${conversionId}`)
+      .on('postgres_changes', {
+        event: 'UPDATE',
+        schema: 'public',
+        table: 'conversions',
+        filter: `id=eq.${conversionId}`
+      }, (payload) => {
+        if (payload.new.status === 'approved') {
+          setPaymentStatus('success');
+          if (timerRef.current) clearInterval(timerRef.current);
+          addToast('🎉 Thanh toán thành công! Đơn hàng đã được xác nhận.', 'success');
+        }
+      })
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [conversionId]);
+
+  // Timer đếm thời gian chờ
+  useEffect(() => {
+    if (paymentStatus === 'waiting') {
+      timerRef.current = setInterval(() => {
+        setElapsedTime(prev => prev + 1);
+      }, 1000);
+    }
+    return () => {
+      if (timerRef.current) clearInterval(timerRef.current);
+    };
+  }, [paymentStatus]);
+
   if (!course) {
     return <div className="checkout-error">Không tìm thấy khóa học này!</div>;
   }
 
-  // Khởi tạo link VietQR
   const amount = course.price;
-  const message = `Thanh toan khoa hoc ${leadInfo?.phone || ''}`.replace(/\s+/g, '%20');
-  const qrImage = `https://img.vietqr.io/image/${BANK_CONFIG.bankId}-${BANK_CONFIG.accountNo}-print.png?amount=${amount}&addInfo=${message}&accountName=${BANK_CONFIG.accountName}`;
+  // Nội dung CK: chứa mã thanh toán để SePay nhận diện
+  const transferMessage = paymentCode;
+  const qrImage = `https://img.vietqr.io/image/${BANK_CONFIG.bankId}-${BANK_CONFIG.accountNo}-print.png?amount=${amount}&addInfo=${transferMessage}&accountName=${encodeURIComponent(BANK_CONFIG.accountName)}`;
 
-  const handleConfirmPayment = async () => {
+  const handleCreateOrder = async () => {
     if (!leadInfo) {
-      addToast('Lỗi: Không tìm thấy thông tin đăng ký (Lead ID).', 'error');
+      addToast('Lỗi: Không tìm thấy thông tin đăng ký.', 'error');
       return;
     }
     
     setLoading(true);
     try {
-      // Tính hoa hồng tạm thời (mặc định cho admin duyệt). Lưu ý: hoa hồng thực tế sẽ tính bởi Admin 
-      // Nhưng ta cứ chèn log vào conversions. Cấu hình tỉ lệ hoa hồng thường nằm ở logic backend
-      
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from('conversions')
         .insert([{
-          affiliate_id: leadInfo.affiliate_id, // Gắn vào ctv
+          affiliate_id: leadInfo.affiliate_id,
           sale_amount: amount,
-          commission_amount: 0, // Mặc định 0, admin check
-          status: 'pending', // Chờ Admin check bank
+          commission_amount: 0,
+          status: 'pending',
           customer_name: leadInfo.name,
           product_name: course.name,
+          payment_code: paymentCode,
           customer_info: {
             lead_id: leadInfo.id,
             phone: leadInfo.phone,
             notes: `Mua ${course.name}`
           }
-        }]);
+        }])
+        .select('id')
+        .single();
 
       if (error) throw error;
       
-      addToast('Gửi yêu cầu thành công! Vui lòng chờ admin xác nhận.', 'success');
-      
-      // Chuyển về trang lỗi hoặc trang cảm ơn
-      setTimeout(() => navigate('/'), 2000);
+      setConversionId(data.id);
+      setPaymentStatus('waiting');
+      setElapsedTime(0);
+      addToast('Đơn hàng đã được tạo. Quét mã QR để thanh toán!', 'success');
       
     } catch (error) {
       console.error(error);
@@ -85,6 +141,55 @@ const Checkout = () => {
       setLoading(false);
     }
   };
+
+  const handleCopyCode = () => {
+    navigator.clipboard.writeText(paymentCode);
+    addToast('Đã sao chép mã thanh toán!', 'success');
+  };
+
+  const formatTime = (seconds) => {
+    const m = Math.floor(seconds / 60);
+    const s = seconds % 60;
+    return `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+  };
+
+  // ---- UI: Thanh toán thành công ----
+  if (paymentStatus === 'success') {
+    return (
+      <div className="checkout-container">
+        <div className="payment-success-card">
+          <div className="success-icon-wrapper">
+            <CheckCircle size={64} color="#059669" />
+          </div>
+          <h2>Thanh Toán Thành Công! 🎉</h2>
+          <p className="success-subtitle">Đơn hàng của bạn đã được xác nhận tự động.</p>
+          
+          <div className="success-details">
+            <div className="success-row">
+              <span>Khóa học:</span>
+              <strong>{course.name}</strong>
+            </div>
+            <div className="success-row">
+              <span>Số tiền:</span>
+              <strong style={{color: '#059669'}}>{amount.toLocaleString('vi-VN')} đ</strong>
+            </div>
+            <div className="success-row">
+              <span>Mã đơn:</span>
+              <strong>{paymentCode}</strong>
+            </div>
+          </div>
+          
+          <p style={{color: '#6B7280', fontSize: '14px', marginTop: '16px'}}>
+            Bạn sẽ nhận được email xác nhận và link truy cập khóa học trong ít phút.
+          </p>
+          
+          <button className="checkout-btn" onClick={() => navigate('/')} style={{marginTop: '24px'}}>
+            Về Trang Chủ
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="checkout-container">
@@ -108,7 +213,7 @@ const Checkout = () => {
           </div>
           
           <div className="security-badges">
-            Thanh toán an toàn 100% | Cam kết hoàn tiền 7 ngày
+            <ShieldCheck size={16} /> Thanh toán an toàn 100% | Cam kết hoàn tiền 7 ngày
           </div>
         </div>
 
@@ -122,6 +227,10 @@ const Checkout = () => {
 
           <div className="bank-details">
             <div className="bank-info-row">
+              <span>Ngân hàng:</span>
+              <strong>BIDV</strong>
+            </div>
+            <div className="bank-info-row">
               <span>Chủ tài khoản:</span>
               <strong>{BANK_CONFIG.accountName}</strong>
             </div>
@@ -133,19 +242,52 @@ const Checkout = () => {
               <span>Số tiền:</span>
               <strong className="text-blue">{amount.toLocaleString('vi-VN')} đ</strong>
             </div>
-            <div className="bank-info-row">
+            <div className="bank-info-row" style={{background: 'rgba(245,158,11,0.1)', padding: '8px 12px', borderRadius: '8px', border: '1px dashed #F59E0B'}}>
               <span>Nội dung CK:</span>
-              <strong className="text-orange">{message.replace(/%20/g, ' ')}</strong>
+              <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                <strong className="text-orange" style={{fontSize: '18px', letterSpacing: '2px'}}>{paymentCode}</strong>
+                <button onClick={handleCopyCode} style={{background: 'none', border: 'none', cursor: 'pointer', color: '#F59E0B', padding: '2px'}}>
+                  <Copy size={16} />
+                </button>
+              </div>
             </div>
           </div>
 
-          <button 
-            className="checkout-btn" 
-            onClick={handleConfirmPayment}
-            disabled={loading || !leadInfo}
-          >
-            {loading ? 'Đang Xử Lý...' : 'Tôi Đã Chuyển Khoản'}
-          </button>
+          {/* Trạng thái chờ thanh toán */}
+          {paymentStatus === 'waiting' && (
+            <div className="payment-waiting-box">
+              <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px'}}>
+                <Loader2 size={20} className="spin" style={{color: '#3B82F6'}} />
+                <span style={{fontWeight: 600, color: '#1E40AF'}}>Đang chờ xác nhận thanh toán...</span>
+              </div>
+              <div style={{fontSize: '13px', color: '#6B7280'}}>
+                Thời gian chờ: <strong>{formatTime(elapsedTime)}</strong> — Hệ thống sẽ tự động xác nhận khi nhận được tiền.
+              </div>
+              {elapsedTime > 300 && (
+                <div style={{marginTop: '8px', fontSize: '13px', color: '#DC2626', display: 'flex', alignItems: 'center', gap: '6px'}}>
+                  <AlertCircle size={14} />
+                  Quá 5 phút chưa nhận được. Vui lòng kiểm tra lại nội dung chuyển khoản hoặc liên hệ hỗ trợ.
+                </div>
+              )}
+            </div>
+          )}
+
+          {paymentStatus === 'idle' && (
+            <button 
+              className="checkout-btn" 
+              onClick={handleCreateOrder}
+              disabled={loading || !leadInfo}
+            >
+              {loading ? 'Đang Tạo Đơn...' : 'Xác Nhận & Chuyển Khoản'}
+            </button>
+          )}
+
+          {paymentStatus === 'waiting' && (
+            <div style={{textAlign: 'center', marginTop: '12px', fontSize: '13px', color: '#9CA3AF'}}>
+              <Clock size={14} style={{verticalAlign: 'middle', marginRight: '4px'}} />
+              Trang này sẽ tự động cập nhật khi nhận được thanh toán
+            </div>
+          )}
         </div>
       </div>
     </div>

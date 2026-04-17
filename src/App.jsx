@@ -113,7 +113,7 @@ const App = () => {
 
           <Route path="/portal/customers" element={
             <ProtectedRoute>
-              <MainLayout title="Khách Hàng & CTV">
+              <MainLayout title="Khách Hàng Của Tôi">
                 <MyCustomers />
               </MainLayout>
             </ProtectedRoute>

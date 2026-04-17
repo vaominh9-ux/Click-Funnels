@@ -82,7 +82,7 @@ const Sidebar = ({ onClose }) => {
 
           <NavLink to="/portal/customers" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={onClose}>
             <Users size={18} />
-            <span>Khách Hàng & CTV</span>
+            <span>Khách Hàng Của Tôi</span>
           </NavLink>
 
           <div className="sidebar-divider"></div>

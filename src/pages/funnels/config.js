@@ -26,7 +26,7 @@ export const FUNNEL_COURSES = {
 };
 
 export const BANK_CONFIG = {
-  bankId: '970436', // Bin Code của Vietcombank. Có thể đổi (MB: 970422, Techcombank: 970415)
-  accountNo: '0123456789',
-  accountName: 'DUHAVA ACADEMY',
+  bankId: '970418',         // BIN Code BIDV
+  accountNo: '96247NTH195', // Số tài khoản VA BIDV
+  accountName: 'NGUYEN TRONG HUU',
 };

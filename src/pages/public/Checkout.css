@@ -171,3 +171,93 @@
     border-bottom: 1px solid #e2e8f0;
   }
 }
+
+/* Payment Success Card */
+.payment-success-card {
+  background: white;
+  max-width: 520px;
+  width: 100%;
+  border-radius: 20px;
+  padding: 48px 40px;
+  text-align: center;
+  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1);
+  animation: fadeInUp 0.5s ease-out;
+}
+
+.success-icon-wrapper {
+  margin-bottom: 20px;
+  animation: bounceIn 0.6s ease-out;
+}
+
+.payment-success-card h2 {
+  font-size: 1.6rem;
+  color: #059669;
+  margin-bottom: 8px;
+}
+
+.success-subtitle {
+  color: #6B7280;
+  font-size: 0.95rem;
+  margin-bottom: 24px;
+}
+
+.success-details {
+  background: #F0FDF4;
+  border: 1px solid #BBF7D0;
+  border-radius: 12px;
+  padding: 20px;
+  text-align: left;
+}
+
+.success-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid #DCFCE7;
+  font-size: 0.9rem;
+}
+
+.success-row:last-child {
+  border-bottom: none;
+}
+
+.success-row span {
+  color: #6B7280;
+}
+
+/* Payment Waiting Box */
+.payment-waiting-box {
+  background: rgba(59,130,246,0.05);
+  border: 1px solid rgba(59,130,246,0.2);
+  border-radius: 12px;
+  padding: 16px;
+  margin-bottom: 16px;
+  animation: pulse-border 2s infinite;
+}
+
+@keyframes pulse-border {
+  0%, 100% { border-color: rgba(59,130,246,0.2); }
+  50% { border-color: rgba(59,130,246,0.5); }
+}
+
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes bounceIn {
+  0% { transform: scale(0.3); opacity: 0; }
+  50% { transform: scale(1.1); }
+  80% { transform: scale(0.95); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.spin {
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
