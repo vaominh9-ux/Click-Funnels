@@ -8,6 +8,7 @@ const Sidebar = ({ onClose }) => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
+  const [isAdmin, setIsAdmin] = useState(false);
 
   const [openGroups, setOpenGroups] = useState({
     campaigns: true,
@@ -28,6 +29,7 @@ const Sidebar = ({ onClose }) => {
         .single();
       if (data) {
         setProfile(data);
+        setIsAdmin(data.role === 'admin');
         if (data.avatar_url) {
           setAvatarUrl(data.avatar_url);
         }
@@ -62,10 +64,6 @@ const Sidebar = ({ onClose }) => {
             <span style={{fontWeight: 800, color: '#FFFFFF', letterSpacing: '-0.3px', fontSize: '20px'}}>Click</span>
             <span style={{fontWeight: 400, color: '#E5E7EB', letterSpacing: '0px', fontSize: '20px'}}>Funnels</span>
           </div>
-        </div>
-        <div className="header-actions" style={{display: 'flex', gap: '12px', color: '#9CA3AF'}}>
-          <Search size={18} />
-          <Bell size={18} />
         </div>
       </div>
       
@@ -122,7 +120,7 @@ const Sidebar = ({ onClose }) => {
             {openGroups.network && (
               <div className="nav-sub-items-tree">
                 <NavLink to="/portal/network/direct" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <span className="nav-sub-item-text">Trực Tiếp F1</span>
+                  <span className="nav-sub-item-text">Quản Lý CTV</span>
                 </NavLink>
                 <NavLink to="/affiliate/ledger" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Sao Kê</span>

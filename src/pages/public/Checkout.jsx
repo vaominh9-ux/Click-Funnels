@@ -18,13 +18,21 @@ const Checkout = () => {
   const course = FUNNEL_COURSES[courseId];
 
   useEffect(() => {
-    // Kéo thông tin Lead lên để biết Affiliate nào
-    const fetchLead = async () => {
-      if (!leadId) return;
-      const { data } = await supabase.from('leads').select('*').eq('id', leadId).single();
-      if (data) setLeadInfo(data);
-    };
-    fetchLead();
+    // Kéo thông tin Lead từ SessionStorage (do RLS chặn Select public)
+    if (!leadId) return;
+    
+    try {
+      const cachedLead = sessionStorage.getItem('tempLeadInfo');
+      if (cachedLead) {
+        const parsed = JSON.parse(cachedLead);
+        if (parsed.id === leadId) {
+          setLeadInfo(parsed);
+          return;
+        }
+      }
+    } catch(err) {
+      console.warn('Could not read lead from sessionStorage:', err);
+    }
   }, [leadId]);
 
   if (!course) {
@@ -51,10 +59,16 @@ const Checkout = () => {
         .from('conversions')
         .insert([{
           affiliate_id: leadInfo.affiliate_id, // Gắn vào ctv
-          lead_id: leadInfo.id,
           sale_amount: amount,
+          commission_amount: 0, // Mặc định 0, admin check
           status: 'pending', // Chờ Admin check bank
-          notes: `Mua ${course.name}`
+          customer_name: leadInfo.name,
+          product_name: course.name,
+          customer_info: {
+            lead_id: leadInfo.id,
+            phone: leadInfo.phone,
+            notes: `Mua ${course.name}`
+          }
         }]);
 
       if (error) throw error;

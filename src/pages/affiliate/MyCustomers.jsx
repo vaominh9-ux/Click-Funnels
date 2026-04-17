@@ -25,27 +25,68 @@ const MyCustomers = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      // Lấy tất cả conversions của affiliate này (không giới hạn 5 như Dashboard)
-      const { data: convData, error } = await supabase
+      // 1. Fetch ALL leads for this affiliate (Ngay khi vừa điền Form)
+      const { data: leadsData, error: leadsErr } = await supabase
+        .from('leads')
+        .select('*')
+        .eq('affiliate_id', user.id)
+        .order('created_at', { ascending: false });
+
+      // 2. Lấy tất cả conversions của affiliate này (Đã qua trang Checkout)
+      const { data: convData, error: convErr } = await supabase
         .from('conversions')
         .select('*, campaigns(name)')
         .eq('affiliate_id', user.id)
-        .neq('type', 'upline_commission') // Loại bỏ commission từ tuyến dưới
-        .order('created_at', { ascending: false });
+        .neq('type', 'upline_commission');
 
-      if (error) {
-        console.error('Error loading customers:', error);
+      if (leadsErr || convErr) {
+        console.error('Error loading customers:', leadsErr || convErr);
         addToast('Không thể tải danh sách khách hàng', 'error');
         return;
       }
 
-      setConversions(convData || []);
+      // 3. Hợp nhất: Nối Lead chưa thanh toán và Lead đã thanh toán
+      const mergedList = (leadsData || []).map(lead => {
+         // Tìm Conversion tương ứng từ Lead ID
+         const matchingConv = (convData || []).find(c => c.customer_info?.lead_id === lead.id);
+         
+         return {
+            id: lead.id,
+            customer_name: lead.name,
+            product_name: matchingConv ? (matchingConv.campaigns?.name || matchingConv.product_name) : (lead.notes?.replace('Đăng ký từ khóa học: ', '') || 'Khóa học'),
+            created_at: lead.created_at,
+            status: matchingConv ? matchingConv.status : 'unpaid', // Thêm trạng thái Chưa Thanh Toán
+            sale_amount: matchingConv ? matchingConv.sale_amount : 0,
+            commission_amount: matchingConv ? matchingConv.commission_amount : 0,
+         };
+      });
+
+      // Nhét bổ sung các Conversions cũ (không map được qua lead)
+      (convData || []).forEach(c => {
+         const leadID = c.customer_info?.lead_id;
+         if (!leadsData?.find(l => l.id === leadID)) {
+             mergedList.push({
+                 id: c.id,
+                 customer_name: c.customer_name,
+                 product_name: c.campaigns?.name || c.product_name,
+                 created_at: c.created_at,
+                 status: c.status,
+                 sale_amount: c.sale_amount,
+                 commission_amount: c.commission_amount
+             });
+         }
+      });
+      
+      // Sắp xếp lại theo thời gian mới nhất
+      mergedList.sort((a, b) => new Date(b.created_at) - new Date(a.created_at));
+
+      setConversions(mergedList);
 
       // Lấy danh sách campaigns để làm bộ lọc
       const uniqueCampaigns = [];
       const seen = new Set();
-      (convData || []).forEach(c => {
-        const name = c.campaigns?.name || c.product_name || 'Chưa phân loại';
+      mergedList.forEach(c => {
+        const name = c.product_name || 'Chưa phân loại';
         if (!seen.has(name)) {
           seen.add(name);
           uniqueCampaigns.push(name);
@@ -54,12 +95,13 @@ const MyCustomers = () => {
       setCampaigns(uniqueCampaigns);
 
       // Tính stats
-      const approved = (convData || []).filter(c => c.status === 'approved');
-      const pending = (convData || []).filter(c => c.status === 'pending');
+      const approved = mergedList.filter(c => c.status === 'approved');
+      const pending = mergedList.filter(c => c.status === 'pending');
+      const unpaid = mergedList.filter(c => c.status === 'unpaid');
       const totalCommission = approved.reduce((sum, c) => sum + (c.commission_amount || 0), 0);
 
       setStats({
-        total: (convData || []).length,
+        total: mergedList.length,
         approved: approved.length,
         pending: pending.length,
         totalCommission
@@ -89,6 +131,7 @@ const MyCustomers = () => {
     switch (status) {
       case 'approved': return <span className="mc-badge mc-badge-approved"><CheckCircle2 size={12} /> Thành công</span>;
       case 'rejected': return <span className="mc-badge mc-badge-rejected"><XCircle size={12} /> Từ chối</span>;
+      case 'unpaid': return <span className="mc-badge" style={{backgroundColor: '#F3F4F6', color: '#4B5563', border: '1px solid #E5E7EB'}}><Clock size={12} /> Chưa thanh toán</span>;
       default: return <span className="mc-badge mc-badge-pending"><Clock size={12} /> Chờ duyệt</span>;
     }
   };
@@ -156,6 +199,7 @@ const MyCustomers = () => {
             <option value="all">Mọi trạng thái</option>
             <option value="approved">Thành công</option>
             <option value="pending">Chờ duyệt</option>
+            <option value="unpaid">Chưa thanh toán</option>
             <option value="rejected">Từ chối</option>
           </select>
         </div>
@@ -169,7 +213,7 @@ const MyCustomers = () => {
               <tr>
                 <th>Khách Hàng</th>
                 <th>Khóa Học / Sản Phẩm</th>
-                <th>Ngày Mua</th>
+                <th>Ngày Cập Nhật</th>
                 <th>Trạng Thái</th>
                 <th style={{textAlign: 'right'}}>Giá Trị Đơn</th>
                 <th style={{textAlign: 'right'}}>Hoa Hồng</th>
@@ -207,7 +251,7 @@ const MyCustomers = () => {
                     </div>
                   </td>
                   <td>
-                    <span className="mc-course-tag">{conv.campaigns?.name || conv.product_name || 'Sản phẩm'}</span>
+                    <span className="mc-course-tag">{conv.product_name}</span>
                   </td>
                   <td className="text-muted">{formatDate(conv.created_at)}</td>
                   <td>{getStatusBadge(conv.status)}</td>

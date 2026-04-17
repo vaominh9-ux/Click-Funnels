@@ -19,21 +19,67 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
       const refCode = getRefCode();
       let finalAffiliateId = null;
 
-      // 1. Gọi RPC để dò xem có Ref Code hợp lệ không
-      if (refCode) {
+      // 1. Dò xem có Ref Code hợp lệ không và cơ chế Affiliate Trọn Đời (Lifetime)
+      let lifetimeMatched = false;
+      
+      // Ưu tiên 1 (Lifetime): Tìm xem Email này đã từng map với CTV nào chưa?
+      if (formData.email) {
+        const { data: existingLead } = await supabase
+          .from('leads')
+          .select('affiliate_id')
+          .eq('email', formData.email)
+          .not('affiliate_id', 'is', null)
+          .order('created_at', { ascending: true })
+          .limit(1)
+          .single();
+          
+        if (existingLead && existingLead.affiliate_id) {
+          finalAffiliateId = existingLead.affiliate_id;
+          lifetimeMatched = true;
+          console.log('Lifetime Affiliate matched via Email:', finalAffiliateId);
+        }
+      }
+
+      // Ưu tiên 2: Truy vết theo link hiện tại nếu chưa có lịch sử Lifetime
+      if (!lifetimeMatched && refCode) {
+        // Cố gắng gọi RPC (nếu đã chạy migration)
         const { data: refData, error: refError } = await supabase.rpc('record_affiliate_lead', {
           p_ref_code: refCode
         });
         
         if (!refError && refData?.success) {
           finalAffiliateId = refData.affiliate_id;
+        } else {
+          // Fallback: Nếu RPC bị lỗi (ví dụ chưa chạy SQL v6), tự query trực tiếp
+          console.warn('RPC record_affiliate_lead failed or missing, falling back to direct query...');
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('id')
+            .eq('ref_code', refCode)
+            .single();
+            
+          if (profile) {
+            finalAffiliateId = profile.id;
+          }
         }
       }
 
-      // 2. Chèn vào bảng leads để Admin dễ chốt
-      const { data: newLead, error: insertError } = await supabase
+      // 2. Tạo ID trước trên Frontend để tránh lỗi RLS (Row Level Security) khi Select back
+      const generateUUID = () => {
+        if (typeof crypto !== 'undefined' && crypto.randomUUID) return crypto.randomUUID();
+        return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, c => {
+          let r = Math.random() * 16 | 0, v = c === 'x' ? r : (r & 0x3 | 0x8);
+          return v.toString(16);
+        });
+      };
+      
+      const newLeadId = generateUUID();
+
+      // 3. Chèn vào bảng leads để Admin dễ chốt
+      const { error: insertError } = await supabase
         .from('leads')
         .insert([{
+          id: newLeadId,
           name: formData.name,
           phone: formData.phone,
           email: formData.email,
@@ -41,14 +87,21 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
           source: refCode ? 'referral' : 'direct',
           stage: 'new',
           notes: `Đăng ký từ khóa học: ${courseName}`
-        }])
-        .select()
-        .single();
+        }]);
 
       if (insertError) throw insertError;
 
-      // 3. Chuyển sang Checkout
-      navigate(`/checkout/${courseId}?lead_id=${newLead.id}`);
+      // Lưu lại cache thông tin Lead vào SessionStorage để sang trang Checkout xài (Vượt qua lỗi RLS Select)
+      sessionStorage.setItem('tempLeadInfo', JSON.stringify({
+        id: newLeadId,
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        affiliate_id: finalAffiliateId
+      }));
+
+      // 4. Chuyển sang Checkout với ID vừa tạo
+      navigate(`/checkout/${courseId}?lead_id=${newLeadId}`);
 
     } catch (err) {
       console.error('Lỗi đăng ký Lead:', err);
