@@ -52,8 +52,8 @@ const AdminPayouts = () => {
 
   const totalUnpaid = pendingProfiles.reduce((s, p) => s + Number(p.balance || 0), 0);
 
-  const handleConfirmPay = async (target) => {
-    const prof = target || confirmTarget;
+  const handleConfirmPay = async () => {
+    const prof = confirmTarget;
     if (!prof) return;
     setSubmitting(true);
 
