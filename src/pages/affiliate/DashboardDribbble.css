@@ -91,6 +91,95 @@
   opacity: 0.9;
 }
 
+/* ── BENTO GRID SYSTEM ── */
+.bento-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 20px;
+}
+.bento-box {
+  background: var(--cf-bg-surface);
+  border: 1px solid var(--cf-border);
+  border-radius: 16px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+  transition: transform 0.2s, box-shadow 0.2s;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.03);
+  display: flex;
+  flex-direction: column;
+}
+.bento-box:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
+}
+.bento-col-2 {
+  grid-column: span 2;
+}
+
+/* Biểu đồ Sóng giả lập */
+.bento-wave-bg {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='%2310b981' fill-opacity='0.1' d='M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,149.3C672,139,768,149,864,170.7C960,192,1056,224,1152,229.3C1248,235,1344,213,1392,202.7L1440,192L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z'%3E%3C/path%3E%3C/svg%3E") no-repeat bottom;
+  background-size: cover;
+  pointer-events: none;
+  opacity: 1;
+}
+.bento-wave-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 80px;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 320'%3E%3Cpath fill='none' stroke='%2310b981' stroke-width='4' stroke-opacity='0.4' d='M0,160L48,170.7C96,181,192,203,288,197.3C384,192,480,160,576,149.3C672,139,768,149,864,170.7C960,192,1056,224,1152,229.3C1248,235,1344,213,1392,202.7L1440,192'%3E%3C/path%3E%3C/svg%3E") no-repeat bottom;
+  background-size: cover;
+  pointer-events: none;
+}
+
+/* Thẻ Visa ATM */
+.bento-visa-card {
+  background: linear-gradient(135deg, #111827 0%, #374151 100%);
+  color: #fff !important;
+  border: 1px solid rgba(255,255,255,0.1);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.1), 0 10px 20px -5px rgba(0,0,0,0.3);
+}
+.bento-visa-card [data-theme="dark"] & {
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+}
+.visa-chip {
+  width: 36px;
+  height: 26px;
+  background: linear-gradient(135deg, #fbbf24 0%, #d97706 100%);
+  border-radius: 6px;
+  position: absolute;
+  top: 24px;
+  right: 24px;
+  opacity: 0.9;
+  border: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.visa-chip::before {
+  content: '';
+  width: 24px;
+  height: 14px;
+  border: 1px solid rgba(0,0,0,0.3);
+  border-radius: 2px;
+}
+
+@media (max-width: 992px) {
+  .bento-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (max-width: 640px) {
+  .bento-grid { grid-template-columns: 1fr; gap: 16px; }
+  .bento-col-2 { grid-column: span 1; }
+}
+
 /* ── PROFILE WIDGET (RIGHT COLUMN) ── */
 .profile-widget {
   position: relative;

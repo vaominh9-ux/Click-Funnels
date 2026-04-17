@@ -105,6 +105,12 @@ const AffiliateDashboard = () => {
 
   const tierLabel = profile?.tier?.toUpperCase() || 'STARTER';
 
+  const currentHour = new Date().getHours();
+  let greetingText = 'Chào mừng trở lại';
+  if (currentHour < 12) greetingText = 'Chào buổi sáng';
+  else if (currentHour < 18) greetingText = 'Chào buổi chiều';
+  else greetingText = 'Chào buổi tối';
+
   return (
     <div className="dashboard-wrapper">
       
@@ -120,65 +126,78 @@ const AffiliateDashboard = () => {
           <div className="welcome-banner-dribbble">
             <div className="welcome-top-dribbble">
               <div className="welcome-left-dribbble">
-                <h1>Chào mừng trở lại, <span>{profile?.full_name || 'Đại Lý'}</span></h1>
-                <p>Nắm bắt cơ hội mới, xây dựng doanh nghiệp B2B của bạn ngay hôm nay.</p>
+                <h1>{greetingText}, <span>{profile?.full_name || 'Đại Lý'}</span></h1>
+                <p>Mạng lưới Đối tác Affiliate Premium. Sẵn sàng chinh phục mọi kỷ lục mới ngay hôm nay.</p>
               </div>
             </div>
           </div>
 
-          {/* METRIC CARDS (Using isolated classes to avoid stats-grid conflict) */}
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
-            <div className="cf-card" style={{ display: 'flex', flexDirection: 'column', transition: 'transform 0.2s', padding: '24px' }}>
+          {/* BENTO GRID METRICS */}
+          <div className="bento-grid">
+            
+            {/* TOTAL EARNED - SPANS 2 COLS WITH WAVE */}
+            <div className="bento-box bento-col-2" style={{ paddingBottom: '60px' }}>
               <div className="qa-icon qa-green" style={{ marginBottom: 16 }}>
                 <DollarSign size={22} />
               </div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>Tổng Thu Nhập</div>
-              <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--cf-text-main)', marginBottom: 12 }}>
-                {loading ? <Skeleton width="120px" height="28px" /> : new Intl.NumberFormat('vi-VN').format(dashboardData.totalEarned)}
+              <div style={{ position: 'relative', zIndex: 1 }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>Tổng Thu Nhập</div>
+                <div style={{ fontSize: '2rem', fontWeight: 800, color: 'var(--cf-text-main)', marginBottom: 12 }}>
+                  {loading ? <Skeleton width="180px" height="36px" /> : new Intl.NumberFormat('vi-VN').format(dashboardData.totalEarned)}
+                </div>
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 700, padding: '4px 10px', borderRadius: 8, background: '#10b981', color: '#fff', width: 'fit-content' }}>
+                  <ArrowUpRight size={14} /> Tăng trưởng ấn tượng
+                </span>
               </div>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, padding: '4px 8px', borderRadius: 6, background: 'rgba(16,185,129,0.1)', color: '#059669', width: 'fit-content' }}>
-                <ArrowUpRight size={14} /> Hiệu suất tuyệt vời
-              </span>
+              <div className="bento-wave-bg"></div>
+              <div className="bento-wave-line"></div>
             </div>
 
-            <div className="cf-card" style={{ display: 'flex', flexDirection: 'column', transition: 'transform 0.2s', padding: '24px' }}>
-              <div className="qa-icon qa-blue" style={{ marginBottom: 16 }}>
-                <CreditCard size={22} />
+            {/* BALANCE - VISA CARD STYLE */}
+            <div className="bento-box bento-visa-card">
+              <div className="visa-chip"></div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.7)', textTransform: 'uppercase', marginBottom: 24, marginTop: 8 }}>Số Dư Khả Dụng</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 800, fontFamily: 'monospace', textShadow: '0 2px 4px rgba(0,0,0,0.3)', marginBottom: 20 }}>
+                {loading ? <Skeleton width="120px" height="32px" baseColor="#374151" highlightColor="#4b5563" /> : new Intl.NumberFormat('vi-VN').format(dashboardData.balance)}
               </div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>Số Dư Khả Dụng</div>
-              <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--cf-text-main)', marginBottom: 12 }}>
-                {loading ? <Skeleton width="100px" height="28px" /> : new Intl.NumberFormat('vi-VN').format(dashboardData.balance)}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', fontSize: 12, color: 'rgba(255,255,255,0.6)', fontWeight: 600, textTransform: 'uppercase' }}>
+                <span>{profile?.full_name || 'PARTNER'}</span>
+                <span style={{ fontSize: 10 }}>VALID THRU<br/><span style={{fontSize: 14, color: '#fff'}}>12/28</span></span>
               </div>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, padding: '4px 8px', borderRadius: 6, background: 'rgba(107,114,128,0.1)', color: '#4b5563', width: 'fit-content' }}>
-                Sẵn sàng rút tiền
-              </span>
             </div>
 
-            <div className="cf-card" style={{ display: 'flex', flexDirection: 'column', transition: 'transform 0.2s', padding: '24px' }}>
-              <div className="qa-icon qa-purple" style={{ marginBottom: 16 }}>
+            {/* CLICKS - SMALL BOX */}
+            <div className="bento-box">
+              <div className="qa-icon qa-purple" style={{ marginBottom: 12 }}>
                 <MousePointerClick size={22} />
               </div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>Lượt Click</div>
-              <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--cf-text-main)', marginBottom: 12 }}>
-                {loading ? <Skeleton width="60px" height="28px" /> : dashboardData.clicks.toLocaleString()}
+              <div style={{ zIndex: 1 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--cf-text-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Lượt Click</div>
+                <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--cf-text-main)', marginBottom: 10 }}>
+                  {loading ? <Skeleton width="60px" height="28px" /> : dashboardData.clicks.toLocaleString()}
+                </div>
+                <span style={{ fontSize: 12, fontWeight: 600, color: '#8b5cf6' }}>
+                  Chuyển đổi {conversionRate}%
+                </span>
               </div>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, padding: '4px 8px', borderRadius: 6, background: 'rgba(16,185,129,0.1)', color: '#059669', width: 'fit-content' }}>
-                <ArrowUpRight size={14} /> Chuyển đổi {conversionRate}%
-              </span>
             </div>
 
-            <div className="cf-card" style={{ display: 'flex', flexDirection: 'column', transition: 'transform 0.2s', padding: '24px' }}>
-              <div className="qa-icon" style={{ background: '#ffedd5', color: '#ea580c', marginBottom: 16 }}>
+            {/* LEADS - SMALL BOX */}
+            <div className="bento-box">
+              <div className="qa-icon" style={{ background: '#ffedd5', color: '#ea580c', marginBottom: 12 }}>
                 <Users size={22} />
               </div>
-              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>Khách Tiềm Năng</div>
-              <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--cf-text-main)', marginBottom: 12 }}>
-                {loading ? <Skeleton width="50px" height="28px" /> : dashboardData.leads.toLocaleString()}
+              <div style={{ zIndex: 1 }}>
+                <div style={{ fontSize: 12, fontWeight: 600, color: 'var(--cf-text-muted)', textTransform: 'uppercase', marginBottom: 4 }}>Khách Tiềm Năng</div>
+                <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--cf-text-main)', marginBottom: 10 }}>
+                  {loading ? <Skeleton width="50px" height="28px" /> : dashboardData.leads.toLocaleString()}
+                </div>
+                <span style={{ fontSize: 12, fontWeight: 600, color: '#ea580c' }}>
+                  Đăng ký chờ duyệt
+                </span>
               </div>
-              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, padding: '4px 8px', borderRadius: 6, background: 'rgba(16,185,129,0.1)', color: '#059669', width: 'fit-content' }}>
-                <ArrowUpRight size={14} /> Số đăng ký mới
-              </span>
             </div>
+
           </div>
 
           {/* RECENT ORDERS */}
@@ -235,9 +254,9 @@ const AffiliateDashboard = () => {
                     <td style={{fontWeight: 600, color: 'var(--cf-text-main)'}}>{conv.campaigns?.name || 'Sản phẩm'}</td>
                     <td>
                       {conv.status === 'rejected' ? (
-                        <span style={{ padding: '4px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600, backgroundColor: 'rgba(239,68,68,0.1)', color: '#EF4444'}}>Từ chối</span>
+                        <span style={{ padding: '4px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600, backgroundColor: 'rgba(239,68,68,0.1)', color: '#EF4444', border: '1px solid rgba(239,68,68,0.2)', backdropFilter: 'blur(4px)'}}>Từ chối</span>
                       ) : (
-                        <span style={{ padding: '4px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600, backgroundColor: conv.status === 'approved' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)', color: conv.status === 'approved' ? '#059669' : '#d97706'}}>
+                        <span style={{ padding: '4px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600, backgroundColor: conv.status === 'approved' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)', color: conv.status === 'approved' ? '#059669' : '#d97706', border: conv.status === 'approved' ? '1px solid rgba(16,185,129,0.2)' : '1px solid rgba(245,158,11,0.2)', backdropFilter: 'blur(4px)'}}>
                           {conv.status === 'approved' ? 'Thành công' : 'Chờ duyệt'}
                         </span>
                       )}
