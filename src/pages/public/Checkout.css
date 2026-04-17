@@ -78,9 +78,11 @@
 }
 
 .total-price {
-  color: #2563eb;
-  font-size: 1.4rem;
-  font-weight: 800;
+  background: linear-gradient(135deg, #2563eb, #3b82f6);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  font-size: 1.6rem;
+  font-weight: 900;
 }
 
 .security-badges {
@@ -108,10 +110,17 @@
 }
 
 .qr-code-img {
-  width: 250px;
-  height: 250px;
+  width: 100%;
+  max-width: 320px;
+  height: auto;
   border-radius: 16px;
-  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+  transition: transform 0.3s ease;
+}
+
+.qr-code-img:hover {
+  transform: scale(1.02);
+  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
 .bank-details {
@@ -142,7 +151,7 @@
 .checkout-btn {
   width: 100%;
   padding: 16px;
-  background: #0f172a;
+  background: linear-gradient(135deg, #0f172a, #1e293b);
   color: #fff;
   border: none;
   border-radius: 12px;
@@ -150,16 +159,19 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.2s;
+  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.4);
 }
 
 .checkout-btn:hover:not(:disabled) {
-  background: #1e293b;
   transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.6);
 }
 
 .checkout-btn:disabled {
-  background: #94a3b8;
+  opacity: 0.7;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 @media (max-width: 768px) {
