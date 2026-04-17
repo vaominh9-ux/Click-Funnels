@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Loader2, Building2, CreditCard, QrCode, RefreshCw, CheckCircle, AlertCircle } from 'lucide-react';
+import { Save, Loader2, Building2, CreditCard, QrCode, RefreshCw, CheckCircle, AlertCircle, Copy, Webhook } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import './PaymentSettings.css';
@@ -30,6 +30,9 @@ const PaymentSettings = () => {
   const [accountNo, setAccountNo] = useState('');
   const [accountName, setAccountName] = useState('');
   
+  // SePay Config form
+  const [apiKey, setApiKey] = useState('');
+  
   // Test QR preview
   const [showQR, setShowQR] = useState(false);
 
@@ -46,14 +49,25 @@ const PaymentSettings = () => {
         .eq('key', 'bank_config')
         .single();
 
-      if (data && data.value) {
-        const config = data.value;
-        setBankName(config.bankName || 'BIDV');
-        setBankId(config.bankId || '970418');
-        setAccountNo(config.accountNo || '');
-        setAccountName(config.accountName || '');
-      }
-    } catch (err) {
+        if (data?.value) {
+          const config = data.value;
+          setBankName(config.bankName || 'BIDV');
+          setBankId(config.bankId || '970418');
+          setAccountNo(config.accountNo || '');
+          setAccountName(config.accountName || '');
+        }
+
+        // Fetch sepay API Key config
+        const { data: sepayData } = await supabase
+          .from('system_settings')
+          .select('*')
+          .eq('key', 'sepay_config')
+          .single();
+        
+        if (sepayData?.value) {
+          setApiKey(sepayData.value.apiKey || '');
+        }
+      } catch (err) {
       console.error('Load settings error:', err);
     } finally {
       setLoading(false);
@@ -76,7 +90,7 @@ const PaymentSettings = () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
-      const { error } = await supabase
+      const { error: bankError } = await supabase
         .from('system_settings')
         .upsert({
           key: 'bank_config',
@@ -85,7 +99,18 @@ const PaymentSettings = () => {
           updated_by: user?.id
         }, { onConflict: 'key' });
 
-      if (error) throw error;
+      if (bankError) throw bankError;
+
+      const { error: apiError } = await supabase
+        .from('system_settings')
+        .upsert({
+          key: 'sepay_config',
+          value: { apiKey: apiKey.trim() },
+          updated_at: new Date().toISOString(),
+          updated_by: user?.id
+        }, { onConflict: 'key' });
+
+      if (apiError) throw apiError;
       
       addToast('Đã lưu cấu hình thanh toán thành công!', 'success');
       setShowQR(true);
@@ -98,6 +123,12 @@ const PaymentSettings = () => {
   };
 
   const qrPreviewUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-print.png?amount=10000&addInfo=TEST_QR&accountName=${encodeURIComponent(accountName)}`;
+  const webhookUrl = `${window.location.origin}/api/sepay-webhook`;
+
+  const handleCopyWebhook = () => {
+    navigator.clipboard.writeText(webhookUrl);
+    addToast('Đã sao chép Webhook URL!', 'success');
+  };
 
   if (loading) {
     return (
@@ -117,9 +148,10 @@ const PaymentSettings = () => {
       </div>
 
       <div className="ps-grid">
-        {/* Cột trái: Form cấu hình */}
-        <div className="ps-card">
-          <div className="ps-card-header">
+        {/* Cột trái: Cấu hình */}
+        <div className="ps-col-left">
+          <div className="ps-card">
+            <div className="ps-card-header">
             <Building2 size={20} />
             <h3>Thông Tin Ngân Hàng</h3>
           </div>
@@ -157,20 +189,58 @@ const PaymentSettings = () => {
               />
               <span className="ps-hint">Viết HOA, không dấu — khớp với tên TK ngân hàng</span>
             </div>
+          </div>
+        </div>
 
-            <button className="ps-save-btn" onClick={handleSave} disabled={saving}>
+        {/* SePay API Config */}
+        <div className="ps-card" style={{marginTop: '24px'}}>
+          <div className="ps-card-header">
+            <Webhook size={20} />
+            <h3>Kết Nối Hệ Thống SePay</h3>
+          </div>
+          
+          <div className="ps-form">
+            <div className="ps-field">
+              <label>API Key (SePay)</label>
+              <input 
+                type="password" 
+                value={apiKey} 
+                onChange={(e) => setApiKey(e.target.value)}
+                placeholder="Nhập API Key từ SePay Dashboard"
+              />
+              <span className="ps-hint">Nếu bỏ trống, hệ thống sẽ sử dụng key Vercel mặc định.</span>
+            </div>
+
+            <div className="ps-field">
+              <label>Webhook URL (Copy dán vào SePay)</label>
+              <div style={{display: 'flex', gap: '8px', alignItems: 'center'}}>
+                <input 
+                  type="text" 
+                  value={webhookUrl} 
+                  readOnly 
+                  style={{flex: 1, backgroundColor: '#F3F4F6', color: '#6B7280'}}
+                />
+                <button type="button" onClick={handleCopyWebhook} style={{padding: '10px 14px', background: '#E5E7EB', border: '1px solid #D1D5DB', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
+                  <Copy size={16} color="#4B5563" />
+                </button>
+              </div>
+            </div>
+
+            <button className="ps-save-btn" onClick={handleSave} disabled={saving} style={{marginTop: '16px'}}>
               {saving ? (
                 <><Loader2 size={16} className="spin" /> Đang lưu...</>
               ) : (
-                <><Save size={16} /> Lưu Cấu Hình</>
+                <><Save size={16} /> Lưu Thay Đổi</>
               )}
             </button>
           </div>
         </div>
+        </div> {/* End left column */}
 
         {/* Cột phải: Preview QR */}
-        <div className="ps-card">
-          <div className="ps-card-header">
+        <div className="ps-col-right">
+          <div className="ps-card">
+            <div className="ps-card-header">
             <QrCode size={20} />
             <h3>Xem Trước QR Code</h3>
           </div>
@@ -224,10 +294,11 @@ const PaymentSettings = () => {
               <li>Điền đúng <strong>số VA</strong> lấy từ SePay Dashboard</li>
               <li>Tên chủ TK phải <strong>khớp chính xác</strong> với tên trên ngân hàng</li>
               <li>Nếu đổi ngân hàng mới → vào SePay liên kết TK mới + cập nhật Webhook</li>
-              <li>Bấm <strong>"Lưu Cấu Hình"</strong> → trang Checkout sẽ tự cập nhật</li>
+              <li>Bấm <strong>"Lưu Thay Đổi"</strong> → cả trang Checkout và Webhook API sẽ tự cập nhật cấu hình mới.</li>
             </ol>
           </div>
         </div>
+        </div> {/* End right column */}
       </div>
     </div>
   );

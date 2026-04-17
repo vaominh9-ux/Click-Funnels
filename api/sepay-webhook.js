@@ -8,15 +8,6 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, message: 'Method not allowed' });
   }
 
-  // Xác thực API Key từ SePay (Header: Authorization: Apikey xxx)
-  const authHeader = req.headers['authorization'] || '';
-  const expectedKey = process.env.SEPAY_API_KEY;
-  
-  if (expectedKey && authHeader !== `Apikey ${expectedKey}`) {
-    console.warn('SePay webhook: Invalid API Key');
-    return res.status(401).json({ success: false, message: 'Unauthorized' });
-  }
-
   const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
   const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
 
@@ -26,6 +17,24 @@ export default async function handler(req, res) {
   }
 
   try {
+    // 1. Lấy API Key động từ DB (nếu Admin có cấu hình trên UI)
+    let expectedKey = process.env.SEPAY_API_KEY;
+    const settingsRes = await fetch(
+      `${SUPABASE_URL}/rest/v1/system_settings?key=eq.sepay_config&select=value`,
+      { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+    );
+    const settingsData = await settingsRes.json();
+    if (Array.isArray(settingsData) && settingsData.length > 0 && settingsData[0].value?.apiKey) {
+      expectedKey = settingsData[0].value.apiKey;
+    }
+
+    // 2. Xác thực API Key từ SePay (Header: Authorization: Apikey xxx)
+    const authHeader = req.headers['authorization'] || '';
+    if (expectedKey && authHeader !== `Apikey ${expectedKey}`) {
+      console.warn('SePay webhook: Invalid API Key');
+      return res.status(401).json({ success: false, message: 'Unauthorized' });
+    }
+
     const data = req.body;
     
     // Log giao dịch nhận được

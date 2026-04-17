@@ -8,7 +8,7 @@
 }
 
 .ps-subtitle {
-  color: #9CA3AF;
+  color: #6B7280;
   font-size: 14px;
   margin: 0;
   line-height: 1.5;
@@ -44,17 +44,19 @@
   }
 }
 
-/* Card */
+/* Card — NỀN SÁNG */
 .ps-card {
-  background: linear-gradient(145deg, #1F2937, #1a2332);
-  border: 1px solid rgba(55, 65, 81, 0.7);
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
   border-radius: 14px;
   padding: 28px;
-  transition: border-color 0.3s;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  transition: box-shadow 0.3s, border-color 0.3s;
 }
 
 .ps-card:hover {
-  border-color: rgba(59, 130, 246, 0.3);
+  border-color: #BFDBFE;
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
 }
 
 /* Card Header */
@@ -64,7 +66,7 @@
   gap: 10px;
   margin-bottom: 22px;
   padding-bottom: 14px;
-  border-bottom: 1px solid rgba(55, 65, 81, 0.5);
+  border-bottom: 1px solid #F3F4F6;
 }
 
 .ps-card-header svg {
@@ -75,7 +77,7 @@
   font-size: 15px;
   font-weight: 600;
   margin: 0;
-  color: #E5E7EB;
+  color: #1F2937;
   letter-spacing: 0.2px;
 }
 
@@ -95,18 +97,18 @@
 .ps-field label {
   font-size: 11px;
   font-weight: 700;
-  color: #9CA3AF;
+  color: #6B7280;
   text-transform: uppercase;
   letter-spacing: 0.8px;
 }
 
 .ps-field input,
 .ps-field select {
-  background: rgba(17, 24, 39, 0.8);
-  border: 1px solid #374151;
+  background: #F9FAFB;
+  border: 1px solid #D1D5DB;
   border-radius: 10px;
   padding: 11px 14px;
-  color: #F3F4F6;
+  color: #111827;
   font-size: 14px;
   font-weight: 500;
   transition: all 0.25s ease;
@@ -117,22 +119,23 @@
   outline: none;
   border-color: #3B82F6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.12);
-  background: rgba(17, 24, 39, 1);
+  background: #FFFFFF;
 }
 
 .ps-field input::placeholder {
-  color: #4B5563;
+  color: #9CA3AF;
   font-weight: 400;
 }
 
 .ps-field select {
   cursor: pointer;
   appearance: auto;
+  color: #111827;
 }
 
 .ps-hint {
   font-size: 11px;
-  color: #6B7280;
+  color: #9CA3AF;
   font-style: italic;
 }
 
@@ -158,7 +161,7 @@
 .ps-save-btn:hover:not(:disabled) {
   background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 50%, #1E40AF 100%);
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.35);
+  box-shadow: 0 6px 20px rgba(37, 99, 235, 0.3);
 }
 
 .ps-save-btn:active:not(:disabled) {
@@ -183,8 +186,9 @@
   height: auto;
   border-radius: 10px;
   background: #fff;
-  padding: 8px;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  padding: 6px;
+  border: 1px solid #E5E7EB;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
 .ps-qr-info {
@@ -193,9 +197,9 @@
   flex-direction: column;
   gap: 10px;
   padding: 16px;
-  background: rgba(17, 24, 39, 0.6);
+  background: #F9FAFB;
   border-radius: 10px;
-  border: 1px solid rgba(55, 65, 81, 0.5);
+  border: 1px solid #E5E7EB;
 }
 
 .ps-qr-row {
@@ -210,7 +214,7 @@
 }
 
 .ps-qr-row strong {
-  color: #E5E7EB;
+  color: #111827;
   font-weight: 600;
 }
 
@@ -219,10 +223,10 @@
   align-items: center;
   gap: 8px;
   font-size: 12px;
-  color: #10B981;
+  color: #059669;
   padding: 10px 14px;
-  background: rgba(16, 185, 129, 0.08);
-  border: 1px solid rgba(16, 185, 129, 0.15);
+  background: #ECFDF5;
+  border: 1px solid #A7F3D0;
   border-radius: 8px;
   width: 100%;
 }
@@ -233,7 +237,7 @@
   align-items: center;
   gap: 12px;
   padding: 48px 24px;
-  color: #4B5563;
+  color: #9CA3AF;
   text-align: center;
 }
 
@@ -262,7 +266,7 @@
 }
 
 .ps-guide li strong {
-  color: #D1D5DB;
+  color: #1F2937;
   font-weight: 600;
 }
 
