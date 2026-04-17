@@ -66,13 +66,8 @@ const AffiliateCampaigns = () => {
 
   const getAffLink = (campaign) => {
     if (!userProfile?.ref_code) return '';
-    const trackingDomain = import.meta.env.VITE_TRACKING_DOMAIN;
-    if (trackingDomain) {
-      return `${trackingDomain}/go/${userProfile.ref_code}?campaign=${campaign.id}`;
-    }
-    const base = campaign.landing_page_url || 'https://duhava.com';
-    const sep = base.includes('?') ? '&' : '?';
-    return `${base}${sep}ref=${userProfile.ref_code}&campaign=${campaign.id}`;
+    const trackingDomain = import.meta.env.VITE_TRACKING_DOMAIN || window.location.origin;
+    return `${trackingDomain}/go/${userProfile.ref_code}?campaign=${campaign.id}`;
   };
 
   const handleCopy = (id, link) => {

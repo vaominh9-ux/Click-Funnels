@@ -67,20 +67,11 @@ export default function AffiliateLinks() {
     fetchData();
   }, []);
 
-  // Link tracking: ưu tiên dùng Tracking Domain (redirect), fallback dùng landing page trực tiếp
-  const trackingDomain = import.meta.env.VITE_TRACKING_DOMAIN; // VD: https://link.duhava.com
+  // Link tracking: dùng Tracking Domain (server-side redirect, gần như tức thì)
+  const trackingDomain = import.meta.env.VITE_TRACKING_DOMAIN || window.location.origin;
   
   const generatedLink = loading || !profile ? null : (selectedCampaign 
-    ? (() => {
-        if (trackingDomain) {
-          // Có tracking domain → link qua /go/ để ghi nhận click rồi redirect
-          return `${trackingDomain}/go/${profile.ref_code}?campaign=${selectedCampaign.id}${utmSource ? `&utm_source=${encodeURIComponent(utmSource)}` : ''}`;
-        }
-        // Không có tracking domain → link trỏ thẳng landing page
-        const base = selectedCampaign.landing_page_url || 'https://duhava.com';
-        const sep = base.includes('?') ? '&' : '?';
-        return `${base}${sep}ref=${profile.ref_code}&campaign=${selectedCampaign.id}${utmSource ? `&utm_source=${encodeURIComponent(utmSource)}` : ''}`;
-      })()
+    ? `${trackingDomain}/go/${profile.ref_code}?campaign=${selectedCampaign.id}${utmSource ? `&utm_source=${encodeURIComponent(utmSource)}` : ''}`
     : 'Chưa chọn dự án...');
 
   const addToast = useToast();
