@@ -7,6 +7,7 @@ import './Sidebar.css';
 const Sidebar = ({ onClose }) => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
+  const [avatarUrl, setAvatarUrl] = useState(null);
 
   const [openGroups, setOpenGroups] = useState({
     campaigns: true,
@@ -25,7 +26,12 @@ const Sidebar = ({ onClose }) => {
         .select('*')
         .eq('id', session.user.id)
         .single();
-      if (data) setProfile(data);
+      if (data) {
+        setProfile(data);
+        if (data.avatar_url) {
+          setAvatarUrl(data.avatar_url);
+        }
+      }
     }
   };
 
@@ -171,7 +177,11 @@ const Sidebar = ({ onClose }) => {
         </NavLink>
         
         <div className="user-profile-card">
-          <div className="user-avatar">{profile?.full_name ? profile.full_name.substring(0,2).toUpperCase() : 'U'}</div>
+          {avatarUrl ? (
+            <img src={avatarUrl} alt="Avatar" className="user-avatar" style={{objectFit: 'cover', border: 'none'}} />
+          ) : (
+            <div className="user-avatar">{profile?.full_name ? profile.full_name.substring(0,2).toUpperCase() : 'U'}</div>
+          )}
           <div className="user-info">
             <div className="user-team" style={{whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: '120px'}}>{profile?.full_name || 'Affiliate User'}</div>
             <div className="user-sub">{profile?.role === 'admin' ? 'Super Admin' : 'Đối Tác (Affiliate)'}</div>

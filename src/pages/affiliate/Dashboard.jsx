@@ -50,8 +50,7 @@ const AffiliateDashboard = () => {
         });
 
         if (profile.avatar_url) {
-          const { data } = supabase.storage.from('avatars').getPublicUrl(profile.avatar_url);
-          if (data?.publicUrl) setAvatarUrl(data.publicUrl);
+          setAvatarUrl(profile.avatar_url);
         }
       }
     } catch (err) {
@@ -190,7 +189,7 @@ const AffiliateDashboard = () => {
                 <span style={{ width: 8, height: 8, backgroundColor: '#10b981', borderRadius: '50%' }}></span>
               </h3>
               <button 
-                onClick={() => navigate('/affiliate/links')}
+                onClick={() => navigate('/portal/customers')}
                 style={{ background: 'transparent', color: 'var(--cf-primary)', fontWeight: 600, fontSize: 14, display: 'flex', alignItems: 'center', gap: 4, border: 'none', cursor: 'pointer' }}
               >
                 Xem chi tiết <ChevronRight size={14} />

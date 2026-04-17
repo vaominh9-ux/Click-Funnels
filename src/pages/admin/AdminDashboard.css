@@ -1,8 +1,6 @@
 .admin-dashboard-container {
-  padding: 32px;
+  padding: 0;
   font-family: 'Inter', system-ui, sans-serif;
-  background: #F9FAFB;
-  min-height: 100vh;
 }
 
 /* --- Top Header --- */
