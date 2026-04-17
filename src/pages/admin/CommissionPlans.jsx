@@ -3,6 +3,10 @@ import { Settings2, Plus, Edit, X, Loader2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import Skeleton from '../../components/common/Skeleton';
+import { FUNNEL_COURSES } from '../funnels/config';
+
+// Danh sách khóa học để chọn trong dropdown
+const COURSE_OPTIONS = Object.values(FUNNEL_COURSES).map(c => ({ id: c.id, name: c.name }));
 
 const overlayStyle = {
   position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
@@ -22,7 +26,7 @@ const AdminCommissionPlans = () => {
   const [modalMode, setModalMode] = useState('add');
   const [editingId, setEditingId] = useState(null);
   const [submitting, setSubmitting] = useState(false);
-  const [form, setForm] = useState({ name: '', type: 'default', rate_percent: '', rate_fixed: '', applied_scope: 'Tất cả Đại lý' });
+  const [form, setForm] = useState({ name: '', type: 'default', rate_percent: '', rate_fixed: '', applied_scope: 'Tất cả Đại lý', applied_to: [] });
 
   const fetchPlans = async () => {
     setLoading(true);
@@ -59,7 +63,7 @@ const AdminCommissionPlans = () => {
 
   const openAdd = () => {
     setModalMode('add');
-    setForm({ name: '', type: 'default', rate_percent: '', rate_fixed: '', applied_scope: 'Tất cả Đại lý' });
+    setForm({ name: '', type: 'default', rate_percent: '', rate_fixed: '', applied_scope: 'Tất cả Đại lý', applied_to: [] });
     setIsModalOpen(true);
   };
 
@@ -71,7 +75,8 @@ const AdminCommissionPlans = () => {
       type: plan.type,
       rate_percent: plan.rate_percent || '',
       rate_fixed: plan.rate_fixed || '',
-      applied_scope: plan.applied_scope || 'Tất cả Đại lý'
+      applied_scope: plan.applied_scope || 'Tất cả Đại lý',
+      applied_to: plan.applied_to || []
     });
     setIsModalOpen(true);
   };
@@ -80,12 +85,29 @@ const AdminCommissionPlans = () => {
     e.preventDefault();
     setSubmitting(true);
 
+    // Xây dựng applied_scope & applied_to dựa trên type
+    let appliedScope = form.applied_scope;
+    let appliedTo = form.applied_to || [];
+
+    if (form.type === 'product' && appliedTo.length > 0) {
+      // Tự động lấy tên khóa học từ ID để hiển thị dễ xem
+      const courseNames = appliedTo.map(id => {
+        const course = FUNNEL_COURSES[id];
+        return course ? course.name : id;
+      });
+      appliedScope = courseNames.join(', ');
+    } else if (form.type === 'default') {
+      appliedScope = 'Tất cả Đại lý';
+      appliedTo = [];
+    }
+
     const payload = {
       name: form.name,
       type: form.type,
       rate_percent: form.rate_percent ? Number(form.rate_percent) : null,
       rate_fixed: form.rate_fixed ? Number(form.rate_fixed) : null,
-      applied_scope: form.applied_scope,
+      applied_scope: appliedScope,
+      applied_to: appliedTo,
     };
 
     if (modalMode === 'add') {
@@ -229,10 +251,35 @@ const AdminCommissionPlans = () => {
                 </div>
               </div>
               <div>
-                <label style={{display: 'block', fontSize: '14px', fontWeight: 600, marginBottom: '8px'}}>Phạm vi áp dụng</label>
-                <input required type="text" value={form.applied_scope} onChange={e => setForm({...form, applied_scope: e.target.value})}
-                  style={{width: '100%', padding: '10px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none'}}
-                  placeholder="VD: Tất cả Đại lý" />
+                <label style={{display: 'block', fontSize: '14px', fontWeight: 600, marginBottom: '8px'}}>
+                  {form.type === 'product' ? 'Chọn Khóa Học áp dụng' : 'Phạm vi áp dụng'}
+                </label>
+                {form.type === 'product' ? (
+                  <div style={{display: 'flex', flexDirection: 'column', gap: '8px'}}>
+                    {COURSE_OPTIONS.map(course => (
+                      <label key={course.id} style={{display: 'flex', alignItems: 'center', gap: '8px', padding: '8px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', cursor: 'pointer', background: (form.applied_to || []).includes(course.id) ? '#EEF2FF' : 'white'}}>
+                        <input
+                          type="checkbox"
+                          checked={(form.applied_to || []).includes(course.id)}
+                          onChange={(e) => {
+                            const current = form.applied_to || [];
+                            if (e.target.checked) {
+                              setForm({...form, applied_to: [...current, course.id]});
+                            } else {
+                              setForm({...form, applied_to: current.filter(id => id !== course.id)});
+                            }
+                          }}
+                          style={{accentColor: '#4F46E5'}}
+                        />
+                        <span style={{fontSize: '14px'}}>{course.name}</span>
+                      </label>
+                    ))}
+                  </div>
+                ) : (
+                  <input required type="text" value={form.applied_scope} onChange={e => setForm({...form, applied_scope: e.target.value})}
+                    style={{width: '100%', padding: '10px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none'}}
+                    placeholder="VD: Tất cả Đại lý" />
+                )}
               </div>
 
               <div style={{marginTop: '16px', display: 'flex', justifyContent: 'flex-end', gap: '12px'}}>

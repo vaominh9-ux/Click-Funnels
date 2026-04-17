@@ -113,6 +113,44 @@ const Checkout = () => {
   const transferMessage = paymentCode;
   const qrImage = `https://img.vietqr.io/image/${bankConfig.bankId}-${bankConfig.accountNo}-print.png?amount=${amount}&addInfo=${transferMessage}&accountName=${encodeURIComponent(bankConfig.accountName)}`;
 
+  // === TÍNH HOA HỒNG TỰ ĐỘNG ===
+  const calculateCommission = async (saleAmount, courseKey) => {
+    try {
+      const { data: plans } = await supabase
+        .from('commission_plans')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (!plans || plans.length === 0) return 0;
+
+      // Ưu tiên 1: Tìm plan "Ghi đè Sản phẩm" khớp với courseId
+      const productPlan = plans.find(p =>
+        p.type === 'product' &&
+        Array.isArray(p.applied_to) &&
+        p.applied_to.includes(courseKey)
+      );
+
+      // Ưu tiên 2: Plan mặc định
+      const defaultPlan = plans.find(p => p.type === 'default');
+
+      const matchedPlan = productPlan || defaultPlan;
+      if (!matchedPlan) return 0;
+
+      // Tính: ưu tiên rate_fixed > rate_percent
+      if (matchedPlan.rate_fixed && Number(matchedPlan.rate_fixed) > 0) {
+        return Number(matchedPlan.rate_fixed);
+      }
+      if (matchedPlan.rate_percent && Number(matchedPlan.rate_percent) > 0) {
+        return Math.round(saleAmount * Number(matchedPlan.rate_percent) / 100);
+      }
+
+      return 0;
+    } catch (err) {
+      console.error('Commission calc error:', err);
+      return 0;
+    }
+  };
+
   const handleCreateOrder = async () => {
     if (!leadInfo) {
       addToast('Lỗi: Không tìm thấy thông tin đăng ký.', 'error');
@@ -121,12 +159,15 @@ const Checkout = () => {
     
     setLoading(true);
     try {
+      // Tính hoa hồng dựa trên commission_plans
+      const commissionAmount = await calculateCommission(amount, courseId);
+
       const { error } = await supabase
         .from('conversions')
         .insert([{
           affiliate_id: leadInfo.affiliate_id,
           sale_amount: amount,
-          commission_amount: 0,
+          commission_amount: commissionAmount,
           status: 'pending',
           customer_name: leadInfo.name,
           product_name: course.name,
