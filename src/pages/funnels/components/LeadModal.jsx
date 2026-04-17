@@ -75,6 +75,9 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
       
       const newLeadId = generateUUID();
 
+      // Lấy link_id từ localStorage (được ClickTracker lưu lại)
+      const linkId = localStorage.getItem('aff_link_id') || null;
+
       // 3. Chèn vào bảng leads để Admin dễ chốt
       const { error: insertError } = await supabase
         .from('leads')
@@ -84,6 +87,7 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
           phone: formData.phone,
           email: formData.email,
           affiliate_id: finalAffiliateId,
+          link_id: linkId,
           source: refCode ? 'referral' : 'direct',
           stage: 'new',
           notes: `Đăng ký từ khóa học: ${courseName}`

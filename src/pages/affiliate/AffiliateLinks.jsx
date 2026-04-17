@@ -206,9 +206,9 @@ export default function AffiliateLinks() {
 
       <div className="stats-section">
         <div className="stats-header flex-between">
-          <div className="flex-align-center" style={{gap: '8px'}}>
+          <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
             <BarChart2 size={20} color="#10B981" />
-            <h3>Đo Lường Hiệu Quả Gần Đây</h3>
+            <h3 style={{margin: 0}}>Đo Lường Hiệu Quả Gần Đây</h3>
           </div>
           <button className="filter-btn">
             <Filter size={16} /> Lọc kết quả
@@ -220,27 +220,27 @@ export default function AffiliateLinks() {
             <thead>
               <tr>
                 <th>LINK ĐƯỢC THEO DÕI (UTM TAG)</th>
-                <th className="text-right">SỐ CLICK</th>
-                <th className="text-right">ĐĂNG KÝ (LEADS)</th>
-                <th className="text-right">CHỐT SALE</th>
-                <th className="text-right">TỈ LỆ CHUYỂN ĐỔI</th>
+                <th style={{textAlign: 'center'}}>SỐ CLICK</th>
+                <th style={{textAlign: 'center'}}>ĐĂNG KÝ (LEADS)</th>
+                <th style={{textAlign: 'center'}}>CHỐT SALE</th>
+                <th style={{textAlign: 'center'}}>TỈ LỆ CHUYỂN ĐỔI</th>
               </tr>
             </thead>
             <tbody>
               {links.map(link => (
                 <tr key={link.id}>
                   <td>
-                    <div className="stat-code bg-gray-100 text-gray-800 text-sm px-2 py-1 rounded inline-block font-mono mb-1">
+                    <div style={{fontWeight: 600, marginBottom: '4px'}}>
                       {link.campaigns?.name}
                     </div>
-                    <div className="text-muted text-xs">
+                    <div style={{color: '#9CA3AF', fontSize: '12px'}}>
                       UTM: {link.sub_id1 || '(Mặc định)'}
                     </div>
                   </td>
-                  <td className="text-right font-semibold text-blue-600">{(link.clicks || 0).toLocaleString()}</td>
-                  <td className="text-right font-semibold text-orange-500">{(link.leads || 0).toLocaleString()}</td>
-                  <td className="text-right font-bold text-green-600">{(link.sales || 0)}</td>
-                  <td className="text-right">
+                  <td style={{textAlign: 'center', fontWeight: 600, color: '#3B82F6'}}>{(link.clicks || 0).toLocaleString()}</td>
+                  <td style={{textAlign: 'center', fontWeight: 600, color: '#F59E0B'}}>{(link.leads || 0).toLocaleString()}</td>
+                  <td style={{textAlign: 'center', fontWeight: 700, color: '#10B981'}}>{(link.sales || 0)}</td>
+                  <td style={{textAlign: 'center'}}>
                     <span className="conversion-badge">
                       {link.clicks > 0 ? ((link.sales / link.clicks) * 100).toFixed(1) : 0}%
                     </span>
@@ -249,18 +249,18 @@ export default function AffiliateLinks() {
               ))}
               {links.length === 0 && (
                 <tr>
-                  <td colSpan="5" className="text-center py-4 text-muted">Chưa tạo đường link Affiliate nào.</td>
+                  <td colSpan="5" style={{textAlign: 'center', padding: '24px', color: '#9CA3AF'}}>Chưa tạo đường link Affiliate nào.</td>
                 </tr>
               )}
             </tbody>
             {links.length > 0 && (
             <tfoot>
               <tr>
-                <td className="font-bold">TỔNG CỘNG</td>
-                <td className="text-right font-bold text-lg">{links.reduce((sum, link) => sum + (link.clicks || 0), 0).toLocaleString()}</td>
-                <td className="text-right font-bold text-lg">{links.reduce((sum, link) => sum + (link.leads || 0), 0).toLocaleString()}</td>
-                <td className="text-right font-bold text-lg text-green-600">{links.reduce((sum, link) => sum + (link.sales || 0), 0)}</td>
-                <td className="text-right font-bold text-lg text-blue-600">
+                <td style={{fontWeight: 700}}>TỔNG CỘNG</td>
+                <td style={{textAlign: 'center', fontWeight: 700, fontSize: '16px'}}>{links.reduce((sum, link) => sum + (link.clicks || 0), 0).toLocaleString()}</td>
+                <td style={{textAlign: 'center', fontWeight: 700, fontSize: '16px'}}>{links.reduce((sum, link) => sum + (link.leads || 0), 0).toLocaleString()}</td>
+                <td style={{textAlign: 'center', fontWeight: 700, fontSize: '16px', color: '#10B981'}}>{links.reduce((sum, link) => sum + (link.sales || 0), 0)}</td>
+                <td style={{textAlign: 'center', fontWeight: 700, fontSize: '16px'}}>
                   {links.reduce((sum, link) => sum + (link.clicks || 0), 0) > 0 
                     ? ((links.reduce((sum, link) => sum + (link.sales || 0), 0) / links.reduce((sum, link) => sum + (link.clicks || 0), 0)) * 100).toFixed(1) 
                     : 0}%

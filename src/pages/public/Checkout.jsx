@@ -161,11 +161,15 @@ const Checkout = () => {
     try {
       // Tính hoa hồng dựa trên commission_plans
       const commissionAmount = await calculateCommission(amount, courseId);
+      
+      // Lấy link_id từ localStorage để trigger cộng Sale
+      const linkId = localStorage.getItem('aff_link_id') || null;
 
       const { error } = await supabase
         .from('conversions')
         .insert([{
           affiliate_id: leadInfo.affiliate_id,
+          link_id: linkId,
           sale_amount: amount,
           commission_amount: commissionAmount,
           status: 'pending',
