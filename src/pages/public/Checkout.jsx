@@ -54,29 +54,27 @@ const Checkout = () => {
     setPaymentCode(generatePaymentCode());
   }, []);
 
-  // Realtime listener: theo dõi khi SePay webhook cập nhật status → approved
+  // Polling: kiểm tra trạng thái thanh toán mỗi 3 giây
   useEffect(() => {
     if (!conversionId) return;
 
-    const channel = supabase
-      .channel(`payment_${conversionId}`)
-      .on('postgres_changes', {
-        event: 'UPDATE',
-        schema: 'public',
-        table: 'conversions',
-        filter: `payment_code=eq.${conversionId}`
-      }, (payload) => {
-        if (payload.new.status === 'approved') {
+    const pollInterval = setInterval(async () => {
+      try {
+        const { data, error } = await supabase
+          .rpc('check_payment_status', { p_payment_code: conversionId });
+        
+        if (!error && data === 'approved') {
           setPaymentStatus('success');
+          clearInterval(pollInterval);
           if (timerRef.current) clearInterval(timerRef.current);
           addToast('🎉 Thanh toán thành công! Đơn hàng đã được xác nhận.', 'success');
         }
-      })
-      .subscribe();
+      } catch (err) {
+        console.warn('Payment check error:', err);
+      }
+    }, 3000); // Poll mỗi 3 giây
 
-    return () => {
-      supabase.removeChannel(channel);
-    };
+    return () => clearInterval(pollInterval);
   }, [conversionId]);
 
   // Timer đếm thời gian chờ
