@@ -129,7 +129,8 @@ const Sidebar = ({ onClose }) => {
             )}
           </div>
 
-          {/* QUẢN TRỊ HỆ THỐNG */}
+          {/* QUẢN TRỊ HỆ THỐNG — Chỉ Admin thấy */}
+          {isAdmin && (
           <div className="nav-group-wrapper">
             <div className="nav-group-header" onClick={() => toggleGroup('admin')}>
               <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
@@ -164,6 +165,7 @@ const Sidebar = ({ onClose }) => {
               </div>
             )}
           </div>
+          )}
 
         </nav>
       </div>
@@ -171,7 +173,7 @@ const Sidebar = ({ onClose }) => {
       <div className="sidebar-footer">
         <NavLink to="/portal/settings" className="nav-item mb-2" style={{color: '#D1D5DB'}} onClick={onClose}>
           <Settings size={18} />
-          <span>Cài Đặt Hệ Thống</span>
+          <span>{isAdmin ? 'Cài Đặt Hệ Thống' : 'Cài Đặt Cá Nhân'}</span>
         </NavLink>
         
         <div className="user-profile-card">
