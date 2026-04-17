@@ -162,10 +162,10 @@ const AdminCommissionPlans = () => {
             <thead>
               <tr>
                 <th>Tên Chính Sách</th>
-                <th>Phân Loại</th>
-                <th>Tỷ Lệ Hoa Hồng</th>
+                <th style={{textAlign: 'center'}}>Phân Loại</th>
+                <th style={{textAlign: 'center'}}>Tỷ Lệ Hoa Hồng</th>
                 <th>Phạm Vi Áp Dụng</th>
-                <th style={{textAlign: 'right'}}>Hành Động</th>
+                <th style={{textAlign: 'center'}}>Hành Động</th>
               </tr>
             </thead>
             <tbody>
@@ -173,10 +173,10 @@ const AdminCommissionPlans = () => {
                 Array.from({ length: 4 }).map((_, i) => (
                   <tr key={i}>
                     <td><Skeleton width="150px" height="20px" /></td>
-                    <td><Skeleton width="120px" height="24px" style={{borderRadius: 12}} /></td>
-                    <td><Skeleton width="80px" height="20px" /></td>
+                    <td style={{textAlign: 'center'}}><Skeleton width="120px" height="24px" style={{borderRadius: 12, margin: '0 auto'}} /></td>
+                    <td style={{textAlign: 'center'}}><Skeleton width="80px" height="20px" style={{margin: '0 auto'}} /></td>
                     <td><Skeleton width="120px" height="20px" /></td>
-                    <td style={{textAlign: 'right'}}><Skeleton width="40px" height="28px" style={{marginLeft: 'auto'}} /></td>
+                    <td style={{textAlign: 'center'}}><Skeleton width="40px" height="28px" style={{margin: '0 auto'}} /></td>
                   </tr>
                 ))
               ) : plans.length === 0 ? (
@@ -188,17 +188,19 @@ const AdminCommissionPlans = () => {
               ) : plans.map((plan) => (
                 <tr key={plan.id}>
                   <td className="font-bold">{plan.name}</td>
-                  <td>
+                  <td style={{textAlign: 'center'}}>
                     <span className={`badge ${plan.type === 'product' ? 'badge-cleared' : (plan.type === 'default' ? 'badge-padding' : 'badge-paid')}`}>
                       {getTypeLabel(plan.type)}
                     </span>
                   </td>
-                  <td className="font-bold text-success">{getRateDisplay(plan)}</td>
+                  <td className="font-bold text-success" style={{textAlign: 'center'}}>{getRateDisplay(plan)}</td>
                   <td className="text-muted">{plan.applied_scope || 'Tất cả'}</td>
-                  <td style={{textAlign: 'right'}}>
-                    <button className="cf-btn-outline" style={{padding: '4px 8px', fontSize: '13px'}} onClick={() => openEdit(plan)} title="Chỉnh sửa">
-                      <Edit size={14} />
-                    </button>
+                  <td style={{textAlign: 'center'}}>
+                    <div style={{display: 'flex', justifyContent: 'center'}}>
+                      <button className="cf-btn-outline" style={{padding: '4px 8px', fontSize: '13px'}} onClick={() => openEdit(plan)} title="Chỉnh sửa">
+                        <Edit size={14} />
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

@@ -381,14 +381,12 @@ const AffiliateSettings = () => {
               ))}
             </div>
 
-            <div className="p-4 mt-6" style={{ background: 'rgba(0,0,0,0.02)', borderRadius: '8px', border: '1px solid var(--cf-border)' }}>
-              <div className="flex-between">
-                <div>
-                  <h4 className="font-bold mb-1">Bạn muốn thăng hạng cao hơn?</h4>
-                  <p className="text-sm text-muted">Truy cập ngay bảng Dự Án (Campaigns) để mua thêm quyền phân phối cấp Đại Lượng.</p>
-                </div>
-                <button className="cf-btn-primary" onClick={() => window.location.href = '/affiliate/store'}>Đến trang Nâng Cấp</button>
+            <div style={{ padding: '20px', marginTop: '24px', background: 'rgba(0,0,0,0.02)', borderRadius: '8px', border: '1px solid var(--cf-border)', display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: '16px' }}>
+              <div style={{ flex: '1 1 300px' }}>
+                <h4 className="font-bold mb-1">Bạn muốn thăng hạng cao hơn?</h4>
+                <p className="text-sm text-muted" style={{ margin: 0 }}>Truy cập ngay bảng Dự Án (Campaigns) để mua thêm quyền phân phối cấp Đại Lượng.</p>
               </div>
+              <button className="cf-btn-primary" style={{ whiteSpace: 'nowrap' }} onClick={() => window.location.href = '/affiliate/store'}>Đến trang Nâng Cấp</button>
             </div>
           </div>
         )}

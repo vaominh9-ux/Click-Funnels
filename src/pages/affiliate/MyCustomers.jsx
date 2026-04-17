@@ -16,7 +16,32 @@ const MyCustomers = () => {
   const addToast = useToast();
 
   useEffect(() => {
-    loadCustomers();
+    const initData = async () => {
+      await loadCustomers();
+      
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const leadsSub = supabase.channel('mycustomers_leads')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'leads', filter: `affiliate_id=eq.${user.id}` }, 
+          () => loadCustomers())
+        .subscribe();
+
+      const convSub = supabase.channel('mycustomers_conversions')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'conversions', filter: `affiliate_id=eq.${user.id}` }, 
+          () => loadCustomers())
+        .subscribe();
+
+      return () => {
+        supabase.removeChannel(leadsSub);
+        supabase.removeChannel(convSub);
+      };
+    };
+
+    const cleanup = initData();
+    return () => {
+      cleanup.then(cleanFn => { if (typeof cleanFn === 'function') cleanFn(); });
+    };
   }, []);
 
   const loadCustomers = async () => {
@@ -53,6 +78,8 @@ const MyCustomers = () => {
          return {
             id: lead.id,
             customer_name: lead.name,
+            phone: lead.phone,
+            email: lead.email,
             product_name: matchingConv ? (matchingConv.campaigns?.name || matchingConv.product_name) : (lead.notes?.replace('Đăng ký từ khóa học: ', '') || 'Khóa học'),
             created_at: lead.created_at,
             status: matchingConv ? matchingConv.status : 'unpaid', // Thêm trạng thái Chưa Thanh Toán
@@ -68,6 +95,8 @@ const MyCustomers = () => {
              mergedList.push({
                  id: c.id,
                  customer_name: c.customer_name,
+                 phone: c.customer_info?.phone || 'N/A',
+                 email: 'N/A',
                  product_name: c.campaigns?.name || c.product_name,
                  created_at: c.created_at,
                  status: c.status,
@@ -247,6 +276,8 @@ const MyCustomers = () => {
                       <div className="mc-avatar">{(conv.customer_name || '?').charAt(0).toUpperCase()}</div>
                       <div>
                         <div className="font-bold">{conv.customer_name || 'Khách hàng'}</div>
+                        <div className="text-sm text-muted" style={{marginTop: '2px'}}>{conv.phone || 'Không có SĐT'}</div>
+                        {conv.email && conv.email !== 'N/A' && <div className="text-xs text-muted">{conv.email}</div>}
                       </div>
                     </div>
                   </td>

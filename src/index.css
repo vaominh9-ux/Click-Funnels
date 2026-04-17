@@ -23,6 +23,18 @@
   --cf-radius-md: 8px;
 }
 
+/* Global Utility Classes */
+.flex-align-center {
+  display: flex;
+  align-items: center;
+}
+
+.flex-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
 [data-theme='dark'] {
   --cf-bg-canvas: #0f172a;
   --cf-bg-surface: #1e293b;

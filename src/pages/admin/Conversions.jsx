@@ -201,6 +201,7 @@ export default function AdminConversions() {
                   </td>
                   <td>
                     <div className="font-bold">{conv.customer_name || conv.customer_info?.name || 'N/A'}</div>
+                    {conv.customer_info?.phone && <div className="text-sm font-bold" style={{color: '#10B981', marginTop: '2px'}}>{conv.customer_info.phone}</div>}
                     <div className="text-sm text-muted">{conv.product_name || 'N/A'}</div>
                     <div className="text-sm text-muted">{new Date(conv.created_at).toLocaleDateString('vi-VN')}</div>
                   </td>

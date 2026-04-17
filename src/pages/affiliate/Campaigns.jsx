@@ -153,10 +153,16 @@ const AffiliateCampaigns = () => {
 
           return (
             <div key={camp.id} className={`cf-card campaign-card ${locked ? 'locked' : ''}`} style={locked ? {opacity: 0.75} : {}}>
-              <div className="campaign-image" style={{
-                backgroundImage: `url(${displayImage})`,
-                display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative'
-              }}>
+              <div className="campaign-image" 
+                style={{
+                  backgroundImage: `url(${displayImage})`,
+                  display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative',
+                  cursor: !locked ? 'pointer' : 'default'
+                }}
+                onClick={() => {
+                  if (!locked) window.open(affLink, '_blank');
+                }}
+              >
                 <div className="campaign-image-overlay"></div>
                 {locked && (
                   <div style={{position: 'absolute', background: 'rgba(15, 23, 42, 0.8)', inset: 0, display:'flex', alignItems:'center', justifyContent:'center', backdropFilter: 'blur(4px)'}}>
@@ -186,21 +192,6 @@ const AffiliateCampaigns = () => {
                       >
                         {copiedId === camp.id ? 'Copied!' : <Copy size={16} />}
                       </button>
-                    </div>
-                    <div className="campaign-footer flex-between mt-4">
-                      <button 
-                        className="cf-btn-text text-sm"
-                        onClick={() => {
-                          if (camp.asset_url) {
-                            window.open(camp.asset_url, '_blank');
-                          } else {
-                            addToast('Chưa có tài liệu quảng bá cho chiến dịch này.', 'info');
-                          }
-                        }}
-                      >Download Assets (Swipes)</button>
-                      <a href={camp.landing_page_url} target="_blank" rel="noopener noreferrer" className="cf-btn-icon">
-                        <ExternalLink size={16}/>
-                      </a>
                     </div>
                   </>
                 ) : (
