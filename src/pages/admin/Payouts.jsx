@@ -16,68 +16,127 @@ const modalStyle = {
 
 const AdminPayouts = () => {
   const addToast = useToast();
-  const [payouts, setPayouts] = useState([]);
+  const [pendingProfiles, setPendingProfiles] = useState([]);
+  const [completedPayouts, setCompletedPayouts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [confirmTarget, setConfirmTarget] = useState(null);
   const [submitting, setSubmitting] = useState(false);
+  const [selectedIds, setSelectedIds] = useState([]);
 
   const fetchPayouts = async () => {
     setLoading(true);
-    const { data, error } = await supabase
+    // 1. Lấy tất cả đại lý thỏa mãn số dư
+    const { data: profilesData, error: profileErr } = await supabase
+      .from('profiles')
+      .select('*')
+      .gte('balance', 1000000);
+
+    // 2. Lấy dữ liệu lịch sử thanh toán thành công
+    const { data: payoutsData, error: payoutErr } = await supabase
       .from('payouts')
       .select('*, profiles:affiliate_id(full_name, email, ref_code)')
+      .eq('status', 'completed')
       .order('created_at', { ascending: false });
 
-    if (error) {
-      addToast('Không thể tải danh sách thanh toán', 'error');
+    if (profileErr || payoutErr) {
+      addToast('Không thể tải dữ liệu kế toán', 'error');
     } else {
-      setPayouts(data || []);
+      setPendingProfiles(profilesData || []);
+      setCompletedPayouts(payoutsData || []);
     }
     setLoading(false);
+    setSelectedIds([]);
   };
 
   useEffect(() => { fetchPayouts(); }, []);
 
-  const pendingPayouts = payouts.filter(p => p.status === 'pending' || p.status === 'processing');
-  const completedPayouts = payouts.filter(p => p.status === 'completed');
-  const totalUnpaid = pendingPayouts.reduce((s, p) => s + Number(p.amount || 0), 0);
+  const totalUnpaid = pendingProfiles.reduce((s, p) => s + Number(p.balance || 0), 0);
 
-  const handleConfirmPay = async () => {
-    if (!confirmTarget) return;
+  const handleConfirmPay = async (target) => {
+    const prof = target || confirmTarget;
+    if (!prof) return;
     setSubmitting(true);
 
-    const { error } = await supabase
-      .from('payouts')
-      .update({ status: 'completed', updated_at: new Date().toISOString() })
-      .eq('id', confirmTarget.id);
+    const amountToPay = prof.balance;
+    const affiliateId = prof.id;
 
-    if (error) {
-      addToast('Lỗi khi xác nhận: ' + error.message, 'error');
+    // Lấy method
+    let method = 'bank';
+    if (prof.payment_info) {
+        const info = typeof prof.payment_info === 'string' ? JSON.parse(prof.payment_info) : prof.payment_info;
+        method = info.method || 'bank';
+    }
+
+    // 1. Insert Record
+    const { error: insertErr } = await supabase.from('payouts').insert({
+        affiliate_id: affiliateId,
+        amount: amountToPay,
+        method: method,
+        status: 'completed',
+        created_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+    });
+
+    if (insertErr) {
+        addToast('Lỗi khi lưu biên lai: ' + insertErr.message, 'error');
     } else {
-      addToast(`Đã thanh toán ${Number(confirmTarget.amount).toLocaleString('vi-VN')} cho ${confirmTarget.profiles?.full_name}`, 'success');
+        // 2. Trừ ví
+        await supabase.from('profiles').update({ balance: 0 }).eq('id', affiliateId);
+        addToast(`Đã thanh toán ${Number(amountToPay).toLocaleString('vi-VN')} cho ${prof.full_name}`, 'success');
     }
 
     setSubmitting(false);
-    setConfirmTarget(null);
+    if (confirmTarget) setConfirmTarget(null);
+    fetchPayouts();
+  };
+
+  const handleBulkApprove = async () => {
+    if (selectedIds.length === 0) return;
+    if (!window.confirm(`Bạn có chắc muốn thanh toán đồng loạt cho ${selectedIds.length} đại lý?`)) return;
+    
+    setLoading(true);
+    for (const sid of selectedIds) {
+      const target = pendingProfiles.find(p => p.id === sid);
+      if (target) {
+        // Run synchronously to ensure order but slower. 
+        // Can be optimized to Promise.all if needed, but safety first for payments.
+        let method = 'bank';
+        if (target.payment_info) {
+            const info = typeof target.payment_info === 'string' ? JSON.parse(target.payment_info) : target.payment_info;
+            method = info.method || 'bank';
+        }
+        await supabase.from('payouts').insert({ affiliate_id: target.id, amount: target.balance, method: method, status: 'completed' });
+        await supabase.from('profiles').update({ balance: 0 }).eq('id', target.id);
+      }
+    }
+    
+    addToast(`Đã thanh toán hàng loạt thành công`, 'success');
     fetchPayouts();
   };
 
   const handleExportCSV = () => {
-    const headers = ['Mã ĐL', 'Họ Tên', 'Email', 'Số Tiền', 'Phương Thức', 'Trạng Thái'];
-    const rows = payouts.map(p => [
-      p.profiles?.ref_code || p.affiliate_id?.substring(0, 8),
-      p.profiles?.full_name || 'N/A',
-      p.profiles?.email || 'N/A',
-      p.amount,
-      p.method || 'Chuyển khoản',
-      p.status === 'completed' ? 'Đã thanh toán' : 'Chờ duyệt'
-    ]);
+    const headers = ['Mã ĐL', 'Họ Tên', 'Email', 'Số Tiền', 'Ngân Hàng', 'Trạng Thái'];
+    const rows = pendingProfiles.map(p => {
+      let bankStr = 'N/A';
+      if (p.payment_info) {
+          const info = typeof p.payment_info === 'string' ? JSON.parse(p.payment_info) : p.payment_info;
+          bankStr = `${info.bank_name || ''} - ${info.account || ''}`;
+      }
+      return [
+        p.ref_code || p.id.substring(0, 8),
+        p.full_name || 'N/A',
+        p.email || 'N/A',
+        p.balance,
+        bankStr,
+        'Chờ thanh toán'
+      ];
+    });
     const csvContent = [headers, ...rows].map(r => r.join(',')).join('\n');
     const blob = new Blob(['\uFEFF' + csvContent], { type: 'text/csv;charset=utf-8;' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `thanh-toan-${new Date().toISOString().slice(0,10)}.csv`;
+    a.download = `can-thanh-toan-${new Date().toISOString().slice(0,10)}.csv`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -101,7 +160,7 @@ const AdminPayouts = () => {
             {loading ? <Skeleton width="150px" height="36px" /> : `${totalUnpaid.toLocaleString('vi-VN')}`}
           </div>
           <div className="text-sm mt-2 text-muted">
-            {loading ? <Skeleton width="120px" height="16px" /> : `${pendingPayouts.length} Đại lý đủ điều kiện`}
+            {loading ? <Skeleton width="120px" height="16px" /> : `${pendingProfiles.length} Đại lý đủ điều kiện`}
           </div>
         </div>
 
@@ -118,13 +177,24 @@ const AdminPayouts = () => {
       <div className="cf-card p-0">
         <div className="p-4 flex-between" style={{borderBottom: '1px solid var(--cf-border)'}}>
           <h3 className="font-bold">Đại lý chờ thanh toán</h3>
+          {selectedIds.length > 0 && (
+            <button className="cf-btn-primary" style={{padding: '6px 16px', fontSize: '13px', background: '#10B981'}} onClick={handleBulkApprove}>
+              Thanh Toán Hàng Loạt ({selectedIds.length})
+            </button>
+          )}
         </div>
         <div className="table-responsive">
           <table className="cf-table">
             <thead>
               <tr>
+                <th style={{width: 40}}>
+                  <input type="checkbox" 
+                    onChange={(e) => setSelectedIds(e.target.checked ? pendingProfiles.map(p => p.id) : [])}
+                    checked={pendingProfiles.length > 0 && selectedIds.length === pendingProfiles.length}
+                  />
+                </th>
                 <th>Thông Tin Đại Lý</th>
-                <th>Phương Thức</th>
+                <th>Phương Thức / Ngân Hàng</th>
                 <th>Số Dư Rút</th>
                 <th style={{textAlign: 'right'}}>Hành Động</th>
               </tr>
@@ -133,34 +203,56 @@ const AdminPayouts = () => {
               {loading ? (
                 Array.from({ length: 3 }).map((_, i) => (
                   <tr key={i}>
+                    <td><Skeleton width="20px" height="20px" /></td>
                     <td><Skeleton width="140px" height="20px" /><div style={{marginTop: 4}}><Skeleton width="180px" height="14px" /></div></td>
-                    <td><Skeleton width="100px" height="24px" style={{borderRadius: 12}} /></td>
+                    <td><Skeleton width="140px" height="20px" /><div style={{marginTop: 4}}><Skeleton width="100px" height="14px" /></div></td>
                     <td><Skeleton width="120px" height="20px" /></td>
                     <td style={{textAlign: 'right'}}><Skeleton width="140px" height="32px" style={{marginLeft: 'auto'}} /></td>
                   </tr>
                 ))
-              ) : pendingPayouts.length === 0 ? (
+              ) : pendingProfiles.length === 0 ? (
                 <tr>
-                  <td colSpan="4" style={{textAlign: 'center', padding: '32px', color: '#9CA3AF'}}>
-                    Chưa có yêu cầu thanh toán nào đang chờ duyệt.
+                  <td colSpan="5" style={{textAlign: 'center', padding: '32px', color: '#9CA3AF'}}>
+                    Chưa có đại lý nào đạt mốc rút tiền &gt; 1.000.000đ.
                   </td>
                 </tr>
-              ) : pendingPayouts.map((pay) => (
-                <tr key={pay.id}>
-                  <td>
-                    <div className="font-bold">{pay.profiles?.full_name || 'Chưa cập nhật'}</div>
-                    <div className="text-sm text-muted">{pay.profiles?.email} ({pay.profiles?.ref_code || pay.affiliate_id?.substring(0, 8)})</div>
-                  </td>
-                  <td><span className="badge badge-cleared">{pay.method || 'Chuyển khoản'}</span></td>
-                  <td className="font-bold text-success">{Number(pay.amount).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
-                  <td style={{textAlign: 'right'}}>
-                    <button className="cf-btn-outline" style={{padding: '6px 12px', fontSize: '13px', display:'inline-flex', gap:'6px', alignItems:'center'}}
-                      onClick={() => setConfirmTarget(pay)}>
-                      <CheckCircle size={14}/> Xác Nhận Thanh Toán
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              ) : pendingProfiles.map((prof) => {
+                let paymentDetails = 'Chưa thiết lập';
+                let method = 'Chuyển khoản';
+                if (prof.payment_info) {
+                    const info = typeof prof.payment_info === 'string' ? JSON.parse(prof.payment_info) : prof.payment_info;
+                    method = info.method === 'paypal' ? 'PayPal' : 'Ngân hàng nội địa';
+                    paymentDetails = info.account ? `${info.bank_name || ''} - ${info.account}` : 'Chưa thiết lập';
+                }
+
+                return (
+                  <tr key={prof.id}>
+                    <td>
+                      <input type="checkbox" checked={selectedIds.includes(prof.id)}
+                        onChange={(e) => {
+                          if (e.target.checked) setSelectedIds([...selectedIds, prof.id]);
+                          else setSelectedIds(selectedIds.filter(id => id !== prof.id));
+                        }}
+                      />
+                    </td>
+                    <td>
+                      <div className="font-bold">{prof.full_name || 'Chưa cập nhật'}</div>
+                      <div className="text-sm text-muted">{prof.email} ({prof.ref_code || prof.id.substring(0, 8)})</div>
+                    </td>
+                    <td>
+                      <div className="font-bold">{method}</div>
+                      <div className="text-sm text-muted">{paymentDetails}</div>
+                    </td>
+                    <td className="font-bold text-success">{Number(prof.balance).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}</td>
+                    <td style={{textAlign: 'right'}}>
+                      <button className="cf-btn-outline" style={{padding: '6px 12px', fontSize: '13px', display:'inline-flex', gap:'6px', alignItems:'center'}}
+                        onClick={() => setConfirmTarget(prof)}>
+                        <CheckCircle size={14}/> Xác Nhận
+                      </button>
+                    </td>
+                  </tr>
+                )
+              })}
             </tbody>
           </table>
         </div>
@@ -207,11 +299,10 @@ const AdminPayouts = () => {
             </div>
 
             <div style={{padding: '16px', background: '#F0FDF4', borderRadius: '8px', marginBottom: '20px'}}>
-              <div style={{fontSize: '14px', color: '#065F46', marginBottom: '8px'}}><strong>Đại lý:</strong> {confirmTarget.profiles?.full_name || 'N/A'}</div>
-              <div style={{fontSize: '14px', color: '#065F46', marginBottom: '8px'}}><strong>Email:</strong> {confirmTarget.profiles?.email || 'N/A'}</div>
-              <div style={{fontSize: '14px', color: '#065F46', marginBottom: '8px'}}><strong>Phương thức:</strong> {confirmTarget.method || 'Chuyển khoản'}</div>
+              <div style={{fontSize: '14px', color: '#065F46', marginBottom: '8px'}}><strong>Đại lý:</strong> {confirmTarget.full_name || 'N/A'}</div>
+              <div style={{fontSize: '14px', color: '#065F46', marginBottom: '8px'}}><strong>Email:</strong> {confirmTarget.email || 'N/A'}</div>
               <div style={{fontSize: '20px', fontWeight: 700, color: '#059669'}}>
-                {Number(confirmTarget.amount).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
+                {Number(confirmTarget.balance).toLocaleString('vi-VN', { style: 'currency', currency: 'VND' })}
               </div>
             </div>
             <p style={{fontSize: '13px', color: '#6B7280', marginBottom: '20px'}}>
