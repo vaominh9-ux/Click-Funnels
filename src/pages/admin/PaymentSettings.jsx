@@ -102,12 +102,9 @@ const PaymentSettings = () => {
   if (loading) {
     return (
       <div className="payment-settings-container">
-        <div className="ps-header">
-          <h1>Cấu Hình Thanh Toán</h1>
-        </div>
-        <div style={{padding: '40px', textAlign: 'center', color: '#9CA3AF'}}>
+        <div className="ps-loading">
           <Loader2 size={32} className="spin" />
-          <p style={{marginTop: '12px'}}>Đang tải cấu hình...</p>
+          <p>Đang tải cấu hình...</p>
         </div>
       </div>
     );
@@ -116,10 +113,7 @@ const PaymentSettings = () => {
   return (
     <div className="payment-settings-container">
       <div className="ps-header">
-        <div>
-          <h1>Cấu Hình Thanh Toán</h1>
-          <p className="ps-subtitle">Quản lý thông tin ngân hàng nhận tiền & mã QR cho trang Checkout.</p>
-        </div>
+        <p className="ps-subtitle">Quản lý thông tin ngân hàng nhận tiền & mã QR cho trang Checkout.</p>
       </div>
 
       <div className="ps-grid">
