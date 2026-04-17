@@ -285,17 +285,19 @@ const PaymentSettings = () => {
             )}
           </div>
 
-          <div className="ps-card-header" style={{marginTop: '24px'}}>
-            <CreditCard size={20} />
-            <h3>Hướng Dẫn Thay Đổi</h3>
-          </div>
-          <div className="ps-guide">
-            <ol>
-              <li>Điền đúng <strong>số VA</strong> lấy từ SePay Dashboard</li>
-              <li>Tên chủ TK phải <strong>khớp chính xác</strong> với tên trên ngân hàng</li>
-              <li>Nếu đổi ngân hàng mới → vào SePay liên kết TK mới + cập nhật Webhook</li>
-              <li>Bấm <strong>"Lưu Thay Đổi"</strong> → cả trang Checkout và Webhook API sẽ tự cập nhật cấu hình mới.</li>
-            </ol>
+          <div className="ps-guide-wrapper">
+            <div className="ps-card-header" style={{marginTop: '24px'}}>
+              <CreditCard size={20} />
+              <h3>Hướng Dẫn Thay Đổi</h3>
+            </div>
+            <div className="ps-guide">
+              <ol>
+                <li>Điền đúng <strong>số VA</strong> lấy từ SePay Dashboard</li>
+                <li>Tên chủ TK phải <strong>khớp chính xác</strong> với tên trên ngân hàng</li>
+                <li>Nếu đổi ngân hàng mới → vào SePay liên kết TK mới + cập nhật Webhook</li>
+                <li>Bấm <strong>"Lưu Thay Đổi"</strong> → cả trang Checkout và Webhook API sẽ tự cập nhật cấu hình mới.</li>
+              </ol>
+            </div>
           </div>
         </div>
         </div> {/* End right column */}

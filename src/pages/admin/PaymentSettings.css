@@ -35,7 +35,18 @@
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 24px;
-  align-items: start;
+  align-items: stretch;
+}
+
+.ps-col-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.ps-col-right .ps-card {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 @media (max-width: 900px) {
@@ -175,9 +186,11 @@
 
 /* QR Preview */
 .ps-qr-preview {
+  flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 16px;
 }
 
@@ -246,7 +259,10 @@
   font-size: 13px;
 }
 
-/* Guide */
+.ps-guide-wrapper {
+  margin-top: auto; /* Push guide to the bottom naturally */
+}
+
 .ps-guide {
   padding: 0;
 }
