@@ -64,7 +64,7 @@ const Checkout = () => {
         event: 'UPDATE',
         schema: 'public',
         table: 'conversions',
-        filter: `id=eq.${conversionId}`
+        filter: `payment_code=eq.${conversionId}`
       }, (payload) => {
         if (payload.new.status === 'approved') {
           setPaymentStatus('success');
@@ -108,7 +108,7 @@ const Checkout = () => {
     
     setLoading(true);
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('conversions')
         .insert([{
           affiliate_id: leadInfo.affiliate_id,
@@ -123,13 +123,11 @@ const Checkout = () => {
             phone: leadInfo.phone,
             notes: `Mua ${course.name}`
           }
-        }])
-        .select('id')
-        .single();
+        }]);
 
       if (error) throw error;
       
-      setConversionId(data.id);
+      setConversionId(paymentCode); // Dùng paymentCode làm key cho realtime
       setPaymentStatus('waiting');
       setElapsedTime(0);
       addToast('Đơn hàng đã được tạo. Quét mã QR để thanh toán!', 'success');
