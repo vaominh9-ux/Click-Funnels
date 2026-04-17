@@ -52,7 +52,7 @@ const AdminCommissionPlans = () => {
 
   const getRateDisplay = (plan) => {
     if (plan.rate_fixed && Number(plan.rate_fixed) > 0) {
-      return `${Number(plan.rate_fixed).toLocaleString('vi-VN')} ₫ (Cố định)`;
+      return `${Number(plan.rate_fixed).toLocaleString('vi-VN')} (Cố định)`;
     }
     return `${plan.rate_percent || 0}%`;
   };
@@ -222,7 +222,7 @@ const AdminCommissionPlans = () => {
                     placeholder="VD: 30" />
                 </div>
                 <div>
-                  <label style={{display: 'block', fontSize: '14px', fontWeight: 600, marginBottom: '8px'}}>Số tiền cố định (₫)</label>
+                  <label style={{display: 'block', fontSize: '14px', fontWeight: 600, marginBottom: '8px'}}>Số tiền cố định</label>
                   <input type="number" min="0" value={form.rate_fixed} onChange={e => setForm({...form, rate_fixed: e.target.value})}
                     style={{width: '100%', padding: '10px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none'}}
                     placeholder="VD: 5000000" />

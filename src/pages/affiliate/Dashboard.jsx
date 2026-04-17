@@ -1,232 +1,372 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../lib/supabase';
-import { DollarSign, CreditCard, TrendingUp, Users, CheckCircle, MousePointerClick } from 'lucide-react';
-import StatCard from '../../components/common/StatCard';
+import { 
+  DollarSign, CreditCard, TrendingUp, Users, 
+  MousePointerClick, Link2, ArrowUpRight, 
+  Zap, Target, Award, ChevronRight, Camera
+} from 'lucide-react';
 import Skeleton from '../../components/common/Skeleton';
-import './Dashboard.css';
+import LeaderboardWidget from '../../components/common/LeaderboardWidget/LeaderboardWidget';
+import './Dashboard.css'; /* Original global classes required by other pages */
+import './DashboardDribbble.css'; /* Completely isolated new UI classes */
 
 const AffiliateDashboard = () => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
+  const [badges, setBadges] = useState([]);
   const [dashboardData, setDashboardData] = useState({
     totalEarned: 0,
     balance: 0,
-    clicks: 1240, // Mock for now until we aggregate affiliate_links
-    leads: 85,
-    rank: 'Gold Affiliate',
+    clicks: 0,
+    leads: 0,
     recentConversions: []
   });
   const [loading, setLoading] = useState(true);
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [avatarError, setAvatarError] = useState(false);
+
+  const loadData = async (userId) => {
+    try {
+      const [{ data: profile }, { data: conversions }, { data: links }, { data: userBadges }] = await Promise.all([
+        supabase.from('profiles').select('*').eq('id', userId).single(),
+        supabase.from('conversions').select('*, campaigns(name)').eq('affiliate_id', userId).order('created_at', { ascending: false }).limit(5),
+        supabase.from('affiliate_links').select('clicks, leads').eq('affiliate_id', userId),
+        supabase.from('user_badges').select('*').eq('affiliate_id', userId)
+      ]);
+
+      const totalClicks = links?.reduce((sum, link) => sum + (link.clicks || 0), 0) || 0;
+      const totalLeads = links?.reduce((sum, link) => sum + (link.leads || 0), 0) || 0;
+
+      if (profile) {
+        setProfile(profile);
+        setBadges(userBadges || []);
+        setDashboardData({
+          totalEarned: profile.total_earned || 0,
+          balance: profile.balance || 0,
+          clicks: totalClicks,
+          leads: totalLeads,
+          recentConversions: conversions || []
+        });
+
+        if (profile.avatar_url) {
+          const { data } = supabase.storage.from('avatars').getPublicUrl(profile.avatar_url);
+          if (data?.publicUrl) setAvatarUrl(data.publicUrl);
+        }
+      }
+    } catch (err) {
+      console.error('Data load error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchDashboardStats = async () => {
-      setLoading(true);
+    const initDashboard = async () => {
       try {
         const { data: { user } } = await supabase.auth.getUser();
         if (!user) return;
+        
+        await loadData(user.id);
 
-        // Fetch User Profile (Balance, etc)
-        const { data: profile } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('id', user.id)
-          .single();
+        const profileSub = supabase.channel('dashboard_profile')
+          .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${user.id}` }, 
+            () => loadData(user.id))
+          .subscribe();
 
-        // Fetch Recent Conversions
-        const { data: conversions } = await supabase
-          .from('conversions')
-          .select('*, campaigns(name)')
-          .eq('affiliate_id', user.id)
-          .order('created_at', { ascending: false })
-          .limit(5);
+        const convSub = supabase.channel('dashboard_conversions')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'conversions', filter: `affiliate_id=eq.${user.id}` }, 
+            () => loadData(user.id))
+          .subscribe();
 
-        // Fetch Total Clicks/Leads from affiliate_links
-        const { data: links } = await supabase
-          .from('affiliate_links')
-          .select('clicks, leads')
-          .eq('affiliate_id', user.id);
+        const linksSub = supabase.channel('dashboard_links')
+          .on('postgres_changes', { event: '*', schema: 'public', table: 'affiliate_links', filter: `affiliate_id=eq.${user.id}` }, 
+            () => loadData(user.id))
+          .subscribe();
 
-        const totalClicks = links?.reduce((sum, link) => sum + (link.clicks || 0), 0) || 0;
-        const totalLeads = links?.reduce((sum, link) => sum + (link.leads || 0), 0) || 0;
-
-        if (profile) {
-          setProfile(profile);
-          setDashboardData({
-            totalEarned: profile.total_earned || 0,
-            balance: profile.balance || 0,
-            rank: profile.rank || 'Tân binh',
-            clicks: totalClicks,
-            leads: totalLeads,
-            recentConversions: conversions || []
-          });
-        }
+        return () => {
+          supabase.removeChannel(profileSub);
+          supabase.removeChannel(convSub);
+          supabase.removeChannel(linksSub);
+        };
       } catch (err) {
-        console.error('Error fetching dashboard data:', err);
-      } finally {
-        setLoading(false);
+        console.error('Lỗi thiết lập realtime dashboard:', err);
       }
     };
 
-    fetchDashboardStats();
+    const cleanup = initDashboard();
+    return () => {
+      cleanup.then(cleanFn => { if (typeof cleanFn === 'function') cleanFn(); });
+    };
   }, []);
+
+  const conversionRate = dashboardData.clicks > 0 
+    ? ((dashboardData.leads / dashboardData.clicks) * 100).toFixed(1) 
+    : '0.0';
+
+  const tierLabel = profile?.tier?.toUpperCase() || 'STARTER';
 
   return (
     <div className="dashboard-wrapper">
       
-      {/* Premium Hero Section */}
-      <div className="hero-dashboard-grid">
-        <div className="premium-card-green">
-          <div className="rank-badge-gold">ĐẠI LÝ MASTER</div>
-          <div className="hero-label">Tổng Thu Nhập Trọn Đời</div>
-          <div className="hero-amount">
-            {loading ? <Skeleton width="150px" height="40px" /> : new Intl.NumberFormat('vi-VN').format(profile?.total_earned || 0)}<sup style={{fontSize: '24px', opacity: 0.8, marginLeft: '4px'}}>₫</sup>
-          </div>
-          <div className="hero-subtext">
-            <span>+ 14,500,000 ₫ trong 30 ngày qua</span>
-          </div>
-        </div>
-
-        <div className="premium-card-red">
-          <div className="rank-badge-gold" style={{background: 'rgba(255,255,255,0.2)', boxShadow: 'none'}}>FOMO ALERT</div>
-          <div className="hero-label">Hoa Hồng Vuột Mất</div>
-          <div className="hero-amount-red">
-            15,000,000<sup style={{fontSize: '20px', opacity: 0.8, marginLeft: '4px'}}>₫</sup>
-          </div>
-          <div className="hero-subtext">
-            Thiếu cấp độ để nhận hoa hồng từ nhánh dưới. Khách VIP vừa chốt đơn.
-          </div>
-          <button className="cf-btn-primary mt-4" style={{background: 'white', color: '#DC2626', width: '100%'}} onClick={() => navigate('/affiliate/store')}>Nâng Cấp Ngay</button>
-        </div>
-      </div>
-
-      {/* Account Status Header (Based on Funnel Rules) */}
-      <div className="cf-card mb-6" style={{ borderLeft: '4px solid var(--cf-accent)' }}>
-        <div className="flex-between" style={{ alignItems: 'center' }}>
-          <div>
-            <h3 className="font-bold mb-1" style={{ fontSize: '16px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-               <CheckCircle size={18} color="#059669" />Trạng Thái Tài Khoản: {profile?.role === 'admin' ? 'ADMIN' : 'BÌNH THƯỜNG'}
-            </h3>
-            <p className="text-muted text-sm">Bạn được phép nhận hoa hồng lên tới 50% cho các khóa Master trở xuống.</p>
-          </div>
+      {/* ── 2-COLUMN ASYMMETRIC GRID ── */}
+      <div className="dashboard-grid">
+        
+        {/* =========================================
+            LEFT COLUMN (MAIN CONTENT) 
+            ========================================= */}
+        <div className="dashboard-main-col">
           
-          <div style={{ textAlign: 'right', width: '350px' }}>
-            <div className="flex-between mb-2">
-              <span className="text-sm font-bold text-muted">Hạn Mức Hoạt Động Cần Thiết</span>
-              <span className="text-sm font-bold" style={{ color: '#059669' }}>Còn 80 Ngày</span>
+          {/* WELCOME BANNER (DRIBBBLE) */}
+          <div className="welcome-banner-dribbble">
+            <div className="welcome-top-dribbble">
+              <div className="welcome-left-dribbble">
+                <h1>Chào mừng trở lại, <span>{profile?.full_name || 'Đại Lý'}</span></h1>
+                <p>Nắm bắt cơ hội mới, xây dựng doanh nghiệp B2B của bạn ngay hôm nay.</p>
+              </div>
             </div>
-            <div style={{ width: '100%', height: '10px', background: 'var(--cf-border)', borderRadius: '5px', overflow: 'hidden' }}>
-              <div style={{ width: '20%', height: '100%', background: '#059669', transition: 'width 0.5s' }}></div>
+          </div>
+
+          {/* METRIC CARDS (Using isolated classes to avoid stats-grid conflict) */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
+            <div className="cf-card" style={{ display: 'flex', flexDirection: 'column', transition: 'transform 0.2s', padding: '24px' }}>
+              <div className="qa-icon qa-green" style={{ marginBottom: 16 }}>
+                <DollarSign size={22} />
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>Tổng Thu Nhập</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--cf-text-main)', marginBottom: 12 }}>
+                {loading ? <Skeleton width="120px" height="28px" /> : new Intl.NumberFormat('vi-VN').format(dashboardData.totalEarned)}
+              </div>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, padding: '4px 8px', borderRadius: 6, background: 'rgba(16,185,129,0.1)', color: '#059669', width: 'fit-content' }}>
+                <ArrowUpRight size={14} /> Hiệu suất tuyệt vời
+              </span>
             </div>
-            <p className="text-muted mt-2" style={{ fontSize: '11px', lineHeight: 1.4 }}>
-              Cần phát sinh 1 Click hoặc 1 Đơn trong 90 ngày để duy trì.
-            </p>
-          </div>
-        </div>
-      </div>
 
-      {/* Overview Stats */}
-      <div className="stats-grid">
-        <StatCard 
-          title="Số Dư Khả Dụng" 
-          value={loading ? <Skeleton width="100px" /> : <>{new Intl.NumberFormat('vi-VN').format(profile?.balance || 0)}<sup>₫</sup></>} 
-          trend={0} 
-          icon={<CreditCard />} 
-          chartData={[5, 5, 5, 5, 5, 5, 5]} 
-        />
-        <StatCard 
-          title="Tỷ lệ Chuyển Đổi" 
-          value={loading ? <Skeleton width="80px" /> : (
-            dashboardData.clicks > 0 
-              ? `${((dashboardData.leads / dashboardData.clicks) * 100).toFixed(1)}%`
-              : '0%'
-          )} 
-          trend={0} 
-          icon={<TrendingUp />} 
-          chartData={[10, 15, 12, 18, 20, 19, 22]} 
-        />
-        <StatCard 
-          title="Lượt Truy Cập (Clicks)" 
-          value={loading ? <Skeleton width="80px" /> : dashboardData.clicks.toLocaleString()} 
-          trend={0} 
-          icon={<MousePointerClick />} 
-          chartData={[20, 25, 30, 45, 50, 70, 90]} 
-        />
-      </div>
+            <div className="cf-card" style={{ display: 'flex', flexDirection: 'column', transition: 'transform 0.2s', padding: '24px' }}>
+              <div className="qa-icon qa-blue" style={{ marginBottom: 16 }}>
+                <CreditCard size={22} />
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>Số Dư Khả Dụng</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--cf-text-main)', marginBottom: 12 }}>
+                {loading ? <Skeleton width="100px" height="28px" /> : new Intl.NumberFormat('vi-VN').format(dashboardData.balance)}
+              </div>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, padding: '4px 8px', borderRadius: 6, background: 'rgba(107,114,128,0.1)', color: '#4b5563', width: 'fit-content' }}>
+                Sẵn sàng rút tiền
+              </span>
+            </div>
 
-      <div className="activity-section mt-6">
-        <div className="cf-card recent-sales">
-          <div className="flex-between mb-4">
-            <h3 className="font-bold flex-align-center" style={{gap: '12px'}}>
-              Đơn Hàng Gần Đây
-              <span className="pulse-dot"></span>
-            </h3>
-            <button className="cf-btn-text" onClick={() => navigate('/affiliate/links')}>Xem chi tiết</button>
+            <div className="cf-card" style={{ display: 'flex', flexDirection: 'column', transition: 'transform 0.2s', padding: '24px' }}>
+              <div className="qa-icon qa-purple" style={{ marginBottom: 16 }}>
+                <MousePointerClick size={22} />
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>Lượt Click</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--cf-text-main)', marginBottom: 12 }}>
+                {loading ? <Skeleton width="60px" height="28px" /> : dashboardData.clicks.toLocaleString()}
+              </div>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, padding: '4px 8px', borderRadius: 6, background: 'rgba(16,185,129,0.1)', color: '#059669', width: 'fit-content' }}>
+                <ArrowUpRight size={14} /> Chuyển đổi {conversionRate}%
+              </span>
+            </div>
+
+            <div className="cf-card" style={{ display: 'flex', flexDirection: 'column', transition: 'transform 0.2s', padding: '24px' }}>
+              <div className="qa-icon" style={{ background: '#ffedd5', color: '#ea580c', marginBottom: 16 }}>
+                <Users size={22} />
+              </div>
+              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-muted)', textTransform: 'uppercase', marginBottom: 8 }}>Khách Tiềm Năng</div>
+              <div style={{ fontSize: '1.6rem', fontWeight: 800, color: 'var(--cf-text-main)', marginBottom: 12 }}>
+                {loading ? <Skeleton width="50px" height="28px" /> : dashboardData.leads.toLocaleString()}
+              </div>
+              <span style={{ display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, padding: '4px 8px', borderRadius: 6, background: 'rgba(16,185,129,0.1)', color: '#059669', width: 'fit-content' }}>
+                <ArrowUpRight size={14} /> Số đăng ký mới
+              </span>
+            </div>
           </div>
-          
-          <table className="cf-table">
-            <thead>
-              <tr>
-                <th>Khách Hàng</th>
-                <th>Sản Phẩm</th>
-                <th>Thông Báo Mới</th>
-                <th style={{textAlign: 'right'}}>Trạng Thái</th>
-                <th style={{textAlign: 'right'}}>Hoa Hồng Nhận</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                Array(3).fill(0).map((_, i) => (
-                  <tr key={i}>
-                    <td colSpan="5"><Skeleton height="40px" width="100%" /></td>
-                  </tr>
-                ))
-              ) : dashboardData.recentConversions.length === 0 ? (
+
+          {/* RECENT ORDERS */}
+          <div className="cf-glass-card orders-card-glass">
+            <div className="orders-header-glass">
+              <h3 style={{ fontSize: '1.1rem', fontWeight: 700, display: 'flex', alignItems: 'center', gap: '8px', margin: 0 }}>
+                Đơn Hàng Gần Đây
+                <span style={{ width: 8, height: 8, backgroundColor: '#10b981', borderRadius: '50%' }}></span>
+              </h3>
+              <button 
+                onClick={() => navigate('/affiliate/links')}
+                style={{ background: 'transparent', color: 'var(--cf-primary)', fontWeight: 600, fontSize: 14, display: 'flex', alignItems: 'center', gap: 4, border: 'none', cursor: 'pointer' }}
+              >
+                Xem chi tiết <ChevronRight size={14} />
+              </button>
+            </div>
+            
+            <table className="cf-table">
+              <thead>
                 <tr>
-                  <td colSpan="5" className="text-center py-4 text-muted">Chưa có đơn hàng nào được ghi nhận. Hãy chia sẻ link để tạo ra sale đầu tiên!</td>
+                  <th>Khách Hàng</th>
+                  <th>Sản Phẩm</th>
+                  <th>Trạng Thái</th>
+                  <th style={{textAlign: 'right'}}>Hoa Hồng</th>
                 </tr>
-              ) : dashboardData.recentConversions.map(conv => (
-                <tr key={conv.id}>
-                  <td>
-                    <div className="flex-table-row">
-                      <div className="avatar-circle">{conv.customer_name?.charAt(0).toUpperCase() || '?'}</div>
-                      <div>
-                        <div className="font-bold">{conv.customer_name || 'Khách hàng ẩn'}</div>
-                        <div className="text-muted" style={{fontSize: '12px'}}>{new Date(conv.created_at).toLocaleDateString('vi-VN')}</div>
+              </thead>
+              <tbody>
+                {loading ? (
+                  Array(3).fill(0).map((_, i) => (
+                    <tr key={i}>
+                      <td colSpan="4"><Skeleton height="40px" width="100%" /></td>
+                    </tr>
+                  ))
+                ) : dashboardData.recentConversions.length === 0 ? (
+                  <tr>
+                    <td colSpan="4" style={{textAlign: 'center', padding: '40px 20px', color: 'var(--cf-text-muted)'}}>
+                      <Target size={32} strokeWidth={1.5} style={{marginBottom: 8, opacity: 0.4}} /><br />
+                      Chưa có đơn hàng nào. Hãy chia sẻ link để tạo sale đầu tiên!
+                    </td>
+                  </tr>
+                ) : dashboardData.recentConversions.map(conv => (
+                  <tr key={conv.id}>
+                    <td>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                        <div style={{ width: 36, height: 36, borderRadius: '50%', background: 'var(--cf-bg-canvas)', border: '1px solid var(--cf-border)', display: 'flex', alignItems: 'center', justifyContent: 'center', fontWeight: 'bold', color: 'var(--cf-text-muted)' }}>
+                          {conv.customer_name?.charAt(0).toUpperCase() || '?'}
+                        </div>
+                        <div>
+                          <div style={{fontWeight: 600}}>{conv.customer_name || 'Khách hàng'}</div>
+                          <div style={{fontSize: '0.75rem', color: 'var(--cf-text-muted)'}}>{new Date(conv.created_at).toLocaleDateString('vi-VN')}</div>
+                        </div>
                       </div>
-                    </div>
-                  </td>
-                  <td className="font-bold" style={{color: '#4B5563'}}>{conv.campaigns?.name || 'Sản phẩm chung'}</td>
-                  <td>
-                    {conv.status === 'rejected' ? (
-                      <span className="text-muted" style={{color: '#EF4444', fontSize: '13px'}}>⚠️ Bị từ chối</span>
-                    ) : conv.status === 'pending' ? (
-                      <span className="text-muted" style={{color: '#F59E0B', fontSize: '13px'}}>⏳ Chờ đối soát</span>
-                    ) : (
-                      <span className="text-muted" style={{color: '#059669', fontSize: '13px'}}>✨ Hoa hồng chảy về</span>
-                    )}
-                  </td>
-                  <td style={{textAlign: 'right'}}>
-                    {conv.status === 'rejected' ? (
-                      <span className="badge" style={{backgroundColor: 'rgba(239, 68, 68, 0.1)', color: '#EF4444'}}>
-                        Từ chối
-                      </span>
-                    ) : (
-                      <span className={`badge ${conv.status === 'approved' ? 'badge-cleared' : 'badge-pending'}`}>
-                        {conv.status === 'approved' ? 'Thành công' : 'Chờ duyệt'}
-                      </span>
-                    )}
-                  </td>
-                  <td style={{textAlign: 'right', fontWeight: 'bold', color: conv.status === 'rejected' ? '#9CA3AF' : '#10B981'}}>
-                    +{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(conv.commission_amount)}
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+                    </td>
+                    <td style={{fontWeight: 600, color: 'var(--cf-text-main)'}}>{conv.campaigns?.name || 'Sản phẩm'}</td>
+                    <td>
+                      {conv.status === 'rejected' ? (
+                        <span style={{ padding: '4px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600, backgroundColor: 'rgba(239,68,68,0.1)', color: '#EF4444'}}>Từ chối</span>
+                      ) : (
+                        <span style={{ padding: '4px 10px', borderRadius: 20, fontSize: 12, fontWeight: 600, backgroundColor: conv.status === 'approved' ? 'rgba(16,185,129,0.1)' : 'rgba(245,158,11,0.1)', color: conv.status === 'approved' ? '#059669' : '#d97706'}}>
+                          {conv.status === 'approved' ? 'Thành công' : 'Chờ duyệt'}
+                        </span>
+                      )}
+                    </td>
+                    <td style={{textAlign: 'right', fontWeight: 'bold', color: conv.status === 'rejected' ? '#9CA3AF' : '#10B981'}}>
+                      +{new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(conv.commission_amount)}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
 
-          </table>
+          {/* LEADERBOARD */}
+          <LeaderboardWidget currentUserId={profile?.id} />
+
         </div>
+
+
+        {/* =========================================
+            RIGHT COLUMN (PROFILE & ACTIONS)
+            ========================================= */}
+        <div className="dashboard-sidebar-col">
+          
+          {/* PROFILE CARD */}
+          <div className="cf-glass-card profile-widget">
+            <div className="profile-widget-bg"></div>
+            <div className="profile-widget-content">
+              <div className="profile-avatar-wrapper" onClick={() => navigate('/affiliate/settings')}>
+                {avatarUrl && !avatarError ? (
+                  <img src={avatarUrl} alt="" className="profile-avatar-img" onError={() => setAvatarError(true)} />
+                ) : (
+                  <div className="profile-avatar-placeholder">
+                    {profile?.full_name?.charAt(0).toUpperCase() || 'A'}
+                  </div>
+                )}
+                <div className="profile-avatar-edit"><Camera size={14} /></div>
+              </div>
+
+              <h2 className="profile-name">{profile?.full_name || 'Đại Lý VIP'}</h2>
+              <div className="profile-meta-data">{profile?.email}</div>
+              
+              <div className="profile-tier-badge">
+                <Award size={16} /> {tierLabel}
+              </div>
+
+              {/* GAMIFICATION BADGES */}
+              {badges.length > 0 && (
+                <div className="profile-badges-container">
+                  <div className="profile-meta-data" style={{fontSize: 12, marginBottom: 8}}>Thành Tích Đạt Được</div>
+                  <div className="achievements-showcase-sidebar">
+                    {badges.map(b => (
+                      <div key={b.id} className="digital-badge-dribbble" title={b.badge_name}>
+                        {b.badge_id === 'first_blood' ? '🗡️' : '🔥'}
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+
+          {/* QUICK ACTIONS */}
+          <div className="quick-actions-widget">
+            <h3 className="widget-title">Thao Tác Nhanh</h3>
+            <button className="quick-action-btn" onClick={() => navigate('/portal/campaigns/locked')}>
+              <div className="qa-icon qa-blue"><Link2 size={20} /></div>
+              <div className="qa-text">
+                <span>Lấy Link Chia Sẻ</span>
+                <span>Sao chép & quảng bá</span>
+              </div>
+              <ChevronRight size={18} style={{color: 'var(--cf-text-muted)', marginLeft: 'auto'}} />
+            </button>
+            <button className="quick-action-btn" onClick={() => navigate('/affiliate/store')}>
+              <div className="qa-icon qa-purple"><Zap size={20} /></div>
+              <div className="qa-text">
+                <span>Nâng Hạng VIP</span>
+                <span>Mở khóa mốc hoa hồng</span>
+              </div>
+              <ChevronRight size={18} style={{color: 'var(--cf-text-muted)', marginLeft: 'auto'}} />
+            </button>
+          </div>
+
+          {/* PROGRESS WIDGET */}
+          <div className="cf-glass-card" style={{ padding: 24 }}>
+            <h3 style={{ fontSize: '1.1rem', fontWeight: 700, marginBottom: 24, display: 'flex', alignItems: 'center', gap: 8, margin: '0 0 24px 0' }}>
+              <TrendingUp size={18} color="#F59E0B" /> KPI Tăng Trưởng
+            </h3>
+            
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, alignItems: 'flex-end' }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-main)'}}>Mục tiêu Doanh Số (50M)</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cf-text-muted)'}}>{Math.round((dashboardData.totalEarned / 50000000) * 100)}%</div>
+              </div>
+              <div style={{ width: '100%', height: 8, background: 'var(--cf-border)', borderRadius: 4, overflow: 'hidden' }}>
+                <div style={{height: '100%', borderRadius: 4, transition: 'width 1s ease-in-out', width: `${Math.min((dashboardData.totalEarned / 50000000) * 100, 100)}%`, background: 'linear-gradient(90deg, #10b981, #059669)'}}></div>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, alignItems: 'flex-end' }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-main)'}}>Mục tiêu Click (100)</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cf-text-muted)'}}>{dashboardData.clicks}/100</div>
+              </div>
+              <div style={{ width: '100%', height: 8, background: 'var(--cf-border)', borderRadius: 4, overflow: 'hidden' }}>
+                <div style={{height: '100%', borderRadius: 4, transition: 'width 1s ease-in-out', width: `${Math.min((dashboardData.clicks / 100) * 100, 100)}%`, background: 'linear-gradient(90deg, #3b82f6, #6366f1)'}}></div>
+              </div>
+            </div>
+
+            <div style={{ marginBottom: 20 }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8, alignItems: 'flex-end' }}>
+                <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-main)'}}>Mục tiêu Lead (50)</div>
+                <div style={{ fontSize: 13, fontWeight: 700, color: 'var(--cf-text-muted)'}}>{dashboardData.leads}/50</div>
+              </div>
+              <div style={{ width: '100%', height: 8, background: 'var(--cf-border)', borderRadius: 4, overflow: 'hidden' }}>
+                <div style={{height: '100%', borderRadius: 4, transition: 'width 1s ease-in-out', width: `${Math.min((dashboardData.leads / 50) * 100, 100)}%`, background: 'linear-gradient(90deg, #8b5cf6, #a855f7)'}}></div>
+              </div>
+            </div>
+            
+            <div style={{ marginTop: 16 }}>
+              <div style={{ fontSize: 13, fontWeight: 600, color: 'var(--cf-text-muted)' }}>Tỷ lệ chuyển đổi: <strong style={{color: '#f97316'}}>{conversionRate}%</strong></div>
+            </div>
+          </div>
+          
+        </div>
+
       </div>
+
     </div>
   );
 };

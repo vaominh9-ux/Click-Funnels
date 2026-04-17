@@ -116,7 +116,7 @@ export default function AdminCampaignManager() {
     <div className="admin-campaign-container">
       <div className="campaign-header">
         <div>
-          <h1>Quản Lý Nguồn Link (Campaigns)</h1>
+          <h1>Quản Lý Nguồn Link</h1>
           <p>Cấu hình các Landing Page gốc để Affiliate lấy link đi quảng bá.</p>
         </div>
         <button 
@@ -151,6 +151,22 @@ export default function AdminCampaignManager() {
                 onChange={(e) => setNewCampaignUrl(e.target.value)}
                 required
               />
+              <div style={{ marginTop: '8px', display: 'flex', gap: '8px', fontSize: '12px' }}>
+                <span style={{ color: '#64748B' }}>Điền nhanh nguồn nội bộ:</span>
+                {[1, 2, 3, 4].map(num => (
+                  <button 
+                    key={num}
+                    type="button" 
+                    onClick={() => {
+                      setNewCampaignName(`Khóa Học ${num}`);
+                      setNewCampaignUrl(`${window.location.origin}/khoa-hoc/khoa-hoc-${num}`);
+                    }}
+                    style={{ background: 'none', border: 'none', color: '#3B82F6', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
+                  >
+                    Khóa {num}
+                  </button>
+                ))}
+              </div>
             </div>
             <button 
               type="submit" 

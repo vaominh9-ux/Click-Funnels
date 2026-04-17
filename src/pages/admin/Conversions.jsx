@@ -87,7 +87,7 @@ export default function AdminConversions() {
         console.error('Insert error:', insertErr);
         addToast('Tạo conversion thất bại!', 'error');
       } else {
-        addToast(`Đã tạo conversion cho ${affiliate.full_name}. Hoa hồng: ${finalCommission.toLocaleString()} ₫${rolledUp > 0 ? ` (Roll-up: ${rolledUp.toLocaleString()} ₫)` : ''}`, 'success');
+        addToast(`Đã tạo conversion cho ${affiliate.full_name}. Hoa hồng: ${finalCommission.toLocaleString()}${rolledUp > 0 ? ` (Roll-up: ${rolledUp.toLocaleString()})` : ''}`, 'success');
         setShowAddModal(false);
         resetForm();
         loadConversions();
@@ -153,7 +153,7 @@ export default function AdminConversions() {
         </div>
         <div className="cf-card" style={{borderTop: '4px solid #3B82F6'}}>
           <h3 className="text-muted text-sm font-bold uppercase mb-2">Tổng Hoa Hồng Đã Chi</h3>
-          <div className="font-bold text-3xl" style={{color:'#059669'}}>{loading ? <Skeleton width="140px" height="36px" /> : conversions.filter(c => c.status === 'approved').reduce((acc, c) => acc + Number(c.commission_amount), 0).toLocaleString() + ' ₫'}</div>
+          <div className="font-bold text-3xl" style={{color:'#059669'}}>{loading ? <Skeleton width="140px" height="36px" /> : conversions.filter(c => c.status === 'approved').reduce((acc, c) => acc + Number(c.commission_amount), 0).toLocaleString()}</div>
         </div>
       </div>
 
@@ -204,11 +204,11 @@ export default function AdminConversions() {
                     <div className="text-sm text-muted">{conv.product_name || 'N/A'}</div>
                     <div className="text-sm text-muted">{new Date(conv.created_at).toLocaleDateString('vi-VN')}</div>
                   </td>
-                  <td style={{textAlign:'right'}} className="font-bold">{Number(conv.sale_amount).toLocaleString()} ₫</td>
+                  <td style={{textAlign:'right'}} className="font-bold">{Number(conv.sale_amount).toLocaleString()}</td>
                   <td style={{textAlign:'right'}}>
-                    <div className="font-bold" style={{color:'#059669'}}>+{Number(conv.commission_amount).toLocaleString()} ₫</div>
+                    <div className="font-bold" style={{color:'#059669'}}>+{Number(conv.commission_amount).toLocaleString()}</div>
                     {conv.customer_info?.rolled_up > 0 && (
-                      <div className="text-sm" style={{color:'#EF4444'}}>Roll-up: -{Number(conv.customer_info.rolled_up).toLocaleString()} ₫</div>
+                      <div className="text-sm" style={{color:'#EF4444'}}>Roll-up: -{Number(conv.customer_info.rolled_up).toLocaleString()}</div>
                     )}
                   </td>
                   <td>{getStatusBadge(conv.status)}</td>
@@ -284,7 +284,7 @@ export default function AdminConversions() {
               {saleAmount && (
                 <div className="cf-card" style={{background:'rgba(52,211,153,0.1)',border:'1px solid rgba(52,211,153,0.3)',padding:'12px 16px'}}>
                   <div className="text-sm" style={{color:'#059669'}}>
-                    <strong>Preview:</strong> Doanh số {Number(saleAmount).toLocaleString()} ₫ × {commissionRate}% = <strong>{Math.round(Number(saleAmount) * commissionRate / 100).toLocaleString()} ₫</strong> hoa hồng
+                    <strong>Preview:</strong> Doanh số {Number(saleAmount).toLocaleString()} × {commissionRate}% = <strong>{Math.round(Number(saleAmount) * commissionRate / 100).toLocaleString()}</strong> hoa hồng
                   </div>
                   <div className="text-sm text-muted mt-1">
                     (Sẽ bị cap theo tier của affiliate. Admin duyệt → tự động cộng balance.)

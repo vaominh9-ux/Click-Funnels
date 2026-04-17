@@ -3,6 +3,7 @@ import { Copy, ExternalLink, Filter, Search, Lock } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import Skeleton from '../../components/common/Skeleton';
+import { FUNNEL_COURSES } from '../funnels/config';
 import './Campaigns.css';
 
 const TIER_RANK = { 'starter': 1, 'master': 2, 'ai-coach': 3, 'ai-partner': 4 };
@@ -135,24 +136,35 @@ const AffiliateCampaigns = () => {
           <div className="cf-card" style={{gridColumn: '1 / -1', textAlign: 'center', padding: '40px', color: '#6B7280'}}>
             {searchTerm ? 'Không tìm thấy chiến dịch nào.' : 'Chưa có chiến dịch nào được tạo.'}
           </div>
-        ) : filteredCampaigns.map((camp) => {
+        ) : filteredCampaigns.map((camp, index) => {
           const locked = isLocked(camp);
           const affLink = getAffLink(camp);
 
+          // Tự động tìm ảnh khớp với cấu hình Khóa Học nếu Admin quên map ảnh
+          const matchedCourseKey = Object.keys(FUNNEL_COURSES).find(k => camp.landing_page_url?.includes(k));
+          const fallbackImages = [
+            'https://images.unsplash.com/photo-1542744173-8e7e53415bb0?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1556761175-5973dc0f32d7?auto=format&fit=crop&w=800&q=80',
+            'https://images.unsplash.com/photo-1533750349088-cd871a92f312?auto=format&fit=crop&w=800&q=80'
+          ];
+          const displayImage = camp.image_url || 
+            (matchedCourseKey ? FUNNEL_COURSES[matchedCourseKey].checkoutImage : fallbackImages[index % fallbackImages.length]);
+
           return (
-            <div key={camp.id} className={`cf-card campaign-card ${locked ? 'locked' : ''}`} style={locked ? {opacity: 0.6} : {}}>
+            <div key={camp.id} className={`cf-card campaign-card ${locked ? 'locked' : ''}`} style={locked ? {opacity: 0.75} : {}}>
               <div className="campaign-image" style={{
-                backgroundImage: camp.image_url ? `url(${camp.image_url})` : undefined,
-                backgroundColor: camp.image_url ? undefined : '#E2E8F0',
-                display: 'flex', alignItems: 'center', justifyContent: 'center'
+                backgroundImage: `url(${displayImage})`,
+                display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative'
               }}>
+                <div className="campaign-image-overlay"></div>
                 {locked && (
-                  <div style={{background: 'rgba(0,0,0,0.6)', width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <span style={{color:'white', fontWeight:'bold', display:'flex', alignItems:'center', gap:'8px'}}><Lock size={18}/> LOCKED</span>
+                  <div style={{position: 'absolute', background: 'rgba(15, 23, 42, 0.8)', inset: 0, display:'flex', alignItems:'center', justifyContent:'center', backdropFilter: 'blur(4px)'}}>
+                    <span style={{color:'white', fontWeight:'bold', display:'flex', alignItems:'center', gap:'8px', fontSize: '1.1rem'}}><Lock size={20}/> LOCKED</span>
                   </div>
                 )}
-                {!locked && !camp.image_url && (
-                  <span style={{color: '#94A3B8', fontSize: '14px', fontWeight: 600}}>{camp.name}</span>
+                {!locked && (
+                  <span className="campaign-hover-btn">Click để xem trang đích</span>
                 )}
               </div>
               <div className="campaign-body">
@@ -176,7 +188,16 @@ const AffiliateCampaigns = () => {
                       </button>
                     </div>
                     <div className="campaign-footer flex-between mt-4">
-                      <button className="cf-btn-text text-sm">Download Assets (Swipes)</button>
+                      <button 
+                        className="cf-btn-text text-sm"
+                        onClick={() => {
+                          if (camp.asset_url) {
+                            window.open(camp.asset_url, '_blank');
+                          } else {
+                            addToast('Chưa có tài liệu quảng bá cho chiến dịch này.', 'info');
+                          }
+                        }}
+                      >Download Assets (Swipes)</button>
                       <a href={camp.landing_page_url} target="_blank" rel="noopener noreferrer" className="cf-btn-icon">
                         <ExternalLink size={16}/>
                       </a>

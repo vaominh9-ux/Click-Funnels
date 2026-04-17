@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Save, User, CreditCard, Loader2 } from 'lucide-react';
+import { Save, User, CreditCard, Loader2, Camera } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import Skeleton from '../../components/common/Skeleton';
@@ -16,6 +16,8 @@ const AffiliateSettings = () => {
   const [email, setEmail] = useState('');
   const [phone, setPhone] = useState('');
   const [tier, setTier] = useState('starter');
+  const [avatarUrl, setAvatarUrl] = useState(null);
+  const [uploading, setUploading] = useState(false);
 
   // Payout form state
   const [paymentMethod, setPaymentMethod] = useState('bank');
@@ -49,6 +51,7 @@ const AffiliateSettings = () => {
         setEmail(profile.email || '');
         setPhone(profile.phone || '');
         setTier(profile.tier || 'starter');
+        setAvatarUrl(profile.avatar_url || null);
 
         // Parse payment_info từ JSONB
         if (profile.payment_info) {
@@ -109,6 +112,64 @@ const AffiliateSettings = () => {
       addToast('Đã xảy ra lỗi!', 'error');
     }
     setSaving(false);
+  };
+
+  const handleAvatarUpload = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Validate
+    if (file.size > 2 * 1024 * 1024) {
+      addToast('Ảnh quá lớn! Tối đa 2MB.', 'error');
+      return;
+    }
+    if (!file.type.startsWith('image/')) {
+      addToast('Chỉ chấp nhận file ảnh (JPG, PNG, WEBP).', 'error');
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const fileExt = file.name.split('.').pop();
+      const filePath = `avatars/${user.id}.${fileExt}`;
+
+      // Upload to Supabase Storage
+      const { error: uploadError } = await supabase.storage
+        .from('avatars')
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) {
+        console.error('Upload error:', uploadError);
+        addToast('Upload thất bại: ' + uploadError.message, 'error');
+        return;
+      }
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from('avatars')
+        .getPublicUrl(filePath);
+
+      // Update profile
+      const { error: updateError } = await supabase
+        .from('profiles')
+        .update({ avatar_url: publicUrl, updated_at: new Date().toISOString() })
+        .eq('id', user.id);
+
+      if (updateError) {
+        addToast('Lưu avatar thất bại!', 'error');
+      } else {
+        setAvatarUrl(publicUrl + '?t=' + Date.now()); // bust cache
+        addToast('Đã cập nhật ảnh đại diện!', 'success');
+      }
+    } catch (err) {
+      console.error(err);
+      addToast('Đã xảy ra lỗi!', 'error');
+    } finally {
+      setUploading(false);
+    }
   };
 
   const handleSavePayout = async () => {
@@ -176,6 +237,34 @@ const AffiliateSettings = () => {
             <div className="settings-header flex-align-center mb-6" style={{ gap: '12px' }}>
               <User size={20} className="text-muted" />
               <h3 className="font-bold">Thông Tin Chi Tiết</h3>
+            </div>
+
+            {/* AVATAR UPLOAD */}
+            <div className="avatar-upload-section">
+              <div className="avatar-preview">
+                {avatarUrl ? (
+                  <img src={avatarUrl} alt="Avatar" className="avatar-img" />
+                ) : (
+                  <div className="avatar-placeholder">
+                    {fullName ? fullName.charAt(0).toUpperCase() : '?'}
+                  </div>
+                )}
+                <label className="avatar-upload-btn" htmlFor="avatar-input">
+                  {uploading ? <Loader2 size={14} className="animate-spin" /> : <Camera size={14} />}
+                </label>
+                <input
+                  id="avatar-input"
+                  type="file"
+                  accept="image/*"
+                  style={{ display: 'none' }}
+                  onChange={handleAvatarUpload}
+                  disabled={uploading}
+                />
+              </div>
+              <div className="avatar-info">
+                <span className="font-bold">{fullName || 'Chưa đặt tên'}</span>
+                <span className="text-muted text-sm">Nhấp vào biểu tượng máy ảnh để đổi ảnh (tối đa 2MB)</span>
+              </div>
             </div>
             
             <div className="form-group mt-4">

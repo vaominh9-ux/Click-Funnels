@@ -89,10 +89,7 @@ const AdminDashboard = () => {
   }, []);
 
   const formatAmount = (amount) => {
-    if (amount >= 1e9) return `${(amount / 1e9).toFixed(2)} Tỷ`;
-    if (amount >= 1e6) return `${(amount / 1e6).toFixed(1)} Tr`;
-    if (amount >= 1e3) return `${(amount / 1e3).toFixed(0)}K`;
-    return amount.toLocaleString('vi-VN');
+    return Math.round(Number(amount)).toLocaleString('vi-VN');
   };
 
   const handleExportCSV = () => {
@@ -132,7 +129,7 @@ const AdminDashboard = () => {
             <div className="stat-icon-wrapper"><Activity size={24} /></div>
           </div>
           <div className="stat-title">Tổng Doanh Số Phễu</div>
-          <div className="stat-value">{loading ? <Skeleton width="100px" height="32px" /> : <>{formatAmount(stats.totalRevenue)}<sup>₫</sup></>}</div>
+          <div className="stat-value">{loading ? <Skeleton width="100px" height="32px" /> : <>{formatAmount(stats.totalRevenue)}</>}</div>
         </div>
 
         <div className="admin-stat-card" style={{"--icon-bg": "#FEF2F2", "--icon-color": "#EF4444", "--bg-accent": "rgba(239, 68, 68, 0.08)"}}>
@@ -140,7 +137,7 @@ const AdminDashboard = () => {
             <div className="stat-icon-wrapper"><DollarSign size={24} /></div>
           </div>
           <div className="stat-title">Hoa Hồng Đã Trả</div>
-          <div className="stat-value">{loading ? <Skeleton width="100px" height="32px" /> : <>{formatAmount(stats.totalPaid)}<sup>₫</sup></>}</div>
+          <div className="stat-value">{loading ? <Skeleton width="100px" height="32px" /> : <>{formatAmount(stats.totalPaid)}</>}</div>
         </div>
 
         <div className="admin-stat-card" style={{"--icon-bg": "#FFFBEB", "--icon-color": "#F59E0B", "--bg-accent": "rgba(245, 158, 11, 0.08)"}}>
@@ -149,7 +146,7 @@ const AdminDashboard = () => {
             {stats.pendingPayouts > 0 && <div className="stat-trend" style={{background: '#FEF3C7', color: '#D97706'}}>Cần duyệt</div>}
           </div>
           <div className="stat-title">Chờ Duyệt Thanh Toán</div>
-          <div className="stat-value">{loading ? <Skeleton width="100px" height="32px" /> : <>{formatAmount(stats.pendingPayouts)}<sup>₫</sup></>}</div>
+          <div className="stat-value">{loading ? <Skeleton width="100px" height="32px" /> : <>{formatAmount(stats.pendingPayouts)}</>}</div>
         </div>
       </div>
 
@@ -179,7 +176,7 @@ const AdminDashboard = () => {
                   <Tooltip 
                     contentStyle={{borderRadius: '8px', border: 'none', boxShadow: '0 10px 15px -3px rgba(0,0,0,0.1)'}}
                     itemStyle={{fontWeight: 700, color: '#3B82F6'}}
-                    formatter={(value) => [`${Number(value).toLocaleString('vi-VN')} ₫`, 'Doanh thu']}
+                    formatter={(value) => [`${Number(value).toLocaleString('vi-VN')}`, 'Doanh thu']}
                   />
                   <Area type="monotone" dataKey="revenue" stroke="#3B82F6" strokeWidth={3} fillOpacity={1} fill="url(#colorRevenue)" />
                 </AreaChart>
@@ -197,7 +194,7 @@ const AdminDashboard = () => {
             {stats.pendingPayouts > 0 ? (
               <div style={{padding: '16px', background: '#FFFBEB', borderLeft: '4px solid #F59E0B', borderRadius: '4px 8px 8px 4px'}}>
                 <h4 style={{margin: '0 0 4px 0', fontSize: '14px', color: '#92400E'}}>⏳ Đang chờ duyệt</h4>
-                <p style={{margin: 0, fontSize: '13px', color: '#B45309'}}>{formatAmount(stats.pendingPayouts)} ₫ hoa hồng đang chờ admin xác nhận thanh toán.</p>
+                <p style={{margin: 0, fontSize: '13px', color: '#B45309'}}>{formatAmount(stats.pendingPayouts)} hoa hồng đang chờ admin xác nhận thanh toán.</p>
               </div>
             ) : (
               <div style={{padding: '16px', background: '#F0FDF4', borderLeft: '4px solid #10B981', borderRadius: '4px 8px 8px 4px'}}>
@@ -208,7 +205,7 @@ const AdminDashboard = () => {
             <div style={{padding: '16px', background: '#EFF6FF', borderLeft: '4px solid #3B82F6', borderRadius: '4px 8px 8px 4px'}}>
               <h4 style={{margin: '0 0 4px 0', fontSize: '14px', color: '#1E40AF'}}>📊 Tổng quan</h4>
               <p style={{margin: 0, fontSize: '13px', color: '#1D4ED8'}}>
-                {stats.activeAffiliates} đại lý đang hoạt động. Tổng doanh thu phễu: {formatAmount(stats.totalRevenue)} ₫.
+                {stats.activeAffiliates} đại lý đang hoạt động. Tổng doanh thu phễu: {formatAmount(stats.totalRevenue)}.
               </p>
             </div>
           </div>
@@ -257,7 +254,7 @@ const AdminDashboard = () => {
                       </div>
                     </div>
                   </td>
-                  <td className="numeric-cell money-green">{Number(aff.total_earned || 0).toLocaleString('vi-VN')}<sup>₫</sup></td>
+                  <td className="numeric-cell money-green">{Number(aff.total_earned || 0).toLocaleString('vi-VN')}</td>
                 </tr>
               ))}
             </tbody>

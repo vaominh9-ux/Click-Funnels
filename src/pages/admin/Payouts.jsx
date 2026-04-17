@@ -54,7 +54,7 @@ const AdminPayouts = () => {
     if (error) {
       addToast('Lỗi khi xác nhận: ' + error.message, 'error');
     } else {
-      addToast(`Đã thanh toán ${Number(confirmTarget.amount).toLocaleString('vi-VN')} ₫ cho ${confirmTarget.profiles?.full_name}`, 'success');
+      addToast(`Đã thanh toán ${Number(confirmTarget.amount).toLocaleString('vi-VN')} cho ${confirmTarget.profiles?.full_name}`, 'success');
     }
 
     setSubmitting(false);
@@ -98,7 +98,7 @@ const AdminPayouts = () => {
         <div className="cf-card" style={{borderTop: '4px solid #10B981'}}>
           <h3 className="text-muted text-sm font-bold uppercase mb-2">Tổng Cần Thanh Toán</h3>
           <div className="font-bold text-3xl">
-            {loading ? <Skeleton width="150px" height="36px" /> : `${totalUnpaid.toLocaleString('vi-VN')} ₫`}
+            {loading ? <Skeleton width="150px" height="36px" /> : `${totalUnpaid.toLocaleString('vi-VN')}`}
           </div>
           <div className="text-sm mt-2 text-muted">
             {loading ? <Skeleton width="120px" height="16px" /> : `${pendingPayouts.length} Đại lý đủ điều kiện`}
@@ -110,7 +110,7 @@ const AdminPayouts = () => {
             <AlertCircle size={18} className="text-muted"/> Mức Sàn & Thời Gian Phong Tỏa (Cooling Period)
           </h4>
           <p className="text-sm text-muted">
-            Hệ thống áp dụng luật chống hoàn tiền của Affiliate. Hoa hồng sẽ bị đóng băng (đang chờ xử lý) trong vòng <strong>30 ngày</strong> để dự phòng trường hợp khách hàng yêu cầu hoàn tiền. Hoa hồng chỉ xuất hiện ở đây sau khi đã rã đông và số dư của đại lý đã đạt <strong>mức tối thiểu 1.000.000 ₫</strong>.
+            Hệ thống áp dụng luật chống hoàn tiền của Affiliate. Hoa hồng sẽ bị đóng băng (đang chờ xử lý) trong vòng <strong>30 ngày</strong> để dự phòng trường hợp khách hàng yêu cầu hoàn tiền. Hoa hồng chỉ xuất hiện ở đây sau khi đã rã đông và số dư của đại lý đã đạt <strong>mức tối thiểu 1.000.000</strong>.
           </p>
         </div>
       </div>
@@ -185,7 +185,7 @@ const AdminPayouts = () => {
                 {completedPayouts.map(pay => (
                   <tr key={pay.id}>
                     <td className="font-bold">{pay.profiles?.full_name || 'N/A'}</td>
-                    <td className="font-bold" style={{color: '#059669'}}>{Number(pay.amount).toLocaleString('vi-VN')} ₫</td>
+                    <td className="font-bold" style={{color: '#059669'}}>{Number(pay.amount).toLocaleString('vi-VN')}</td>
                     <td className="text-muted">{new Date(pay.updated_at).toLocaleDateString('vi-VN')}</td>
                   </tr>
                 ))}

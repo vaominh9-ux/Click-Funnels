@@ -76,7 +76,7 @@ const Sidebar = ({ onClose }) => {
             <span>Cửa Hàng Bậc B2B</span>
           </NavLink>
 
-          <NavLink to="/admin/affiliates" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={onClose}>
+          <NavLink to="/portal/customers" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={onClose}>
             <Users size={18} />
             <span>Khách Hàng & CTV</span>
           </NavLink>
@@ -86,21 +86,18 @@ const Sidebar = ({ onClose }) => {
           {/* APPS - TIẾP THỊ */}
           <div className="nav-group-wrapper">
             <div className="nav-group-header" onClick={() => toggleGroup('apps')}>
-              <span>TIẾP THỊ</span>
-              <div className="nav-group-icon">
-                {openGroups.apps ? '-' : '+'}
+              <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                <Megaphone size={18} />
+                <span>Tiếp Thị</span>
               </div>
             </div>
             
             {openGroups.apps && (
-              <div className="nav-sub-items">
-                <NavLink to="/affiliate/links" className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <div className="nav-square-icon"><Megaphone size={16} /></div>
-                  <span className="nav-sub-item-text">Lấy Link & Tracking</span>
-                  <span className="badge-green-pill-static">MỚI</span>
+              <div className="nav-sub-items-tree">
+                <NavLink to="/affiliate/links" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Lấy Link</span>
                 </NavLink>
-                <NavLink to="/portal/campaigns/locked" className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <div className="nav-square-icon"><Hexagon size={16} /></div>
+                <NavLink to="/portal/campaigns/locked" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Chiến Dịch Khóa</span>
                 </NavLink>
               </div>
@@ -110,26 +107,19 @@ const Sidebar = ({ onClose }) => {
           {/* MẠNG LƯỚI */}
           <div className="nav-group-wrapper">
             <div className="nav-group-header" onClick={() => toggleGroup('network')}>
-              <span>MẠNG LƯỚI</span>
-              <div className="nav-group-icon">
-                {openGroups.network ? '-' : '+'}
+              <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                <Users size={18} />
+                <span>Mạng Lưới</span>
               </div>
             </div>
             
             {openGroups.network && (
-              <div className="nav-sub-items">
-                <NavLink to="/portal/network/direct" className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <div className="nav-square-icon"><Users size={16} /></div>
+              <div className="nav-sub-items-tree">
+                <NavLink to="/portal/network/direct" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Trực Tiếp F1</span>
                 </NavLink>
-                <NavLink to="/portal/network/branch" className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <div className="nav-square-icon"><Users size={16} /></div>
-                  <span className="nav-sub-item-text">Tuyến Dưới</span>
-                </NavLink>
-                <NavLink to="/affiliate/ledger" className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <div className="nav-square-icon"><DollarSign size={16} /></div>
-                  <span className="nav-sub-item-text">Sao Kê Rớt Tiền</span>
-                  <span className="badge-red-pill-static">FOMO</span>
+                <NavLink to="/affiliate/ledger" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Sao Kê</span>
                 </NavLink>
               </div>
             )}
@@ -138,41 +128,33 @@ const Sidebar = ({ onClose }) => {
           {/* QUẢN TRỊ HỆ THỐNG */}
           <div className="nav-group-wrapper">
             <div className="nav-group-header" onClick={() => toggleGroup('admin')}>
-              <span>HỆ THỐNG</span>
-              <div className="nav-group-icon">
-                {openGroups.admin ? '-' : '+'}
+              <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                <Settings2 size={18} />
+                <span>Hệ Thống</span>
               </div>
             </div>
             
             {openGroups.admin && (
-              <div className="nav-sub-items">
-                <NavLink to="/admin" end className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <div className="nav-square-icon"><LayoutDashboard size={16} /></div>
+              <div className="nav-sub-items-tree">
+                <NavLink to="/admin" end className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Tổng Quan Admin</span>
                 </NavLink>
-                <NavLink to="/admin/commissions" className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <div className="nav-square-icon"><Settings2 size={16} /></div>
+                <NavLink to="/admin/commissions" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Cấu Hình Hoa Hồng</span>
                 </NavLink>
-                <NavLink to="/admin/payouts" className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <div className="nav-square-icon"><Wallet size={16} /></div>
+                <NavLink to="/admin/payouts" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Duyệt Rút Tiền</span>
                 </NavLink>
-                <NavLink to="/admin/staff" className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <div className="nav-square-icon"><UserCheck size={16} /></div>
+                <NavLink to="/admin/staff" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Nhân Sự</span>
                 </NavLink>
-                <NavLink to="/admin/campaign-links" className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <div className="nav-square-icon"><LinkIcon size={16} /></div>
-                  <span className="nav-sub-item-text">Nguồn Link (Campaigns)</span>
+                <NavLink to="/admin/campaign-links" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Nguồn Link</span>
                 </NavLink>
-                <NavLink to="/admin/leads" className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <div className="nav-square-icon"><ContactRound size={16} /></div>
-                  <span className="nav-sub-item-text">Quản Lý Khách Hàng</span>
-                  <span className="badge-green-pill-static">CRM</span>
+                <NavLink to="/admin/leads" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">CRM</span>
                 </NavLink>
-                <NavLink to="/admin/conversions" className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <div className="nav-square-icon"><DollarSign size={16} /></div>
+                <NavLink to="/admin/conversions" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Đơn Hàng & Hoa Hồng</span>
                 </NavLink>
               </div>

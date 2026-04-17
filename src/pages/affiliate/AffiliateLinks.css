@@ -115,7 +115,8 @@
   font-family: inherit;
 }
 
-.form-group input:focus, .select-wrapper select:focus {
+.form-group input:focus,
+.select-wrapper select:focus {
   outline: none;
   border-color: #3B82F6;
   box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);

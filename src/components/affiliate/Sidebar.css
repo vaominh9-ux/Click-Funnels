@@ -124,21 +124,21 @@
 
 .nav-group-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 16px 20px 8px 20px;
-  font-size: 13px;
+  padding: 10px 16px;
+  font-size: 14px;
   font-weight: 700;
-  color: #adb5bd;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
+  color: #D1D5DB;
+  margin: 2px 12px;
+  border-radius: 8px;
   cursor: pointer;
-  transition: color 0.2s;
+  transition: all 0.2s;
   user-select: none;
 }
 
 .nav-group-header:hover {
   color: #ffffff;
+  background-color: var(--cf-sidebar-hover);
 }
 
 .nav-group-icon {
@@ -171,6 +171,47 @@
   flex-direction: column;
   padding: 0;
   margin-top: 2px;
+}
+
+/* New Tree Structure */
+.nav-sub-items-tree {
+  display: flex;
+  flex-direction: column;
+  padding: 4px 0;
+  margin-left: 37px; /* Chính xác tâm của icon 18px trên cha (12px margin + 16px padding + 9px center) */
+  position: relative;
+}
+
+.nav-sub-items-tree::before {
+  content: '';
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  left: 0px;
+  width: 1px;
+  background-color: rgba(255, 255, 255, 0.15);
+}
+
+.nav-sub-item-tree {
+  display: flex;
+  align-items: center;
+  padding: 10px 16px 10px 19px; /* Thụt vào chính xác bằng text cha (37 + 19 = 56px) */
+  color: #C7C9D9;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  margin: 2px 12px 2px 0;
+  border-radius: 8px;
+}
+
+.nav-sub-item-tree:hover {
+  color: #FFFFFF;
+}
+
+.nav-sub-item-tree.active {
+  color: #FFFFFF;
+  font-weight: 600;
 }
 
 .nav-sub-item {

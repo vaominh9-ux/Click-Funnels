@@ -244,6 +244,7 @@
   padding: 3px 8px;
   border-radius: 6px;
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .source-facebook { background: #EFF6FF; color: #1D4ED8; }

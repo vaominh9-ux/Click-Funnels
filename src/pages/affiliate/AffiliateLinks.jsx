@@ -48,23 +48,54 @@ export default function AffiliateLinks() {
         }
       }
 
+      let subscription = null;
+
       // 3. Load user's tracked links
-      if (profileData) {
+      const fetchLinks = async (userId) => {
         const { data: linksData } = await supabase
           .from('affiliate_links')
           .select('*, campaigns(name)')
-          .eq('affiliate_id', profileData.id)
+          .eq('affiliate_id', userId)
           .order('created_at', { ascending: false });
           
         if (linksData) {
           setLinks(linksData);
         }
+      };
+
+      if (profileData) {
+        await fetchLinks(profileData.id);
+
+        // === REALTIME SUBSCRIPTION ===
+        subscription = supabase
+          .channel('realtime_affiliate_links')
+          .on('postgres_changes', { 
+            event: '*', 
+            schema: 'public', 
+            table: 'affiliate_links',
+            filter: `affiliate_id=eq.${profileData.id}`
+          }, (payload) => {
+            console.log('Realtime update on links:', payload);
+            fetchLinks(profileData.id); // Tự động load lại data mới
+          })
+          .subscribe();
       }
       
       setLoading(false);
+
+      return () => {
+        if (subscription) {
+          supabase.removeChannel(subscription);
+        }
+      };
     };
 
-    fetchData();
+    const cleanup = fetchData();
+    return () => {
+      cleanup.then(cleanFn => {
+        if (typeof cleanFn === 'function') cleanFn();
+      });
+    };
   }, []);
 
   // Link tracking: dùng Tracking Domain (server-side redirect, gần như tức thì)

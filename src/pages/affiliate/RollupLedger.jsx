@@ -20,20 +20,48 @@ export default function RollupLedger() {
   const addToast = useToast();
 
   useEffect(() => {
-    loadLedger();
-  }, []);
+    let subscription = null;
+    let currentUserId = null;
 
-  const loadLedger = async () => {
-    setLoading(true);
-    try {
+    const initLedger = async () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
+      currentUserId = user.id;
 
-      // 1. Lấy tier hiện tại
+      await loadLedger(user.id);
+
+      // === REALTIME SUBSCRIPTION ===
+      subscription = supabase
+        .channel('realtime_rollup_ledger')
+        .on('postgres_changes', { 
+          event: '*', 
+          schema: 'public', 
+          table: 'conversions',
+          filter: `affiliate_id=eq.${user.id}`
+        }, () => {
+          console.log('Realtime update on conversions (RollupLedger)');
+          loadLedger(user.id);
+        })
+        .subscribe();
+    };
+
+    initLedger();
+
+    return () => {
+      if (subscription) {
+        supabase.removeChannel(subscription);
+      }
+    };
+  }, []);
+
+  const loadLedger = async (userId) => {
+    setLoading(true);
+    try {
+      // 1. Lắng nghe tier hiện tại
       const { data: profile } = await supabase
         .from('profiles')
         .select('tier')
-        .eq('id', user.id)
+        .eq('id', userId)
         .single();
 
       const tier = profile?.tier || 'starter';
@@ -43,8 +71,8 @@ export default function RollupLedger() {
       // 2. Lấy conversions đã approved cho user này
       const { data: conversions, error } = await supabase
         .from('conversions')
-        .select('id, created_at, commission_amount, status, customer_name, product_name')
-        .eq('affiliate_id', user.id)
+        .select('id, created_at, commission_amount, status, customer_name, product_name, customer_info')
+        .eq('affiliate_id', userId)
         .eq('status', 'approved')
         .order('created_at', { ascending: false })
         .limit(20);
@@ -75,7 +103,7 @@ export default function RollupLedger() {
           lostComm,
           rolledUpTo: lostComm > 0 ? 'Upline / Hệ thống Gốc' : 'N/A',
           reason: lostComm > 0 
-            ? `Gói hiện tại: ${tier.toUpperCase()}. Hạn mức tối đa: ${cap.toLocaleString()} ₫.`
+            ? `Gói hiện tại: ${tier.toUpperCase()}. Hạn mức tối đa: ${cap.toLocaleString()}.`
             : 'Hoa hồng chi trả 100% trong hạn mức.'
         };
       });
@@ -99,7 +127,7 @@ export default function RollupLedger() {
         <div className="ledger-total-lost">
           <div className="ledger-lost-label">TỔNG LỢI NHUẬN BỎ LỠ (30 NGÀY)</div>
           <div className="ledger-lost-amount">
-            {loading ? <Skeleton width="150px" height="32px" /> : `${totalLost.toLocaleString()} ₫`}
+            {loading ? <Skeleton width="150px" height="32px" /> : `${totalLost.toLocaleString()}`}
           </div>
         </div>
       </div>
@@ -140,20 +168,20 @@ export default function RollupLedger() {
                   <div className="trx-buyer">{trx.buyer}</div>
                   <div className="trx-course">{trx.courseName}</div>
                   <div style={{fontSize:'12px',color:'#9CA3AF',marginTop:'4px'}}>
-                    Hoa hồng lẽ ra nhận: <strong>{trx.expectedComm.toLocaleString()} ₫</strong>
+                    Hoa hồng lẽ ra nhận: <strong>{trx.expectedComm.toLocaleString()}</strong>
                   </div>
                 </td>
                 <td className="text-right">
-                  <div className="trx-earned">{trx.earnedComm > 0 ? '+' + trx.earnedComm.toLocaleString() + ' ₫' : '0 ₫'}</div>
+                  <div className="trx-earned">{trx.earnedComm > 0 ? '+' + trx.earnedComm.toLocaleString() : '0'}</div>
                 </td>
                 <td className="text-right">
                   {trx.lostComm > 0 ? (
                     <>
-                      <div className="trx-lost">-{trx.lostComm.toLocaleString()} ₫</div>
+                      <div className="trx-lost">-{trx.lostComm.toLocaleString()}</div>
                       <div style={{fontSize:'12px',color:'#EF4444',fontWeight:500,marginTop:'4px'}}>Tràn lên: {trx.rolledUpTo}</div>
                     </>
                   ) : (
-                    <div className="trx-no-loss">0 ₫</div>
+                    <div className="trx-no-loss">0</div>
                   )}
                 </td>
               </tr>
@@ -169,8 +197,8 @@ export default function RollupLedger() {
         <div className="explanation-content">
           <h4>BẠN ĐANG BỊ RỚT TIỀN?</h4>
           <p>
-            Hạng hiện tại của bạn là <strong>{userTier.toUpperCase()}</strong> — hạn mức tối đa mỗi sale: <strong>{(TIER_CAPS[userTier] || 0).toLocaleString()} ₫</strong>.
-            {totalLost > 0 && <> Bạn đã mất <strong style={{color:'#DC2626'}}>{totalLost.toLocaleString()} ₫</strong> do vượt hạn mức!</>}
+            Hạng hiện tại của bạn là <strong>{userTier.toUpperCase()}</strong> — hạn mức tối đa mỗi sale: <strong>{(TIER_CAPS[userTier] || 0).toLocaleString()}</strong>.
+            {totalLost > 0 && <> Bạn đã mất <strong style={{color:'#DC2626'}}>{totalLost.toLocaleString()}</strong> do vượt hạn mức!</>}
           </p>
           <NavLink to="/affiliate/store" className="upgrade-now-btn mt-3 inline-block">BẢO VỆ DÒNG TIỀN - NÂNG CẤP NGAY</NavLink>
         </div>

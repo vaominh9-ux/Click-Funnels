@@ -16,6 +16,7 @@ import AffiliateNetwork from './pages/affiliate/Network';
 import AffiliateSettings from './pages/affiliate/Settings';
 import UpgradeStore from './pages/affiliate/UpgradeStore';
 import RollupLedger from './pages/affiliate/RollupLedger';
+import MyCustomers from './pages/affiliate/MyCustomers';
 
 // Admin Pages
 import AdminDashboard from './pages/admin/Dashboard';
@@ -27,8 +28,14 @@ import AdminCampaignManager from './pages/admin/CampaignManager';
 import AdminLeadsCRM from './pages/admin/LeadsCRM';
 import AdminConversions from './pages/admin/Conversions';
 
-// Public Pages
 import ClickTracker from './pages/public/ClickTracker';
+import Checkout from './pages/public/Checkout';
+
+// Landing Pages (Funnels)
+import Course1 from './pages/funnels/Course1';
+import Course2 from './pages/funnels/Course2';
+import Course3 from './pages/funnels/Course3';
+import Course4 from './pages/funnels/Course4';
 
 const App = () => {
   return (
@@ -36,6 +43,11 @@ const App = () => {
       <Router>
         <Routes>
           {/* Public Routes */}
+          <Route path="/khoa-hoc/khoa-hoc-1" element={<Course1 />} />
+          <Route path="/khoa-hoc/khoa-hoc-2" element={<Course2 />} />
+          <Route path="/khoa-hoc/khoa-hoc-3" element={<Course3 />} />
+          <Route path="/khoa-hoc/khoa-hoc-4" element={<Course4 />} />
+          <Route path="/checkout/:courseId" element={<Checkout />} />
           <Route path="/go/:refCode" element={<ClickTracker />} />
 
           {/* Auth Routes */}
@@ -98,6 +110,14 @@ const App = () => {
               </MainLayout>
             </ProtectedRoute>
           } />
+
+          <Route path="/portal/customers" element={
+            <ProtectedRoute>
+              <MainLayout title="Khách Hàng & CTV">
+                <MyCustomers />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
           
           {/* Admin Portal Routes */}
           <Route path="/admin" element={
@@ -144,7 +164,7 @@ const App = () => {
           } />
           <Route path="/admin/leads" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="Quản Lý Khách Hàng (CRM)">
+              <MainLayout title="CRM">
                 <AdminLeadsCRM />
               </MainLayout>
             </ProtectedRoute>

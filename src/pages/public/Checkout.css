@@ -1,0 +1,173 @@
+.checkout-container {
+  min-height: 100vh;
+  background-color: #f1f5f9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  font-family: 'Inter', sans-serif;
+}
+
+.checkout-wrapper {
+  background: #ffffff;
+  max-width: 1000px;
+  width: 100%;
+  border-radius: 20px;
+  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  overflow: hidden;
+}
+
+.checkout-left {
+  background: #f8fafc;
+  padding: 40px;
+  border-right: 1px solid #e2e8f0;
+}
+
+.checkout-right {
+  padding: 40px;
+}
+
+.checkout-wrapper h2 {
+  font-size: 1.5rem;
+  color: #0f172a;
+  margin-bottom: 25px;
+  font-weight: 700;
+}
+
+.course-image {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 12px;
+  margin-bottom: 20px;
+}
+
+.order-details {
+  background: #fff;
+  padding: 20px;
+  border-radius: 12px;
+  border: 1px solid #e2e8f0;
+}
+
+.course-name {
+  font-size: 1.2rem;
+  margin-bottom: 20px;
+  color: #1e293b;
+}
+
+.price-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  color: #64748b;
+}
+
+.strike {
+  text-decoration: line-through;
+}
+
+.total-row {
+  border-top: 1px solid #e2e8f0;
+  padding-top: 15px;
+  margin-top: 15px;
+  color: #0f172a;
+  font-weight: 600;
+  font-size: 1.1rem;
+}
+
+.total-price {
+  color: #2563eb;
+  font-size: 1.4rem;
+  font-weight: 800;
+}
+
+.security-badges {
+  margin-top: 20px;
+  text-align: center;
+  color: #10b981;
+  font-size: 0.9rem;
+  font-weight: 600;
+  background: #ecfdf5;
+  padding: 10px;
+  border-radius: 8px;
+}
+
+/* RIGHT SIDE */
+.qr-guide {
+  color: #64748b;
+  margin-bottom: 20px;
+  font-size: 0.95rem;
+}
+
+.qr-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 30px;
+}
+
+.qr-code-img {
+  width: 250px;
+  height: 250px;
+  border-radius: 16px;
+  box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
+}
+
+.bank-details {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: 12px;
+  margin-bottom: 30px;
+}
+
+.bank-info-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 12px;
+  font-size: 0.95rem;
+}
+
+.bank-info-row span {
+  color: #64748b;
+}
+
+.bank-info-row strong {
+  color: #0f172a;
+}
+
+.text-blue { color: #2563eb !important; font-size: 1.1rem; }
+.text-orange { color: #ea580c !important; }
+
+.checkout-btn {
+  width: 100%;
+  padding: 16px;
+  background: #0f172a;
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.checkout-btn:hover:not(:disabled) {
+  background: #1e293b;
+  transform: translateY(-2px);
+}
+
+.checkout-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .checkout-wrapper {
+    grid-template-columns: 1fr;
+  }
+  .checkout-left {
+    border-right: none;
+    border-bottom: 1px solid #e2e8f0;
+  }
+}

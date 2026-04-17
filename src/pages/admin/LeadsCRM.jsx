@@ -173,7 +173,7 @@ export default function LeadsCRM() {
     return (
       <div className="crm-container">
         <div className="crm-header">
-          <h1>Quản Lý Khách Hàng</h1>
+          <h1>CRM</h1>
           <Skeleton width="200px" height="36px" />
         </div>
         <div className="crm-stats-bar">
@@ -210,7 +210,7 @@ export default function LeadsCRM() {
     <div className="crm-container">
       {/* Header */}
       <div className="crm-header">
-        <h1>Quản Lý Khách Hàng</h1>
+        <h1>CRM</h1>
         <div className="crm-header-actions">
           <div className="crm-search">
             <Search size={16} color="#9CA3AF" />
@@ -246,7 +246,7 @@ export default function LeadsCRM() {
         })}
         <div className="crm-stat-chip">
           <span className="stat-count" style={{ color: '#10B981' }}>
-            {leads.reduce((sum, l) => sum + (Number(l.value) || 0), 0).toLocaleString('vi-VN')}đ
+            {leads.reduce((sum, l) => sum + (Number(l.value) || 0), 0).toLocaleString('vi-VN')}
           </span>
           <span className="stat-label">Tổng GT Pipeline</span>
         </div>
@@ -294,7 +294,7 @@ export default function LeadsCRM() {
                         {SOURCES.find(s => s.key === lead.source)?.label || lead.source}
                       </span>
                       {lead.value > 0 && (
-                        <span className="lead-value">{Number(lead.value).toLocaleString('vi-VN')}đ</span>
+                        <span className="lead-value">{Number(lead.value).toLocaleString('vi-VN')}</span>
                       )}
                     </div>
                   </div>
