@@ -1,5 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
+import Skeleton from '../../components/common/Skeleton';
 import './UpgradeStore.css';
 
 const TIERS = [
@@ -7,7 +9,9 @@ const TIERS = [
     id: 'starter',
     name: 'STARTER',
     price: '6,000,000 đ',
+    priceNum: 6000000,
     commission: '50%',
+    rank: 1,
     features: [
       'Hoa hồng tối đa 3 Triệu / Sale',
       'Được bán mọi khóa học',
@@ -20,7 +24,9 @@ const TIERS = [
     id: 'master',
     name: 'MASTER',
     price: '12,000,000 đ',
+    priceNum: 12000000,
     commission: '50%',
+    rank: 2,
     features: [
       'Hoa hồng tối đa 6 Triệu / Sale',
       'Tặng kèm nội dung khóa Starter',
@@ -33,7 +39,9 @@ const TIERS = [
     id: 'ai-coach',
     name: 'AI COACH',
     price: '30,000,000 đ',
+    priceNum: 30000000,
     commission: '30%',
+    rank: 3,
     features: [
       'Hoa hồng tối đa 9 Triệu / Sale',
       'Bao gồm Starter và Master',
@@ -47,7 +55,9 @@ const TIERS = [
     id: 'ai-partner',
     name: 'AI PARTNER',
     price: '100,000,000 đ',
+    priceNum: 100000000,
     commission: '20%',
+    rank: 4,
     features: [
       'Hoa hồng 20 Triệu / Sale + % Nhánh',
       'Bao gồm toàn bộ Khóa trước',
@@ -59,12 +69,39 @@ const TIERS = [
 ];
 
 export default function UpgradeStore() {
-  const currentTier = 'master'; // Mocking current user tier as Master
-  const tierRank = { 'starter': 1, 'master': 2, 'ai-coach': 3, 'ai-partner': 4 };
-  const currentRank = tierRank[currentTier];
-
+  const [currentTier, setCurrentTier] = useState(null);
+  const [loading, setLoading] = useState(true);
   const [checkoutTier, setCheckoutTier] = useState(null);
   const addToast = useToast();
+
+  useEffect(() => {
+    loadUserTier();
+  }, []);
+
+  const loadUserTier = async () => {
+    setLoading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      const { data: profile, error } = await supabase
+        .from('profiles')
+        .select('tier')
+        .eq('id', user.id)
+        .single();
+
+      if (error) {
+        console.error('Lỗi lấy tier:', error);
+      } else {
+        setCurrentTier(profile?.tier || 'starter');
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    }
+    setLoading(false);
+  };
+
+  const currentRank = TIERS.find(t => t.id === currentTier)?.rank || 1;
 
   const handleUpgrade = (tier) => {
     setCheckoutTier(tier);
@@ -79,16 +116,34 @@ export default function UpgradeStore() {
       <div className="store-header">
         <h1>Thang Giá Trị & Nâng Cấp Bậc</h1>
         <p>
-          Hiện tại bạn đang ở hạng mức <span>{currentTier}</span>. 
+          Hiện tại bạn đang ở hạng mức <span>{loading ? '...' : (currentTier || 'starter').toUpperCase()}</span>. 
           Nâng cấp ngay để mở khóa toàn bộ tiềm năng hoa hồng và tránh thất thoát (Roll-up) cho upline.
         </p>
       </div>
 
       <div className="store-grid">
-        {TIERS.map((tier) => {
-          const rankMatch = tierRank[tier.id];
-          const isCurrent = rankMatch === currentRank;
-          const isLower = rankMatch < currentRank;
+        {loading ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="store-card">
+              <div className="store-card-header">
+                <Skeleton width="100px" height="20px" style={{margin: '0 auto 8px'}} />
+                <Skeleton width="140px" height="32px" style={{margin: '0 auto 8px'}} />
+                <Skeleton width="160px" height="20px" style={{margin: '0 auto', borderRadius: 100}} />
+              </div>
+              <div className="store-divider"></div>
+              <div style={{display:'flex',flexDirection:'column',gap:12,flex:1}}>
+                {Array.from({ length: 4 }).map((_, j) => (
+                  <Skeleton key={j} width="100%" height="16px" />
+                ))}
+              </div>
+              <div style={{marginTop: 24}}>
+                <Skeleton width="100%" height="44px" style={{borderRadius: 8}} />
+              </div>
+            </div>
+          ))
+        ) : TIERS.map((tier) => {
+          const isCurrent = tier.rank === currentRank;
+          const isLower = tier.rank < currentRank;
           
           return (
             <div key={tier.id} className={`store-card ${tier.highlight ? 'highlight' : ''} ${isLower ? 'opacity-50' : ''}`}>
@@ -183,7 +238,6 @@ export default function UpgradeStore() {
                 addToast('Đã ghi nhận thanh toán. Vui lòng chờ admin duyệt.', 'success');
                 closeCheckout();
               }}>
-                <svg width="20" height="20" className="confirm-icon hidden" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none"></circle><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
                 Tôi đã chuyển khoản thành công
               </button>
             </div>

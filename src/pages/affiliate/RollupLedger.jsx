@@ -1,45 +1,93 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { NavLink } from 'react-router-dom';
+import { supabase } from '../../lib/supabase';
+import { useToast } from '../../components/common/Toast';
+import Skeleton from '../../components/common/Skeleton';
 import './RollupLedger.css';
 
-const MOCK_LEDGER = [
-  {
-    id: '#TRX-98231',
-    date: '16/04/2026',
-    buyer: 'Nguyễn Tiến Đạt',
-    courseName: 'AI COACH (30 Tr)',
-    expectedComm: 9000000, 
-    earnedComm: 6000000,
-    lostComm: 3000000,
-    rolledUpTo: 'Hệ thống Gốc',
-    reason: 'Gói hiện tại của bạn là MASTER. Hạn mức hoa hồng tối đa: 6.000.000 ₫.'
-  },
-  {
-    id: '#TRX-98205',
-    date: '14/04/2026',
-    buyer: 'Trần Minh Quân',
-    courseName: 'AI PARTNER (100 Tr)',
-    expectedComm: 20000000, 
-    earnedComm: 6000000,
-    lostComm: 14000000,
-    rolledUpTo: 'Hữu Nguyễn (Upline)',
-    reason: 'Gói hiện tại của bạn là MASTER. Hạn mức hoa hồng tối đa: 6.000.000 ₫.'
-  },
-  {
-    id: '#TRX-98188',
-    date: '10/04/2026',
-    buyer: 'Lê Hoàng Yến',
-    courseName: 'STARTER (6 Tr)',
-    expectedComm: 3000000, 
-    earnedComm: 3000000,
-    lostComm: 0,
-    rolledUpTo: 'N/A',
-    reason: 'Hoa hồng chi trả 100% trong hạn mức.'
-  }
-];
+const TIER_CAPS = {
+  'starter': 3000000,
+  'master': 6000000,
+  'ai-coach': 9000000,
+  'ai-partner': 20000000,
+};
 
 export default function RollupLedger() {
-  const totalLost = MOCK_LEDGER.reduce((acc, trx) => acc + trx.lostComm, 0);
+  const [loading, setLoading] = useState(true);
+  const [ledgerData, setLedgerData] = useState([]);
+  const [totalLost, setTotalLost] = useState(0);
+  const [userTier, setUserTier] = useState('starter');
+  const addToast = useToast();
+
+  useEffect(() => {
+    loadLedger();
+  }, []);
+
+  const loadLedger = async () => {
+    setLoading(true);
+    try {
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // 1. Lấy tier hiện tại
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('tier')
+        .eq('id', user.id)
+        .single();
+
+      const tier = profile?.tier || 'starter';
+      setUserTier(tier);
+      const cap = TIER_CAPS[tier] || 3000000;
+
+      // 2. Lấy conversions đã approved cho user này
+      const { data: conversions, error } = await supabase
+        .from('conversions')
+        .select('id, created_at, commission_amount, status, customer_name, product_name')
+        .eq('affiliate_id', user.id)
+        .eq('status', 'approved')
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (error) {
+        console.error('Lỗi lấy conversions:', error);
+        addToast('Không thể tải dữ liệu sao kê', 'error');
+        setLoading(false);
+        return;
+      }
+
+      // 3. Tính toán rollup cho mỗi conversion
+      let totalLostCalc = 0;
+      const ledger = (conversions || []).map((conv, index) => {
+        const expectedComm = Number(conv.commission_amount) || 0;
+        const earnedComm = Math.min(expectedComm, cap);
+        const lostComm = Math.max(0, expectedComm - cap);
+
+        totalLostCalc += lostComm;
+
+        return {
+          id: `#TRX-${String(index + 1).padStart(5, '0')}`,
+          date: new Date(conv.created_at).toLocaleDateString('vi-VN'),
+          buyer: conv.customer_name || 'Khách hàng',
+          courseName: conv.product_name || 'Sản phẩm',
+          expectedComm,
+          earnedComm,
+          lostComm,
+          rolledUpTo: lostComm > 0 ? 'Upline / Hệ thống Gốc' : 'N/A',
+          reason: lostComm > 0 
+            ? `Gói hiện tại: ${tier.toUpperCase()}. Hạn mức tối đa: ${cap.toLocaleString()} ₫.`
+            : 'Hoa hồng chi trả 100% trong hạn mức.'
+        };
+      });
+
+      setLedgerData(ledger);
+      setTotalLost(totalLostCalc);
+
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    }
+    setLoading(false);
+  };
 
   return (
     <div className="ledger-container">
@@ -50,7 +98,9 @@ export default function RollupLedger() {
         </div>
         <div className="ledger-total-lost">
           <div className="ledger-lost-label">TỔNG LỢI NHUẬN BỎ LỠ (30 NGÀY)</div>
-          <div className="ledger-lost-amount">{totalLost.toLocaleString()} ₫</div>
+          <div className="ledger-lost-amount">
+            {loading ? <Skeleton width="150px" height="32px" /> : `${totalLost.toLocaleString()} ₫`}
+          </div>
         </div>
       </div>
 
@@ -65,16 +115,31 @@ export default function RollupLedger() {
             </tr>
           </thead>
           <tbody>
-            {MOCK_LEDGER.map(trx => (
+            {loading ? (
+              Array.from({ length: 3 }).map((_, i) => (
+                <tr key={i}>
+                  <td><Skeleton width="100px" height="20px" /><div style={{marginTop: 6}}><Skeleton width="80px" height="14px" /></div></td>
+                  <td><Skeleton width="140px" height="20px" /><div style={{marginTop: 6}}><Skeleton width="120px" height="16px" /></div></td>
+                  <td className="text-right"><Skeleton width="120px" height="20px" style={{marginLeft: 'auto'}} /></td>
+                  <td className="text-right"><Skeleton width="130px" height="24px" style={{marginLeft: 'auto'}} /></td>
+                </tr>
+              ))
+            ) : ledgerData.length === 0 ? (
+              <tr>
+                <td colSpan={4} style={{textAlign: 'center', padding: '40px', color: '#6B7280'}}>
+                  Chưa có giao dịch nào. Khi có conversions được duyệt, dữ liệu sẽ hiển thị ở đây.
+                </td>
+              </tr>
+            ) : ledgerData.map(trx => (
               <tr key={trx.id} className={trx.lostComm > 0 ? 'row-danger' : 'row-safe'}>
                 <td>
                   <div className="trx-id">{trx.id}</div>
-                  <div className="trx-date bg-gray-100 text-gray-500 text-xs px-2 py-1 rounded inline-block mt-1">{trx.date}</div>
+                  <div style={{fontSize:'12px',color:'#9CA3AF',marginTop:'4px'}}>{trx.date}</div>
                 </td>
                 <td>
                   <div className="trx-buyer">{trx.buyer}</div>
                   <div className="trx-course">{trx.courseName}</div>
-                  <div className="trx-expected text-xs mt-1 text-gray-500">
+                  <div style={{fontSize:'12px',color:'#9CA3AF',marginTop:'4px'}}>
                     Hoa hồng lẽ ra nhận: <strong>{trx.expectedComm.toLocaleString()} ₫</strong>
                   </div>
                 </td>
@@ -85,7 +150,7 @@ export default function RollupLedger() {
                   {trx.lostComm > 0 ? (
                     <>
                       <div className="trx-lost">-{trx.lostComm.toLocaleString()} ₫</div>
-                      <div className="trx-rolled text-xs text-red-500 font-medium">Tràn lên: {trx.rolledUpTo}</div>
+                      <div style={{fontSize:'12px',color:'#EF4444',fontWeight:500,marginTop:'4px'}}>Tràn lên: {trx.rolledUpTo}</div>
                     </>
                   ) : (
                     <div className="trx-no-loss">0 ₫</div>
@@ -103,7 +168,10 @@ export default function RollupLedger() {
         </div>
         <div className="explanation-content">
           <h4>BẠN ĐANG BỊ RỚT TIỀN?</h4>
-          <p>Hệ thống tự động phát hiện bạn đang kinh doanh các gói cao cấp (AI Partner, AI Coach) nhưng tài khoản của bạn chỉ đang chịu mức giới hạn của gói <strong>MASTER</strong>. Những đại lý tuyến trên của bạn đang <strong>Hưởng Lợi Miễn Phí {totalLost.toLocaleString()} ₫</strong> từ công sức mồ hôi nước mắt của bạn!</p>
+          <p>
+            Hạng hiện tại của bạn là <strong>{userTier.toUpperCase()}</strong> — hạn mức tối đa mỗi sale: <strong>{(TIER_CAPS[userTier] || 0).toLocaleString()} ₫</strong>.
+            {totalLost > 0 && <> Bạn đã mất <strong style={{color:'#DC2626'}}>{totalLost.toLocaleString()} ₫</strong> do vượt hạn mức!</>}
+          </p>
           <NavLink to="/affiliate/store" className="upgrade-now-btn mt-3 inline-block">BẢO VỆ DÒNG TIỀN - NÂNG CẤP NGAY</NavLink>
         </div>
       </div>

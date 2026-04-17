@@ -1,0 +1,59 @@
+<!-- 
+  ClickFunnels Affiliate Tracking Script
+  Dán đoạn này vào <head> hoặc trước </body> của website duhava.com
+  
+  Cách hoạt động:
+  1. Khách click link: duhava.com?ref=abc123&campaign=XXX
+  2. Script đọc ?ref= từ URL
+  3. Gọi Supabase RPC ghi nhận 1 click
+  4. Lưu ref vào cookie 30 ngày (cho conversion tracking sau)
+-->
+<script>
+(function() {
+  // === CẤU HÌNH ===
+  var SUPABASE_URL = 'https://iykdzwuqwlemszawpove.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_WJs51tDt1uXWUy3uNkXiNw_THqLSbA1';
+  var COOKIE_DAYS = 30;
+
+  // === LẤY PARAMS ===
+  var params = new URLSearchParams(window.location.search);
+  var refCode = params.get('ref');
+  var campaignId = params.get('campaign');
+
+  if (!refCode) return; // Không có ref → bỏ qua
+
+  // === LƯU COOKIE 30 NGÀY ===
+  function setCookie(name, value, days) {
+    var d = new Date();
+    d.setTime(d.getTime() + (days * 24 * 60 * 60 * 1000));
+    document.cookie = name + '=' + value + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+  }
+
+  setCookie('aff_ref', refCode, COOKIE_DAYS);
+  if (campaignId) setCookie('aff_campaign', campaignId, COOKIE_DAYS);
+  setCookie('aff_click_at', new Date().toISOString(), COOKIE_DAYS);
+
+  // === GHI NHẬN CLICK VÀO SUPABASE ===
+  fetch(SUPABASE_URL + '/rest/v1/rpc/record_affiliate_click', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': 'Bearer ' + SUPABASE_ANON_KEY
+    },
+    body: JSON.stringify({
+      p_ref_code: refCode,
+      p_campaign_id: campaignId || null
+    })
+  })
+  .then(function(res) { return res.json(); })
+  .then(function(data) {
+    if (data && data.success) {
+      console.log('[ClickFunnels] Click tracked successfully for ref:', refCode);
+    }
+  })
+  .catch(function(err) {
+    console.warn('[ClickFunnels] Click tracking failed:', err);
+  });
+})();
+</script>

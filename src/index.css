@@ -57,6 +57,107 @@
   background-color: var(--cf-bg-canvas);
 }
 
+/* Dark Mode — CRM / Kanban */
+[data-theme='dark'] .crm-search {
+  background: var(--cf-bg-surface);
+  border-color: var(--cf-border);
+}
+[data-theme='dark'] .crm-search input { color: var(--cf-text-main); }
+[data-theme='dark'] .crm-stat-chip {
+  background: var(--cf-bg-surface);
+  border-color: var(--cf-border);
+}
+[data-theme='dark'] .crm-stat-chip .stat-count { color: var(--cf-text-main); }
+[data-theme='dark'] .kanban-column {
+  background: #1a2332;
+  border-color: var(--cf-border);
+}
+[data-theme='dark'] .lead-card {
+  background: var(--cf-bg-surface);
+  border-color: var(--cf-border);
+}
+[data-theme='dark'] .lead-card-name { color: var(--cf-text-main); }
+[data-theme='dark'] .lead-card-footer { border-top-color: var(--cf-border); }
+[data-theme='dark'] .crm-header h1 { color: var(--cf-text-main); }
+
+/* Dark Mode — Modals */
+[data-theme='dark'] .crm-modal,
+[data-theme='dark'] .store-modal {
+  background: #1e293b;
+  color: var(--cf-text-main);
+}
+[data-theme='dark'] .crm-modal-header,
+[data-theme='dark'] .modal-header { border-bottom-color: var(--cf-border); }
+[data-theme='dark'] .crm-modal-header h2,
+[data-theme='dark'] .modal-header h2 { color: var(--cf-text-main); }
+[data-theme='dark'] .crm-modal-footer,
+[data-theme='dark'] .modal-footer {
+  border-top-color: var(--cf-border);
+  background: #0f172a;
+}
+[data-theme='dark'] .crm-form-group input,
+[data-theme='dark'] .crm-form-group select,
+[data-theme='dark'] .crm-form-group textarea {
+  background: #0f172a;
+  border-color: var(--cf-border);
+  color: var(--cf-text-main);
+}
+[data-theme='dark'] .crm-form-group label { color: var(--cf-text-muted); }
+[data-theme='dark'] .crm-modal-close { background: #334155; color: #94a3b8; }
+
+/* Dark Mode — Ledger */
+[data-theme='dark'] .ledger-container { color: var(--cf-text-main); }
+[data-theme='dark'] .ledger-header-text h1 { color: var(--cf-text-main); }
+[data-theme='dark'] .ledger-table-container {
+  background: var(--cf-bg-surface);
+  border-color: var(--cf-border);
+}
+[data-theme='dark'] .ledger-table th { background: #0f172a; color: var(--cf-text-muted); border-bottom-color: var(--cf-border); }
+[data-theme='dark'] .ledger-table td { border-bottom-color: var(--cf-border); }
+[data-theme='dark'] .row-safe { background: var(--cf-bg-surface); }
+[data-theme='dark'] .row-danger { background: rgba(239, 68, 68, 0.1); }
+[data-theme='dark'] .trx-id { color: var(--cf-text-main); }
+[data-theme='dark'] .trx-buyer { color: var(--cf-text-main); }
+[data-theme='dark'] .ledger-total-lost { background: var(--cf-bg-surface); }
+[data-theme='dark'] .ledger-explanation {
+  background: var(--cf-bg-surface);
+  border-color: var(--cf-border);
+}
+[data-theme='dark'] .explanation-content h4 { color: var(--cf-text-main); }
+[data-theme='dark'] .explanation-content p { color: var(--cf-text-muted); }
+
+/* Dark Mode — Store */
+[data-theme='dark'] .store-card {
+  background: var(--cf-bg-surface);
+  border-color: var(--cf-border);
+}
+[data-theme='dark'] .store-tier-name { color: var(--cf-text-muted); }
+[data-theme='dark'] .store-price { color: var(--cf-text-main); }
+[data-theme='dark'] .store-commission { background: #334155; color: var(--cf-text-muted); }
+[data-theme='dark'] .store-divider { background: var(--cf-border); }
+[data-theme='dark'] .store-features li { color: var(--cf-text-muted); }
+[data-theme='dark'] .store-header h1 { color: var(--cf-text-main); }
+
+/* Dark Mode — Settings */
+[data-theme='dark'] .settings-wrapper { color: var(--cf-text-main); }
+[data-theme='dark'] .settings-tab-btn { color: var(--cf-text-muted); }
+[data-theme='dark'] .settings-tab-btn.active { color: var(--cf-text-main); border-color: var(--cf-primary); }
+[data-theme='dark'] .cf-input { background: #0f172a; border-color: var(--cf-border); color: var(--cf-text-main); }
+
+/* Dark Mode — Staff */
+[data-theme='dark'] .admin-page-wrapper { color: var(--cf-text-main); }
+[data-theme='dark'] .admin-page-wrapper h2 { color: var(--cf-text-main); }
+
+/* Dark Mode — Campaign Cards */
+[data-theme='dark'] .campaign-image { border-bottom-color: var(--cf-border); }
+[data-theme='dark'] .campaign-name { color: var(--cf-text-main); }
+
+/* Dark Mode — Topbar */
+[data-theme='dark'] .topbar {
+  background: var(--cf-bg-surface);
+  border-bottom-color: var(--cf-border);
+}
+
 * {
   box-sizing: border-box;
   margin: 0;

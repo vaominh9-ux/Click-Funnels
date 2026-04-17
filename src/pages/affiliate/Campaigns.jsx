@@ -1,57 +1,79 @@
-import React, { useState } from 'react';
-import { Copy, ExternalLink, Filter, Search } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { Copy, ExternalLink, Filter, Search, Lock } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
+import Skeleton from '../../components/common/Skeleton';
 import './Campaigns.css';
+
+const TIER_RANK = { 'starter': 1, 'master': 2, 'ai-coach': 3, 'ai-partner': 4 };
 
 const AffiliateCampaigns = () => {
   const [copiedId, setCopiedId] = useState(null);
   const [showUpgradeModal, setShowUpgradeModal] = useState(false);
   const [selectedUpgrade, setSelectedUpgrade] = useState(null);
-
-  const campaigns = [
-    {
-      id: 'CMP-STARTER',
-      name: 'STARTER Training',
-      description: 'The foundation to begin your journey. 6,000,000 VND.',
-      commission: '50% Lifetime',
-      image: 'https://placehold.co/400x200/2563eb/ffffff?text=STARTER+6Tr',
-      link: 'https://go.yoursite.com/starter?aff_id=AFF10293',
-      locked: false
-    },
-    {
-      id: 'CMP-MASTER',
-      name: 'MASTER Training',
-      description: 'Advanced methodologies and tools. 12,000,000 VND.',
-      commission: '50% Lifetime',
-      image: 'https://placehold.co/400x200/0f172a/ffffff?text=MASTER+12Tr',
-      link: 'https://go.yoursite.com/master?aff_id=AFF10293',
-      locked: false
-    },
-    {
-      id: 'CMP-AICOACH',
-      name: 'AI COACH Certification',
-      description: 'The comprehensive 30Tr curriculum to become a certified coach.',
-      commission: '30% Lifetime',
-      image: 'https://placehold.co/400x200/64748B/ffffff?text=AI+COACH+30Tr',
-      link: null,
-      locked: true,
-      price: '30,000,000 VND',
-      lockedMsg: 'Upgrade to Unlock AI COACH'
-    },
-    {
-      id: 'CMP-AIPARTNER',
-      name: 'AI PARTNER Program',
-      description: 'Highest 100Tr tier for elite partners (3 Month access).',
-      commission: '20% Lifetime',
-      image: 'https://placehold.co/400x200/475569/ffffff?text=AI+PARTNER+100Tr',
-      link: null,
-      locked: true,
-      price: '100,000,000 VND',
-      lockedMsg: 'Upgrade to Unlock AI PARTNER'
-    }
-  ];
+  const [loading, setLoading] = useState(true);
+  const [campaigns, setCampaigns] = useState([]);
+  const [userProfile, setUserProfile] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
 
   const addToast = useToast();
+
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const loadData = async () => {
+    setLoading(true);
+    try {
+      // 1. Lấy thông tin user hiện tại
+      const { data: { user } } = await supabase.auth.getUser();
+      if (!user) return;
+
+      // 2. Lấy profile (để biết tier)
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('tier, ref_code, full_name')
+        .eq('id', user.id)
+        .single();
+
+      setUserProfile(profile);
+
+      // 3. Lấy tất cả campaigns active
+      const { data: campaignData, error } = await supabase
+        .from('campaigns')
+        .select('*')
+        .eq('status', 'active')
+        .order('tier_required', { ascending: true });
+
+      if (error) {
+        console.error('Lỗi khi lấy campaigns:', error);
+        addToast('Không thể tải danh sách chiến dịch', 'error');
+      } else {
+        setCampaigns(campaignData || []);
+      }
+    } catch (err) {
+      console.error('Unexpected error:', err);
+    }
+    setLoading(false);
+  };
+
+  const userTierRank = userProfile ? (TIER_RANK[userProfile.tier] || 1) : 1;
+  const userTierLabel = userProfile?.tier?.toUpperCase() || 'STARTER';
+
+  const isLocked = (campaign) => {
+    return (campaign.tier_required || 1) > userTierRank;
+  };
+
+  const getAffLink = (campaign) => {
+    if (!userProfile?.ref_code) return '';
+    const trackingDomain = import.meta.env.VITE_TRACKING_DOMAIN;
+    if (trackingDomain) {
+      return `${trackingDomain}/go/${userProfile.ref_code}?campaign=${campaign.id}`;
+    }
+    const base = campaign.landing_page_url || 'https://duhava.com';
+    const sep = base.includes('?') ? '&' : '?';
+    return `${base}${sep}ref=${userProfile.ref_code}&campaign=${campaign.id}`;
+  };
 
   const handleCopy = (id, link) => {
     navigator.clipboard.writeText(link);
@@ -65,6 +87,10 @@ const AffiliateCampaigns = () => {
     setShowUpgradeModal(true);
   };
 
+  const filteredCampaigns = campaigns.filter(c =>
+    c.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
+
   return (
     <div className="dashboard-wrapper relative">
       <div className="flex-between mb-4">
@@ -74,65 +100,111 @@ const AffiliateCampaigns = () => {
         </div>
         <div className="search-bar">
           <Search size={18} className="text-muted" />
-          <input type="text" placeholder="Search campaigns..." className="cf-input" style={{ width: '250px' }} />
+          <input
+            type="text"
+            placeholder="Search campaigns..."
+            className="cf-input"
+            style={{ width: '250px' }}
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+          />
         </div>
       </div>
 
       {/* Pay-to-play Alert Banner */}
       <div className="cf-card mb-6" style={{ background: 'rgba(245, 158, 11, 0.1)', border: '1px solid rgba(245, 158, 11, 0.3)', borderLeft: '4px solid #F59E0B' }}>
         <p style={{ color: '#D97706', fontSize: '14px', lineHeight: '1.5' }}>
-          <strong>Pay-to-Play Notice:</strong> Bạn hiện đang ở hạng <strong>MASTER</strong>. Để quảng bá và nhận hoa hồng vĩnh viễn từ các dự án Cao Cấp hơn, bạn cần sở hữu/trải nghiệm trực tiếp dự án đó.
+          <strong>Pay-to-Play Notice:</strong> Bạn hiện đang ở hạng <strong>{userTierLabel}</strong>. Để quảng bá và nhận hoa hồng vĩnh viễn từ các dự án Cao Cấp hơn, bạn cần sở hữu/trải nghiệm trực tiếp dự án đó.
         </p>
       </div>
 
       <div className="campaigns-grid">
-        {campaigns.map((camp) => (
-          <div key={camp.id} className={`cf-card campaign-card ${camp.locked ? 'locked' : ''}`} style={camp.locked ? {opacity: 0.6} : {}}>
-            <div className="campaign-image" style={{ backgroundImage: `url(${camp.image})` }}>
-              {camp.locked && (
-                 <div style={{background: 'rgba(0,0,0,0.6)', width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
-                    <span style={{color:'white', fontWeight:'bold', display:'flex', alignItems:'center', gap:'8px'}}><Filter size={18}/> LOCKED</span>
-                 </div>
-              )}
-            </div>
-            <div className="campaign-body">
-              <div className="flex-between mb-2">
-                <h3 className="campaign-name">{camp.name}</h3>
-                <span className={camp.locked ? "badge badge-pending" : "badge badge-cleared"}>{camp.commission}</span>
+        {loading ? (
+          Array.from({ length: 4 }).map((_, i) => (
+            <div key={i} className="cf-card campaign-card">
+              <div className="campaign-image" style={{display:'flex',alignItems:'center',justifyContent:'center'}}>
+                <Skeleton width="100%" height="100%" />
               </div>
-              <p className="campaign-desc text-muted">{camp.description}</p>
-              
-              {!camp.locked ? (
-                <>
-                  <div className="campaign-link-box mt-4">
-                    <div className="link-text">{camp.link}</div>
-                    <button 
-                      className={`copy-btn ${copiedId === camp.id ? 'copied' : ''}`}
-                      onClick={() => handleCopy(camp.id, camp.link)}
-                    >
-                      {copiedId === camp.id ? 'Copied!' : <Copy size={16} />}
-                    </button>
-                  </div>
-                  <div className="campaign-footer flex-between mt-4">
-                    <button className="cf-btn-text text-sm">Download Assets (Swipes)</button>
-                    <button className="cf-btn-icon"><ExternalLink size={16}/></button>
-                  </div>
-                </>
-              ) : (
-                <div className="mt-4 flex-center flex-column" style={{gap: '8px'}}>
-                  <button 
-                    className="cf-btn-primary w-100" 
-                    onClick={() => handleUpgradeClick(camp)}
-                    style={{justifyContent: 'center', backgroundColor: '#fb923c', color: 'white', fontWeight: 600}}
-                  >
-                    {camp.lockedMsg}
-                  </button>
-                  <span style={{fontSize: '11px', color: '#6B7280'}}>Thanh toán: {camp.price}</span>
+              <div className="campaign-body">
+                <div className="flex-between mb-2">
+                  <Skeleton width="140px" height="20px" />
+                  <Skeleton width="80px" height="24px" style={{borderRadius: 12}} />
                 </div>
-              )}
+                <Skeleton width="100%" height="14px" style={{marginBottom: 6}} />
+                <Skeleton width="70%" height="14px" style={{marginBottom: 16}} />
+                <Skeleton width="100%" height="40px" style={{borderRadius: 6}} />
+              </div>
             </div>
+          ))
+        ) : filteredCampaigns.length === 0 ? (
+          <div className="cf-card" style={{gridColumn: '1 / -1', textAlign: 'center', padding: '40px', color: '#6B7280'}}>
+            {searchTerm ? 'Không tìm thấy chiến dịch nào.' : 'Chưa có chiến dịch nào được tạo.'}
           </div>
-        ))}
+        ) : filteredCampaigns.map((camp) => {
+          const locked = isLocked(camp);
+          const affLink = getAffLink(camp);
+
+          return (
+            <div key={camp.id} className={`cf-card campaign-card ${locked ? 'locked' : ''}`} style={locked ? {opacity: 0.6} : {}}>
+              <div className="campaign-image" style={{
+                backgroundImage: camp.image_url ? `url(${camp.image_url})` : undefined,
+                backgroundColor: camp.image_url ? undefined : '#E2E8F0',
+                display: 'flex', alignItems: 'center', justifyContent: 'center'
+              }}>
+                {locked && (
+                  <div style={{background: 'rgba(0,0,0,0.6)', width:'100%', height:'100%', display:'flex', alignItems:'center', justifyContent:'center'}}>
+                    <span style={{color:'white', fontWeight:'bold', display:'flex', alignItems:'center', gap:'8px'}}><Lock size={18}/> LOCKED</span>
+                  </div>
+                )}
+                {!locked && !camp.image_url && (
+                  <span style={{color: '#94A3B8', fontSize: '14px', fontWeight: 600}}>{camp.name}</span>
+                )}
+              </div>
+              <div className="campaign-body">
+                <div className="flex-between mb-2">
+                  <h3 className="campaign-name">{camp.name}</h3>
+                  <span className={locked ? "badge badge-pending" : "badge badge-cleared"}>
+                    {camp.commission_text || '50%'}
+                  </span>
+                </div>
+                <p className="campaign-desc text-muted">{camp.description || 'Chiến dịch quảng bá sản phẩm.'}</p>
+
+                {!locked ? (
+                  <>
+                    <div className="campaign-link-box mt-4">
+                      <div className="link-text">{affLink}</div>
+                      <button
+                        className={`copy-btn ${copiedId === camp.id ? 'copied' : ''}`}
+                        onClick={() => handleCopy(camp.id, affLink)}
+                      >
+                        {copiedId === camp.id ? 'Copied!' : <Copy size={16} />}
+                      </button>
+                    </div>
+                    <div className="campaign-footer flex-between mt-4">
+                      <button className="cf-btn-text text-sm">Download Assets (Swipes)</button>
+                      <a href={camp.landing_page_url} target="_blank" rel="noopener noreferrer" className="cf-btn-icon">
+                        <ExternalLink size={16}/>
+                      </a>
+                    </div>
+                  </>
+                ) : (
+                  <div className="mt-4 flex-center flex-column" style={{gap: '8px'}}>
+                    <button 
+                      className="cf-btn-primary w-100" 
+                      onClick={() => handleUpgradeClick(camp)}
+                      style={{justifyContent: 'center', backgroundColor: '#fb923c', color: 'white', fontWeight: 600}}
+                    >
+                      Nâng cấp để Mở Khóa
+                    </button>
+                    <span style={{fontSize: '11px', color: '#6B7280'}}>
+                      Yêu cầu: Hạng {['', 'STARTER', 'MASTER', 'AI COACH', 'AI PARTNER'][camp.tier_required] || 'N/A'}
+                    </span>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
       </div>
 
       {showUpgradeModal && selectedUpgrade && (
@@ -142,25 +214,23 @@ const AffiliateCampaigns = () => {
         }}>
           <div className="cf-card" onClick={e => e.stopPropagation()} style={{ width: '500px', maxWidth: '90%', padding: '32px' }}>
             <h2 className="mb-2">Nâng cấp Đặc Quyền: {selectedUpgrade.name}</h2>
-            <p className="text-muted mb-6">Mở khóa quyền phân phối chức năng và hưởng {selectedUpgrade.commission}</p>
+            <p className="text-muted mb-6">Mở khóa quyền phân phối chức năng và hưởng {selectedUpgrade.commission_text || '50%'}</p>
             
-            <div className="mb-6 p-4" style={{ backgroundColor: 'rgba(255,255,255,0.03)', borderRadius: '8px' }}>
+            <div className="mb-6 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.02)', borderRadius: '8px', border: '1px solid var(--cf-border)' }}>
               <div className="flex-between mb-2">
                 <span className="text-muted">Gói hiện tại</span>
-                <span className="font-bold">MASTER (12Tr)</span>
+                <span className="font-bold">{userTierLabel}</span>
               </div>
               <div className="flex-between mb-2" style={{color: '#9CA3AF'}}>
-                <span>-&gt; Quyền lợi cũ</span>
-                <span>Bán MAX Master</span>
+                <span>→ Quyền lợi cũ</span>
+                <span>Bán MAX {userTierLabel}</span>
               </div>
-              <hr style={{ borderColor: 'rgba(255,255,255,0.1)', margin: '16px 0' }} />
+              <hr style={{ borderColor: 'var(--cf-border)', margin: '16px 0' }} />
               <div className="flex-between mb-2">
-                <span className="text-muted">Gói nâng cấp</span>
-                <span className="font-bold" style={{color: '#34D399'}}>{selectedUpgrade.name}</span>
-              </div>
-              <div className="flex-between mb-2" style={{color: '#9CA3AF'}}>
-                <span>-&gt; Quyền lợi mới</span>
-                <span>Mở bán {selectedUpgrade.name}</span>
+                <span className="text-muted">Gói nâng cấp cần</span>
+                <span className="font-bold" style={{color: '#34D399'}}>
+                  {['', 'STARTER', 'MASTER', 'AI COACH', 'AI PARTNER'][selectedUpgrade.tier_required] || selectedUpgrade.name}
+                </span>
               </div>
             </div>
 
@@ -173,8 +243,15 @@ const AffiliateCampaigns = () => {
 
             <div className="flex-between" style={{ gap: '16px' }}>
               <button className="cf-btn-text w-100" onClick={() => setShowUpgradeModal(false)} style={{justifyContent: 'center'}}>Hủy bỏ</button>
-              <button className="cf-btn-primary w-100" style={{justifyContent: 'center', backgroundColor: '#34D399'}}>
-                Xác nhận {selectedUpgrade.price}
+              <button
+                className="cf-btn-primary w-100"
+                style={{justifyContent: 'center', backgroundColor: '#34D399'}}
+                onClick={() => {
+                  addToast('Vui lòng liên hệ Admin để nâng cấp!', 'info');
+                  setShowUpgradeModal(false);
+                }}
+              >
+                Liên hệ nâng cấp
               </button>
             </div>
           </div>

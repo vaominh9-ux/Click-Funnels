@@ -171,6 +171,10 @@ const Sidebar = ({ onClose }) => {
                   <span className="nav-sub-item-text">Quản Lý Khách Hàng</span>
                   <span className="badge-green-pill-static">CRM</span>
                 </NavLink>
+                <NavLink to="/admin/conversions" className={({ isActive }) => `nav-sub-item ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <div className="nav-square-icon"><DollarSign size={16} /></div>
+                  <span className="nav-sub-item-text">Đơn Hàng & Hoa Hồng</span>
+                </NavLink>
               </div>
             )}
           </div>

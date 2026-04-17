@@ -112,3 +112,25 @@
 .text-sm {
   font-size: 13px;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .campaigns-grid {
+    grid-template-columns: 1fr;
+  }
+  .campaign-link-box {
+    flex-direction: column;
+  }
+  .link-text {
+    width: 100%;
+    white-space: normal;
+    word-break: break-all;
+  }
+  .copy-btn {
+    border-left: none;
+    border-top: 1px solid var(--cf-border);
+    width: 100%;
+    padding: 10px;
+    text-align: center;
+  }
+}

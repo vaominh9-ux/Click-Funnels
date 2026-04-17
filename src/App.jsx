@@ -25,12 +25,19 @@ import AdminPayouts from './pages/admin/Payouts';
 import AdminStaffManagement from './pages/admin/StaffManagement';
 import AdminCampaignManager from './pages/admin/CampaignManager';
 import AdminLeadsCRM from './pages/admin/LeadsCRM';
+import AdminConversions from './pages/admin/Conversions';
+
+// Public Pages
+import ClickTracker from './pages/public/ClickTracker';
 
 const App = () => {
   return (
     <ToastProvider>
       <Router>
         <Routes>
+          {/* Public Routes */}
+          <Route path="/go/:refCode" element={<ClickTracker />} />
+
           {/* Auth Routes */}
           <Route path="/auth/login" element={<Login />} />
           <Route path="/auth/register" element={<Register />} />
@@ -139,6 +146,13 @@ const App = () => {
             <ProtectedRoute requiredRole="admin">
               <MainLayout title="Quản Lý Khách Hàng (CRM)">
                 <AdminLeadsCRM />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/conversions" element={
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Quản Lý Đơn Hàng & Hoa Hồng">
+                <AdminConversions />
               </MainLayout>
             </ProtectedRoute>
           } />

@@ -173,3 +173,28 @@
 .upgrade-now-btn:hover {
   background: #B91C1C;
 }
+
+/* Responsive */
+@media (max-width: 768px) {
+  .ledger-container {
+    padding: 16px;
+  }
+  .ledger-header {
+    flex-direction: column;
+    gap: 16px;
+  }
+  .ledger-total-lost {
+    text-align: left;
+    width: 100%;
+  }
+  .ledger-table-container {
+    overflow-x: auto;
+  }
+  .ledger-table {
+    white-space: nowrap;
+    min-width: 600px;
+  }
+  .ledger-explanation {
+    flex-direction: column;
+  }
+}

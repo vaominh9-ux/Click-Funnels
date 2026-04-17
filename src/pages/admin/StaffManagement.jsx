@@ -1,49 +1,72 @@
-import React, { useState } from 'react';
-import { Shield, Plus, Edit2, Lock, Unlock, Mail, ShieldAlert, X } from 'lucide-react';
-
-const initialStaff = [
-  { id: 'STF-001', name: 'Quản Trị Viên', email: 'admin@clickfunnels.vn', role: 'Super Admin', status: 'Hoạt động', lastLogin: 'Vừa xong' },
-  { id: 'STF-002', name: 'Trần Kế Toán', email: 'ketoan@clickfunnels.vn', role: 'Kế Toán', status: 'Hoạt động', lastLogin: '2 giờ trước' },
-  { id: 'STF-003', name: 'Lê Nội Dung', email: 'content@clickfunnels.vn', role: 'Biên Tập Viên', status: 'Hoạt động', lastLogin: '1 ngày trước' },
-  { id: 'STF-004', name: 'Phạm Hỗ Trợ', email: 'support@clickfunnels.vn', role: 'CSKH', status: 'Tạm khóa', lastLogin: '1 tháng trước' },
-];
+import React, { useState, useEffect } from 'react';
+import { Shield, Plus, Edit2, Lock, Unlock, Mail, ShieldAlert, X, Loader2 } from 'lucide-react';
+import { supabase } from '../../lib/supabase';
+import { useToast } from '../../components/common/Toast';
+import Skeleton from '../../components/common/Skeleton';
 
 const StaffManagement = () => {
-  const [staffList, setStaffList] = useState(initialStaff);
+  const [staffList, setStaffList] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const addToast = useToast();
   
   // Modal states
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [modalMode, setModalMode] = useState('add'); // 'add' or 'edit'
+  const [modalMode, setModalMode] = useState('add');
+  const [saving, setSaving] = useState(false);
   
   // Form states
   const [editingId, setEditingId] = useState('');
-  const [formData, setFormData] = useState({ name: '', email: '', role: 'Biên Tập Viên', status: 'Hoạt động' });
+  const [formData, setFormData] = useState({ name: '', email: '', role: 'staff', status: 'active' });
+
+  useEffect(() => {
+    loadStaff();
+  }, []);
+
+  const loadStaff = async () => {
+    setLoading(true);
+    const { data, error } = await supabase
+      .from('profiles')
+      .select('*')
+      .in('role', ['admin', 'staff'])
+      .order('created_at', { ascending: true });
+
+    if (error) {
+      console.error('Lỗi khi lấy danh sách nhân sự:', error);
+      addToast('Không thể tải danh sách nhân sự', 'error');
+    } else {
+      setStaffList(data || []);
+    }
+    setLoading(false);
+  };
 
   const getRoleBadge = (role) => {
     switch (role) {
-      case 'Super Admin':
-        return <span className="badge" style={{background: '#EF4444', color: 'white'}}>Quyền cao nhất</span>;
-      case 'Kế Toán':
-        return <span className="badge" style={{background: '#10B981', color: 'white'}}>Kế Toán</span>;
-      case 'Biên Tập Viên':
-        return <span className="badge" style={{background: '#F59E0B', color: 'white'}}>Nội Dung</span>;
-      case 'CSKH':
-        return <span className="badge" style={{background: '#3B82F6', color: 'white'}}>Hỗ Trợ</span>;
+      case 'admin':
+        return <span className="badge" style={{background: '#EF4444', color: 'white'}}>Super Admin</span>;
+      case 'staff':
+        return <span className="badge" style={{background: '#3B82F6', color: 'white'}}>Nhân viên</span>;
       default:
         return <span className="badge badge-pending">{role}</span>;
     }
   };
 
+  const getStatusBadge = (status) => {
+    if (status === 'active') {
+      return <span className="badge badge-cleared"><Unlock size={12} style={{marginRight: '4px', display:'inline'}}/>Đang mở</span>;
+    }
+    return <span className="badge badge-pending"><Lock size={12} style={{marginRight: '4px', display:'inline'}}/>Đã khóa</span>;
+  };
+
   const openAddModal = () => {
     setModalMode('add');
-    setFormData({ name: '', email: '', role: 'Biên Tập Viên', status: 'Hoạt động' });
+    setFormData({ name: '', email: '', role: 'staff', status: 'active' });
     setIsModalOpen(true);
   };
 
   const openEditModal = (staff) => {
     setModalMode('edit');
     setEditingId(staff.id);
-    setFormData({ name: staff.name, email: staff.email, role: staff.role, status: staff.status });
+    setFormData({ name: staff.full_name || '', email: staff.email, role: staff.role, status: staff.approval_status || 'active' });
     setIsModalOpen(true);
   };
 
@@ -51,33 +74,111 @@ const StaffManagement = () => {
     setIsModalOpen(false);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setSaving(true);
+
     if (modalMode === 'add') {
-      const newStaff = {
-        id: `STF-00${staffList.length + 1}`,
-        name: formData.name,
-        email: formData.email,
-        role: formData.role,
-        status: formData.status,
-        lastLogin: 'Chưa đăng nhập'
-      };
-      setStaffList([newStaff, ...staffList]);
+      // Tạo user mới qua Supabase Auth (admin invite)
+      // Note: Trong thực tế, cần Supabase Admin API hoặc Edge Function
+      // Ở đây tạm update profile nếu đã tồn tại
+      const { data: existing } = await supabase
+        .from('profiles')
+        .select('id')
+        .eq('email', formData.email)
+        .single();
+
+      if (existing) {
+        const { error } = await supabase
+          .from('profiles')
+          .update({ 
+            full_name: formData.name, 
+            role: formData.role,
+            approval_status: 'active',
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', existing.id);
+
+        if (error) {
+          console.error('Lỗi khi cập nhật:', error);
+          addToast('Cập nhật thất bại!', 'error');
+        } else {
+          addToast('Đã cấp quyền nhân sự thành công', 'success');
+          loadStaff();
+        }
+      } else {
+        addToast('Email chưa có trong hệ thống. Người này cần đăng ký tài khoản trước.', 'warning');
+      }
     } else {
-      setStaffList(staffList.map(s => 
-        s.id === editingId ? { ...s, name: formData.name, email: formData.email, role: formData.role, status: formData.status } : s
-      ));
+      // Edit existing staff
+      const { error } = await supabase
+        .from('profiles')
+        .update({ 
+          full_name: formData.name,
+          role: formData.role,
+          approval_status: formData.status,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', editingId);
+
+      if (error) {
+        console.error('Lỗi khi cập nhật:', error);
+        addToast('Cập nhật thất bại!', 'error');
+      } else {
+        addToast('Đã cập nhật quyền nhân sự', 'success');
+        loadStaff();
+      }
     }
+
+    setSaving(false);
     closeModal();
   };
 
-  const toggleStatus = (id) => {
+  const toggleStatus = async (staff) => {
+    const newStatus = staff.approval_status === 'active' ? 'rejected' : 'active';
+    
+    // Optimistic update
     setStaffList(staffList.map(s => 
-      s.id === id ? { ...s, status: s.status === 'Hoạt động' ? 'Tạm khóa' : 'Hoạt động' } : s
+      s.id === staff.id ? { ...s, approval_status: newStatus } : s
     ));
+
+    const { error } = await supabase
+      .from('profiles')
+      .update({ approval_status: newStatus, updated_at: new Date().toISOString() })
+      .eq('id', staff.id);
+
+    if (error) {
+      console.error('Lỗi khi cập nhật trạng thái:', error);
+      // Revert
+      setStaffList(staffList.map(s => 
+        s.id === staff.id ? { ...s, approval_status: staff.approval_status } : s
+      ));
+      addToast('Cập nhật trạng thái thất bại!', 'error');
+    } else {
+      addToast(newStatus === 'active' ? 'Đã mở khóa tài khoản' : 'Đã khóa tài khoản', 'success');
+    }
   };
 
-  // Inline CSS for the Modal overlay
+  const formatDate = (dateStr) => {
+    if (!dateStr) return 'N/A';
+    const d = new Date(dateStr);
+    const now = new Date();
+    const diffMs = now - d;
+    const diffMins = Math.floor(diffMs / 60000);
+    if (diffMins < 1) return 'Vừa xong';
+    if (diffMins < 60) return `${diffMins} phút trước`;
+    const diffHours = Math.floor(diffMins / 60);
+    if (diffHours < 24) return `${diffHours} giờ trước`;
+    const diffDays = Math.floor(diffHours / 24);
+    if (diffDays < 30) return `${diffDays} ngày trước`;
+    return d.toLocaleDateString('vi-VN');
+  };
+
+  // Stats
+  const totalStaff = staffList.length;
+  const totalAdmin = staffList.filter(s => s.role === 'admin').length;
+  const totalLocked = staffList.filter(s => s.approval_status !== 'active').length;
+
   const modalOverlayStyle = {
     position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
     backgroundColor: 'rgba(0,0,0,0.5)', zIndex: 9999,
@@ -104,15 +205,15 @@ const StaffManagement = () => {
       <div className="stats-grid mb-6">
         <div className="cf-card" style={{borderTop: '4px solid #8B5CF6'}}>
           <h3 className="text-muted text-sm font-bold uppercase mb-2">Tổng Nhân Sự</h3>
-          <div className="font-bold text-3xl">{staffList.length} Người</div>
+          <div className="font-bold text-3xl">{loading ? <Skeleton width="80px" height="36px" /> : `${totalStaff} Người`}</div>
         </div>
         <div className="cf-card" style={{borderTop: '4px solid #EF4444'}}>
           <h3 className="text-muted text-sm font-bold uppercase mb-2">Quyền Super Admin</h3>
-          <div className="font-bold text-3xl">{staffList.filter(s => s.role === 'Super Admin').length} Người</div>
+          <div className="font-bold text-3xl">{loading ? <Skeleton width="80px" height="36px" /> : `${totalAdmin} Người`}</div>
         </div>
         <div className="cf-card" style={{borderTop: '4px solid #F59E0B'}}>
           <h3 className="text-muted text-sm font-bold uppercase mb-2">Đang Bị Khóa</h3>
-          <div className="font-bold text-3xl">{staffList.filter(s => s.status === 'Tạm khóa').length} Người</div>
+          <div className="font-bold text-3xl">{loading ? <Skeleton width="80px" height="36px" /> : `${totalLocked} Người`}</div>
         </div>
       </div>
 
@@ -135,23 +236,33 @@ const StaffManagement = () => {
               </tr>
             </thead>
             <tbody>
-              {staffList.map((staff, i) => (
-                <tr key={i}>
+              {loading ? (
+                Array.from({ length: 4 }).map((_, i) => (
+                  <tr key={i}>
+                    <td><Skeleton width="120px" height="20px" /><div style={{marginTop: 4}}><Skeleton width="180px" height="14px" /></div></td>
+                    <td><Skeleton width="100px" height="24px" style={{borderRadius: 12}} /></td>
+                    <td><Skeleton width="100px" height="24px" style={{borderRadius: 12}} /></td>
+                    <td><Skeleton width="80px" height="14px" /></td>
+                    <td style={{textAlign: 'right'}}><Skeleton width="60px" height="28px" style={{marginLeft: 'auto'}} /></td>
+                  </tr>
+                ))
+              ) : staffList.length === 0 ? (
+                <tr>
+                  <td colSpan={5} style={{textAlign: 'center', padding: '40px', color: '#6B7280'}}>
+                    Chưa có nhân sự nào. Nhấn "Thêm Quản Trị Mới" để bắt đầu.
+                  </td>
+                </tr>
+              ) : staffList.map((staff) => (
+                <tr key={staff.id}>
                   <td>
-                    <div className="font-bold">{staff.name}</div>
+                    <div className="font-bold">{staff.full_name || 'Chưa cập nhật'}</div>
                     <div className="text-sm text-muted flex-align-center" style={{gap: '4px', marginTop: '4px'}}>
                       <Mail size={12}/> {staff.email}
                     </div>
                   </td>
                   <td>{getRoleBadge(staff.role)}</td>
-                  <td>
-                    {staff.status === 'Hoạt động' ? (
-                      <span className="badge badge-cleared"><Unlock size={12} style={{marginRight: '4px', display:'inline'}}/>Đang mở</span>
-                    ) : (
-                      <span className="badge badge-pending"><Lock size={12} style={{marginRight: '4px', display:'inline'}}/>Đã khóa</span>
-                    )}
-                  </td>
-                  <td className="text-muted text-sm">{staff.lastLogin}</td>
+                  <td>{getStatusBadge(staff.approval_status)}</td>
+                  <td className="text-muted text-sm">{formatDate(staff.updated_at)}</td>
                   <td style={{textAlign: 'right'}}>
                     <div className="flex-align-center" style={{justifyContent: 'flex-end', gap: '8px'}}>
                       <button className="cf-btn-outline" style={{padding: '4px 8px', fontSize: '13px'}} title="Chỉnh sửa quyền" onClick={() => openEditModal(staff)}>
@@ -159,11 +270,11 @@ const StaffManagement = () => {
                       </button>
                       <button 
                         className="cf-btn-outline" 
-                        style={{padding: '4px 8px', fontSize: '13px', color: staff.status === 'Hoạt động' ? '#EF4444' : '#10B981', borderColor: staff.status === 'Hoạt động' ? '#EF4444' : '#10B981'}} 
-                        title={staff.status === 'Hoạt động' ? 'Khóa tài khoản' : 'Mở khóa'}
-                        onClick={() => toggleStatus(staff.id)}
+                        style={{padding: '4px 8px', fontSize: '13px', color: staff.approval_status === 'active' ? '#EF4444' : '#10B981', borderColor: staff.approval_status === 'active' ? '#EF4444' : '#10B981'}} 
+                        title={staff.approval_status === 'active' ? 'Khóa tài khoản' : 'Mở khóa'}
+                        onClick={() => toggleStatus(staff)}
                       >
-                        {staff.status === 'Hoạt động' ? <ShieldAlert size={14} /> : <Unlock size={14} />}
+                        {staff.approval_status === 'active' ? <ShieldAlert size={14} /> : <Unlock size={14} />}
                       </button>
                     </div>
                   </td>
@@ -180,7 +291,7 @@ const StaffManagement = () => {
           <div style={modalContentStyle}>
             <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px'}}>
               <h3 style={{margin: 0, fontSize: '18px', fontWeight: 700}}>
-                {modalMode === 'add' ? 'Thêm Quản Trị Viên' : 'Chỉnh Sửa Quyền'}
+                {modalMode === 'add' ? 'Thêm / Cấp Quyền Quản Trị' : 'Chỉnh Sửa Quyền'}
               </h3>
               <button onClick={closeModal} style={{background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280', padding: '4px', display: 'flex', alignItems: 'center'}}>
                 <X size={24} />
@@ -205,11 +316,17 @@ const StaffManagement = () => {
                 <input 
                   type="email" 
                   required
-                  style={{width: '100%', padding: '10px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none'}}
+                  disabled={modalMode === 'edit'}
+                  style={{width: '100%', padding: '10px 12px', border: '1px solid #E5E7EB', borderRadius: '8px', outline: 'none', opacity: modalMode === 'edit' ? 0.6 : 1}}
                   value={formData.email}
                   onChange={e => setFormData({...formData, email: e.target.value})}
                   placeholder="email@clickfunnels.vn"
                 />
+                {modalMode === 'add' && (
+                  <span style={{fontSize: '12px', color: '#9CA3AF', marginTop: '4px', display: 'block'}}>
+                    Người này phải đã đăng ký tài khoản trên hệ thống trước.
+                  </span>
+                )}
               </div>
 
               <div>
@@ -219,10 +336,8 @@ const StaffManagement = () => {
                   value={formData.role}
                   onChange={e => setFormData({...formData, role: e.target.value})}
                 >
-                  <option value="Super Admin">Super Admin (Quyền cao nhất)</option>
-                  <option value="Kế Toán">Kế Toán (Quản lý rút tiền/phễu)</option>
-                  <option value="Biên Tập Viên">Biên Tập Viên (Nội dung/Landing Page)</option>
-                  <option value="CSKH">CSKH (Hỗ trợ đại lý)</option>
+                  <option value="admin">Admin (Quyền cao nhất)</option>
+                  <option value="staff">Staff (Nhân viên hỗ trợ)</option>
                 </select>
               </div>
 
@@ -230,8 +345,9 @@ const StaffManagement = () => {
                 <button type="button" onClick={closeModal} style={{padding: '10px 16px', background: '#F3F4F6', color: '#4B5563', border: 'none', borderRadius: '8px', cursor: 'pointer', fontWeight: 600}}>
                   Hủy Bỏ
                 </button>
-                <button type="submit" className="cf-btn-primary" style={{padding: '10px 24px', border: 'none', borderRadius: '8px', cursor: 'pointer'}}>
-                  {modalMode === 'add' ? 'Tạo Tài Khoản' : 'Lưu Thay Đổi'}
+                <button type="submit" className="cf-btn-primary" disabled={saving} style={{padding: '10px 24px', border: 'none', borderRadius: '8px', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px'}}>
+                  {saving ? <Loader2 size={16} className="animate-spin" /> : null}
+                  {modalMode === 'add' ? 'Cấp Quyền' : 'Lưu Thay Đổi'}
                 </button>
               </div>
             </form>
