@@ -2,7 +2,7 @@ export const FUNNEL_COURSES = {
   'khoa-hoc-1': {
     id: 'khoa-hoc-1',
     name: 'Khóa Học 1: Xây Dựng Hệ Thống Đa Kênh',
-    price: 3500000,
+    price: 10000,
     checkoutImage: 'https://images.unsplash.com/photo-1616469829941-c7200edec809?auto=format&fit=crop&q=80',
   },
   'khoa-hoc-2': {
