@@ -14,8 +14,30 @@ const Course1 = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
-    // Scroll to top on load
     window.scrollTo(0, 0);
+
+    // Intersection Observer for Reveal Animations
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px',
+      threshold: 0.15
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('is-visible');
+          observer.unobserve(entry.target); // Reveal only once
+        }
+      });
+    }, observerOptions);
+
+    const revealElements = document.querySelectorAll('.reveal-on-scroll');
+    revealElements.forEach(el => observer.observe(el));
+
+    return () => {
+      revealElements.forEach(el => observer.unobserve(el));
+    };
   }, []);
 
   // Hook theo dõi ref
@@ -23,6 +45,13 @@ const Course1 = () => {
 
   return (
     <div className="c1-container">
+      {/* BACKGROUND PARTICLES */}
+      <div className="c1-particles">
+        <div className="particle p1"></div>
+        <div className="particle p2"></div>
+        <div className="particle p3"></div>
+      </div>
+
       {/* HEADER */}
       <header className="c1-header">
         <div className="c1-logo">
@@ -67,7 +96,7 @@ const Course1 = () => {
       </section>
 
       {/* TRUST AS SEEN ON */}
-      <section className="c1-trust">
+      <section className="c1-trust reveal-on-scroll">
         <p>Đã giúp +2,000 học viên đạt thu nhập $1,000/tháng</p>
         <div className="c1-trust-logos">
           <span>FORBES</span>
@@ -78,23 +107,23 @@ const Course1 = () => {
       </section>
 
       {/* BENEFITS SECTION */}
-      <section className="c1-section">
+      <section className="c1-section reveal-on-scroll">
         <div className="c1-section-header">
           <h2>Tại Sao Khóa Học Này Khác Biệt?</h2>
           <p>Không lý thuyết sáo rỗng. Chúng tôi cung cấp cho bạn hệ thống đã được chứng minh hiệu quả.</p>
         </div>
         <div className="c1-grid">
-          <div className="c1-card">
+          <div className="c1-card reveal-card" style={{transitionDelay: '0.1s'}}>
             <div className="c1-icon-wrap"><Zap size={24} /></div>
             <h3>Khởi Động Nhanh Chóng</h3>
             <p>Bạn sẽ có hệ thống phễu đầu tiên hoạt động hoàn chỉnh chỉ sau 3 ngày thực hành theo các video hướng dẫn từng bước click by click.</p>
           </div>
-          <div className="c1-card">
+          <div className="c1-card reveal-card" style={{transitionDelay: '0.2s'}}>
             <div className="c1-icon-wrap"><TrendingUp size={24} /></div>
             <h3>Tỷ Lệ Chuyển Đổi Cao</h3>
             <p>Chúng tôi chia sẻ template Funnel đang mang lại tỷ lệ chuyển đổi tĩnh lên đến 20%, giúp bạn tối ưu hóa ngân sách quảng cáo.</p>
           </div>
-          <div className="c1-card">
+          <div className="c1-card reveal-card" style={{transitionDelay: '0.3s'}}>
             <div className="c1-icon-wrap"><Users size={24} /></div>
             <h3>Hỗ Trợ Cộng Đồng 24/7</h3>
             <p>Tham gia vào Private Group VIP. Đội ngũ chuyên gia và các mentor luôn sẵn sàng review phễu của bạn trước khi chạy chiến dịch.</p>
@@ -103,7 +132,7 @@ const Course1 = () => {
       </section>
 
       {/* CURRICULUM SECTION */}
-      <section id="modules" className="c1-section" style={{ background: 'rgba(0,0,0,0.2)' }}>
+      <section id="modules" className="c1-section reveal-on-scroll" style={{ background: 'rgba(0,0,0,0.2)' }}>
         <div className="c1-section-header">
           <h2>Nội Dung Khóa Học</h2>
           <p>Lộ trình thực chiến từ Zero đến Hero trong 4 tuần</p>
@@ -111,7 +140,7 @@ const Course1 = () => {
         
         <div className="c1-grid" style={{ gridTemplateColumns: '1fr', maxWidth: '800px', margin: '0 auto' }}>
           
-          <div className="c1-module">
+          <div className="c1-module reveal-card" style={{transitionDelay: '0.1s'}}>
             <div className="c1-module-header">
               <span className="c1-module-num">01</span>
               <h3>Nền Tảng Affiliate & Tư Duy Hệ Thống</h3>
@@ -123,7 +152,7 @@ const Course1 = () => {
             </ul>
           </div>
 
-          <div className="c1-module">
+          <div className="c1-module reveal-card" style={{transitionDelay: '0.2s'}}>
             <div className="c1-module-header">
               <span className="c1-module-num">02</span>
               <h3>Xây Dựng Cỗ Máy Kiếm Tiền</h3>
@@ -135,7 +164,7 @@ const Course1 = () => {
             </ul>
           </div>
 
-          <div className="c1-module">
+          <div className="c1-module reveal-card" style={{transitionDelay: '0.3s'}}>
             <div className="c1-module-header">
               <span className="c1-module-num">03</span>
               <h3>Bom Tấn Kéo Traffic Đa Kênh</h3>
@@ -151,8 +180,8 @@ const Course1 = () => {
       </section>
 
       {/* PRICING & FINAL CTA */}
-      <section className="c1-section">
-        <div className="c1-pricing">
+      <section className="c1-section reveal-on-scroll">
+        <div className="c1-pricing animated-border">
           <div className="c1-pricing-popular">Bán Chạy Nhất</div>
           <h2>Bậc Thầy Affiliate Tự Động</h2>
           <div className="c1-pricing-price">
