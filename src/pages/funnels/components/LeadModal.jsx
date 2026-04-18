@@ -44,14 +44,16 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
       if (!lifetimeMatched && refCode) {
         // Lấy chính xác chiến dịch hiện tại lưu từ lúc click link
         let storedCampaignId = localStorage.getItem('aff_campaign_id');
-        if (storedCampaignId === 'undefined' || storedCampaignId === 'null') {
-           storedCampaignId = null;
-        }
+        if (storedCampaignId === 'undefined' || storedCampaignId === 'null') storedCampaignId = null;
+
+        let storedLinkId = localStorage.getItem('aff_link_id');
+        if (storedLinkId === 'undefined' || storedLinkId === 'null') storedLinkId = null;
 
         // Cố gắng gọi RPC (nếu đã chạy migration)
         const { data: refData, error: refError } = await supabase.rpc('record_affiliate_lead', {
           p_ref_code: refCode,
-          p_campaign_id: storedCampaignId
+          p_campaign_id: storedCampaignId,
+          p_link_id: storedLinkId
         });
         
         if (!refError && refData?.success) {
