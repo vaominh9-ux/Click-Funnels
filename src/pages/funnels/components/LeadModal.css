@@ -1,56 +1,77 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;900&family=Inter:wght@400;600;700&display=swap');
+
 .lead-modal-backdrop {
   position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.7);
-  backdrop-filter: blur(5px);
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.85); /* Darker backdrop */
+  backdrop-filter: blur(8px); /* Nice cinematic blur */
   display: flex;
-  align-items: center;
   justify-content: center;
+  align-items: center;
   z-index: 9999;
   padding: 20px;
+  animation: fadeIn 0.3s ease-out forwards;
 }
 
 .lead-modal-card {
-  background: #1e293b;
+  background: #0A0A0A; /* Premium Abyss */
   width: 100%;
-  max-width: 450px;
-  border-radius: 20px;
-  padding: 40px;
+  max-width: 480px;
+  border-radius: 16px;
+  padding: 40px 32px;
   position: relative;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  animation: slideUp 0.3s ease-out;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8), 0 0 40px rgba(16, 185, 129, 0.1) inset;
+  border: 1px solid #1E293B;
+  animation: slideUp 0.3s ease-out forwards;
+  color: #F8FAFC;
+  font-family: 'Inter', sans-serif;
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+/* Green emerald top accent line */
+.lead-modal-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  background: linear-gradient(90deg, #10B981, #34D399, #059669);
 }
 
 .close-btn {
   position: absolute;
-  top: 15px;
-  right: 20px;
-  background: transparent;
+  top: 20px;
+  right: 24px;
+  background: none;
   border: none;
-  color: #94a3b8;
   font-size: 28px;
+  color: #64748B;
   cursor: pointer;
+  transition: color 0.2s;
   line-height: 1;
 }
 
 .close-btn:hover {
-  color: #fff;
+  color: #EF4444;
 }
 
 .lead-modal-card h2 {
-  font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: #f8fafc;
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #10B981; /* Emerald/Green focus */
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.3;
+  padding-right: 20px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .lead-modal-card p {
-  color: #94a3b8;
+  color: #94A3B8;
   font-size: 0.95rem;
   margin-bottom: 30px;
   line-height: 1.5;
@@ -58,54 +79,78 @@
 
 .lead-form .form-group {
   margin-bottom: 20px;
-  text-align: left;
 }
 
 .lead-form label {
   display: block;
-  font-size: 0.85rem;
-  color: #cbd5e1;
   margin-bottom: 8px;
+  font-size: 0.85rem;
   font-weight: 600;
+  color: #CBD5E1;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .lead-form input {
   width: 100%;
-  padding: 12px 16px;
-  background: #0f172a;
-  border: 1px solid #334155;
-  border-radius: 10px;
-  color: #fff;
+  padding: 14px 16px;
+  border: 1px solid #1E293B;
+  border-radius: 8px;
   font-size: 1rem;
-  outline: none;
-  transition: border-color 0.2s;
+  font-family: 'Inter', sans-serif;
+  background: #111827;
+  color: #F8FAFC;
+  transition: border-color 0.2s, box-shadow 0.2s;
 }
 
 .lead-form input:focus {
-  border-color: #3b82f6;
+  outline: none;
+  border-color: #10B981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.15);
+  background: #0F172A;
+}
+
+.lead-form input::placeholder {
+  color: #475569;
 }
 
 .submit-btn {
   width: 100%;
-  margin-top: 10px;
   padding: 16px;
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
-  color: #ffffff;
+  background: linear-gradient(135deg, #10B981, #059669);
+  color: white;
   border: none;
-  border-radius: 12px;
+  border-radius: 8px;
   font-size: 1.1rem;
   font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
   cursor: pointer;
+  margin-top: 10px;
   transition: all 0.2s ease;
-  box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  text-transform: uppercase;
+  box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.4);
 }
 
 .submit-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 6px 20px rgba(59, 130, 246, 0.6);
+  box-shadow: 0 15px 30px -5px rgba(16, 185, 129, 0.6);
+  background: linear-gradient(135deg, #059669, #047857);
 }
 
 .submit-btn:disabled {
-  opacity: 0.6;
+  background: #334155;
+  color: #94A3B8;
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
 }
