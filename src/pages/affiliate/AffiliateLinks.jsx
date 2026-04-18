@@ -289,13 +289,14 @@ export default function AffiliateLinks() {
                 </tr>
               )}
             </tbody>
+            {links.length > 0 && (
             <tfoot>
               <tr>
                 <td style={{fontWeight: 700}}>TỔNG CỘNG</td>
                 <td style={{textAlign: 'center', fontWeight: 700, fontSize: '16px'}}>{links.reduce((sum, link) => sum + (link.clicks || 0), 0).toLocaleString()}</td>
                 <td style={{textAlign: 'center', fontWeight: 700, fontSize: '16px'}}>{links.reduce((sum, link) => sum + (link.leads || 0), 0).toLocaleString()}</td>
                 <td style={{textAlign: 'center', fontWeight: 700, fontSize: '16px', color: '#10B981'}}>{links.reduce((sum, link) => sum + (link.sales || 0), 0)}</td>
-                <td style={{textAlign: 'center', fontWeight: 700, fontSize: '16px'}}>
+                <td colSpan="2" style={{textAlign: 'center', fontWeight: 700, fontSize: '16px'}}>
                   {links.reduce((sum, link) => sum + (link.clicks || 0), 0) > 0 
                     ? ((links.reduce((sum, link) => sum + (link.sales || 0), 0) / links.reduce((sum, link) => sum + (link.clicks || 0), 0)) * 100).toFixed(1) 
                     : 0}%
