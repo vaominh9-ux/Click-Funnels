@@ -30,6 +30,7 @@ const Checkout = () => {
   const [conversionId, setConversionId] = useState(null);
   const [elapsedTime, setElapsedTime] = useState(0);
   const timerRef = useRef(null);
+  const orderInitialized = useRef(false);
 
   const course = FUNNEL_COURSES[courseId];
   const [bankConfig, setBankConfig] = useState(BANK_CONFIG);
@@ -188,7 +189,6 @@ const Checkout = () => {
       setConversionId(paymentCode); // Dùng paymentCode làm key cho realtime
       setPaymentStatus('waiting');
       setElapsedTime(0);
-      addToast('Đơn hàng đã được tạo. Quét mã QR để thanh toán!', 'success');
       
     } catch (error) {
       console.error(error);
@@ -202,6 +202,15 @@ const Checkout = () => {
     navigator.clipboard.writeText(paymentCode);
     addToast('Đã sao chép mã thanh toán!', 'success');
   };
+
+  // Tự động kéo đơn hàng ngầm (Auto-order)
+  useEffect(() => {
+    if (leadInfo && paymentCode && paymentStatus === 'idle' && !orderInitialized.current) {
+      orderInitialized.current = true;
+      handleCreateOrder();
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [leadInfo, paymentCode, paymentStatus]);
 
   const formatTime = (seconds) => {
     const m = Math.floor(seconds / 60);
@@ -309,39 +318,30 @@ const Checkout = () => {
             </div>
           </div>
 
+          {/* Trạng thái khởi tạo */}
+          {paymentStatus === 'idle' && (
+            <div className="payment-waiting-box" style={{textAlign: 'center'}}>
+              <Loader2 size={24} className="spin" style={{color: '#38BDF8', margin: '0 auto 10px'}} />
+              <div style={{fontWeight: 600, color: '#F8FAFC'}}>Đang khởi tạo giao dịch an toàn...</div>
+            </div>
+          )}
+
           {/* Trạng thái chờ thanh toán */}
           {paymentStatus === 'waiting' && (
             <div className="payment-waiting-box">
               <div style={{display: 'flex', alignItems: 'center', gap: '12px', marginBottom: '8px'}}>
-                <Loader2 size={20} className="spin" style={{color: '#3B82F6'}} />
-                <span style={{fontWeight: 600, color: '#1E40AF'}}>Đang chờ xác nhận thanh toán...</span>
+                <Loader2 size={20} className="spin" style={{color: '#38BDF8'}} />
+                <span style={{fontWeight: 600, color: '#38BDF8'}}>Đang chờ xác nhận thanh toán tự động...</span>
               </div>
-              <div style={{fontSize: '13px', color: '#6B7280'}}>
-                Thời gian chờ: <strong>{formatTime(elapsedTime)}</strong> — Hệ thống sẽ tự động xác nhận khi nhận được tiền.
+              <div style={{fontSize: '13px', color: '#94A3B8'}}>
+                Thời gian chờ: <strong style={{color: '#F8FAFC'}}>{formatTime(elapsedTime)}</strong> — Hệ thống quét giao dịch mỗi 3s.
               </div>
               {elapsedTime > 300 && (
-                <div style={{marginTop: '8px', fontSize: '13px', color: '#DC2626', display: 'flex', alignItems: 'center', gap: '6px'}}>
-                  <AlertCircle size={14} />
-                  Quá 5 phút chưa nhận được. Vui lòng kiểm tra lại nội dung chuyển khoản hoặc liên hệ hỗ trợ.
+                <div style={{marginTop: '12px', fontSize: '13px', color: '#EF4444', display: 'flex', alignItems: 'flex-start', gap: '6px', background: 'rgba(239, 68, 68, 0.1)', padding: '8px', borderRadius: '4px'}}>
+                  <AlertCircle size={16} />
+                  Quá 5 phút chưa nhận được. Vui lòng đảm bảo nội dung chuyển khoản là <b>{paymentCode}</b>, hoặc F5 để thử lại.
                 </div>
               )}
-            </div>
-          )}
-
-          {paymentStatus === 'idle' && (
-            <button 
-              className="checkout-btn" 
-              onClick={handleCreateOrder}
-              disabled={loading || !leadInfo}
-            >
-              {loading ? 'Đang Tạo Đơn...' : 'Xác Nhận & Chuyển Khoản'}
-            </button>
-          )}
-
-          {paymentStatus === 'waiting' && (
-            <div style={{textAlign: 'center', marginTop: '12px', fontSize: '13px', color: '#9CA3AF'}}>
-              <Clock size={14} style={{verticalAlign: 'middle', marginRight: '4px'}} />
-              Trang này sẽ tự động cập nhật khi nhận được thanh toán
             </div>
           )}
         </div>

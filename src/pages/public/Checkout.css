@@ -1,28 +1,48 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@700;900&display=swap');
+
+/* =========================================
+   CHECKOUT PREMIUM DARK UI
+   Dramatically improved to match the elite funnels
+   ========================================= */
+
 .checkout-container {
   min-height: 100vh;
-  background-color: #f1f5f9;
+  background-color: #050505; /* Deep Abyss */
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
   font-family: 'Inter', sans-serif;
+  color: #F8FAFC;
+  /* Add subtle gradient */
+  background-image: radial-gradient(circle at top right, #1F1F1F 0%, #050505 50%);
 }
 
 .checkout-wrapper {
-  background: #ffffff;
+  background: #0A0A0A;
   max-width: 1000px;
   width: 100%;
   border-radius: 20px;
-  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1);
+  border: 1px solid #1E293B;
+  box-shadow: 0 40px 100px -20px rgba(0,0,0,0.8);
   display: grid;
   grid-template-columns: 1fr 1fr;
   overflow: hidden;
+  position: relative;
+}
+
+/* Add a gold/emerald accent line at top */
+.checkout-wrapper::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 3px;
+  background: linear-gradient(90deg, #10B981, #34D399, #059669);
 }
 
 .checkout-left {
-  background: #f8fafc;
+  background: #050505;
   padding: 40px;
-  border-right: 1px solid #e2e8f0;
+  border-right: 1px solid #1E293B;
 }
 
 .checkout-right {
@@ -30,76 +50,83 @@
 }
 
 .checkout-wrapper h2 {
+  font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
-  color: #0f172a;
+  color: #F8FAFC;
   margin-bottom: 25px;
   font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 .course-image {
   width: 100%;
-  height: 200px;
+  aspect-ratio: 16/9;
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 20px;
+  border: 1px solid #333;
 }
 
 .order-details {
-  background: #fff;
+  background: #111827;
   padding: 20px;
   border-radius: 12px;
-  border: 1px solid #e2e8f0;
+  border: 1px solid #1E293B;
 }
 
 .course-name {
-  font-size: 1.2rem;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1rem;
   margin-bottom: 20px;
-  color: #1e293b;
+  color: #E2E8F0;
+  font-weight: 700;
 }
 
 .price-row {
   display: flex;
   justify-content: space-between;
   margin-bottom: 12px;
-  color: #64748b;
+  color: #94A3B8;
 }
 
 .strike {
   text-decoration: line-through;
+  color: #EF4444;
 }
 
 .total-row {
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px dashed #334155;
   padding-top: 15px;
   margin-top: 15px;
-  color: #0f172a;
+  color: #F8FAFC;
   font-weight: 600;
   font-size: 1.1rem;
 }
 
 .total-price {
-  background: linear-gradient(135deg, #2563eb, #3b82f6);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  color: #10B981; /* Emerald */
   font-size: 1.6rem;
   font-weight: 900;
+  font-family: 'Montserrat', sans-serif;
 }
 
 .security-badges {
   margin-top: 20px;
   text-align: center;
-  color: #10b981;
-  font-size: 0.9rem;
+  color: #10B981;
+  font-size: 0.85rem;
   font-weight: 600;
-  background: #ecfdf5;
-  padding: 10px;
+  background: rgba(16, 185, 129, 0.1);
+  padding: 12px;
   border-radius: 8px;
+  border: 1px solid rgba(16, 185, 129, 0.2);
 }
 
 /* RIGHT SIDE */
 .qr-guide {
-  color: #64748b;
-  margin-bottom: 20px;
+  color: #94A3B8;
+  margin-bottom: 24px;
   font-size: 0.95rem;
 }
 
@@ -107,126 +134,121 @@
   display: flex;
   justify-content: center;
   margin-bottom: 30px;
+  padding: 20px;
+  background: #fff;
+  border-radius: 16px;
+  width: fit-content;
+  margin-inline: auto;
 }
 
 .qr-code-img {
   width: 100%;
-  max-width: 320px;
+  max-width: 250px;
   height: auto;
-  border-radius: 16px;
-  box-shadow: 0 15px 35px rgba(0,0,0,0.1);
-  transition: transform 0.3s ease;
-}
-
-.qr-code-img:hover {
-  transform: scale(1.02);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.15);
 }
 
 .bank-details {
-  background: #f8fafc;
-  padding: 20px;
+  background: #111827;
+  padding: 24px;
   border-radius: 12px;
   margin-bottom: 30px;
+  border: 1px solid #1E293B;
 }
 
 .bank-info-row {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 12px;
+  margin-bottom: 14px;
   font-size: 0.95rem;
 }
 
 .bank-info-row span {
-  color: #64748b;
+  color: #94A3B8;
 }
 
 .bank-info-row strong {
-  color: #0f172a;
+  color: #E2E8F0;
+  font-weight: 600;
 }
 
-.text-blue { color: #2563eb !important; font-size: 1.1rem; }
-.text-orange { color: #ea580c !important; }
+.text-blue { color: #38BDF8 !important; font-size: 1.1rem; font-weight: 800!important; }
+.text-orange { color: #10B981 !important; }
 
-.checkout-btn {
-  width: 100%;
-  padding: 16px;
-  background: linear-gradient(135deg, #0f172a, #1e293b);
-  color: #fff;
-  border: none;
+/* Pulse animation for waiting */
+.payment-waiting-box {
+  background: rgba(59, 130, 246, 0.1);
+  border: 1px solid rgba(59, 130, 246, 0.3);
   border-radius: 12px;
-  font-size: 1.1rem;
-  font-weight: 700;
-  cursor: pointer;
-  transition: all 0.2s;
-  box-shadow: 0 4px 15px rgba(15, 23, 42, 0.4);
+  padding: 20px;
+  margin-bottom: 16px;
+  animation: pulse-border-blue 2s infinite;
 }
 
-.checkout-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(15, 23, 42, 0.6);
-}
-
-.checkout-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-  transform: none;
-  box-shadow: none;
+@keyframes pulse-border-blue {
+  0%, 100% { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 0 10px rgba(59, 130, 246, 0); }
+  50% { border-color: rgba(59, 130, 246, 0.6); box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
 }
 
 @media (max-width: 768px) {
   .checkout-wrapper {
     grid-template-columns: 1fr;
+    margin-top: 20px;
   }
   .checkout-left {
     border-right: none;
-    border-bottom: 1px solid #e2e8f0;
+    border-bottom: 1px dashed #334155;
+  }
+  .checkout-container {
+    padding: 10px;
   }
 }
 
 /* Payment Success Card */
 .payment-success-card {
-  background: white;
+  background: #0A0A0A;
   max-width: 520px;
   width: 100%;
   border-radius: 20px;
   padding: 48px 40px;
   text-align: center;
-  box-shadow: 0 20px 40px -15px rgba(0,0,0,0.1);
+  border: 1px solid #1E293B;
+  box-shadow: 0 40px 100px -20px rgba(0,0,0,0.8), inset 0 0 40px rgba(16,185,129,0.1);
   animation: fadeInUp 0.5s ease-out;
 }
 
 .success-icon-wrapper {
-  margin-bottom: 20px;
+  margin-bottom: 24px;
   animation: bounceIn 0.6s ease-out;
 }
 
 .payment-success-card h2 {
-  font-size: 1.6rem;
-  color: #059669;
-  margin-bottom: 8px;
+  font-size: 1.8rem;
+  color: #10B981;
+  margin-bottom: 12px;
+  font-family: 'Montserrat', sans-serif;
+  text-transform: uppercase;
 }
 
 .success-subtitle {
-  color: #6B7280;
+  color: #94A3B8;
   font-size: 0.95rem;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 .success-details {
-  background: #F0FDF4;
-  border: 1px solid #BBF7D0;
+  background: #111827;
+  border: 1px dashed #334155;
   border-radius: 12px;
-  padding: 20px;
+  padding: 24px;
   text-align: left;
 }
 
 .success-row {
   display: flex;
   justify-content: space-between;
-  padding: 8px 0;
-  border-bottom: 1px solid #DCFCE7;
-  font-size: 0.9rem;
+  padding: 12px 0;
+  border-bottom: 1px solid #1E293B;
+  font-size: 0.95rem;
 }
 
 .success-row:last-child {
@@ -234,24 +256,14 @@
 }
 
 .success-row span {
-  color: #6B7280;
+  color: #94A3B8;
 }
 
-/* Payment Waiting Box */
-.payment-waiting-box {
-  background: rgba(59,130,246,0.05);
-  border: 1px solid rgba(59,130,246,0.2);
-  border-radius: 12px;
-  padding: 16px;
-  margin-bottom: 16px;
-  animation: pulse-border 2s infinite;
+.success-row strong {
+  color: #F8FAFC;
 }
 
-@keyframes pulse-border {
-  0%, 100% { border-color: rgba(59,130,246,0.2); }
-  50% { border-color: rgba(59,130,246,0.5); }
-}
-
+/* Animations */
 @keyframes fadeInUp {
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
@@ -272,4 +284,3 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
-
