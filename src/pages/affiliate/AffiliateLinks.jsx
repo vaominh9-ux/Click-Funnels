@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Link as LinkIcon, Filter, Copy, CheckCircle2, ChevronDown, Loader2 } from 'lucide-react';
+import { Search, Link as LinkIcon, Filter, Copy, CheckCircle2, ChevronDown, Loader2, BarChart2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import Skeleton from '../../components/common/Skeleton';
