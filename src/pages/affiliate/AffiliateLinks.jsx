@@ -55,7 +55,7 @@ export default function AffiliateLinks() {
       const fetchLinks = async (userId) => {
         const { data: linksData } = await supabase
           .from('affiliate_links')
-          .select('*, campaigns(name)')
+          .select('*, campaigns(name, status)')
           .eq('affiliate_id', userId)
           .order('created_at', { ascending: false });
           
@@ -250,8 +250,15 @@ export default function AffiliateLinks() {
               {links.map((link) => (
                 <tr key={link.id}>
                   <td>
-                    <div style={{ fontWeight: 600, color: '#1E293B' }}>{link.campaigns ? link.campaigns.name : 'Chiến dịch đã xóa'}</div>
-                    <div style={{ fontSize: '13px', color: '#94A3B8', marginTop: '4px' }}>
+                    <div style={{ fontWeight: 600, color: link.campaigns?.status === 'inactive' ? '#94A3B8' : '#1E293B', display: 'flex', alignItems: 'center' }}>
+                      {link.campaigns ? link.campaigns.name : 'Chiến dịch đã xóa'}
+                      {link.campaigns?.status === 'inactive' && (
+                        <span style={{ marginLeft: '8px', padding: '2px 6px', background: '#FEE2E2', color: '#EF4444', fontSize: '11px', borderRadius: '4px', fontWeight: 700 }}>
+                          [ĐÃ ĐÓNG]
+                        </span>
+                      )}
+                    </div>
+                    <div style={{ fontSize: '13px', color: '#94A3B8', marginTop: '4px', opacity: link.campaigns?.status === 'inactive' ? 0.6 : 1 }}>
                       UTM: <span style={{ background: '#F1F5F9', padding: '2px 6px', borderRadius: '4px' }}>{link.sub_id1 ? link.sub_id1 : '(Mặc định)'}</span>
                     </div>
                   </td>
@@ -268,18 +275,32 @@ export default function AffiliateLinks() {
                     </span>
                   </td>
                   <td style={{ textAlign: 'center' }}>
-                    <button 
-                      onClick={() => handleCopyRow(link)}
-                      style={{
-                        background: 'none', border: '1px solid #CBD5E1', padding: '6px 10px', 
-                        borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                        gap: '6px', color: '#475569', fontSize: '12px', margin: '0 auto'
-                      }}
-                      title="Copy lại link này"
-                    >
-                      {copiedRowId === link.id ? <CheckCircle2 size={14} color="#10B981" /> : <Copy size={14} />}
-                      {copiedRowId === link.id ? 'Copied' : 'Copy'}
-                    </button>
+                    {link.campaigns?.status === 'inactive' ? (
+                      <button 
+                        disabled
+                        style={{
+                          background: '#F1F5F9', border: '1px dashed #CBD5E1', padding: '6px 10px', 
+                          borderRadius: '6px', cursor: 'not-allowed', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                          gap: '6px', color: '#94A3B8', fontSize: '12px', margin: '0 auto'
+                        }}
+                        title="Chiến dịch đã kết thúc"
+                      >
+                        Khóa
+                      </button>
+                    ) : (
+                      <button 
+                        onClick={() => handleCopyRow(link)}
+                        style={{
+                          background: 'none', border: '1px solid #CBD5E1', padding: '6px 10px', 
+                          borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                          gap: '6px', color: '#475569', fontSize: '12px', margin: '0 auto'
+                        }}
+                        title="Copy lại link này"
+                      >
+                        {copiedRowId === link.id ? <CheckCircle2 size={14} color="#10B981" /> : <Copy size={14} />}
+                        {copiedRowId === link.id ? 'Copied' : 'Copy'}
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
