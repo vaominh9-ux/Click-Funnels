@@ -1,48 +1,46 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&family=Montserrat:wght@700;900&display=swap');
 
 /* =========================================
-   CHECKOUT PREMIUM DARK UI
-   Dramatically improved to match the elite funnels
+   CHECKOUT PREMIUM LIGHT UI
+   Clean, trustworthy, highly converting layout
    ========================================= */
 
 .checkout-container {
   min-height: 100vh;
-  background-color: #050505; /* Deep Abyss */
+  background-color: #F1F5F9; /* Light Slate */
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 40px 20px;
   font-family: 'Inter', sans-serif;
-  color: #F8FAFC;
-  /* Add subtle gradient */
-  background-image: radial-gradient(circle at top right, #1F1F1F 0%, #050505 50%);
+  color: #0F172A;
 }
 
 .checkout-wrapper {
-  background: #0A0A0A;
+  background: #FFFFFF;
   max-width: 1000px;
   width: 100%;
   border-radius: 20px;
-  border: 1px solid #1E293B;
-  box-shadow: 0 40px 100px -20px rgba(0,0,0,0.8);
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.05);
   display: grid;
   grid-template-columns: 1fr 1fr;
   overflow: hidden;
   position: relative;
 }
 
-/* Add a gold/emerald accent line at top */
+/* Green emerald top accent line */
 .checkout-wrapper::before {
   content: '';
   position: absolute;
-  top: 0; left: 0; right: 0; height: 3px;
+  top: 0; left: 0; right: 0; height: 4px;
   background: linear-gradient(90deg, #10B981, #34D399, #059669);
 }
 
 .checkout-left {
-  background: #050505;
+  background: #F8FAFC;
   padding: 40px;
-  border-right: 1px solid #1E293B;
+  border-right: 1px solid #E2E8F0;
 }
 
 .checkout-right {
@@ -52,10 +50,9 @@
 .checkout-wrapper h2 {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.5rem;
-  color: #F8FAFC;
+  color: #0F172A;
   margin-bottom: 25px;
-  font-weight: 700;
-  text-transform: uppercase;
+  font-weight: 800;
   letter-spacing: 0.5px;
 }
 
@@ -65,21 +62,23 @@
   object-fit: cover;
   border-radius: 12px;
   margin-bottom: 20px;
-  border: 1px solid #333;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
 .order-details {
-  background: #111827;
-  padding: 20px;
+  background: #FFFFFF;
+  padding: 24px;
   border-radius: 12px;
-  border: 1px solid #1E293B;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
 }
 
 .course-name {
   font-family: 'Montserrat', sans-serif;
   font-size: 1.1rem;
   margin-bottom: 20px;
-  color: #E2E8F0;
+  color: #1E293B;
   font-weight: 700;
 }
 
@@ -87,7 +86,8 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 12px;
-  color: #94A3B8;
+  color: #64748B;
+  font-size: 0.95rem;
 }
 
 .strike {
@@ -96,16 +96,16 @@
 }
 
 .total-row {
-  border-top: 1px dashed #334155;
+  border-top: 1px dashed #CBD5E1;
   padding-top: 15px;
   margin-top: 15px;
-  color: #F8FAFC;
-  font-weight: 600;
+  color: #0F172A;
+  font-weight: 700;
   font-size: 1.1rem;
 }
 
 .total-price {
-  color: #10B981; /* Emerald */
+  color: #059669; /* Emerald */
   font-size: 1.6rem;
   font-weight: 900;
   font-family: 'Montserrat', sans-serif;
@@ -114,18 +114,18 @@
 .security-badges {
   margin-top: 20px;
   text-align: center;
-  color: #10B981;
+  color: #059669;
   font-size: 0.85rem;
-  font-weight: 600;
-  background: rgba(16, 185, 129, 0.1);
+  font-weight: 700;
+  background: #ECFDF5;
   padding: 12px;
   border-radius: 8px;
-  border: 1px solid rgba(16, 185, 129, 0.2);
+  border: 1px solid #A7F3D0;
 }
 
 /* RIGHT SIDE */
 .qr-guide {
-  color: #94A3B8;
+  color: #475569;
   margin-bottom: 24px;
   font-size: 0.95rem;
 }
@@ -135,10 +135,12 @@
   justify-content: center;
   margin-bottom: 30px;
   padding: 20px;
-  background: #fff;
+  background: #FFFFFF;
   border-radius: 16px;
   width: fit-content;
   margin-inline: auto;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.05);
 }
 
 .qr-code-img {
@@ -148,11 +150,11 @@
 }
 
 .bank-details {
-  background: #111827;
+  background: #F8FAFC;
   padding: 24px;
   border-radius: 12px;
   margin-bottom: 30px;
-  border: 1px solid #1E293B;
+  border: 1px solid #E2E8F0;
 }
 
 .bank-info-row {
@@ -163,21 +165,21 @@
 }
 
 .bank-info-row span {
-  color: #94A3B8;
+  color: #64748B;
 }
 
 .bank-info-row strong {
-  color: #E2E8F0;
-  font-weight: 600;
+  color: #0F172A;
+  font-weight: 700;
 }
 
-.text-blue { color: #38BDF8 !important; font-size: 1.1rem; font-weight: 800!important; }
-.text-orange { color: #10B981 !important; }
+.text-blue { color: #2563EB !important; font-size: 1.1rem; font-weight: 800!important; }
+.text-orange { color: #059669 !important; }
 
 /* Pulse animation for waiting */
 .payment-waiting-box {
-  background: rgba(59, 130, 246, 0.1);
-  border: 1px solid rgba(59, 130, 246, 0.3);
+  background: #EFF6FF;
+  border: 1px solid #BFDBFE;
   border-radius: 12px;
   padding: 20px;
   margin-bottom: 16px;
@@ -185,8 +187,8 @@
 }
 
 @keyframes pulse-border-blue {
-  0%, 100% { border-color: rgba(59, 130, 246, 0.3); box-shadow: 0 0 10px rgba(59, 130, 246, 0); }
-  50% { border-color: rgba(59, 130, 246, 0.6); box-shadow: 0 0 20px rgba(59, 130, 246, 0.2); }
+  0%, 100% { border-color: #BFDBFE; box-shadow: 0 0 10px rgba(59, 130, 246, 0); }
+  50% { border-color: #60A5FA; box-shadow: 0 0 15px rgba(59, 130, 246, 0.15); }
 }
 
 @media (max-width: 768px) {
@@ -196,7 +198,7 @@
   }
   .checkout-left {
     border-right: none;
-    border-bottom: 1px dashed #334155;
+    border-bottom: 1px dashed #CBD5E1;
   }
   .checkout-container {
     padding: 10px;
@@ -205,14 +207,14 @@
 
 /* Payment Success Card */
 .payment-success-card {
-  background: #0A0A0A;
+  background: #FFFFFF;
   max-width: 520px;
   width: 100%;
   border-radius: 20px;
   padding: 48px 40px;
   text-align: center;
-  border: 1px solid #1E293B;
-  box-shadow: 0 40px 100px -20px rgba(0,0,0,0.8), inset 0 0 40px rgba(16,185,129,0.1);
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 25px 50px -12px rgba(0,0,0,0.1), inset 0 0 20px rgba(16,185,129,0.05);
   animation: fadeInUp 0.5s ease-out;
 }
 
@@ -223,21 +225,21 @@
 
 .payment-success-card h2 {
   font-size: 1.8rem;
-  color: #10B981;
+  color: #059669;
   margin-bottom: 12px;
   font-family: 'Montserrat', sans-serif;
-  text-transform: uppercase;
+  font-weight: 800;
 }
 
 .success-subtitle {
-  color: #94A3B8;
-  font-size: 0.95rem;
+  color: #64748B;
+  font-size: 1rem;
   margin-bottom: 32px;
 }
 
 .success-details {
-  background: #111827;
-  border: 1px dashed #334155;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
   border-radius: 12px;
   padding: 24px;
   text-align: left;
@@ -247,7 +249,7 @@
   display: flex;
   justify-content: space-between;
   padding: 12px 0;
-  border-bottom: 1px solid #1E293B;
+  border-bottom: 1px dashed #CBD5E1;
   font-size: 0.95rem;
 }
 
@@ -256,11 +258,42 @@
 }
 
 .success-row span {
-  color: #94A3B8;
+  color: #64748B;
 }
 
 .success-row strong {
-  color: #F8FAFC;
+  color: #0F172A;
+  font-weight: 700;
+}
+
+/* Buttons */
+.checkout-btn {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, #059669, #10B981);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 10px 15px -3px rgba(16, 185, 129, 0.3);
+  text-transform: uppercase;
+}
+
+.checkout-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 15px 20px -3px rgba(16, 185, 129, 0.4);
+  background: linear-gradient(135deg, #047857, #059669);
+}
+
+.checkout-btn:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 /* Animations */
