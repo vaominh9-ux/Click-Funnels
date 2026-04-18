@@ -65,6 +65,14 @@ export default function ClickTracker() {
         setMessage('Đang chuyển đến trang đích...');
 
         const url = new URL(landingUrl);
+        
+        // Tự động override nếu DB lỡ lưu URL gốc là localhost
+        if (url.hostname === 'localhost') {
+          url.hostname = 'click-funnels.vercel.app';
+          url.port = '';
+          url.protocol = 'https:';
+        }
+
         url.searchParams.set('ref', refCode);
         
         // Giữ lại UTM params
