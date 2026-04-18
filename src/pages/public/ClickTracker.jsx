@@ -30,11 +30,13 @@ export default function ClickTracker() {
       }
 
       const campaignId = searchParams.get('campaign') || null;
+      const utmSource = searchParams.get('utm_source') || '';
 
       // Gọi RPC function — atomic, bypass RLS, ghi nhận click + trả về landing URL
       const { data, error } = await supabase.rpc('record_affiliate_click', {
         p_ref_code: refCode,
-        p_campaign_id: campaignId
+        p_campaign_id: campaignId,
+        p_sub_id1: utmSource
       });
 
       if (error) {
