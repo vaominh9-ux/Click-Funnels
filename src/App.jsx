@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ToastProvider } from './components/common/Toast';
 import './index.css';
 
@@ -39,25 +39,27 @@ import Course2 from './pages/funnels/Course2';
 import Course3 from './pages/funnels/Course3';
 import Course4 from './pages/funnels/Course4';
 
-const App = () => {
+const ZoomController = () => {
+  const location = useLocation();
   useEffect(() => {
-    // Khôi phục cài đặt độ thu phóng từ localStorage, mặc định là 80%
-    const currentZoom = localStorage.getItem('cf_ui_zoom');
-    
-    if (!currentZoom) {
-      localStorage.setItem('cf_ui_zoom', '80%');
+    const isPublicPage = location.pathname.startsWith('/khoa-hoc') || location.pathname.startsWith('/checkout') || location.pathname.startsWith('/go') || location.pathname.startsWith('/auth');
+    if (isPublicPage) {
+      document.body.style.zoom = "100%";
+      document.documentElement.style.setProperty('--ui-zoom', 1);
+    } else {
+      const currentZoom = localStorage.getItem('cf_ui_zoom') || '80%';
+      document.body.style.zoom = currentZoom;
+      document.documentElement.style.setProperty('--ui-zoom', parseFloat(currentZoom) / 100);
     }
-    
-    const zoomToApply = currentZoom || '80%';
-    document.body.style.zoom = zoomToApply;
-    
-    const zoomVal = parseFloat(zoomToApply) / 100;
-    document.documentElement.style.setProperty('--ui-zoom', zoomVal);
-  }, []);
+  }, [location.pathname]);
+  return null;
+};
 
+const App = () => {
   return (
     <ToastProvider>
       <Router>
+        <ZoomController />
         <Routes>
           {/* Public Routes */}
           <Route path="/khoa-hoc/khoa-hoc-1" element={<Course1 />} />
