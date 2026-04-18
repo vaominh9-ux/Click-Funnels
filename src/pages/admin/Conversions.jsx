@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
+import { logAudit } from '../../lib/auditLog';
 import { useToast } from '../../components/common/Toast';
 import { Plus, Search, CheckCircle, XCircle, Clock, Loader2, X } from 'lucide-react';
 import Skeleton from '../../components/common/Skeleton';
@@ -87,6 +88,15 @@ export default function AdminConversions() {
         console.error('Insert error:', insertErr);
         addToast('Tạo conversion thất bại!', 'error');
       } else {
+        await logAudit('conversion.create', 'conversion', 'new', {
+          affiliate_name: affiliate.full_name,
+          affiliate_id: affiliate.id,
+          sale_amount: sale,
+          commission: finalCommission,
+          rolled_up: rolledUp,
+          product: productName,
+          customer: customerName
+        });
         addToast(`Đã tạo conversion cho ${affiliate.full_name}. Hoa hồng: ${finalCommission.toLocaleString()}${rolledUp > 0 ? ` (Roll-up: ${rolledUp.toLocaleString()})` : ''}`, 'success');
         setShowAddModal(false);
         resetForm();
@@ -100,6 +110,8 @@ export default function AdminConversions() {
   };
 
   const updateStatus = async (id, newStatus) => {
+    // Lấy thông tin conversion trước khi cập nhật để log chi tiết
+    const target = conversions.find(c => c.id === id);
     const { error } = await supabase
       .from('conversions')
       .update({ status: newStatus, updated_at: new Date().toISOString() })
@@ -108,6 +120,19 @@ export default function AdminConversions() {
     if (error) {
       addToast('Cập nhật thất bại!', 'error');
     } else {
+      await logAudit(
+        newStatus === 'approved' ? 'conversion.approve' : 'conversion.reject',
+        'conversion',
+        id,
+        {
+          affiliate_name: target?.profiles?.full_name,
+          sale_amount: target?.sale_amount,
+          commission_amount: target?.commission_amount,
+          product: target?.product_name,
+          previous_status: target?.status,
+          new_status: newStatus
+        }
+      );
       addToast(`Đã ${newStatus === 'approved' ? 'DUYỆT' : 'TỪ CHỐI'} conversion`, newStatus === 'approved' ? 'success' : 'warning');
       loadConversions();
     }

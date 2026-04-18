@@ -1,0 +1,358 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800;900&family=Montserrat:wght@800;900&display=swap');
+
+/* =========================================
+   COURSE 2: "WHITEBOARD BRUTALISM" STYLE
+   High Conversion, Light Mode, Hormozi Vibe
+   ========================================= */
+
+.c2-hz-wrapper {
+  font-family: 'Inter', sans-serif;
+  background-color: #FAFAFA;
+  color: #0F172A;
+  line-height: 1.6;
+  position: relative;
+  overflow-x: hidden;
+  /* Dotted blueprint background for a "system/framework" feel */
+  background-image: radial-gradient(#CBD5E1 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+/* Typography Utils */
+.c2-hz-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: -0.02em;
+}
+
+/* Highlighters */
+.c2-highlight-yellow {
+  background: linear-gradient(120deg, #FEF08A 0%, #FACC15 100%);
+  padding: 0 8px;
+  transform: skewX(-12deg);
+  display: inline-block;
+  box-shadow: 2px 2px 0px #0F172A;
+  color: #0F172A;
+}
+
+.c2-highlight-blue {
+  background: #2563EB;
+  color: white;
+  padding: 4px 12px;
+  display: inline-block;
+  box-shadow: 4px 4px 0px #0F172A;
+}
+
+/* Container */
+.c2-hz-inner {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+
+/* ────────────────────────────────────
+   HERO SECTION
+   ──────────────────────────────────── */
+.c2-hero {
+  padding: 80px 0 60px;
+  text-align: center;
+}
+
+.c2-hero-eyebrow {
+  display: inline-flex;
+  border: 3px solid #0F172A;
+  padding: 6px 16px;
+  font-weight: 800;
+  font-size: 14px;
+  text-transform: uppercase;
+  background: white;
+  box-shadow: 4px 4px 0px #0F172A;
+  color: #EF4444;
+  margin-bottom: 32px;
+  align-items: center;
+  gap: 8px;
+}
+
+.c2-hero h1 {
+  font-size: 52px;
+  line-height: 1.1;
+  margin-bottom: 24px;
+  color: #0F172A;
+}
+
+.c2-hero-sub {
+  font-size: 22px;
+  color: #475569;
+  font-weight: 600;
+  max-width: 800px;
+  margin: 0 auto 40px;
+}
+
+/* ────────────────────────────────────
+   VIDEO WRAPPER (THE VSL)
+   ──────────────────────────────────── */
+.c2-vsl-container {
+  position: relative;
+  max-width: 800px;
+  margin: 0 auto 50px;
+  border: 4px solid #0F172A;
+  background: white;
+  padding: 12px;
+  box-shadow: 12px 12px 0px #2563EB, 12px 12px 0px 4px #0F172A;
+  transition: transform 0.2s;
+}
+
+.c2-vsl-container:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 16px 16px 0px #2563EB, 16px 16px 0px 4px #0F172A;
+}
+
+.c2-vsl-box {
+  background: #0F172A;
+  aspect-ratio: 16/9;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  cursor: pointer;
+  border-radius: 4px;
+}
+
+.c2-vsl-play {
+  color: #FACC15;
+  margin-bottom: 16px;
+  transition: transform 0.3s;
+}
+
+.c2-vsl-box:hover .c2-vsl-play {
+  transform: scale(1.15) rotate(5deg);
+}
+
+.c2-vsl-text {
+  font-size: 24px;
+  font-weight: 900;
+  text-transform: uppercase;
+}
+
+/* ────────────────────────────────────
+   CTA BUTTON (THE BIG ONE)
+   ──────────────────────────────────── */
+.c2-cta-wrap {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.c2-hz-btn {
+  background: #EF4444; /* Action Red */
+  color: white;
+  border: 4px solid #0F172A;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  font-size: 26px;
+  text-transform: uppercase;
+  padding: 20px 40px;
+  cursor: pointer;
+  box-shadow: 6px 6px 0px #0F172A;
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.1s ease-in-out;
+}
+
+.c2-hz-btn:hover {
+  background: #DC2626;
+  transform: translate(-2px, -2px);
+  box-shadow: 8px 8px 0px #0F172A;
+}
+
+.c2-hz-btn:active {
+  transform: translate(6px, 6px);
+  box-shadow: 0px 0px 0px #0F172A;
+}
+
+.c2-urgency {
+  margin-top: 16px;
+  font-weight: 800;
+  color: #B91C1C;
+}
+
+/* ────────────────────────────────────
+   MODULES (3 COLUMNS)
+   ──────────────────────────────────── */
+.c2-section {
+  padding: 80px 0;
+  border-top: 4px dashed #CBD5E1;
+  background: white;
+}
+
+.c2-grid-3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 32px;
+  margin-top: 50px;
+}
+
+.c2-module-card {
+  background: white;
+  border: 4px solid #0F172A;
+  padding: 32px;
+  box-shadow: 8px 8px 0px #FACC15, 8px 8px 0px 4px #0F172A;
+  position: relative;
+}
+
+.c2-module-num {
+  position: absolute;
+  top: -24px;
+  left: -24px;
+  background: #0F172A;
+  color: white;
+  width: 48px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 24px;
+  border: 4px solid white;
+  border-radius: 50%;
+}
+
+.c2-module-title {
+  font-size: 22px;
+  font-weight: 900;
+  margin-bottom: 16px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #E2E8F0;
+  padding-bottom: 16px;
+}
+
+.c2-module-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.c2-module-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+  font-weight: 600;
+  color: #334155;
+  font-size: 16px;
+}
+
+.c2-module-icon {
+  color: #2563EB;
+  margin-top: 2px;
+}
+
+/* ────────────────────────────────────
+   GRAND SLAM OFFER STACK (THE RECEIPT)
+   ──────────────────────────────────── */
+.c2-offer-section {
+  background: #0F172A;
+  padding: 80px 0;
+  color: white;
+  position: relative;
+}
+
+.c2-receipt {
+  max-width: 700px;
+  margin: 0 auto;
+  background: #FEFCE8; /* Receipt yellowish */
+  color: #0F172A;
+  border: 4px solid #0F172A;
+  padding: 48px;
+  position: relative;
+  /* Zig-zag bottom edge */
+  border-bottom: 8px dashed #0F172A;
+  box-shadow: 16px 16px 0px #2563EB;
+}
+
+.c2-receipt h2 {
+  font-size: 36px;
+  font-weight: 900;
+  text-align: center;
+  margin-bottom: 40px;
+  text-transform: uppercase;
+  border-bottom: 4px solid #0F172A;
+  padding-bottom: 20px;
+}
+
+.c2-stack-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 0;
+  border-bottom: 2px dotted #94A3B8;
+  font-weight: 800;
+  font-size: 20px;
+}
+
+.c2-stack-bonus {
+  color: #DC2626;
+}
+
+.c2-stack-val {
+  font-family: monospace;
+  font-size: 22px;
+}
+
+.c2-stack-total {
+  margin-top: 32px;
+  text-align: center;
+  font-size: 24px;
+  font-weight: 900;
+}
+
+.c2-stack-strike {
+  text-decoration: line-through;
+  color: #DC2626;
+  opacity: 0.7;
+}
+
+.c2-stack-today {
+  text-align: center;
+  font-size: 42px;
+  font-weight: 900;
+  color: #16A34A; /* Money Green */
+  margin-top: 10px;
+  border: 4px dashed #16A34A;
+  padding: 16px;
+  display: inline-block;
+  background: white;
+}
+
+/* ────────────────────────────────────
+   GUARANTEE
+   ──────────────────────────────────── */
+.c2-guarantee {
+  max-width: 800px;
+  margin: 80px auto 0;
+  background: #FFF;
+  border: 4px solid #FACC15;
+  padding: 40px;
+  text-align: center;
+  box-shadow: 0px 8px 0px #FACC15;
+}
+
+.c2-guarantee-title {
+  font-size: 28px;
+  font-weight: 900;
+  color: #B45309;
+  margin: 16px 0;
+  text-transform: uppercase;
+}
+
+/* RESPONSIVE */
+@media (max-width: 800px) {
+  .c2-hero h1 { font-size: 32px; }
+  .c2-hero-sub { font-size: 18px; }
+  .c2-hz-btn { font-size: 18px; width: 100%; justify-content: center; }
+  .c2-grid-3 { grid-template-columns: 1fr; }
+  .c2-receipt { padding: 24px; }
+  .c2-stack-row { font-size: 16px; flex-direction: column; align-items: flex-start; gap: 8px;}
+  .c2-stack-val { align-self: flex-end; }
+}

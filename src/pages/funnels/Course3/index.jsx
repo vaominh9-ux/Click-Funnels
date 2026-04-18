@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import '../Course1/style.css'; // Kế thừa toàn bộ nét hiện đại của Course 1
+import './c3-style.css'; // Phong cách Đẳng Cấp: THE BLACK CARD (Elite Mastermind)
 import { useFunnelTracking } from '../utils';
 import LeadModal from '../components/LeadModal';
 import { FUNNEL_COURSES } from '../config';
 import { 
-  PlayCircle, Star, CheckCircle2, Shield, Zap, 
-  TrendingUp, Users, Target, Lock, ArrowRight, Video 
+  Play, ArrowRight, ShieldAlert, Cpu, Network, Briefcase, Lock, Fingerprint
 } from 'lucide-react';
 
 const COURSE_INFO = FUNNEL_COURSES['khoa-hoc-3'];
@@ -15,148 +14,132 @@ const Course3 = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target); 
-        }
-      });
-    }, observerOptions);
-
-    const revealElements = document.querySelectorAll('.reveal-on-scroll');
-    revealElements.forEach(el => observer.observe(el));
-
-    return () => revealElements.forEach(el => observer.unobserve(el));
   }, []);
 
   useFunnelTracking();
 
   return (
-    <div className="c1-container">
-      <div className="c1-particles">
-        <div className="particle p1"></div><div className="particle p2"></div><div className="particle p3"></div>
+    <div className="c3-elite-wrapper">
+      <div className="c3-elite-inner">
+        {/* HERO SECTION */}
+        <section className="c3-hero">
+          <div className="c3-top-secret-badge">
+            <Fingerprint size={16} /> DỰ ÁN MẬT DÀNH RIÊNG CHO FOUNDER & CEO 2026
+          </div>
+          
+          <h1 className="c3-elite-title">
+            BÍ MẬT XÂY DỰNG AGENCY TỰ VẬN HÀNH <br/> ĐẠT DOANH SỐ <span className="c3-gold-text">10 TỶ/NĂM</span> MÀ KHÔNG CẦN BẠN CÓ MẶT
+          </h1>
+          
+          <p className="c3-hero-sub">
+            Giải phóng bản thân khỏi mớ hỗn độn hàng ngày. Đây là hệ thống đóng gói toàn bộ quy trình CRM, Phân bổ Lead và Bảng lương tự động hóa để nhân bản doanh nghiệp của bạn lên quy mô 100 nhân sự.
+          </p>
+
+          <div className="c3-vsl-board" onClick={() => setIsModalOpen(true)}>
+            <div className="c3-vsl-inner">
+              <div className="c3-play-btn">
+                <div><Play size={40} color="#BF953F" fill="#BF953F" /></div>
+              </div>
+              <div className="c3-vsl-text">MỞ KHÓA TÀI LIỆU (18 PHÚT)</div>
+            </div>
+          </div>
+
+          <div className="c3-cta-wrap">
+            <button className="c3-elite-btn" onClick={() => setIsModalOpen(true)}>
+              TÔI ĐÃ SẴN SÀNG THOÁT KHỎI VẬN HÀNH <ArrowRight size={28} strokeWidth={3} />
+            </button>
+            <p className="c3-limited">Lưu ý: Chỉ tiếp nhận 20 CEO trong tháng này để đảm bảo chất lượng Coaching.</p>
+          </div>
+        </section>
+
+        {/* THE BOARDROOM MODULES */}
+        <section className="c3-boardroom">
+          <h2 className="c3-elite-title" style={{ textAlign: 'center', fontSize: '32px', marginBottom: '8px' }}>CỖ MÁY IN TIỀN TỰ ĐỘNG</h2>
+          <p style={{ textAlign: 'center', color: '#94A3B8', fontSize: '16px', marginBottom: '40px' }}>Ba mảnh ghép hoàn hảo để chuyển hóa từ "Người làm nghề" sang "Chủ doanh nghiệp".</p>
+          
+          <div className="c3-grid-3">
+            <div className="c3-card">
+              <Network className="c3-card-icon" size={40} strokeWidth={1.5} />
+              <h3 className="c3-card-title">HỆ THỐNG DATA PIPELINE</h3>
+              <p>Setup guồng máy tự động kéo Data từ đa kênh đổ thẳng vào CRM, và chia đều cho hàng trăm nhân viên Sales chỉ bằng trí tuệ nhân tạo (AI).</p>
+            </div>
+
+            <div className="c3-card">
+              <Briefcase className="c3-card-icon" size={40} strokeWidth={1.5} />
+              <h3 className="c3-card-title">NHÂN BẢN DOANH NGHIỆP</h3>
+              <p>Cơ chế thiết lập Lương cúp cứng, thưởng dật cấp và Phả hệ Affiliate nội bộ khiến nhân sự cày cuốc 200% sức lực mà không cần giám sát.</p>
+            </div>
+
+            <div className="c3-card">
+              <Cpu className="c3-card-icon" size={40} strokeWidth={1.5} />
+              <h3 className="c3-card-title">MÀNG LỌC BẢO MẬT MATRIX</h3>
+              <p>Áp dụng hệ thống Role-Level Security (RLS) để cô lập dữ liệu. Không một nhân sự cấp dưới nào có quyền tải trộm Data khách hàng của công ty.</p>
+            </div>
+          </div>
+        </section>
       </div>
 
-      <header className="c1-header">
-        <div className="c1-logo">
-          <Target className="c1-logo-icon" size={28} />
-          DUHAVA <span>ACADEMY</span>
-        </div>
-        <button className="c1-header-btn" onClick={() => setIsModalOpen(true)}>Đăng Ký Khóa Học</button>
-      </header>
-
-      <section className="c1-hero">
-        <div className="c1-badge">
-          <Star size={14} /> KHÓA CHO FOUNDER & CEO 2026
-        </div>
-        <h1>Xây Dựng Agency Tự Vận Hành Đạt Doanh Số 10 Tỷ</h1>
-        <p className="c1-hero-subtitle">
-          Bí mật tối ưu hóa CRM, quản trị nhân sự, và tự động hóa quy trình phân bổ Lead giúp doanh nghiệp của bạn nhân bản quy mô nhanh chóng mà không cần bạn có mặt.
-        </p>
-        <div className="c1-hero-cta">
-          <button className="c1-btn c1-btn-primary" onClick={() => setIsModalOpen(true)}>
-            Nhận Ưu Đãi & Đăng Ký Ngay <ArrowRight size={18} />
-          </button>
-        </div>
-
-        <div className="c1-hero-mockup">
-          <div className="c1-mockup-inner">
-            <div className="c1-mockup-play"><PlayCircle size={32} /></div>
-            <h3>Xem Video Giới Thiệu Khóa Học</h3>
-            <p>Thời lượng: 20 phút</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="c1-section reveal-on-scroll">
-        <div className="c1-section-header">
-          <h2>Đòi Lại Thời Gian Cho Bạn</h2>
-          <p>Từ một người làm nghề (Freelancer) đến một chủ doanh nghiệp đích thực (Business Owner).</p>
-        </div>
-        <div className="c1-grid">
-          <div className="c1-card reveal-card" style={{transitionDelay: '0.1s'}}>
-            <div className="c1-icon-wrap"><Zap size={24} /></div>
-            <h3>Tự Động Phân Bổ Leads</h3>
-            <p>Quản trị lượng data khách hàng khổng lồ bằng hệ thống tự chia Lead đều cho hàng trăm nhân viên Sales.</p>
-          </div>
-          <div className="c1-card reveal-card" style={{transitionDelay: '0.2s'}}>
-            <div className="c1-icon-wrap"><Users size={24} /></div>
-            <h3>Nhân Bản Leader</h3>
-            <p>Cách truyền động lực, thưởng KPI, và xây cơ chế lương thưởng khiến nhân sự cống hiến hết mình 200% sức lực.</p>
-          </div>
-          <div className="c1-card reveal-card" style={{transitionDelay: '0.3s'}}>
-            <div className="c1-icon-wrap"><TrendingUp size={24} /></div>
-            <h3>Mở Rộng Quy Mô (Scale Up)</h3>
-            <p>Sử dụng đòn bẩy tài chính dòng tiền, pháp lý nội bộ, và Affiliate để Scale Up từ 5 người lên 500 người an toàn.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="modules" className="c1-section reveal-on-scroll" style={{ background: 'rgba(0,0,0,0.2)' }}>
-        <div className="c1-section-header">
-          <h2>Nội Dung Khóa Học</h2>
-        </div>
-        <div className="c1-grid" style={{ gridTemplateColumns: '1fr', maxWidth: '800px', margin: '0 auto' }}>
-          <div className="c1-module reveal-card" style={{transitionDelay: '0.1s'}}>
-            <div className="c1-module-header">
-              <span className="c1-module-num">01</span>
-              <h3>Chiến Lược Sản Phẩm & Phễu Giá Trị</h3>
+      {/* THE DOSSIER (OFFER STACK) */}
+      <section className="c3-dossier-section">
+        <div className="c3-elite-inner">
+          <div className="c3-dossier-box">
+            <div className="c3-dossier-header">
+              <h2 className="c3-elite-title" style={{ fontSize: '28px', color: '#BF953F', margin: 0 }}>HỒ SƠ NHƯỢNG QUYỀN (DOSSIER)</h2>
             </div>
-            <ul className="c1-module-list">
-              <li><Video size={16} /> Đóng gói dịch vụ để bán giá cao (High-Ticket)</li>
-              <li><Video size={16} /> Tư duy "Thang Giá Trị" (Value Ladder) cho khách hàng B2B</li>
-            </ul>
-          </div>
-          <div className="c1-module reveal-card" style={{transitionDelay: '0.2s'}}>
-            <div className="c1-module-header">
-              <span className="c1-module-num">02</span>
-              <h3>Setup Hệ Thống Công Nghệ ERP/CRM</h3>
+            
+            <div className="c3-dossier-body">
+              <div className="c3-dossier-row">
+                <span>Khung Sườn ERP/CRM Bản Quyền 2026</span>
+                <span className="c3-dossier-val">45.000.000 đ</span>
+              </div>
+              <div className="c3-dossier-row">
+                <span>(File Tuyệt Mật) Hợp Đồng Khoán Việc KPI & Cổ Phần Chéo</span>
+                <span className="c3-dossier-val">22.000.000 đ</span>
+              </div>
+              <div className="c3-dossier-row">
+                <span>(Vault 3) Group Coaching Cấp Cao Cùng Founder Thứ 7 Hàng Tuần</span>
+                <span className="c3-dossier-val">50.000.000 đ</span>
+              </div>
+              <div className="c3-dossier-row" style={{ borderBottom: 'none' }}>
+                <span style={{ color: '#E11D48' }}>*QUYỀN LỢI ĐẶC BIỆT: 1 Vé Thăm Khám Trực Tiếp Trụ Sở DUHAVA</span>
+                <span className="c3-dossier-val" style={{ color: '#E11D48' }}>Vô Giá</span>
+              </div>
+              
+              <div className="c3-dossier-total">
+                ĐỊNH GIÁ TÀI SẢN: <span className="c3-dossier-strike">117.000.000 đ</span>
+              </div>
+
+              <div className="c3-dossier-price c3-gold-text">
+                CHỈ THEO YÊU CẦU
+              </div>
+              <p style={{ textAlign: 'center', color: '#94A3B8', fontSize: '14px', marginTop: '8px' }}>
+                (Mức giá kích hoạt hiện tại: {COURSE_INFO.price.toLocaleString('vi-VN')} đ)
+              </p>
+
+              <div className="c3-cta-wrap" style={{ marginTop: '40px', marginBottom: 0 }}>
+                <button className="c3-elite-btn" style={{ width: '100%' }} onClick={() => setIsModalOpen(true)}>
+                  <Lock size={20} /> KIỂM TRA ĐIỀU KIỆN ỨNG TUYỂN
+                </button>
+              </div>
             </div>
-            <ul className="c1-module-list">
-              <li><Video size={16} /> Triển khai cấu trúc Data Pipeline trên Cloud an toàn</li>
-              <li><Video size={16} /> Cấu hình quyền truy cập (RLS), ngăn chặn nhân sự ăn cắp data</li>
-            </ul>
           </div>
-          <div className="c1-module reveal-card" style={{transitionDelay: '0.3s'}}>
-            <div className="c1-module-header">
-              <span className="c1-module-num">03</span>
-              <h3>Vận Hành Tự Động (Automation)</h3>
+
+          {/* IRONCLAD GUARANTEE */}
+          <div className="c3-ironclad">
+            <div className="c3-seal">
+               <ShieldAlert size={48} color="#E11D48" />
             </div>
-            <ul className="c1-module-list">
-              <li><Video size={16} /> Setup chuỗi Email Marketing chăm sóc khách theo luồng vòng đời</li>
-              <li><Video size={16} /> Kết hợp AI (ChatGPT/Claude) vào hoạt động Marketing doanh nghiệp</li>
-            </ul>
+            <div className="c3-ironclad-title">BẢN CAM KẾT HOÀN VỐN DOANH NGHIỆP</div>
+            <p style={{ fontSize: '16px', color: '#CBD5E1', lineHeight: 1.8 }}>
+              Hệ thống này được thiết kế không phải để nằm trên giấy. Nếu sau khi triển khai toàn bộ khung sườn CRM và Automation mà doanh số của công ty bạn không tăng chi phí nhân sự không giảm, 
+              <strong> chúng tôi sẽ bay trực tiếp đến văn phòng của bạn để Setup lại. Và nếu vẫn không thành công, 100% chi phí chuyển giao sẽ được bồi hoàn. Không hỏi han lằng nhằng.</strong>
+            </p>
           </div>
         </div>
       </section>
 
-      <section className="c1-section reveal-on-scroll">
-        <div className="c1-pricing animated-border">
-          <div className="c1-pricing-popular">Đỉnh Cao CEO</div>
-          <h2>{COURSE_INFO.name}</h2>
-          <div className="c1-pricing-price">
-            <div className="c1-price-strike">{(COURSE_INFO.price * 2).toLocaleString('vi-VN')} đ</div>
-            <div className="c1-price-current">{COURSE_INFO.price.toLocaleString('vi-VN')} đ</div>
-          </div>
-          <ul className="c1-docs">
-            <li><CheckCircle2 size={18} /> Khoá cứng Video độc quyền cho CEO</li>
-            <li><CheckCircle2 size={18} /> Các file mẫu (Excel/Notion): Cơ chế Lương, Hợp Đồng Nhân Sự</li>
-            <li><CheckCircle2 size={18} /> 01 Buổi Audit doanh nghiệp trực tiếp 30 phút</li>
-          </ul>
-          <button className="c1-btn c1-btn-primary" style={{ width: '100%', fontSize: '18px' }} onClick={() => setIsModalOpen(true)}>
-            Đăng Ký Vào Học Ngay <Lock size={18} />
-          </button>
-        </div>
-      </section>
-
-      <footer className="c1-footer">
-        <div className="c1-logo" style={{ fontSize: '18px', filter: 'grayscale(1)', opacity: 0.5 }}>
-          <Target size={20} /> DUHAVA ACADEMY
-        </div>
-        <p>&copy; 2026 DUHAVA Academy. Tất cả các quyền được bảo lưu.</p>
+      <footer style={{ padding: '40px 0', textAlign: 'center', background: '#000', color: '#334155', borderTop: '1px solid #0F172A' }}>
+        <p>&copy; 2026 DUHAVA Academy Elite. Classified Information.</p>
       </footer>
 
       <LeadModal 
@@ -166,5 +149,6 @@ const Course3 = () => {
     </div>
   );
 };
+
 
 export default Course3;

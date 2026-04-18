@@ -29,10 +29,10 @@ const PaymentSettings = () => {
   const [bankId, setBankId] = useState('970418');
   const [accountNo, setAccountNo] = useState('');
   const [accountName, setAccountName] = useState('');
-  
+
   // SePay Config form
   const [apiKey, setApiKey] = useState('');
-  
+
   // Test QR preview
   const [showQR, setShowQR] = useState(false);
 
@@ -49,25 +49,25 @@ const PaymentSettings = () => {
         .eq('key', 'bank_config')
         .single();
 
-        if (data?.value) {
-          const config = data.value;
-          setBankName(config.bankName || 'BIDV');
-          setBankId(config.bankId || '970418');
-          setAccountNo(config.accountNo || '');
-          setAccountName(config.accountName || '');
-        }
+      if (data?.value) {
+        const config = data.value;
+        setBankName(config.bankName || 'BIDV');
+        setBankId(config.bankId || '970418');
+        setAccountNo(config.accountNo || '');
+        setAccountName(config.accountName || '');
+      }
 
-        // Fetch sepay API Key config
-        const { data: sepayData } = await supabase
-          .from('system_settings')
-          .select('*')
-          .eq('key', 'sepay_config')
-          .single();
-        
-        if (sepayData?.value) {
-          setApiKey(sepayData.value.apiKey || '');
-        }
-      } catch (err) {
+      // Fetch sepay API Key config
+      const { data: sepayData } = await supabase
+        .from('system_settings')
+        .select('*')
+        .eq('key', 'sepay_config')
+        .single();
+
+      if (sepayData?.value) {
+        setApiKey(sepayData.value.apiKey || '');
+      }
+    } catch (err) {
       console.error('Load settings error:', err);
     } finally {
       setLoading(false);
@@ -89,7 +89,7 @@ const PaymentSettings = () => {
     setSaving(true);
     try {
       const { data: { user } } = await supabase.auth.getUser();
-      
+
       const { error: bankError } = await supabase
         .from('system_settings')
         .upsert({
@@ -111,7 +111,7 @@ const PaymentSettings = () => {
         }, { onConflict: 'key' });
 
       if (apiError) throw apiError;
-      
+
       addToast('Đã lưu cấu hình thanh toán thành công!', 'success');
       setShowQR(true);
     } catch (err) {
@@ -150,155 +150,154 @@ const PaymentSettings = () => {
       <div className="ps-grid">
         {/* Cột trái: Cấu hình */}
         <div className="ps-col-left">
-          <div className="ps-card">
+          <div className="ps-card" style={{ display: 'flex', flexDirection: 'column', height: '100%' }}>
             <div className="ps-card-header">
-            <Building2 size={20} />
-            <h3>Thông Tin Ngân Hàng</h3>
-          </div>
-          
-          <div className="ps-form">
-            <div className="ps-field">
-              <label>Ngân Hàng</label>
-              <select value={bankName} onChange={(e) => handleBankChange(e.target.value)}>
-                {BANK_LIST.map(b => (
-                  <option key={b.bin} value={b.name}>{b.name}</option>
-                ))}
-              </select>
-              <span className="ps-hint">BIN Code: {bankId}</span>
+              <Building2 size={20} />
+              <h3>Thông Tin Ngân Hàng</h3>
             </div>
 
-            <div className="ps-field">
-              <label>Số Tài Khoản (VA)</label>
-              <input 
-                type="text" 
-                value={accountNo} 
-                onChange={(e) => setAccountNo(e.target.value)}
-                placeholder="VD: 96247NTH195"
-              />
-              <span className="ps-hint">Là số tài khoản ảo (VA) lấy từ SePay</span>
-            </div>
+            <div className="ps-form">
+              <div className="ps-field">
+                <label>Ngân Hàng</label>
+                <select value={bankName} onChange={(e) => handleBankChange(e.target.value)}>
+                  {BANK_LIST.map(b => (
+                    <option key={b.bin} value={b.name}>{b.name}</option>
+                  ))}
+                </select>
+                <span className="ps-hint">BIN Code: {bankId}</span>
+              </div>
 
-            <div className="ps-field">
-              <label>Tên Chủ Tài Khoản</label>
-              <input 
-                type="text" 
-                value={accountName} 
-                onChange={(e) => setAccountName(e.target.value.toUpperCase())}
-                placeholder="VD: NGUYEN TRONG HUU"
-                style={{textTransform: 'uppercase'}}
-              />
-              <span className="ps-hint">Viết HOA, không dấu — khớp với tên TK ngân hàng</span>
-            </div>
-          </div>
-        </div>
-
-        <div className="ps-card">
-          <div className="ps-card-header">
-            <Webhook size={20} />
-            <h3>Kết Nối Hệ Thống SePay</h3>
-          </div>
-          
-          <div className="ps-form">
-            <div className="ps-field">
-              <label>API Key (SePay)</label>
-              <input 
-                type="password" 
-                value={apiKey} 
-                onChange={(e) => setApiKey(e.target.value)}
-                placeholder="Nhập API Key từ SePay Dashboard"
-              />
-              <span className="ps-hint">Nếu bỏ trống, hệ thống sẽ sử dụng key Vercel mặc định.</span>
-            </div>
-
-            <div className="ps-field">
-              <label>Webhook URL (Copy dán vào SePay)</label>
-              <div style={{display: 'flex', gap: '8px', alignItems: 'center'}}>
-                <input 
-                  type="text" 
-                  value={webhookUrl} 
-                  readOnly 
-                  style={{flex: 1, backgroundColor: '#F3F4F6', color: '#6B7280'}}
+              <div className="ps-field">
+                <label>Số Tài Khoản (VA)</label>
+                <input
+                  type="text"
+                  value={accountNo}
+                  onChange={(e) => setAccountNo(e.target.value)}
+                  placeholder="VD: 96247NTH195"
                 />
-                <button type="button" onClick={handleCopyWebhook} style={{padding: '10px 14px', background: '#E5E7EB', border: '1px solid #D1D5DB', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center'}}>
-                  <Copy size={16} color="#4B5563" />
-                </button>
+                <span className="ps-hint">Là số tài khoản ảo (VA) lấy từ SePay</span>
+              </div>
+
+              <div className="ps-field">
+                <label>Tên Chủ Tài Khoản</label>
+                <input
+                  type="text"
+                  value={accountName}
+                  onChange={(e) => setAccountName(e.target.value.toUpperCase())}
+                  placeholder="VD: NGUYEN TRONG HUU"
+                  style={{ textTransform: 'uppercase' }}
+                />
+                <span className="ps-hint">Viết HOA, không dấu — khớp với tên TK ngân hàng</span>
               </div>
             </div>
 
-            <button className="ps-save-btn" onClick={handleSave} disabled={saving} style={{marginTop: '16px'}}>
-              {saving ? (
-                <><Loader2 size={16} className="spin" /> Đang lưu...</>
-              ) : (
-                <><Save size={16} /> Lưu Thay Đổi</>
-              )}
-            </button>
+            <hr style={{ borderTop: '1px solid #E5E7EB', borderBottom: 'none', margin: '32px 0 24px 0' }} />
+
+            <div className="ps-card-header" style={{ marginBottom: '16px' }}>
+              <Webhook size={20} />
+              <h3>Kết Nối Hệ Thống SePay</h3>
+            </div>
+            <div className="ps-form">
+              <div className="ps-field">
+                <label>API Key (SePay)</label>
+                <input
+                  type="password"
+                  value={apiKey}
+                  onChange={(e) => setApiKey(e.target.value)}
+                  placeholder="Nhập API Key từ SePay Dashboard"
+                />
+                <span className="ps-hint">Nếu bỏ trống, hệ thống sẽ sử dụng key Vercel mặc định.</span>
+              </div>
+
+              <div className="ps-field">
+                <label>Webhook URL (Copy dán vào SePay)</label>
+                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                  <input
+                    type="text"
+                    value={webhookUrl}
+                    readOnly
+                    style={{ flex: 1, backgroundColor: '#F3F4F6', color: '#6B7280' }}
+                  />
+                  <button type="button" onClick={handleCopyWebhook} style={{ padding: '10px 14px', background: '#E5E7EB', border: '1px solid #D1D5DB', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                    <Copy size={16} color="#4B5563" />
+                  </button>
+                </div>
+              </div>
+
+              <button className="ps-save-btn" onClick={handleSave} disabled={saving} style={{ marginTop: '16px' }}>
+                {saving ? (
+                  <><Loader2 size={16} className="spin" /> Đang lưu...</>
+                ) : (
+                  <><Save size={16} /> Lưu Thay Đổi</>
+                )}
+              </button>
+            </div>
           </div>
-        </div>
         </div> {/* End left column */}
 
         {/* Cột phải: Preview QR */}
         <div className="ps-col-right">
           <div className="ps-card">
             <div className="ps-card-header">
-            <QrCode size={20} />
-            <h3>Xem Trước QR Code</h3>
-          </div>
+              <QrCode size={20} />
+              <h3>Xem Trước QR Code</h3>
+            </div>
 
-          <div className="ps-qr-preview">
-            {accountNo && accountName ? (
-              <>
-                <img 
-                  src={qrPreviewUrl} 
-                  alt="QR Preview" 
-                  className="ps-qr-image"
-                  onError={(e) => { e.target.style.display = 'none'; }}
-                />
-                <div className="ps-qr-info">
-                  <div className="ps-qr-row">
-                    <span>Ngân hàng:</span>
-                    <strong>{bankName}</strong>
+            <div className="ps-qr-preview">
+              {accountNo && accountName ? (
+                <>
+                  <img
+                    src={qrPreviewUrl}
+                    alt="QR Preview"
+                    className="ps-qr-image"
+                    onError={(e) => { e.target.style.display = 'none'; }}
+                  />
+                  <div className="ps-qr-info">
+                    <div className="ps-qr-row">
+                      <span>Ngân hàng:</span>
+                      <strong>{bankName}</strong>
+                    </div>
+                    <div className="ps-qr-row">
+                      <span>Chủ TK:</span>
+                      <strong>{accountName}</strong>
+                    </div>
+                    <div className="ps-qr-row">
+                      <span>Số TK:</span>
+                      <strong>{accountNo}</strong>
+                    </div>
+                    <div className="ps-qr-row">
+                      <span>Số tiền test:</span>
+                      <strong style={{ color: '#059669' }}>10.000 đ</strong>
+                    </div>
                   </div>
-                  <div className="ps-qr-row">
-                    <span>Chủ TK:</span>
-                    <strong>{accountName}</strong>
+                  <div className="ps-qr-note">
+                    <CheckCircle size={14} style={{ color: '#059669' }} />
+                    <span>QR sẽ hiển thị như thế này trên trang Checkout</span>
                   </div>
-                  <div className="ps-qr-row">
-                    <span>Số TK:</span>
-                    <strong>{accountNo}</strong>
-                  </div>
-                  <div className="ps-qr-row">
-                    <span>Số tiền test:</span>
-                    <strong style={{color: '#059669'}}>10.000 đ</strong>
-                  </div>
+                </>
+              ) : (
+                <div className="ps-qr-empty">
+                  <AlertCircle size={32} style={{ color: '#6B7280' }} />
+                  <p>Điền thông tin ngân hàng để xem trước QR Code</p>
                 </div>
-                <div className="ps-qr-note">
-                  <CheckCircle size={14} style={{color: '#059669'}} />
-                  <span>QR sẽ hiển thị như thế này trên trang Checkout</span>
-                </div>
-              </>
-            ) : (
-              <div className="ps-qr-empty">
-                <AlertCircle size={32} style={{color: '#6B7280'}} />
-                <p>Điền thông tin ngân hàng để xem trước QR Code</p>
+              )}
+            </div>
+
+            <div className="ps-guide-wrapper">
+              <div className="ps-card-header" style={{ marginTop: '24px' }}>
+                <CreditCard size={20} />
+                <h3>Hướng Dẫn Thay Đổi</h3>
               </div>
-            )}
-          </div>
-
-          <div className="ps-guide-wrapper">
-            <div className="ps-card-header" style={{marginTop: '24px'}}>
-              <CreditCard size={20} />
-              <h3>Hướng Dẫn Thay Đổi</h3>
-            </div>
-            <div className="ps-guide">
-              <ol>
-                <li>Điền đúng <strong>số VA</strong> lấy từ SePay Dashboard</li>
-                <li>Tên chủ TK phải <strong>khớp chính xác</strong> với tên trên ngân hàng</li>
-                <li>Nếu đổi ngân hàng mới → vào SePay liên kết TK mới + cập nhật Webhook</li>
-                <li>Bấm <strong>"Lưu Thay Đổi"</strong> → cả trang Checkout và Webhook API sẽ tự cập nhật cấu hình mới.</li>
-              </ol>
+              <div className="ps-guide">
+                <ol>
+                  <li>Điền đúng <strong>số VA</strong> lấy từ SePay Dashboard</li>
+                  <li>Tên chủ TK phải <strong>khớp chính xác</strong> với tên trên ngân hàng</li>
+                  <li>Nếu đổi ngân hàng mới → vào SePay liên kết TK mới + cập nhật Webhook</li>
+                  <li>Bấm <strong>"Lưu Thay Đổi"</strong> → cả trang Checkout và Webhook API sẽ tự cập nhật cấu hình mới.</li>
+                </ol>
+              </div>
             </div>
           </div>
-        </div>
         </div> {/* End right column */}
       </div>
     </div>

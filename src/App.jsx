@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { ToastProvider } from './components/common/Toast';
 import './index.css';
@@ -39,6 +40,21 @@ import Course3 from './pages/funnels/Course3';
 import Course4 from './pages/funnels/Course4';
 
 const App = () => {
+  useEffect(() => {
+    // Khôi phục cài đặt độ thu phóng từ localStorage, mặc định là 80%
+    const currentZoom = localStorage.getItem('cf_ui_zoom');
+    
+    if (!currentZoom) {
+      localStorage.setItem('cf_ui_zoom', '80%');
+    }
+    
+    const zoomToApply = currentZoom || '80%';
+    document.body.style.zoom = zoomToApply;
+    
+    const zoomVal = parseFloat(zoomToApply) / 100;
+    document.documentElement.style.setProperty('--ui-zoom', zoomVal);
+  }, []);
+
   return (
     <ToastProvider>
       <Router>

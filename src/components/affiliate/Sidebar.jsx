@@ -12,6 +12,7 @@ const Sidebar = ({ onClose }) => {
 
   const [openGroups, setOpenGroups] = useState({
     campaigns: true,
+    finance: true,
     network: false
   });
 
@@ -72,17 +73,12 @@ const Sidebar = ({ onClose }) => {
           {/* TOP LEVEL NAVIGATION */}
           <NavLink to="/portal" end className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={onClose}>
             <LayoutDashboard size={18} />
-            <span>Thống Kê Cá Nhân</span>
-          </NavLink>
-
-          <NavLink to="/affiliate/store" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={onClose}>
-            <Zap size={18} />
-            <span>Cửa Hàng Bậc B2B</span>
+            <span>Tổng Quan</span>
           </NavLink>
 
           <NavLink to="/portal/customers" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={onClose}>
             <Users size={18} />
-            <span>Khách Hàng Của Tôi</span>
+            <span>Khách Hàng</span>
           </NavLink>
 
           <div className="sidebar-divider"></div>
@@ -99,10 +95,31 @@ const Sidebar = ({ onClose }) => {
             {openGroups.apps && (
               <div className="nav-sub-items-tree">
                 <NavLink to="/affiliate/links" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <span className="nav-sub-item-text">Lấy Link</span>
+                  <span className="nav-sub-item-text">Link & Tài Nguyên</span>
                 </NavLink>
                 <NavLink to="/portal/campaigns/locked" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <span className="nav-sub-item-text">Chiến Dịch Khóa</span>
+                  <span className="nav-sub-item-text">Chiến Dịch Độc Quyền</span>
+                </NavLink>
+                <NavLink to="/affiliate/store" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Sản Phẩm & Phễu</span>
+                </NavLink>
+              </div>
+            )}
+          </div>
+
+          {/* TÀI CHÍNH */}
+          <div className="nav-group-wrapper">
+            <div className="nav-group-header" onClick={() => toggleGroup('finance')}>
+              <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                <Wallet size={18} />
+                <span>Tài Chính</span>
+              </div>
+            </div>
+            
+            {openGroups.finance && (
+              <div className="nav-sub-items-tree">
+                <NavLink to="/affiliate/ledger" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Ví & Thu Nhập</span>
                 </NavLink>
               </div>
             )}
@@ -120,10 +137,7 @@ const Sidebar = ({ onClose }) => {
             {openGroups.network && (
               <div className="nav-sub-items-tree">
                 <NavLink to="/portal/network/direct" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <span className="nav-sub-item-text">Quản Lý CTV</span>
-                </NavLink>
-                <NavLink to="/affiliate/ledger" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <span className="nav-sub-item-text">Sao Kê</span>
+                  <span className="nav-sub-item-text">Mạng Lưới Đối Tác</span>
                 </NavLink>
               </div>
             )}
@@ -141,26 +155,31 @@ const Sidebar = ({ onClose }) => {
             
             {openGroups.admin && (
               <div className="nav-sub-items-tree">
+                <div style={{fontSize: '11px', fontWeight: 'bold', color: '#6B7280', padding: '12px 16px 4px', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Vận Hành Thường Xuyên</div>
+                
                 <NavLink to="/admin" end className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Tổng Quan Admin</span>
                 </NavLink>
-                <NavLink to="/admin/commissions" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <span className="nav-sub-item-text">Cấu Hình Hoa Hồng</span>
+                <NavLink to="/admin/conversions" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Đơn Hàng & Hoa Hồng</span>
                 </NavLink>
                 <NavLink to="/admin/payouts" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Duyệt Rút Tiền</span>
                 </NavLink>
-                <NavLink to="/admin/staff" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <span className="nav-sub-item-text">Nhân Sự</span>
-                </NavLink>
-                <NavLink to="/admin/campaign-links" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <span className="nav-sub-item-text">Nguồn Link</span>
-                </NavLink>
                 <NavLink to="/admin/leads" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <span className="nav-sub-item-text">CRM</span>
+                  <span className="nav-sub-item-text">CRM Khách Hàng</span>
                 </NavLink>
-                <NavLink to="/admin/conversions" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
-                  <span className="nav-sub-item-text">Đơn Hàng & Hoa Hồng</span>
+
+                <div style={{fontSize: '11px', fontWeight: 'bold', color: '#6B7280', padding: '16px 16px 4px', textTransform: 'uppercase', letterSpacing: '0.05em'}}>Quản Trị Dữ Liệu</div>
+                
+                <NavLink to="/admin/campaign-links" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Quản Lý Chiến Dịch</span>
+                </NavLink>
+                <NavLink to="/admin/staff" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Quản Lý Nhân Sự</span>
+                </NavLink>
+                <NavLink to="/admin/commissions" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Cấu Hình Hoa Hồng</span>
                 </NavLink>
                 <NavLink to="/admin/payment-settings" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Cấu Hình Thanh Toán</span>

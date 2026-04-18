@@ -11,6 +11,9 @@ const AffiliateSettings = () => {
   const [saving, setSaving] = useState(false);
   const addToast = useToast();
 
+  // Appearance state
+  const [uiZoom, setUiZoom] = useState(localStorage.getItem('cf_ui_zoom') || '100%');
+
   // Profile form state
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
@@ -229,6 +232,12 @@ const AffiliateSettings = () => {
         >
           Lịch Sử Hạng & Thanh Toán
         </button>
+        <button 
+          className={`settings-tab-btn ${activeTab === 'appearance' ? 'active' : ''}`}
+          onClick={() => setActiveTab('appearance')}
+        >
+          Giao Diện (Hiển Thị)
+        </button>
       </div>
 
       <div className="settings-container">
@@ -387,6 +396,44 @@ const AffiliateSettings = () => {
                 <p className="text-sm text-muted" style={{ margin: 0 }}>Truy cập ngay bảng Dự Án (Campaigns) để mua thêm quyền phân phối cấp Đại Lượng.</p>
               </div>
               <button className="cf-btn-primary" style={{ whiteSpace: 'nowrap' }} onClick={() => window.location.href = '/affiliate/store'}>Đến trang Nâng Cấp</button>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'appearance' && (
+          <div className="cf-card settings-card" style={{ maxWidth: '600px' }}>
+            <div className="settings-header flex-align-center mb-6" style={{ gap: '12px' }}>
+              <Camera size={20} className="text-muted" />
+              <h3 className="font-bold">Cài Đặt Màn Hình</h3>
+            </div>
+            
+            <div className="form-group">
+              <label style={{ display: 'block', marginBottom: '12px', fontWeight: 'bold' }}>Tỷ lệ thu phóng (Zoom)</label>
+              <div style={{ display: 'flex', gap: '12px', flexWrap: 'wrap' }}>
+                {['80%', '90%', '100%', '110%', '120%'].map((zoom) => (
+                  <button
+                    key={zoom}
+                    onClick={() => {
+                      setUiZoom(zoom);
+                      localStorage.setItem('cf_ui_zoom', zoom);
+                      document.body.style.zoom = zoom;
+                      const zoomVal = parseFloat(zoom) / 100;
+                      document.documentElement.style.setProperty('--ui-zoom', zoomVal);
+                      addToast(`Đã đổi scale thành ${zoom}`, 'success');
+                    }}
+                    className={`cf-btn-outline ${uiZoom === zoom ? 'active' : ''}`}
+                    style={{
+                      padding: '8px 16px',
+                      backgroundColor: uiZoom === zoom ? 'var(--cf-primary)' : 'transparent',
+                      color: uiZoom === zoom ? 'white' : 'var(--cf-text)',
+                      borderColor: uiZoom === zoom ? 'var(--cf-primary)' : 'var(--cf-border)'
+                    }}
+                  >
+                    {zoom}
+                  </button>
+                ))}
+              </div>
+              <p className="text-sm text-muted mt-3">Chọn &lt; 100% nếu bạn muốn màn hình hiển thị được nhiều công cụ và dữ liệu hơn mà không cần cuộn.</p>
             </div>
           </div>
         )}

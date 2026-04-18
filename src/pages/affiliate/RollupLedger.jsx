@@ -33,9 +33,9 @@ export default function RollupLedger() {
       // === REALTIME SUBSCRIPTION ===
       subscription = supabase
         .channel('realtime_rollup_ledger')
-        .on('postgres_changes', { 
-          event: '*', 
-          schema: 'public', 
+        .on('postgres_changes', {
+          event: '*',
+          schema: 'public',
           table: 'conversions',
           filter: `affiliate_id=eq.${user.id}`
         }, () => {
@@ -102,7 +102,7 @@ export default function RollupLedger() {
           earnedComm,
           lostComm,
           rolledUpTo: lostComm > 0 ? 'Upline / Hệ thống Gốc' : 'N/A',
-          reason: lostComm > 0 
+          reason: lostComm > 0
             ? `Gói hiện tại: ${tier.toUpperCase()}. Hạn mức tối đa: ${cap.toLocaleString()}.`
             : 'Hoa hồng chi trả 100% trong hạn mức.'
         };
@@ -146,15 +146,15 @@ export default function RollupLedger() {
             {loading ? (
               Array.from({ length: 3 }).map((_, i) => (
                 <tr key={i}>
-                  <td><Skeleton width="100px" height="20px" /><div style={{marginTop: 6}}><Skeleton width="80px" height="14px" /></div></td>
-                  <td><Skeleton width="140px" height="20px" /><div style={{marginTop: 6}}><Skeleton width="120px" height="16px" /></div></td>
-                  <td className="text-right"><Skeleton width="120px" height="20px" style={{marginLeft: 'auto'}} /></td>
-                  <td className="text-right"><Skeleton width="130px" height="24px" style={{marginLeft: 'auto'}} /></td>
+                  <td><Skeleton width="100px" height="20px" /><div style={{ marginTop: 6 }}><Skeleton width="80px" height="14px" /></div></td>
+                  <td><Skeleton width="140px" height="20px" /><div style={{ marginTop: 6 }}><Skeleton width="120px" height="16px" /></div></td>
+                  <td className="text-right"><Skeleton width="120px" height="20px" style={{ marginLeft: 'auto' }} /></td>
+                  <td className="text-right"><Skeleton width="130px" height="24px" style={{ marginLeft: 'auto' }} /></td>
                 </tr>
               ))
             ) : ledgerData.length === 0 ? (
               <tr>
-                <td colSpan={4} style={{textAlign: 'center', padding: '40px', color: '#6B7280'}}>
+                <td colSpan={4} style={{ textAlign: 'center', padding: '40px', color: '#6B7280' }}>
                   Chưa có giao dịch nào. Khi có conversions được duyệt, dữ liệu sẽ hiển thị ở đây.
                 </td>
               </tr>
@@ -162,12 +162,12 @@ export default function RollupLedger() {
               <tr key={trx.id} className={trx.lostComm > 0 ? 'row-danger' : 'row-safe'}>
                 <td>
                   <div className="trx-id">{trx.id}</div>
-                  <div style={{fontSize:'12px',color:'#9CA3AF',marginTop:'4px'}}>{trx.date}</div>
+                  <div style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '4px' }}>{trx.date}</div>
                 </td>
                 <td>
                   <div className="trx-buyer">{trx.buyer}</div>
                   <div className="trx-course">{trx.courseName}</div>
-                  <div style={{fontSize:'12px',color:'#9CA3AF',marginTop:'4px'}}>
+                  <div style={{ fontSize: '12px', color: '#9CA3AF', marginTop: '4px' }}>
                     Hoa hồng lẽ ra nhận: <strong>{trx.expectedComm.toLocaleString()}</strong>
                   </div>
                 </td>
@@ -178,7 +178,7 @@ export default function RollupLedger() {
                   {trx.lostComm > 0 ? (
                     <>
                       <div className="trx-lost">-{trx.lostComm.toLocaleString()}</div>
-                      <div style={{fontSize:'12px',color:'#EF4444',fontWeight:500,marginTop:'4px'}}>Tràn lên: {trx.rolledUpTo}</div>
+                      <div style={{ fontSize: '12px', color: '#EF4444', fontWeight: 500, marginTop: '4px' }}>Tràn lên: {trx.rolledUpTo}</div>
                     </>
                   ) : (
                     <div className="trx-no-loss">0</div>
@@ -198,7 +198,7 @@ export default function RollupLedger() {
           <h4>BẠN ĐANG BỊ RỚT TIỀN?</h4>
           <p>
             Hạng hiện tại của bạn là <strong>{userTier.toUpperCase()}</strong> — hạn mức tối đa mỗi sale: <strong>{(TIER_CAPS[userTier] || 0).toLocaleString()}</strong>.
-            {totalLost > 0 && <> Bạn đã mất <strong style={{color:'#DC2626'}}>{totalLost.toLocaleString()}</strong> do vượt hạn mức!</>}
+            {totalLost > 0 && <> Bạn đã mất <strong style={{ color: '#DC2626' }}>{totalLost.toLocaleString()}</strong> do vượt hạn mức!</>}
           </p>
           <NavLink to="/affiliate/store" className="upgrade-now-btn mt-3 inline-block">BẢO VỆ DÒNG TIỀN - NÂNG CẤP NGAY</NavLink>
         </div>

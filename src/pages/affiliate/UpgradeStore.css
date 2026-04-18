@@ -1,3 +1,4 @@
+/* UpgradeStore.css Full File Rewrite */
 .store-card {
   background: white;
   border-radius: 16px;
@@ -10,7 +11,7 @@
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
 }
 
-.store-card:hover:not(.opacity-50) {
+.store-card:hover {
   transform: translateY(-4px);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
 }
@@ -33,6 +34,7 @@
   border-radius: 12px;
   letter-spacing: 0.05em;
   box-shadow: 0 2px 4px rgba(37, 99, 235, 0.3);
+  white-space: nowrap;
 }
 
 .store-card-header {
@@ -42,30 +44,55 @@
 
 .store-tier-name {
   font-size: 16px;
-  font-weight: 700;
-  color: #4B5563;
-  letter-spacing: 0.05em;
-  margin-bottom: 8px;
+  font-weight: 800;
+  color: #111827;
+  letter-spacing: 0.02em;
+  margin-bottom: 12px;
 }
 
 .store-card.highlight .store-tier-name {
   color: #2563EB;
 }
 
-.store-price {
-  font-size: 28px;
+.store-commission-pot {
+  margin-bottom: 16px;
+  background: #FFFBEB;
+  border: 1px dashed #F59E0B;
+  padding: 16px 12px;
+  border-radius: 8px;
+}
+.store-commission-pot span {
+  display: block;
+  font-size: 11px;
+  color: #B45309;
+  text-transform: uppercase;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+.store-commission-pot .pot-value {
+  color: #D97706;
+  font-size: 22px;
   font-weight: 800;
-  color: #111827;
-  margin-bottom: 8px;
+}
+.store-card.highlight .store-commission-pot {
+  background: #EFF6FF;
+  border-color: #3B82F6;
+}
+.store-card.highlight .store-commission-pot span {
+  color: #1D4ED8;
+}
+.store-card.highlight .store-commission-pot .pot-value {
+  color: #2563EB;
 }
 
 .store-commission {
   font-size: 13px;
   color: #6B7280;
   background: #F3F4F6;
-  padding: 4px 12px;
+  padding: 6px 12px;
   border-radius: 100px;
   display: inline-block;
+  font-weight: 500;
 }
 
 .store-card.highlight .store-commission {
@@ -76,7 +103,26 @@
 .store-divider {
   height: 1px;
   background: #E5E7EB;
-  margin: 0 -24px 24px -24px;
+  margin: 0 -24px 20px -24px;
+}
+
+.store-target {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  background: #F9FAFB;
+  padding: 12px;
+  border-radius: 8px;
+  font-size: 13px;
+  color: #4B5563;
+  margin-bottom: 20px;
+  line-height: 1.4;
+  border: 1px solid #E5E7EB;
+}
+.store-target svg {
+  min-width: 16px;
+  color: #6B7280;
+  margin-top: 2px;
 }
 
 .store-features {
@@ -90,32 +136,25 @@
   display: flex;
   align-items: flex-start;
   font-size: 14px;
-  color: #4B5563;
+  color: #374151;
   margin-bottom: 12px;
   line-height: 1.5;
+}
+
+.store-li-icon {
+  color: #10B981;
+  margin-right: 8px;
 }
 
 .store-btn {
   width: 100%;
   padding: 12px 0;
   border-radius: 8px;
-  font-weight: 700;
+  font-weight: 600;
   font-size: 14px;
   text-align: center;
   transition: all 0.2s;
-}
-
-.store-btn.current {
-  background: #E5E7EB;
-  color: #6B7280;
-  cursor: not-allowed;
-}
-
-.store-btn.lower {
-  background: transparent;
-  border: 1px dashed #D1D5DB;
-  color: #9CA3AF;
-  cursor: not-allowed;
+  cursor: pointer;
 }
 
 .store-btn.upgrade {
@@ -123,7 +162,6 @@
   border: 1px solid #3B82F6;
   color: #3B82F6;
 }
-
 .store-btn.upgrade:hover {
   background: #EFF6FF;
 }
@@ -133,9 +171,19 @@
   color: white;
   border: none;
 }
-
 .store-btn.upgrade.pulse:hover {
   background: #2563EB;
+}
+
+.store-btn.download {
+  background: white;
+  border: 1px solid #E5E7EB;
+  color: #4B5563;
+}
+.store-btn.download:hover {
+  background: #F9FAFB;
+  border-color: #D1D5DB;
+  color: #111827;
 }
 
 /* Modal CSS */
@@ -154,7 +202,7 @@
   background: white;
   border-radius: 16px;
   width: 100%;
-  max-width: 600px;
+  max-width: 500px;
   box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
   animation: modalFadeIn 0.3s ease;
 }
@@ -167,21 +215,11 @@
   border-bottom: 1px solid #E5E7EB;
 }
 
-.modal-body {
-  padding: 24px;
-}
-
-.warning-box {
-  background: #FEF2F2;
-  border: 1px solid #F87171;
-  border-radius: 12px;
-  padding: 16px;
-}
-
 .modal-header h2 {
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
   margin: 0;
+  color: #111827;
 }
 
 .modal-header h2 span {
@@ -205,8 +243,6 @@
 }
 
 .warning-box {
-  background: #FEF2F2;
-  border: 1px solid #F87171;
   border-radius: 12px;
   padding: 16px;
   margin-bottom: 24px;
@@ -218,122 +254,56 @@
 }
 
 .warning-icon {
-  color: #DC2626;
   margin-right: 12px;
   margin-top: 2px;
+  min-width: 24px;
 }
 
 .warning-text h4 {
-  color: #991B1B;
   font-weight: 700;
   margin: 0 0 4px 0;
+  font-size: 14px;
 }
 
 .warning-text p {
-  color: #B91C1C;
-  font-size: 14px;
+  font-size: 13px;
   margin: 0;
+  line-height: 1.5;
 }
 
-.payment-grid {
-  display: flex;
-  gap: 24px;
-}
-
-.qr-section {
-  width: 33.33%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid #E5E7EB;
-  border-radius: 12px;
-  padding: 16px;
-  background-color: #F9FAFB;
-}
-
-.qr-img {
-  margin-bottom: 12px;
-}
-
-.qr-caption {
-  font-size: 12px;
-  color: #6B7280;
-  font-weight: 500;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
-
-.details-section {
-  width: 66.66%;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.detail-item {
-  margin-bottom: 16px;
-}
-
-.detail-item label {
-  font-size: 12px;
-  color: #6B7280;
-  font-weight: 700;
-  text-transform: uppercase;
-  margin-bottom: 4px;
-  display: block;
-}
-
-.detail-value {
-  font-weight: 600;
-  color: #111827;
-  border: 1px solid #E5E7EB;
-  padding: 12px;
+.cf-input {
+  border: 1px solid #D1D5DB;
   border-radius: 8px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  padding: 10px 12px;
+  font-size: 14px;
+  outline: none;
+  transition: border-color 0.2s;
+  background: #fff;
+  color: #111827;
 }
-
-.detail-value.box-white {
-  background-color: white;
-}
-
-.detail-value.box-blue {
-  background-color: #EFF6FF;
-  border-color: #BFDBFE;
-  font-size: 20px;
-}
-
-.detail-value.box-mono {
-  background-color: #F9FAFB;
-  font-family: monospace;
-}
-
-.detail-amount {
-  font-weight: 700;
-  font-size: 24px;
-  color: #DC2626;
-  margin-top: 8px;
+.cf-input:focus {
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
 }
 
 .modal-footer {
   display: flex;
   justify-content: flex-end;
-  padding: 24px;
+  padding: 20px 24px;
   border-top: 1px solid #E5E7EB;
-  margin-top: 16px;
   background-color: #F9FAFB;
   border-bottom-left-radius: 16px;
   border-bottom-right-radius: 16px;
   gap: 12px;
+  margin-top: 24px;
 }
 
 .btn-cancel {
-  padding: 8px 24px;
+  padding: 10px 24px;
   border-radius: 8px;
   border: 1px solid #D1D5DB;
   font-weight: 600;
+  font-size: 14px;
   color: #374151;
   background: white;
   cursor: pointer;
@@ -344,11 +314,12 @@
 }
 
 .btn-confirm {
-  padding: 8px 24px;
+  padding: 10px 24px;
   border-radius: 8px;
   background-color: #3B82F6;
   color: white;
   font-weight: 600;
+  font-size: 14px;
   display: flex;
   align-items: center;
   border: none;
@@ -356,24 +327,12 @@
 }
 
 .btn-confirm:hover {
-  background-color: #1D4ED8;
+  background-color: #2563EB;
 }
 
-.copy-btn {
-  color: #3B82F6;
-  font-weight: 600;
-  font-size: 14px;
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.copy-btn:hover {
-  color: #1D4ED8;
-}
-
-.hidden {
-  display: none;
+.btn-confirm:disabled {
+  opacity: 0.7;
+  cursor: not-allowed;
 }
 
 /* Store Header & Grid */
@@ -387,20 +346,25 @@
 
 .store-header h1 {
   font-size: 24px;
-  font-weight: 700;
+  font-weight: 800;
   color: #111827;
   margin: 0 0 8px 0;
+  letter-spacing: -0.02em;
 }
 
 .store-header p {
-  color: #6B7280;
+  color: #4B5563;
   margin: 0;
+  max-width: 800px;
+  line-height: 1.6;
 }
 
 .store-header span {
-  font-weight: 600;
-  color: #3B82F6;
-  text-transform: uppercase;
+  font-weight: 700;
+  color: #2563EB;
+  background: #EFF6FF;
+  padding: 2px 8px;
+  border-radius: 4px;
 }
 
 .store-grid {
@@ -413,7 +377,7 @@
   width: calc(25% - 18px);
 }
 
-@media (max-width: 1024px) {
+@media (max-width: 1200px) {
   .store-grid .store-card {
     width: calc(50% - 12px);
   }
@@ -421,12 +385,6 @@
 
 @media (max-width: 768px) {
   .store-grid .store-card {
-    width: 100%;
-  }
-  .payment-grid {
-    flex-direction: column;
-  }
-  .qr-section, .details-section {
     width: 100%;
   }
 }

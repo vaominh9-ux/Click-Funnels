@@ -198,7 +198,7 @@ button {
 /* Base structural classes */
 .app-container {
   display: flex;
-  height: 100vh;
+  height: calc(100vh / var(--ui-zoom, 1));
   width: 100%; /* Better than 100vw on Windows to avoid horizontal scrollbar */
   background-color: var(--cf-sidebar-bg);
   padding: 16px 16px 16px 0;

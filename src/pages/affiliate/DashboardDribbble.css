@@ -3,10 +3,78 @@
    This CSS file is separate to ensure no original global classes are broken
    ==================================================== */
 
+/* ── TOP FILTER BAR ── */
+.dashboard-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.date-filter-group {
+  display: flex;
+  align-items: center;
+  background: white;
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid var(--cf-border);
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+
+.date-filter-icon {
+  padding: 0 12px;
+  color: var(--cf-text-muted);
+}
+
+.date-filter-btn {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--cf-text-muted);
+  background: transparent;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.date-filter-btn:hover {
+  color: var(--cf-text-main);
+  background: #F9FAFB;
+}
+
+.date-filter-btn.active {
+  background: #EFF6FF;
+  color: #2563EB;
+}
+
+/* ── CHARTS ── */
+.custom-chart-tooltip {
+  background: white;
+  border: 1px solid var(--cf-border);
+  padding: 12px 16px;
+  border-radius: 8px;
+  box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+}
+
+.custom-chart-tooltip .tooltip-date {
+  font-size: 12px;
+  color: var(--cf-text-muted);
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.custom-chart-tooltip .tooltip-val {
+  font-size: 16px;
+  font-weight: 800;
+  color: #10B981;
+}
+
 /* ── 2-COLUMN ASYMMETRIC GRID ── */
 .dashboard-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 320px;
+  grid-template-columns: minmax(0, 1fr) 300px;
   gap: 28px;
   align-items: start;
 }
@@ -221,6 +289,77 @@
   transform: scale(1.1) translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
+
+/* ── ACTIVITY FEED WIDGET ── */
+.activity-feed-widget {
+  background: var(--cf-bg-surface);
+  border-radius: 16px;
+  border: 1px solid var(--cf-border);
+  padding: 0;
+  overflow: hidden;
+  box-shadow: 0 4px 6px -1px rgba(0,0,0,0.03);
+}
+
+.feed-header {
+  padding: 16px;
+  background: #F9FAFB;
+  border-bottom: 1px solid var(--cf-border);
+  font-weight: 700;
+  font-size: 13px;
+  color: var(--cf-text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.feed-list {
+  display: flex;
+  flex-direction: column;
+}
+
+.feed-item {
+  padding: 16px;
+  border-bottom: 1px solid var(--cf-border);
+  display: flex;
+  gap: 12px;
+  background: white;
+  transition: background 0.2s;
+}
+.feed-item:last-child {
+  border-bottom: none;
+}
+.feed-item:hover {
+  background: #F9FAFB;
+}
+.feed-item.pulse {
+  background: #F0FDF4;
+}
+
+.feed-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.feed-icon.approved { background: #10B981; color: white; }
+.feed-icon.new-lead { background: #3B82F6; color: white; }
+.feed-icon.system { background: #8B5CF6; color: white; }
+
+.feed-content p {
+  margin: 0 0 4px 0;
+  font-size: 13px;
+  color: var(--cf-text-main);
+  line-height: 1.4;
+}
+.feed-content span {
+  font-size: 11px;
+  color: var(--cf-text-muted);
+  font-weight: 500;
+}
+
 
 /* ── QUICK ACTIONS (RIGHT COLUMN) ── */
 .quick-actions-widget {

@@ -1,11 +1,10 @@
 import React, { useEffect, useState } from 'react';
-import '../Course1/style.css'; // Kế thừa toàn bộ nét hiện đại của Course 1
+import './c4-style.css'; // Phong cách Bụi bặm: THE INDUSTRIAL HUSTLE
 import { useFunnelTracking } from '../utils';
 import LeadModal from '../components/LeadModal';
 import { FUNNEL_COURSES } from '../config';
 import { 
-  PlayCircle, Star, CheckCircle2, Shield, Zap, 
-  TrendingUp, Users, Target, Lock, ArrowRight, Video 
+  Play, ArrowRight, AlertTriangle, FastForward
 } from 'lucide-react';
 
 const COURSE_INFO = FUNNEL_COURSES['khoa-hoc-4'];
@@ -15,153 +14,117 @@ const Course4 = () => {
 
   useEffect(() => {
     window.scrollTo(0, 0);
-
-    const observerOptions = { root: null, rootMargin: '0px', threshold: 0.15 };
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('is-visible');
-          observer.unobserve(entry.target); 
-        }
-      });
-    }, observerOptions);
-
-    const revealElements = document.querySelectorAll('.reveal-on-scroll');
-    revealElements.forEach(el => observer.observe(el));
-
-    return () => revealElements.forEach(el => observer.unobserve(el));
   }, []);
 
   useFunnelTracking();
 
   return (
-    <div className="c1-container">
-      <div className="c1-particles">
-        <div className="particle p1"></div><div className="particle p2"></div><div className="particle p3"></div>
+    <div className="c4-hustle-wrapper">
+      <div className="c4-caution-tape"></div>
+
+      <div className="c4-container">
+        {/* HERO SECTION */}
+        <section className="c4-hero">
+          <div className="c4-alert-badge">
+            <AlertTriangle size={18} strokeWidth={3} /> STARTUP 2026: TÁC CHIẾN NHANH
+          </div>
+          
+          <h1 className="c4-hustle-title">
+            KHỞI NGHIỆP <span className="c4-orange-text">0 ĐỒNG TỐC CHIẾN</span>
+          </h1>
+          
+          <p className="c4-hero-sub">
+            Bạn không có vốn? Quên việc nhập hàng lại đi. Sử dụng AI và ngách Dropshipping/Affiliate để tạo ra dòng tiền dương ngay trong tuần đầu tiên chỉ với 1 chiếc Laptop.
+          </p>
+
+          <div className="c4-action-box" onClick={() => setIsModalOpen(true)}>
+            <div className="c4-vsl-area">
+              <Play size={48} color="#F97316" fill="#F97316" />
+              <div className="c4-vsl-alert-text">XEM BẢN KẾ HOẠCH TÁC CHIẾN (5 PHÚT)</div>
+            </div>
+          </div>
+
+          <div style={{ textAlign: 'center' }}>
+            <button className="c4-hustle-btn" onClick={() => setIsModalOpen(true)}>
+              TÔI MUỐN KIẾM TIỀN NGAY HÔM NAY <FastForward size={24} strokeWidth={3} />
+            </button>
+            <p style={{ marginTop: '16px', color: '#71717A', fontWeight: 600 }}>Cảnh báo: Nếu bạn lười biếng, hãy đóng trang web này lại.</p>
+          </div>
+        </section>
+
+        {/* MODULES (ROUGH LIST) */}
+        <section className="c4-modules-sec">
+          <h2 className="c4-hustle-title" style={{ textAlign: 'center', fontSize: '36px' }}>BA BƯỚC ĐẬP ĐI XÂY LẠI TỪ HAI BÀN TAY TRẮNG</h2>
+          
+          <div className="c4-grid-col">
+            <div className="c4-rough-card">
+              <div className="c4-rough-num">01</div>
+              <div className="c4-rough-content">
+                <h3>XÁC ĐỊNH MỎ VÀNG TRONG NGÁCH NHỎ</h3>
+                <p>Tuyệt đối không bán hàng phổ thông. Sử dụng prompt AI đặc biệt để tìm ra các sản phẩm ngách có biên lợi nhuận cực cao trên TikTok Shop Mỹ và Shopee.</p>
+              </div>
+            </div>
+
+            <div className="c4-rough-card">
+              <div className="c4-rough-num">02</div>
+              <div className="c4-rough-content">
+                <h3>KẺ HÚT TRAFFIC MIỄN PHÍ</h3>
+                <p>Nấu nướng các Video ngắn (Shorts/Reels) bằng công cụ AI tự động. Bơm hàng triệu lượt xem miễn phí (Zero-Cost Traffic) mà không tốn một đồng chạy Facebook Ads.</p>
+              </div>
+            </div>
+
+            <div className="c4-rough-card">
+              <div className="c4-rough-num">03</div>
+              <div className="c4-rough-content">
+                <h3>CƠ CHẾ IN TIỀN TỰ ĐỘNG (SOLOPRENEUR)</h3>
+                <p>Cấu hình luồng Dropshipping và Affiliate tự kết nối đơn hàng. Bạn đi ngủ, hệ thống xử lý nhà cung cấp. Bạn thức dậy, rút số dư trong tài khoản.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        {/* STICKY NOTES OFFER STACK */}
+        <section className="c4-offer-sec">
+          <div className="c4-notice-board">
+            <div className="c4-board-header">
+              <h2 className="c4-hustle-title">TẤM VÉ THU PHÍ CHỈ 1 LẦN</h2>
+            </div>
+            
+            <div className="c4-sticky-wrap">
+              <div className="c4-sticky-note">
+                <span>Hệ Thống Tác Chiến 0 Đồng Từ A-Z</span>
+                <span className="c4-sticky-val">4.500.000 đ</span>
+              </div>
+              <div className="c4-sticky-note">
+                <span>Kho 500+ Prompt ChatGPT Khủng (Bonus)</span>
+                <span className="c4-sticky-val">2.000.000 đ</span>
+              </div>
+              <div className="c4-sticky-note">
+                <span>Cẩm Nang Lách Luật Nền Tảng (Bonus)</span>
+                <span className="c4-sticky-val">1.500.000 đ</span>
+              </div>
+            </div>
+
+            <div className="c4-total-cost">
+              TỔNG TRỊ GIÁ TRÊN BÀN H C: <span style={{ textDecoration: 'line-through' }}>8.000.000 đ</span>
+            </div>
+            <div className="c4-final-price">
+              LỆ PHÍ TÁC CHIẾN: {COURSE_INFO.price.toLocaleString('vi-VN')} đ
+            </div>
+
+            <div style={{ textAlign: 'center', marginTop: '40px' }}>
+              <button className="c4-hustle-btn" onClick={() => setIsModalOpen(true)}>
+                KÍCH HOẠT VÉ VÀO CỬA <FastForward size={24} />
+              </button>
+            </div>
+          </div>
+        </section>
       </div>
 
-      <header className="c1-header">
-        <div className="c1-logo">
-          <Target className="c1-logo-icon" size={28} />
-          DUHAVA <span>ACADEMY</span>
-        </div>
-        <button className="c1-header-btn" onClick={() => setIsModalOpen(true)}>Đăng Ký Khóa Học</button>
-      </header>
+      <div className="c4-caution-tape"></div>
 
-      <section className="c1-hero">
-        <div className="c1-badge">
-          <Star size={14} /> KHÓA CHO NGƯỜI MỚI BẮT ĐẦU 2026
-        </div>
-        <h1>Khởi Nghiệp 0 Đồng Tinh Gọn</h1>
-        <p className="c1-hero-subtitle">
-          Tìm ra ý tưởng kinh doanh không rủi ro tài chính. Vận dụng AI và miễn phí nguồn traffic (Traffic Zero Cost) để tạo ra những đơn hàng đầu tiên dưới 7 ngày!
-        </p>
-        <div className="c1-hero-cta">
-          <button className="c1-btn c1-btn-primary" onClick={() => setIsModalOpen(true)}>
-            Nhận Ưu Đãi & Đăng Ký Ngay <ArrowRight size={18} />
-          </button>
-          <button className="c1-btn c1-btn-secondary" onClick={() => {
-            document.getElementById('modules').scrollIntoView({ behavior: 'smooth' });
-          }}>
-            Xem Lộ Trình Học
-          </button>
-        </div>
-
-        <div className="c1-hero-mockup">
-          <div className="c1-mockup-inner">
-            <div className="c1-mockup-play"><PlayCircle size={32} /></div>
-            <h3>Xem Video Giới Thiệu Khóa Học</h3>
-            <p>Thời lượng: 5 phút</p>
-          </div>
-        </div>
-      </section>
-
-      <section className="c1-section reveal-on-scroll">
-        <div className="c1-section-header">
-          <h2>Hãy vứt bỏ những rào cản cũ!</h2>
-          <p>Bạn không cần vốn lớn, không cần mặt bằng, không cần nhập hàng. Bạn chỉ cần Wifi và Laptop.</p>
-        </div>
-        <div className="c1-grid">
-          <div className="c1-card reveal-card" style={{transitionDelay: '0.1s'}}>
-            <div className="c1-icon-wrap"><Zap size={24} /></div>
-            <h3>Dropshipping & Affiliate</h3>
-            <p>Kinh doanh mà không tồn kho. Bán sản phẩm của người khác với mức hoa hồng cao chót vót.</p>
-          </div>
-          <div className="c1-card reveal-card" style={{transitionDelay: '0.2s'}}>
-            <div className="c1-icon-wrap"><TrendingUp size={24} /></div>
-            <h3>AI Kinh Doanh (ChatGPT)</h3>
-            <p>Để AI viết nội dung, thiết kế hình ảnh, lập kế hoạch marketing 100% thay vì thuê đội ngũ cồng kềnh.</p>
-          </div>
-          <div className="c1-card reveal-card" style={{transitionDelay: '0.3s'}}>
-            <div className="c1-icon-wrap"><Users size={24} /></div>
-            <h3>Khởi Nghiệp 1 Người (Solopreneur)</h3>
-            <p>Trở thành công ty 1 người với hệ thống đòn bẩy công nghệ tinh gọn tối giản, tự do tài chính mọi nơi.</p>
-          </div>
-        </div>
-      </section>
-
-      <section id="modules" className="c1-section reveal-on-scroll" style={{ background: 'rgba(0,0,0,0.2)' }}>
-        <div className="c1-section-header">
-          <h2>Nội Dung Khóa Học</h2>
-        </div>
-        <div className="c1-grid" style={{ gridTemplateColumns: '1fr', maxWidth: '800px', margin: '0 auto' }}>
-          <div className="c1-module reveal-card" style={{transitionDelay: '0.1s'}}>
-            <div className="c1-module-header">
-              <span className="c1-module-num">01</span>
-              <h3>Xác Định Nghách Ngon, Ít Cạnh Tranh</h3>
-            </div>
-            <ul className="c1-module-list">
-              <li><Video size={16} /> Sử dụng AI để research xu hướng thị trường nóng hổi</li>
-              <li><Video size={16} /> Chọn sản phẩm "Vạn người mê" trên Shopee, TikTok Shop Mẽo</li>
-            </ul>
-          </div>
-          <div className="c1-module reveal-card" style={{transitionDelay: '0.2s'}}>
-            <div className="c1-module-header">
-              <span className="c1-module-num">02</span>
-              <h3>Tiếp Thị 0 Đồng</h3>
-            </div>
-            <ul className="c1-module-list">
-              <li><Video size={16} /> Bơm Traffic miễn phí từ Tiktok Organic & SEO</li>
-              <li><Video size={16} /> Seeding group Facebook mà không dính Spam</li>
-            </ul>
-          </div>
-          <div className="c1-module reveal-card" style={{transitionDelay: '0.3s'}}>
-            <div className="c1-module-header">
-              <span className="c1-module-num">03</span>
-              <h3>Scale Lợi Nhuận Gấp Đôi Mỗi Tuần</h3>
-            </div>
-            <ul className="c1-module-list">
-              <li><Video size={16} /> Chiến lược Upsell ngay khi khách vừa mua xong</li>
-              <li><Video size={16} /> Chăm sóc khách cũ với chi phí bằng 0VNĐ</li>
-            </ul>
-          </div>
-        </div>
-      </section>
-
-      <section className="c1-section reveal-on-scroll">
-        <div className="c1-pricing animated-border">
-          <div className="c1-pricing-popular">Đầu Tư Xứng Đáng Nhất</div>
-          <h2>{COURSE_INFO.name}</h2>
-          <div className="c1-pricing-price">
-            <div className="c1-price-strike">{(COURSE_INFO.price * 2).toLocaleString('vi-VN')} đ</div>
-            <div className="c1-price-current">{COURSE_INFO.price.toLocaleString('vi-VN')} đ</div>
-          </div>
-          <ul className="c1-docs">
-            <li><CheckCircle2 size={18} /> Các Video thực chiến cầm tay chỉ việc</li>
-            <li><CheckCircle2 size={18} /> Kho 200+ câu lệnh Prompt ChatGPT thần thánh cho bán hàng</li>
-            <li><CheckCircle2 size={18} /> 1 Tháng tham gia Thử Thách Hành Động Cùng Cộng Đồng 0 Đồng</li>
-          </ul>
-          <button className="c1-btn c1-btn-primary" style={{ width: '100%', fontSize: '18px' }} onClick={() => setIsModalOpen(true)}>
-            Đăng Ký Vào Học Ngay <Lock size={18} />
-          </button>
-        </div>
-      </section>
-
-      <footer className="c1-footer">
-        <div className="c1-logo" style={{ fontSize: '18px', filter: 'grayscale(1)', opacity: 0.5 }}>
-          <Target size={20} /> DUHAVA ACADEMY
-        </div>
-        <p>&copy; 2026 DUHAVA Academy.</p>
+      <footer style={{ padding: '40px 0', textAlign: 'center', background: '#09090B', color: '#52525B' }}>
+        <p>&copy; 2026 DUHAVA Academy. Hành động ngay hoặc mất phần.</p>
       </footer>
 
       <LeadModal 

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { DownloadCloud, CheckCircle, AlertCircle, X, Loader2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
+import { logAudit } from '../../lib/auditLog';
 import { useToast } from '../../components/common/Toast';
 import Skeleton from '../../components/common/Skeleton';
 
@@ -82,6 +83,13 @@ const AdminPayouts = () => {
     } else {
         // 2. Trừ ví
         await supabase.from('profiles').update({ balance: 0 }).eq('id', affiliateId);
+        // 3. Ghi audit log
+        await logAudit('payout.complete', 'payout', affiliateId, {
+          affiliate_name: prof.full_name,
+          affiliate_email: prof.email,
+          amount: amountToPay,
+          method: method
+        });
         addToast(`Đã thanh toán ${Number(amountToPay).toLocaleString('vi-VN')} cho ${prof.full_name}`, 'success');
     }
 
@@ -107,6 +115,10 @@ const AdminPayouts = () => {
         }
         await supabase.from('payouts').insert({ affiliate_id: target.id, amount: target.balance, method: method, status: 'completed' });
         await supabase.from('profiles').update({ balance: 0 }).eq('id', target.id);
+        await logAudit('payout.bulk_complete', 'payout', target.id, {
+          affiliate_name: target.full_name,
+          amount: target.balance
+        });
       }
     }
     
