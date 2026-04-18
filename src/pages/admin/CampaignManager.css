@@ -99,7 +99,7 @@
   color: #059669;
 }
 
-.status-badge.inactive {
+.status-badge.inactive, .status-badge.paused {
   background: #F3F4F6;
   color: #4B5563;
 }

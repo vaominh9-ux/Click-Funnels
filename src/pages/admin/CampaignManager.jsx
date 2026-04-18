@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Plus, Search, Edit2, Trash2, Link as LinkIcon, Copy, Loader2, X } from 'lucide-react';
+import { Plus, Search, Edit2, Trash2, Link as LinkIcon, Copy, Loader2, X, Pause, Play } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import Skeleton from '../../components/common/Skeleton';
@@ -296,6 +296,9 @@ export default function AdminCampaignManager() {
                       </td>
                       <td style={{textAlign: 'right'}}>
                         <div style={{display: 'flex', gap: '8px', justifyContent: 'flex-end'}}>
+                          <button className="action-btn" title={camp.status === 'active' ? 'Tạm Dừng' : 'Kích Hoạt'} onClick={() => toggleStatus(camp.id, camp.status)}>
+                            {camp.status === 'active' ? <Pause size={16} /> : <Play size={16} />}
+                          </button>
                           <button className="action-btn" title="Chỉnh sửa" onClick={() => startEdit(camp)}>
                             <Edit2 size={16} />
                           </button>
