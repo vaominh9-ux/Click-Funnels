@@ -32,7 +32,7 @@ const AffiliateNetwork = () => {
       setIsAdmin(adminMode);
 
       if (profile?.ref_code) {
-        const domain = import.meta.env.VITE_TRACKING_DOMAIN || window.location.origin;
+        const domain = import.meta.env.VITE_TRACKING_DOMAIN || (window.location.hostname === 'localhost' ? 'https://click-funnels.vercel.app' : window.location.origin);
         setRefLink(`${domain}/auth/register?ref=${profile.ref_code}`);
       }
 

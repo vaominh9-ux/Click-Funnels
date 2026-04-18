@@ -99,7 +99,7 @@ export default function AffiliateLinks() {
   }, []);
 
   // Link tracking: dùng Tracking Domain (server-side redirect, gần như tức thì)
-  const trackingDomain = import.meta.env.VITE_TRACKING_DOMAIN || window.location.origin;
+  const trackingDomain = import.meta.env.VITE_TRACKING_DOMAIN || (window.location.hostname === 'localhost' ? 'https://click-funnels.vercel.app' : window.location.origin);
   
   const generatedLink = loading || !profile ? null : (selectedCampaign 
     ? `${trackingDomain}/go/${profile.ref_code}?campaign=${selectedCampaign.id}${utmSource ? `&utm_source=${encodeURIComponent(utmSource)}` : ''}`

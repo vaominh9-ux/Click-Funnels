@@ -159,7 +159,7 @@ export default function AdminCampaignManager() {
                     type="button" 
                     onClick={() => {
                       setNewCampaignName(`Khóa Học ${num}`);
-                      setNewCampaignUrl(`${window.location.origin}/khoa-hoc/khoa-hoc-${num}`);
+                      setNewCampaignUrl(`${window.location.hostname === 'localhost' ? 'https://click-funnels.vercel.app' : window.location.origin}/khoa-hoc/khoa-hoc-${num}`);
                     }}
                     style={{ background: 'none', border: 'none', color: '#3B82F6', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
                   >
