@@ -267,13 +267,13 @@ export default function AffiliateLinks() {
                       {link.clicks > 0 ? ((link.leads / link.clicks) * 100).toFixed(1) : 0}%
                     </span>
                   </td>
-                  <td style={{ display: 'flex', justifyContent: 'center' }}>
+                  <td style={{ textAlign: 'center' }}>
                     <button 
                       onClick={() => handleCopyRow(link)}
                       style={{
                         background: 'none', border: '1px solid #CBD5E1', padding: '6px 10px', 
-                        borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', 
-                        gap: '6px', color: '#475569', fontSize: '12px'
+                        borderRadius: '6px', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                        gap: '6px', color: '#475569', fontSize: '12px', margin: '0 auto'
                       }}
                       title="Copy lại link này"
                     >
