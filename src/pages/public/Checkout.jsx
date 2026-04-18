@@ -163,13 +163,16 @@ const Checkout = () => {
       // Tính hoa hồng dựa trên commission_plans
       const commissionAmount = await calculateCommission(amount, courseId);
       
-      // Lấy link_id từ localStorage để trigger cộng Sale
+      // Lấy link_id và campaign_id từ localStorage để ghi nhận toàn diện
       const linkId = localStorage.getItem('aff_link_id') || null;
+      let campaignId = localStorage.getItem('aff_campaign_id') || null;
+      if (campaignId === 'undefined' || campaignId === 'null') campaignId = null;
 
       const { error } = await supabase
         .from('conversions')
         .insert([{
           affiliate_id: leadInfo.affiliate_id,
+          campaign_id: campaignId,
           link_id: linkId,
           sale_amount: amount,
           commission_amount: commissionAmount,

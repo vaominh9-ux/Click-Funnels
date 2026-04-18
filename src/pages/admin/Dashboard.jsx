@@ -12,6 +12,7 @@ const AdminDashboard = () => {
   const [profiles, setProfiles] = useState([]);
   const [payoutsData, setPayoutsData] = useState([]);
   const [auditLogs, setAuditLogs] = useState([]);
+  const [allLinks, setAllLinks] = useState([]);
 
   useEffect(() => {
     fetchAll();
@@ -20,17 +21,19 @@ const AdminDashboard = () => {
   const fetchAll = async () => {
     setLoading(true);
     try {
-      const [convRes, profRes, payRes, auditRes] = await Promise.all([
-        supabase.from('conversions').select('*').order('created_at', { ascending: false }),
+      const [convRes, profRes, payRes, auditRes, linksRes] = await Promise.all([
+        supabase.from('conversions').select('*, campaigns(name)').order('created_at', { ascending: false }),
         supabase.from('profiles').select('id, full_name, email, total_earned, balance, role, approval_status, tier, created_at'),
         supabase.from('payouts').select('amount, status').in('status', ['pending', 'processing']),
         supabase.from('audit_logs').select('*').order('created_at', { ascending: false }).limit(20),
+        supabase.from('affiliate_links').select('id, campaign_id, clicks, leads, campaigns(name, status)'),
       ]);
 
       setConversions(convRes.data || []);
       setProfiles(profRes.data || []);
       setPayoutsData(payRes.data || []);
       setAuditLogs(auditRes.data || []);
+      setAllLinks(linksRes.data || []);
     } catch (err) {
       console.error('Error fetching admin stats:', err);
     } finally {
@@ -120,7 +123,54 @@ const AdminDashboard = () => {
       }))
       .sort((a, b) => b.totalCommission - a.totalCommission)
       .slice(0, 8);
-  }, [profiles, conversions]);
+  }, [profiles, conversions]); // Affiliates leaderboard considers ALL conversions, or filtered? We use 'conversions' here.
+
+  // ─── Top Campaigns table data ───
+  const topCampaigns = useMemo(() => {
+    const campMap = {};
+
+    // 1. Phân tích Clicks & Leads thô từ affiliate_links
+    allLinks.forEach(link => {
+      if (!link.campaign_id || !link.campaigns) return;
+      const cId = link.campaign_id;
+      if (!campMap[cId]) {
+        campMap[cId] = { id: cId, name: link.campaigns.name, status: link.campaigns.status, clicks: 0, rawLeads: 0, orders: 0, approved: 0, revenue: 0 };
+      }
+      campMap[cId].clicks += (link.clicks || 0);
+      campMap[cId].rawLeads += (link.leads || 0);
+    });
+
+    // 2. Phân tích Orders và Revenue thực thụ từ conversions
+    // Dùng filteredConversions để bảng Khóa học Lọc theo ngày
+    filteredConversions.forEach(c => {
+      let cId = c.campaign_id;
+      
+      // Nếu conversion chưa lưu campaign_id (đơn hàng cũ), truy ngược từ link_id
+      if (!cId && c.link_id) {
+        const foundLink = allLinks.find(l => l.id === c.link_id);
+        if (foundLink) cId = foundLink.campaign_id;
+      }
+
+      if (!cId) return;
+
+      if (!campMap[cId]) {
+        campMap[cId] = { id: cId, name: c.campaigns?.name || 'Chiến dịch vô danh', clicks: 0, rawLeads: 0, orders: 0, approved: 0, revenue: 0, status: 'unknown' };
+      }
+      campMap[cId].orders += 1;
+      if (c.status === 'approved') {
+        campMap[cId].approved += 1;
+        campMap[cId].revenue += Number(c.sale_amount || 0);
+      }
+    });
+
+    return Object.values(campMap)
+      .map(c => ({
+         ...c, 
+         conversionRate: c.clicks > 0 ? ((c.approved / c.clicks) * 100).toFixed(1) : 0
+      }))
+      .sort((a, b) => b.revenue - a.revenue)
+      .slice(0, 8); // Top 8 chiến dịch
+  }, [filteredConversions, allLinks]);
 
   const formatAmount = (v) => Math.round(Number(v)).toLocaleString('vi-VN');
   const formatShort = (v) => {
@@ -316,74 +366,121 @@ const AdminDashboard = () => {
         </div>
       </div>
 
-      {/* ─── Top Affiliates Enhanced ─── */}
-      <div className="admin-panel">
-        <div className="panel-header">
-          <h3>🏆 Bảng Xếp Hạng Đại Lý</h3>
-          <button className="custom-select" style={{ background: 'white', cursor: 'pointer' }} onClick={handleExportCSV}>Xuất CSV</button>
+      {/* ─── Bottom Grid for Tables ─── */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '24px', marginTop: '24px' }}>
+        
+        {/* ─── Top Campaigns Enhanced ─── */}
+        <div className="admin-panel" style={{ margin: 0 }}>
+          <div className="panel-header">
+            <h3>🔥 Chiến Dịch Hiệu Quả (Top Funnels)</h3>
+          </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table className="affiliate-leaderboard">
+              <thead>
+                <tr>
+                  <th>Tên Chiến Dịch</th>
+                  <th style={{ textAlign: 'center' }}>Click</th>
+                  <th style={{ textAlign: 'center' }}>Đơn</th>
+                  <th style={{ textAlign: 'center' }}>TL Chốt</th>
+                  <th style={{ textAlign: 'right' }}>Doanh Thu</th>
+                </tr>
+              </thead>
+              <tbody>
+                {loading ? (
+                  Array.from({ length: 5 }).map((_, i) => (
+                    <tr key={i}>
+                      <td><Skeleton width="150px" height="20px" /></td>
+                      <td><Skeleton width="40px" height="20px" style={{ margin: '0 auto' }} /></td>
+                      <td><Skeleton width="40px" height="20px" style={{ margin: '0 auto' }} /></td>
+                      <td><Skeleton width="50px" height="20px" style={{ margin: '0 auto' }} /></td>
+                      <td style={{ textAlign: 'right' }}><Skeleton width="100px" height="20px" style={{ marginLeft: 'auto' }} /></td>
+                    </tr>
+                  ))
+                ) : topCampaigns.length === 0 ? (
+                  <tr>
+                    <td colSpan="5" style={{ textAlign: 'center', padding: '32px', color: '#9CA3AF' }}>
+                      Chưa có dữ liệu chiến dịch.
+                    </td>
+                  </tr>
+                ) : topCampaigns.map((camp, i) => (
+                  <tr key={camp.id}>
+                    <td>
+                      <div style={{ fontWeight: 600, color: '#111827', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        {i < 3 && <span style={{ fontSize: '14px' }}>{i === 0 ? '🥇' : i === 1 ? '🥈' : '🥉'}</span>}
+                        {camp.name}
+                        {camp.status === 'inactive' && <span style={{ fontSize: '10px', padding: '2px 4px', background: '#FEE2E2', color: '#EF4444', borderRadius: '4px', fontWeight: 700 }}>ĐÓNG</span>}
+                      </div>
+                    </td>
+                    <td style={{ textAlign: 'center', fontWeight: 600, color: '#3B82F6' }}>{camp.clicks}</td>
+                    <td style={{ textAlign: 'center', fontWeight: 600 }}>{camp.approved}<span style={{color: '#9CA3AF', fontSize: '12px', fontWeight: 500}}>.{camp.orders}</span></td>
+                    <td style={{ textAlign: 'center' }}>
+                      <span className={`rate-badge ${Number(camp.conversionRate) >= 10 ? 'rate-high' : Number(camp.conversionRate) >= 2 ? 'rate-mid' : 'rate-low'}`}>
+                        {camp.conversionRate}%
+                      </span>
+                    </td>
+                    <td className="numeric-cell money-green">{formatAmount(camp.revenue)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
 
-        <div style={{ overflowX: 'auto' }}>
-          <table className="affiliate-leaderboard">
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Đại Lý</th>
-                <th style={{ textAlign: 'center' }}>Đơn Hàng</th>
-                <th style={{ textAlign: 'center' }}>Duyệt</th>
-                <th style={{ textAlign: 'center' }}>Tỷ Lệ</th>
-                <th style={{ textAlign: 'right' }}>Doanh Thu</th>
-                <th style={{ textAlign: 'right' }}>Hoa Hồng</th>
-              </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                Array.from({ length: 5 }).map((_, i) => (
-                  <tr key={i}>
-                    <td><Skeleton width="20px" height="20px" /></td>
-                    <td><Skeleton width="200px" height="20px" /></td>
-                    <td><Skeleton width="40px" height="20px" /></td>
-                    <td><Skeleton width="40px" height="20px" /></td>
-                    <td><Skeleton width="50px" height="20px" /></td>
-                    <td style={{ textAlign: 'right' }}><Skeleton width="100px" height="20px" style={{ marginLeft: 'auto' }} /></td>
-                    <td style={{ textAlign: 'right' }}><Skeleton width="100px" height="20px" style={{ marginLeft: 'auto' }} /></td>
-                  </tr>
-                ))
-              ) : topAffiliates.length === 0 ? (
+        {/* ─── Top Affiliates Enhanced ─── */}
+        <div className="admin-panel" style={{ margin: 0 }}>
+          <div className="panel-header">
+            <h3>🏆 Bảng Xếp Hạng Đại Lý</h3>
+            <button className="custom-select" style={{ background: 'white', cursor: 'pointer' }} onClick={handleExportCSV}>Xuất CSV</button>
+          </div>
+          <div style={{ overflowX: 'auto' }}>
+            <table className="affiliate-leaderboard">
+              <thead>
                 <tr>
-                  <td colSpan="7" style={{ textAlign: 'center', padding: '32px', color: '#9CA3AF' }}>
-                    Chưa có đại lý nào.
-                  </td>
+                  <th>Đại Lý</th>
+                  <th style={{ textAlign: 'center' }}>Đơn</th>
+                  <th style={{ textAlign: 'center' }}>Tỷ Lệ</th>
+                  <th style={{ textAlign: 'right' }}>Hoa Hồng</th>
                 </tr>
-              ) : topAffiliates.map((aff, i) => (
-                <tr key={aff.id}>
-                  <td>
-                    <div className="rank-number" style={{ background: rankColors[i] || '#9CA3AF' }}>{i + 1}</div>
-                  </td>
-                  <td>
-                    <div className="aff-user-cell">
-                      <div className="aff-avatar" style={{ backgroundColor: rankColors[i] || '#6B7280' }}>
-                        {(aff.full_name || '?').charAt(0).toUpperCase()}
+              </thead>
+              <tbody>
+                {loading ? (
+                  Array.from({ length: 5 }).map((_, i) => (
+                    <tr key={i}>
+                      <td><Skeleton width="150px" height="20px" /></td>
+                      <td><Skeleton width="40px" height="20px" style={{ margin: '0 auto' }} /></td>
+                      <td><Skeleton width="50px" height="20px" style={{ margin: '0 auto' }} /></td>
+                      <td style={{ textAlign: 'right' }}><Skeleton width="100px" height="20px" style={{ marginLeft: 'auto' }} /></td>
+                    </tr>
+                  ))
+                ) : topAffiliates.length === 0 ? (
+                  <tr>
+                    <td colSpan="4" style={{ textAlign: 'center', padding: '32px', color: '#9CA3AF' }}>
+                      Chưa có đại lý nào.
+                    </td>
+                  </tr>
+                ) : topAffiliates.map((aff, i) => (
+                  <tr key={aff.id}>
+                    <td>
+                      <div className="aff-user-cell" style={{ gap: '8px' }}>
+                        <div className="rank-number" style={{ background: rankColors[i] || '#9CA3AF', flexShrink: 0, width: '22px', height: '22px', fontSize: '11px' }}>{i + 1}</div>
+                        <div>
+                          <div className="aff-name" style={{ fontSize: '13px' }}>{aff.full_name || 'Chưa cập nhật'}</div>
+                          <div className="aff-email" style={{ fontSize: '11px' }}>{aff.email.split('@')[0]}</div>
+                        </div>
                       </div>
-                      <div>
-                        <div className="aff-name">{aff.full_name || 'Chưa cập nhật'}</div>
-                        <div className="aff-email">{aff.email}</div>
-                      </div>
-                    </div>
-                  </td>
-                  <td style={{ textAlign: 'center', fontWeight: 700 }}>{aff.orders}</td>
-                  <td style={{ textAlign: 'center', fontWeight: 700, color: '#10B981' }}>{aff.approvedOrders}</td>
-                  <td style={{ textAlign: 'center' }}>
-                    <span className={`rate-badge ${Number(aff.rate) >= 70 ? 'rate-high' : Number(aff.rate) >= 40 ? 'rate-mid' : 'rate-low'}`}>
-                      {aff.rate}%
-                    </span>
-                  </td>
-                  <td className="numeric-cell">{formatAmount(aff.totalRevenue)}</td>
-                  <td className="numeric-cell money-green">{formatAmount(aff.totalCommission)}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
+                    </td>
+                    <td style={{ textAlign: 'center', fontWeight: 600 }}>{aff.approvedOrders}<span style={{color: '#9CA3AF', fontSize: '12px', fontWeight: 500}}>.{aff.orders}</span></td>
+                    <td style={{ textAlign: 'center' }}>
+                      <span className={`rate-badge ${Number(aff.rate) >= 70 ? 'rate-high' : Number(aff.rate) >= 40 ? 'rate-mid' : 'rate-low'}`}>
+                        {aff.rate}%
+                      </span>
+                    </td>
+                    <td className="numeric-cell money-green">{formatAmount(aff.totalCommission)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
       </div>
     </div>
