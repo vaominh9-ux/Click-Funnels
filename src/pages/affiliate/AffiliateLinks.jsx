@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Copy, Link as LinkIcon, BarChart2, CheckCircle2, ChevronDown, Filter, Loader2 } from 'lucide-react';
+import { Search, Link as LinkIcon, Filter, Copy, CheckCircle2, ChevronDown, Loader2 } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import Skeleton from '../../components/common/Skeleton';
@@ -12,6 +12,7 @@ export default function AffiliateLinks() {
   const [campaigns, setCampaigns] = useState([]);
   const [selectedCampaign, setSelectedCampaign] = useState(null);
   const [utmSource, setUtmSource] = useState('');
+  const [copiedRowId, setCopiedRowId] = useState(null);
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(true);
 
@@ -108,33 +109,51 @@ export default function AffiliateLinks() {
   const addToast = useToast();
 
   const handleCopy = async () => {
-    if (!selectedCampaign || !profile) return;
-    navigator.clipboard.writeText(generatedLink);
-    setCopied(true);
-    addToast('Đã sao chép đường dẫn thành công', 'success');
-    
-    // Upsert link to DB (tạo mới nếu chưa có, bỏ qua nếu đã tồn tại)
-    const { error } = await supabase
-      .from('affiliate_links')
-      .upsert({
-        campaign_id: selectedCampaign.id,
-        affiliate_id: profile.id,
-        sub_id1: utmSource || '',
-        generated_url: generatedLink,
-        short_code: `URL-${Math.random().toString(36).substr(2, 6)}`
-      }, { onConflict: 'affiliate_id,campaign_id,sub_id1', ignoreDuplicates: true });
-
-    if (!error) {
-      // Refresh links list
-      const { data: linksData } = await supabase
+    if (!generatedLink) return;
+    try {
+      await navigator.clipboard.writeText(generatedLink);
+      addToast('success', 'Đã copy link thành công!');
+      
+      // Auto-save the link to DB if it's a new combination
+      const { error } = await supabase
         .from('affiliate_links')
-        .select('*, campaigns(name)')
-        .eq('affiliate_id', profile.id)
-        .order('created_at', { ascending: false });
-      if (linksData) setLinks(linksData);
+        .upsert({
+          campaign_id: selectedCampaign.id,
+          affiliate_id: profile.id,
+          sub_id1: utmSource || '',
+        }, { onConflict: 'affiliate_id, campaign_id, sub_id1' }); // Prevent inserting duplicate links
+
+      if (!error) {
+        // Refresh the list without overriding typing
+        const { data } = await supabase
+          .from('affiliate_links')
+          .select('*, campaigns(name, status)')
+          .eq('affiliate_id', profile.id)
+          .order('created_at', { ascending: false });
+        if (data) setLinks(data);
+      }
+    } catch (err) {
+      addToast('error', 'Không thể copy link');
     }
+  };
+
+  const handleCopyRow = async (linkRow) => {
+    if (!profile) return;
+    const trackingDomain = window.location.hostname === 'localhost' 
+      ? 'http://localhost:5173' 
+      : 'https://click-funnels.vercel.app';
+      
+    const utmParam = linkRow.sub_id1 ? `&utm_source=${encodeURIComponent(linkRow.sub_id1)}` : '';
+    const linkStr = `${trackingDomain}/go/${profile.ref_code}?campaign=${linkRow.campaign_id}${utmParam}`;
     
-    setTimeout(() => setCopied(false), 2000);
+    try {
+      await navigator.clipboard.writeText(linkStr);
+      setCopiedRowId(linkRow.id);
+      addToast('success', 'Đã copy link thành công!');
+      setTimeout(() => setCopiedRowId(null), 2000);
+    } catch (err) {
+      addToast('error', 'Lỗi copy link');
+    }
   };
 
   return (
@@ -222,38 +241,54 @@ export default function AffiliateLinks() {
                 <th>LINK ĐƯỢC THEO DÕI (UTM TAG)</th>
                 <th style={{textAlign: 'center'}}>SỐ CLICK</th>
                 <th style={{textAlign: 'center'}}>ĐĂNG KÝ (LEADS)</th>
-                <th style={{textAlign: 'center'}}>CHỐT SALE</th>
-                <th style={{textAlign: 'center'}}>TỈ LỆ CHUYỂN ĐỔI</th>
+                <th style={{ width: '15%' }}>CHỐT SALE</th>
+                <th style={{ width: '15%' }}>TỈ LỆ CHUYỂN ĐỔI</th>
+                <th style={{ width: '10%' }}>THAO TÁC</th>
               </tr>
             </thead>
             <tbody>
-              {links.map(link => (
+              {links.map((link) => (
                 <tr key={link.id}>
                   <td>
-                    <div style={{fontWeight: 600, marginBottom: '4px'}}>
-                      {link.campaigns?.name}
-                    </div>
-                    <div style={{color: '#9CA3AF', fontSize: '12px'}}>
-                      UTM: {link.sub_id1 || '(Mặc định)'}
+                    <div style={{ fontWeight: 600, color: '#1E293B' }}>{link.campaigns ? link.campaigns.name : 'Chiến dịch đã xóa'}</div>
+                    <div style={{ fontSize: '13px', color: '#94A3B8', marginTop: '4px' }}>
+                      UTM: <span style={{ background: '#F1F5F9', padding: '2px 6px', borderRadius: '4px' }}>{link.sub_id1 ? link.sub_id1 : '(Mặc định)'}</span>
                     </div>
                   </td>
-                  <td style={{textAlign: 'center', fontWeight: 600, color: '#3B82F6'}}>{(link.clicks || 0).toLocaleString()}</td>
-                  <td style={{textAlign: 'center', fontWeight: 600, color: '#F59E0B'}}>{(link.leads || 0).toLocaleString()}</td>
-                  <td style={{textAlign: 'center', fontWeight: 700, color: '#10B981'}}>{(link.sales || 0)}</td>
-                  <td style={{textAlign: 'center'}}>
-                    <span className="conversion-badge">
-                      {link.clicks > 0 ? ((link.sales / link.clicks) * 100).toFixed(1) : 0}%
+                  <td style={{ color: '#3B82F6', fontWeight: 600, textAlign: 'center' }}>{link.clicks || 0}</td>
+                  <td style={{ color: '#F59E0B', fontWeight: 600, textAlign: 'center' }}>{link.leads || 0}</td>
+                  <td style={{ color: '#10B981', fontWeight: 600 }}>{link.sales || 0}</td>
+                  <td>
+                    <span style={{ 
+                      background: '#F0FDF4', color: '#16A34A', 
+                      padding: '4px 10px', borderRadius: '20px', 
+                      fontSize: '13px', fontWeight: 600 
+                    }}>
+                      {link.clicks > 0 ? ((link.leads / link.clicks) * 100).toFixed(1) : 0}%
                     </span>
+                  </td>
+                  <td>
+                    <button 
+                      onClick={() => handleCopyRow(link)}
+                      style={{
+                        background: 'none', border: '1px solid #CBD5E1', padding: '6px 10px', 
+                        borderRadius: '6px', cursor: 'pointer', display: 'flex', alignItems: 'center', 
+                        gap: '6px', color: '#475569', fontSize: '12px'
+                      }}
+                      title="Copy lại link này"
+                    >
+                      {copiedRowId === link.id ? <CheckCircle2 size={14} color="#10B981" /> : <Copy size={14} />}
+                      {copiedRowId === link.id ? 'Copied' : 'Copy'}
+                    </button>
                   </td>
                 </tr>
               ))}
               {links.length === 0 && (
                 <tr>
-                  <td colSpan="5" style={{textAlign: 'center', padding: '24px', color: '#9CA3AF'}}>Chưa tạo đường link Affiliate nào.</td>
+                  <td colSpan="6" style={{textAlign: 'center', padding: '24px', color: '#9CA3AF'}}>Chưa tạo đường link Affiliate nào.</td>
                 </tr>
               )}
             </tbody>
-            {links.length > 0 && (
             <tfoot>
               <tr>
                 <td style={{fontWeight: 700}}>TỔNG CỘNG</td>
