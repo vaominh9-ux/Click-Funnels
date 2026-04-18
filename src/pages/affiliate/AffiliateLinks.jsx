@@ -241,9 +241,9 @@ export default function AffiliateLinks() {
                 <th>LINK ĐƯỢC THEO DÕI (UTM TAG)</th>
                 <th style={{textAlign: 'center'}}>SỐ CLICK</th>
                 <th style={{textAlign: 'center'}}>ĐĂNG KÝ (LEADS)</th>
-                <th style={{ width: '15%' }}>CHỐT SALE</th>
-                <th style={{ width: '15%' }}>TỈ LỆ CHUYỂN ĐỔI</th>
-                <th style={{ width: '10%' }}>THAO TÁC</th>
+                <th style={{ width: '15%', textAlign: 'center' }}>CHỐT SALE</th>
+                <th style={{ width: '15%', textAlign: 'center' }}>TỈ LỆ CHUYỂN ĐỔI</th>
+                <th style={{ width: '10%', textAlign: 'center' }}>THAO TÁC</th>
               </tr>
             </thead>
             <tbody>
@@ -257,8 +257,8 @@ export default function AffiliateLinks() {
                   </td>
                   <td style={{ color: '#3B82F6', fontWeight: 600, textAlign: 'center' }}>{link.clicks || 0}</td>
                   <td style={{ color: '#F59E0B', fontWeight: 600, textAlign: 'center' }}>{link.leads || 0}</td>
-                  <td style={{ color: '#10B981', fontWeight: 600 }}>{link.sales || 0}</td>
-                  <td>
+                  <td style={{ color: '#10B981', fontWeight: 600, textAlign: 'center' }}>{link.sales || 0}</td>
+                  <td style={{ textAlign: 'center' }}>
                     <span style={{ 
                       background: '#F0FDF4', color: '#16A34A', 
                       padding: '4px 10px', borderRadius: '20px', 
@@ -267,7 +267,7 @@ export default function AffiliateLinks() {
                       {link.clicks > 0 ? ((link.leads / link.clicks) * 100).toFixed(1) : 0}%
                     </span>
                   </td>
-                  <td>
+                  <td style={{ display: 'flex', justifyContent: 'center' }}>
                     <button 
                       onClick={() => handleCopyRow(link)}
                       style={{
