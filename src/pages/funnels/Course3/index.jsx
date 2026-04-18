@@ -109,8 +109,8 @@ const Course3 = () => {
                 ĐỊNH GIÁ TÀI SẢN: <span className="c3-dossier-strike">117.000.000 đ</span>
               </div>
 
-              <div className="c3-dossier-price c3-gold-text">
-                CHỈ THEO YÊU CẦU
+              <div className="c3-dossier-price">
+                <span className="c3-gold-text">CHỈ THEO YÊU CẦU</span>
               </div>
               <p style={{ textAlign: 'center', color: '#94A3B8', fontSize: '14px', marginTop: '8px' }}>
                 (Mức giá kích hoạt hiện tại: {COURSE_INFO.price.toLocaleString('vi-VN')} đ)
