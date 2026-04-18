@@ -72,7 +72,7 @@ export default function AdminCampaignManager() {
   };
 
   const toggleStatus = async (id, currentStatus) => {
-    const nextStatus = currentStatus === 'active' ? 'paused' : 'active';
+    const nextStatus = currentStatus === 'active' ? 'inactive' : 'active';
     
     // Cập nhật UI ngay lập tức để tạo cảm giác mượt (Optimistic UI)
     setCampaigns(campaigns.map(c => 
