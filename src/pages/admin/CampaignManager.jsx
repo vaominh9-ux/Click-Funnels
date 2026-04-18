@@ -15,6 +15,11 @@ export default function AdminCampaignManager() {
   const [newCampaignUrl, setNewCampaignUrl] = useState('');
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  // State quản lý Edit
+  const [editingCampaignId, setEditingCampaignId] = useState(null);
+  const [editName, setEditName] = useState('');
+  const [editUrl, setEditUrl] = useState('');
+
   // Lấy dữ liệu từ Supabase khi vừa vào trang
   useEffect(() => {
     const loadCampaigns = async () => {
@@ -108,7 +113,30 @@ export default function AdminCampaignManager() {
     if (error) {
       console.error('Lỗi khi xóa:', error);
       setCampaigns(previousCampaigns); // Hoàn tác
-      alert('Xóa dự án thất bại!');
+      alert('Xóa dự án thất bại! Lưu ý: Nếu dự án này đã có Đại lý lấy link để chạy, hệ thống sẽ không cho xóa để bảo vệ dữ liệu đo lường. Hãy chuyển trạng thái sang "Tạm Dừng".');
+    }
+  };
+
+  const startEdit = (camp) => {
+    setEditingCampaignId(camp.id);
+    setEditName(camp.name);
+    setEditUrl(camp.landing_page_url);
+  };
+
+  const saveEdit = async (id) => {
+    const previousCampaigns = [...campaigns];
+    setCampaigns(campaigns.map(c => c.id === id ? { ...c, name: editName, landing_page_url: editUrl } : c));
+    setEditingCampaignId(null);
+    
+    const { error } = await supabase
+      .from('campaigns')
+      .update({ name: editName, landing_page_url: editUrl })
+      .eq('id', id);
+
+    if (error) {
+      console.error('Lỗi khi cập nhật:', error);
+      setCampaigns(previousCampaigns);
+      alert('Cập nhật tên/link chiến dịch thất bại!');
     }
   };
 
@@ -209,33 +237,75 @@ export default function AdminCampaignManager() {
             <tbody>
               {campaigns.map((camp) => (
                 <tr key={camp.id}>
-                  <td>
-                    <div className="campaign-name">{camp.name}</div>
-                  </td>
-                  <td>
-                    <div className="campaign-url flex-align-center" style={{gap: '6px'}}>
-                      <LinkIcon size={14} /> {camp.landing_page_url}
-                    </div>
-                  </td>
-                  <td>
-                    <span 
-                      className={`status-badge ${camp.status}`}
-                      style={{cursor: 'pointer'}}
-                      onClick={() => toggleStatus(camp.id, camp.status)}
-                    >
-                      {camp.status === 'active' ? 'Đang Chạy' : 'Tạm Dừng'}
-                    </span>
-                  </td>
-                  <td style={{textAlign: 'right'}}>
-                    <div style={{display: 'flex', gap: '8px', justifyContent: 'flex-end'}}>
-                      <button className="action-btn" title="Chỉnh sửa">
-                        <Edit2 size={16} />
-                      </button>
-                      <button className="action-btn delete" title="Xóa bỏ" onClick={() => deleteCampaign(camp.id)}>
-                        <Trash2 size={16} />
-                      </button>
-                    </div>
-                  </td>
+                  {editingCampaignId === camp.id ? (
+                    <>
+                      <td>
+                        <input 
+                          value={editName} 
+                          onChange={e => setEditName(e.target.value)} 
+                          style={{width:'100%', padding:'8px', border:'1px solid #CBD5E1', borderRadius:'4px', fontSize:'14px'}}
+                        />
+                      </td>
+                      <td>
+                        <input 
+                          value={editUrl} 
+                          onChange={e => setEditUrl(e.target.value)} 
+                          style={{width:'100%', padding:'8px', border:'1px solid #CBD5E1', borderRadius:'4px', fontSize:'14px'}}
+                        />
+                      </td>
+                      <td>
+                        <span className={`status-badge ${camp.status}`}>
+                          {camp.status === 'active' ? 'Đang Chạy' : 'Tạm Dừng'}
+                        </span>
+                      </td>
+                      <td style={{textAlign: 'right'}}>
+                        <div style={{display: 'flex', gap: '8px', justifyContent: 'flex-end'}}>
+                          <button 
+                            onClick={() => saveEdit(camp.id)}
+                            style={{background:'#10B981', color:'white', border:'none', padding:'6px 12px', borderRadius:'4px', cursor:'pointer'}}
+                          >
+                            Lưu
+                          </button>
+                          <button 
+                            onClick={() => setEditingCampaignId(null)}
+                            style={{background:'#64748B', color:'white', border:'none', padding:'6px 12px', borderRadius:'4px', cursor:'pointer'}}
+                          >
+                            Hủy
+                          </button>
+                        </div>
+                      </td>
+                    </>
+                  ) : (
+                    <>
+                      <td>
+                        <div className="campaign-name">{camp.name}</div>
+                      </td>
+                      <td>
+                        <div className="campaign-url flex-align-center" style={{gap: '6px', fontSize: '13px', color: '#64748B', wordBreak: 'break-all'}}>
+                          <LinkIcon size={14} style={{flexShrink: 0}} /> {camp.landing_page_url}
+                        </div>
+                      </td>
+                      <td>
+                        <span 
+                          className={`status-badge ${camp.status}`}
+                          style={{cursor: 'pointer'}}
+                          onClick={() => toggleStatus(camp.id, camp.status)}
+                        >
+                          {camp.status === 'active' ? 'Đang Chạy' : 'Tạm Dừng'}
+                        </span>
+                      </td>
+                      <td style={{textAlign: 'right'}}>
+                        <div style={{display: 'flex', gap: '8px', justifyContent: 'flex-end'}}>
+                          <button className="action-btn" title="Chỉnh sửa" onClick={() => startEdit(camp)}>
+                            <Edit2 size={16} />
+                          </button>
+                          <button className="action-btn delete" title="Xóa bỏ" onClick={() => deleteCampaign(camp.id)}>
+                            <Trash2 size={16} />
+                          </button>
+                        </div>
+                      </td>
+                    </>
+                  )}
                 </tr>
               ))}
             </tbody>
