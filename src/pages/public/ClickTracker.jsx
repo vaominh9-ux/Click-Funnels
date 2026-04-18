@@ -74,6 +74,8 @@ export default function ClickTracker() {
         }
 
         url.searchParams.set('ref', refCode);
+        if (campaignId) url.searchParams.set('camp', campaignId);
+        if (data.link_id) url.searchParams.set('link', data.link_id);
         
         // Giữ lại UTM params
         const utmSource = searchParams.get('utm_source');
