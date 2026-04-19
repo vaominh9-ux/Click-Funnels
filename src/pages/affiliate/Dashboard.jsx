@@ -193,6 +193,7 @@ const AffiliateDashboard = () => {
   };
 
   // Căn chỉnh chữ lớn nhất có thể theo chiều ngang thẻ lưới 2 cột
+  const revenueStrLength = formatCompactParts(filteredData.revenueStr).value.length;
   const dynamicRevenueFontSize = revenueStrLength >= 17 ? 'clamp(1.8rem, 4.5vw, 2.8rem)' : // Dạng >= 10.000 Tỷ
                                  revenueStrLength >= 13 ? 'clamp(2.2rem, 5vw, 3.3rem)' :   // Dạng >= 10 Tỷ
                                                           'clamp(2.5rem, 5vw, 3.6rem)';    // Bình thường
