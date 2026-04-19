@@ -140,7 +140,7 @@ export default async function handler(req, res) {
     let subjectTemplate = DEFAULT_REG_SUBJECT;
     let htmlTemplate = DEFAULT_REG_HTML;
 
-    if (SUPABASE_URL && SUPABASE_KEY) {
+    if (SUPABASE_URL && SUPABASE_KEY && SUPABASE_URL !== 'undefined') {
       try {
         const settingsRes = await fetch(
           `${SUPABASE_URL}/rest/v1/system_settings?key=eq.email_template_registration&select=value`,
@@ -156,16 +156,17 @@ export default async function handler(req, res) {
       }
     }
 
-    const formattedPrice = Number(coursePrice).toLocaleString('vi-VN');
+    const formattedPrice = Number(coursePrice || 0).toLocaleString('vi-VN');
     const bankName = bankConfig?.bankName || 'BIDV';
     const accountNo = bankConfig?.accountNo || '96247NTH195';
     const accountName = bankConfig?.accountName || 'NGUYEN TRONG HUU';
-    const firstName = name.split(' ').pop();
+    const safeName = name || 'Khách Hàng';
+    const firstName = safeName.split(' ').pop() || 'bạn';
 
     const variables = {
       firstName,
       firstName_upper: firstName.toUpperCase(),
-      name,
+      name: safeName,
       courseName,
       formattedPrice,
       paymentCode,
