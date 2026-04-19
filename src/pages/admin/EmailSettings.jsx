@@ -375,22 +375,22 @@ const EmailSettings = () => {
             <div className="es-guide">
               <p>Bạn có thể chèn các biến sau vào Tiêu đề hoặc HTML. Hệ thống sẽ tự động điền dữ liệu thực tế vào lúc gửi:</p>
               <ul>
-                <li><code>{{firstName}}</code> — Tên ngắn gọi (VD: Hữu)</li>
-                <li><code>{{firstName_upper}}</code> — Tên ngắn viết HOA (VD: HỮU)</li>
-                <li><code>{{name}}</code> — Họ Tên Đầy Đủ</li>
-                <li><code>{{courseName}}</code> — Tên khóa học / Sản phẩm</li>
-                <li><code>{{formattedPrice}}</code> — Số tiền (VD: 10.000)</li>
-                <li><code>{{paymentCode}}</code> — Mã chuyển khoản</li>
-                <li><code>{{year}}</code> — Năm hiện tại (VD: 2026)</li>
+                <li><code>{`{{firstName}}`}</code> — Tên ngắn gọi (VD: Hữu)</li>
+                <li><code>{`{{firstName_upper}}`}</code> — Tên ngắn viết HOA (VD: HỮU)</li>
+                <li><code>{`{{name}}`}</code> — Họ Tên Đầy Đủ</li>
+                <li><code>{`{{courseName}}`}</code> — Tên khóa học / Sản phẩm</li>
+                <li><code>{`{{formattedPrice}}`}</code> — Số tiền (VD: 10.000)</li>
+                <li><code>{`{{paymentCode}}`}</code> — Mã chuyển khoản</li>
+                <li><code>{`{{year}}`}</code> — Năm hiện tại (VD: 2026)</li>
               </ul>
 
               {activeTab === 'registration' && (
                 <>
                   <h4 style={{ marginTop: '16px', marginBottom: '8px', color: '#FFFFFF', fontSize: '13px' }}>Chỉ dùng cho Email Đăng Ký:</h4>
                   <ul>
-                    <li><code>{{bankName}}</code> — Tên ngân hàng nhận</li>
-                    <li><code>{{accountNo}}</code> — Số tài khoản nhận</li>
-                    <li><code>{{accountName}}</code> — Chủ tài khoản</li>
+                    <li><code>{`{{bankName}}`}</code> — Tên ngân hàng nhận</li>
+                    <li><code>{`{{accountNo}}`}</code> — Số tài khoản nhận</li>
+                    <li><code>{`{{accountName}}`}</code> — Chủ tài khoản</li>
                   </ul>
                 </>
               )}
@@ -399,7 +399,7 @@ const EmailSettings = () => {
                 <>
                   <h4 style={{ marginTop: '16px', marginBottom: '8px', color: '#FFFFFF', fontSize: '13px' }}>Chỉ dùng cho Email Thanh Toán:</h4>
                   <ul>
-                    <li><code>{{formattedDate}}</code> — Thời gian thanh toán (VD: 19/04/2026 12:45)</li>
+                    <li><code>{`{{formattedDate}}`}</code> — Thời gian thanh toán (VD: 19/04/2026 12:45)</li>
                   </ul>
                 </>
               )}
