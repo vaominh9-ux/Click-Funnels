@@ -228,7 +228,7 @@ const AffiliateDashboard = () => {
               <div className="fomo-shimmer"></div>
 
               {/* HEADER ROW: Icon + Title + Badge */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '16px', zIndex: 2, position: 'relative' }}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', width: '100%', marginBottom: '16px', zIndex: 2, position: 'relative' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
                   <div className="qa-icon" style={{ background: '#FFF1F2', color: '#E11D48', boxShadow: '0 0 15px rgba(225,29,72,0.3)', flexShrink: 0, width: '40px', height: '40px' }}>
                     <Target size={20} className="fomo-pulse-icon" />
