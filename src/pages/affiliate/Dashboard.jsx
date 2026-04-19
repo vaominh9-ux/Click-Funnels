@@ -228,49 +228,52 @@ const AffiliateDashboard = () => {
             <div className="cf-card fomo-glow-card" style={{ display: 'flex', flexDirection: 'column', padding: '24px', gridColumn: 'span 2', position: 'relative', overflow: 'hidden' }}>
               <div className="fomo-shimmer"></div>
 
-              {/* Định vị tuyệt đối cho Badge để luôn neo ở góc phải, không bị chữ dài đẩy mất */}
-              <div className="fomo-badge" style={{ position: 'absolute', top: '20px', right: '20px', zIndex: 2 }}>
-                🚀 TOP 5% Tuần Này
-              </div>
-
-              <div style={{ display: 'flex', alignItems: 'flex-start', zIndex: 1, paddingRight: '120px' }}>
-                <div style={{ display: 'flex', alignItems: 'flex-start', gap: '16px' }}>
-                  <div className="qa-icon" style={{ background: '#FFF1F2', color: '#E11D48', boxShadow: '0 0 15px rgba(225,29,72,0.3)', flexShrink: 0 }}>
-                    <Target size={24} className="fomo-pulse-icon" />
+              {/* HEADER ROW: Icon + Title + Badge */}
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', width: '100%', marginBottom: '16px', zIndex: 2, position: 'relative' }}>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                  <div className="qa-icon" style={{ background: '#FFF1F2', color: '#E11D48', boxShadow: '0 0 15px rgba(225,29,72,0.3)', flexShrink: 0, width: '40px', height: '40px' }}>
+                    <Target size={20} className="fomo-pulse-icon" />
                   </div>
-                  <div style={{ minWidth: 0 }}>
-                    <div style={{ fontSize: 13, fontWeight: 800, color: '#BE123C', textTransform: 'uppercase', marginBottom: 6, letterSpacing: '0.5px' }}>
-                      🔥 Tổng Doanh Số Bán Hàng
-                    </div>
-                    {/* Dùng nowrap và format rút gọn để đảm bảo luôn chỉ 1 dòng cực mượt */}
-                    <div
-                      title={new Intl.NumberFormat('vi-VN').format(filteredData.revenueStr) + ' đ'}
-                      style={{
-                        fontSize: '3.6rem',
-                        fontWeight: 900,
-                        color: '#9F1239',
-                        textShadow: '0 2px 10px rgba(159,18,57,0.15)',
-                        lineHeight: '1',
-                        whiteSpace: 'nowrap',
-                        display: 'flex',
-                        alignItems: 'baseline',
-                        gap: '8px',
-                        letterSpacing: '-1px'
-                      }}
-                    >
-                      {loading ? <Skeleton width="200px" height="48px" /> : (
-                        <>
-                          {formatCompactParts(filteredData.revenueStr).value}
-                          <span style={{ fontSize: '0.45em', opacity: 0.85, letterSpacing: 'normal', fontWeight: 800 }}>
-                            {formatCompactParts(filteredData.revenueStr).unit}
-                          </span>
-                        </>
-                      )}
-                    </div>
+                  <div style={{ fontSize: 13, fontWeight: 800, color: '#BE123C', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+                    🔥 Tổng Doanh Số Bán Hàng
                   </div>
                 </div>
+
+                <div className="fomo-badge" style={{ position: 'static' }}>
+                  🚀 TOP 5% Tuần Này
+                </div>
               </div>
-              <div style={{ marginTop: 'auto', paddingTop: '16px', display: 'flex', alignItems: 'center', zIndex: 1 }}>
+
+              {/* NUMBER ROW */}
+              <div
+                title={new Intl.NumberFormat('vi-VN').format(filteredData.revenueStr) + ' đ'}
+                style={{
+                  fontSize: '3.6rem',
+                  fontWeight: 900,
+                  color: '#9F1239',
+                  textShadow: '0 2px 10px rgba(159,18,57,0.15)',
+                  lineHeight: '1',
+                  whiteSpace: 'nowrap',
+                  display: 'flex',
+                  alignItems: 'baseline',
+                  gap: '8px',
+                  letterSpacing: '-1px',
+                  zIndex: 2,
+                  position: 'relative'
+                }}
+              >
+                {loading ? <Skeleton width="200px" height="48px" /> : (
+                  <>
+                    {formatCompactParts(filteredData.revenueStr).value}
+                    <span style={{ fontSize: '0.45em', opacity: 0.85, letterSpacing: 'normal', fontWeight: 800 }}>
+                      {formatCompactParts(filteredData.revenueStr).unit}
+                    </span>
+                  </>
+                )}
+              </div>
+
+              {/* FOOTER ROW */}
+              <div style={{ marginTop: 'auto', paddingTop: '16px', display: 'flex', alignItems: 'center', zIndex: 2, position: 'relative' }}>
                 <div style={{ fontSize: 13, color: '#881337', fontWeight: 500, background: 'rgba(255,228,230,0.5)', padding: '6px 12px', borderRadius: '20px', display: 'inline-block' }}>
                   * Khoản tiền khổng lồ bạn mang về cho hệ thống. Khoe ngay!
                 </div>
