@@ -235,7 +235,7 @@ const AffiliateDashboard = () => {
                     <Target size={20} className="fomo-pulse-icon" />
                   </div>
                   <div style={{ fontSize: 13, fontWeight: 800, color: '#BE123C', textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-                    🔥 Tổng Doanh Số Bán Hàng
+                    🔥 Tổng Doanh Số
                   </div>
                 </div>
 
