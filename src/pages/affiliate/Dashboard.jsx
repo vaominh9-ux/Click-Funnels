@@ -240,7 +240,7 @@ const AffiliateDashboard = () => {
                   </div>
                   <div style={{ minWidth: 0 }}>
                     <div style={{ fontSize: 13, fontWeight: 800, color: '#BE123C', textTransform: 'uppercase', marginBottom: 6, letterSpacing: '0.5px' }}>
-                      🔥 Doanh Thu Mạng Lưới
+                      🔥 Tổng Doanh Số Bán Hàng
                     </div>
                     {/* Dùng nowrap và format rút gọn để đảm bảo luôn chỉ 1 dòng cực mượt */}
                     <div
