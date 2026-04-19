@@ -363,7 +363,7 @@ const EmailSettings = () => {
           onClick={() => setActiveTab('registration')}
         >
           <Mail size={16} />
-          <span>Email Xác Nhận Đăng Ký (Chưa thanh toán)</span>
+          <span>Email Xác Nhận Đăng Ký</span>
         </button>
         <button 
           className={`es-tab ${activeTab === 'payment' ? 'active' : ''}`}
@@ -388,57 +388,39 @@ const EmailSettings = () => {
                 />
               </div>
 
-              <div className="es-field" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8px' }}>
-                  <div>
-                    <label style={{ marginBottom: 0 }}>Nội dung Email</label>
-                    <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#6B7280' }}>
-                      {viewMode === 'visual' ? 'Click trực tiếp vào chữ bên dưới để chỉnh sửa!' : 'Dành cho người biết lập trình HTML.'}
-                    </p>
-                  </div>
-                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <div style={{ display: 'flex', background: '#F3F4F6', borderRadius: '8px', padding: '4px' }}>
-                      <button 
-                        type="button" 
-                        onClick={() => setViewMode('visual')}
-                        style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 12px', border: 'none', background: viewMode === 'visual' ? '#FFFFFF' : 'transparent', color: viewMode === 'visual' ? '#3B82F6' : '#6B7280', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: 600, boxShadow: viewMode === 'visual' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none' }}>
-                        <Eye size={14} /> Trực Quan
-                      </button>
-                      <button 
-                        type="button" 
-                        onClick={() => setViewMode('code')}
-                        style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 12px', border: 'none', background: viewMode === 'code' ? '#FFFFFF' : 'transparent', color: viewMode === 'code' ? '#3B82F6' : '#6B7280', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: 600, boxShadow: viewMode === 'code' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none' }}>
-                        <Code size={14} /> Mã Code
+              <div className="es-field" style={{ flex: 1 }}>
+                <label>Nội dung Email</label>
+                <div className="es-editor-wrapper">
+                  <div className="es-editor-toolbar">
+                    <span className="es-editor-info">
+                      {viewMode === 'visual' ? '✏️ Click trực tiếp vào nội dung để chỉnh sửa' : '💻 Chỉnh sửa mã nguồn HTML'}
+                    </span>
+                    <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                      <div className="es-mode-toggle">
+                        <button type="button" className={`es-mode-btn ${viewMode === 'visual' ? 'active' : ''}`} onClick={() => setViewMode('visual')}>
+                          <Eye size={14} /> Trực Quan
+                        </button>
+                        <button type="button" className={`es-mode-btn ${viewMode === 'code' ? 'active' : ''}`} onClick={() => setViewMode('code')}>
+                          <Code size={14} /> Mã Code
+                        </button>
+                      </div>
+                      <button type="button" className="es-restore-btn" onClick={restoreDefault}>
+                        <RefreshCcw size={14} /> Mặc định
                       </button>
                     </div>
-                    <button type="button" className="es-restore-btn" onClick={restoreDefault} style={{ marginLeft: '12px' }}>
-                      <RefreshCcw size={14} /> Khôi phục gốc
-                    </button>
                   </div>
-                </div>
-                
-                <div style={{ flex: 1, display: 'flex', border: '1px solid #D1D5DB', borderRadius: '8px', overflow: 'hidden', background: viewMode === 'visual' ? '#E5E7EB' : '#F8FAFC' }}>
+                  
                   {viewMode === 'visual' ? (
-                    <div style={{ display: 'flex', justifyContent: 'center', padding: '24px 0', width: '100%', overflowY: 'auto' }}>
-                      <iframe 
-                        ref={iframeRef}
-                        style={{ 
-                          width: '100%', 
-                          maxWidth: '600px', 
-                          height: '600px', 
-                          border: 'none', 
-                          background: '#FFFFFF',
-                          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
-                        }}
-                        title="Live Email Editor"
-                      />
-                    </div>
+                    <iframe 
+                      ref={iframeRef}
+                      className="es-visual-frame"
+                      title="Live Email Editor"
+                    />
                   ) : (
                     <textarea 
                       value={currentHtml}
                       onChange={(e) => handleHtmlChange(e.target.value)}
                       className="es-html-editor"
-                      style={{ border: 'none', borderRadius: 0, minHeight: '600px' }}
                       spellCheck="false"
                     />
                   )}
@@ -458,36 +440,36 @@ const EmailSettings = () => {
           <div className="es-card">
             <div className="es-card-header">
               <LayoutTemplate size={18} />
-              <h3>Các Biến Sử Dụng Khả Dụng</h3>
+              <h3>Biến Khả Dụng</h3>
             </div>
             <div className="es-guide">
-              <p>Bạn có thể chèn các biến sau vào Tiêu đề hoặc HTML. Hệ thống sẽ tự động điền dữ liệu thực tế vào lúc gửi:</p>
+              <p>Chèn các biến sau vào Tiêu đề hoặc HTML. Hệ thống sẽ tự điền dữ liệu thực tế khi gửi:</p>
               <ul>
-                <li><code>{`{{firstName}}`}</code> — Tên ngắn gọi (VD: Hữu)</li>
-                <li><code>{`{{firstName_upper}}`}</code> — Tên ngắn viết HOA (VD: HỮU)</li>
-                <li><code>{`{{name}}`}</code> — Họ Tên Đầy Đủ</li>
-                <li><code>{`{{courseName}}`}</code> — Tên khóa học / Sản phẩm</li>
-                <li><code>{`{{formattedPrice}}`}</code> — Số tiền (VD: 10.000)</li>
-                <li><code>{`{{paymentCode}}`}</code> — Mã chuyển khoản</li>
-                <li><code>{`{{year}}`}</code> — Năm hiện tại (VD: 2026)</li>
+                <li><code>{`{{firstName}}`}</code> — Tên gọi</li>
+                <li><code>{`{{firstName_upper}}`}</code> — Tên HOA</li>
+                <li><code>{`{{name}}`}</code> — Họ Tên</li>
+                <li><code>{`{{courseName}}`}</code> — Khóa học</li>
+                <li><code>{`{{formattedPrice}}`}</code> — Số tiền</li>
+                <li><code>{`{{paymentCode}}`}</code> — Mã CK</li>
+                <li><code>{`{{year}}`}</code> — Năm</li>
               </ul>
 
               {activeTab === 'registration' && (
                 <>
-                  <h4 style={{ marginTop: '16px', marginBottom: '8px', color: '#FFFFFF', fontSize: '13px' }}>Chỉ dùng cho Email Đăng Ký:</h4>
+                  <h4>Chỉ Email Đăng Ký:</h4>
                   <ul>
-                    <li><code>{`{{bankName}}`}</code> — Tên ngân hàng nhận</li>
-                    <li><code>{`{{accountNo}}`}</code> — Số tài khoản nhận</li>
-                    <li><code>{`{{accountName}}`}</code> — Chủ tài khoản</li>
+                    <li><code>{`{{bankName}}`}</code> — Ngân hàng</li>
+                    <li><code>{`{{accountNo}}`}</code> — STK</li>
+                    <li><code>{`{{accountName}}`}</code> — Chủ TK</li>
                   </ul>
                 </>
               )}
 
               {activeTab === 'payment' && (
                 <>
-                  <h4 style={{ marginTop: '16px', marginBottom: '8px', color: '#FFFFFF', fontSize: '13px' }}>Chỉ dùng cho Email Thanh Toán:</h4>
+                  <h4>Chỉ Email Thanh Toán:</h4>
                   <ul>
-                    <li><code>{`{{formattedDate}}`}</code> — Thời gian thanh toán (VD: 19/04/2026 12:45)</li>
+                    <li><code>{`{{formattedDate}}`}</code> — Thời gian TT</li>
                   </ul>
                 </>
               )}
