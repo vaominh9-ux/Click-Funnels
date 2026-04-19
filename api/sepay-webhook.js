@@ -139,6 +139,55 @@ export default async function handler(req, res) {
     }
 
     console.log(`SePay webhook: Order ${order.id} (code: ${matchCode}) → APPROVED ✅`);
+
+    // === GỬI EMAIL XÁC NHẬN THANH TOÁN THÀNH CÔNG ===
+    try {
+      // Query thông tin khách hàng từ bảng conversions
+      const orderInfoRes = await fetch(
+        `${SUPABASE_URL}/rest/v1/conversions?id=eq.${order.id}&select=customer_name,customer_info,product_name,sale_amount,payment_code,paid_at`,
+        {
+          headers: {
+            'apikey': SUPABASE_KEY,
+            'Authorization': `Bearer ${SUPABASE_KEY}`
+          }
+        }
+      );
+      const orderInfoData = await orderInfoRes.json();
+      
+      if (Array.isArray(orderInfoData) && orderInfoData.length > 0) {
+        const orderInfo = orderInfoData[0];
+        const customerEmail = orderInfo.customer_info?.email || 
+                              orderInfo.customer_info?.phone; // fallback nếu không có email
+        
+        // Chỉ gửi email nếu có email hợp lệ (chứa @)
+        if (customerEmail && customerEmail.includes('@')) {
+          // Gọi API nội bộ gửi email (fire-and-forget)
+          let appUrl = process.env.VITE_APP_URL || 'https://click-funnels.vercel.app';
+          if (!appUrl.startsWith('http') && process.env.VERCEL_URL) {
+            appUrl = `https://${process.env.VERCEL_URL}`;
+          }
+          
+          fetch(`${appUrl}/api/email/send-payment-success`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: orderInfo.customer_name || 'Quý khách',
+              email: customerEmail,
+              courseName: orderInfo.product_name || 'Sản phẩm',
+              coursePrice: orderInfo.sale_amount,
+              paymentCode: orderInfo.payment_code || matchCode,
+              paidAt: orderInfo.paid_at || new Date().toISOString()
+            })
+          })
+          .then(r => r.json())
+          .then(d => console.log('📧 Payment success email:', d.success ? 'sent' : 'failed'))
+          .catch(err => console.warn('Payment email failed (non-blocking):', err));
+        }
+      }
+    } catch (emailErr) {
+      // Email lỗi không ảnh hưởng đến webhook response
+      console.warn('Email notification error (non-blocking):', emailErr);
+    }
     
     return res.status(200).json({ success: true, message: 'Payment verified' });
 

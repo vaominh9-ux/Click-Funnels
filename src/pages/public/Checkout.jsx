@@ -183,6 +183,7 @@ const Checkout = () => {
           customer_info: {
             lead_id: leadInfo.id,
             phone: leadInfo.phone,
+            email: leadInfo.email || null,
             notes: `Mua ${course.name}`
           }
         }]);
@@ -192,6 +193,25 @@ const Checkout = () => {
       setConversionId(paymentCode); // Dùng paymentCode làm key cho realtime
       setPaymentStatus('waiting');
       setElapsedTime(0);
+
+      // === GỬI EMAIL XÁC NHẬN ĐĂNG KÝ (fire-and-forget) ===
+      if (leadInfo.email) {
+        fetch('/api/email/send-registration', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: leadInfo.name,
+            email: leadInfo.email,
+            phone: leadInfo.phone,
+            courseName: course.name,
+            coursePrice: amount,
+            paymentCode: paymentCode,
+            bankConfig: bankConfig
+          })
+        }).then(r => r.json())
+          .then(d => console.log('📧 Registration email:', d.success ? 'sent' : 'skipped'))
+          .catch(err => console.warn('Email send failed (non-blocking):', err));
+      }
       
     } catch (error) {
       console.error(error);
