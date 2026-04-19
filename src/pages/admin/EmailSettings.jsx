@@ -349,7 +349,7 @@ const EmailSettings = () => {
 
     try {
       // Gọi API Vercel Serverless để gửi email (không cần lưu mới có thể test)
-      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const baseUrl = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3000' : '');
       const response = await fetch(`${baseUrl}/api/email/send-test`, {
         method: 'POST',
         headers: {
