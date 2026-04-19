@@ -196,7 +196,8 @@ const Checkout = () => {
 
       // === GỬI EMAIL XÁC NHẬN ĐĂNG KÝ (fire-and-forget) ===
       if (leadInfo.email) {
-        fetch('/api/email/send-registration', {
+        const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+        fetch(`${baseUrl}/api/email/send-registration`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify({
