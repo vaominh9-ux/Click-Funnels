@@ -144,7 +144,7 @@ export default async function handler(req, res) {
       try {
         const settingsRes = await fetch(
           `${SUPABASE_URL}/rest/v1/system_settings?key=eq.email_template_registration&select=value`,
-          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': \`Bearer \${SUPABASE_KEY}\` } }
+          { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
         );
         const settingsData = await settingsRes.json();
         if (Array.isArray(settingsData) && settingsData.length > 0 && settingsData[0].value) {
@@ -181,13 +181,13 @@ export default async function handler(req, res) {
 
     const transporter = createTransporter();
     const info = await transporter.sendMail({
-      from: \`"ClickFunnels" <\${process.env.GMAIL_USER}>\`,
+      from: `"ClickFunnels" <${process.env.GMAIL_USER}>`,
       to: email,
       subject: finalSubject,
       html: finalHtml,
     });
 
-    console.log(\`✅ Registration email sent to \${email}, ID: \${info.messageId}\`);
+    console.log(`✅ Registration email sent to ${email}, ID: ${info.messageId}`);
     return res.status(200).json({ success: true, messageId: info.messageId });
 
   } catch (error) {
