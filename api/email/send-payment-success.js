@@ -1,6 +1,6 @@
 // Vercel Serverless Function — Gửi Email Xác Nhận Thanh Toán Thành Công
 // Route: POST /api/email/send-payment-success
-// Dùng Nodemailer + Gmail SMTP (miễn phí, không cần domain riêng)
+// Style: Alex Hormozi — Bold, Direct, Celebratory
 
 import nodemailer from 'nodemailer';
 
@@ -15,18 +15,12 @@ const createTransporter = () => {
 };
 
 export default async function handler(req, res) {
-  // CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'POST, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
 
-  if (req.method === 'OPTIONS') {
-    return res.status(200).end();
-  }
-
-  if (req.method !== 'POST') {
-    return res.status(405).json({ success: false, message: 'Method not allowed' });
-  }
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ success: false, message: 'Method not allowed' });
 
   if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
     console.error('Missing Gmail SMTP credentials');
@@ -36,16 +30,14 @@ export default async function handler(req, res) {
   try {
     const { name, email, courseName, coursePrice, paymentCode, paidAt } = req.body;
 
-    // Nếu không có email → skip, không lỗi
     if (!email) {
       return res.status(200).json({ success: true, message: 'No email provided, skipped' });
     }
 
     const transporter = createTransporter();
-
     const formattedPrice = Number(coursePrice).toLocaleString('vi-VN');
-    
-    // Format ngày giờ thanh toán
+    const firstName = name.split(' ').pop();
+
     let formattedDate = 'Vừa xong';
     try {
       const d = new Date(paidAt);
@@ -63,76 +55,126 @@ export default async function handler(req, res) {
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 </head>
-<body style="margin:0;padding:0;background-color:#0F172A;font-family:'Segoe UI',Roboto,Arial,sans-serif;">
-  <div style="max-width:600px;margin:0 auto;padding:24px;">
+<body style="margin:0;padding:0;background-color:#000000;font-family:Arial,Helvetica,sans-serif;">
+  <div style="max-width:600px;margin:0 auto;">
     
-    <!-- Header -->
-    <div style="background:linear-gradient(135deg,#064E3B 0%,#065F46 100%);border-radius:16px 16px 0 0;padding:32px 24px;text-align:center;border-bottom:3px solid #34D399;">
-      <div style="font-size:48px;margin-bottom:8px;">✅</div>
-      <h1 style="color:#F8FAFC;font-size:22px;margin:0 0 4px;">Thanh Toán Thành Công!</h1>
-      <p style="color:#6EE7B7;font-size:14px;margin:0;">Đơn hàng đã được xác nhận tự động</p>
+    <!-- TOP BAR — SUCCESS -->
+    <div style="background:#059669;padding:10px 24px;text-align:center;">
+      <span style="color:#FFF;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:2px;">✅ THANH TOÁN ĐÃ XÁC NHẬN — BẠN ĐÃ VÀO TRONG</span>
     </div>
 
-    <!-- Body -->
-    <div style="background:#1E293B;padding:24px;border-radius:0 0 16px 16px;">
+    <!-- MAIN CONTENT -->
+    <div style="background:#000000;padding:40px 32px;">
       
-      <!-- Greeting -->
-      <p style="color:#E2E8F0;font-size:16px;margin:0 0 8px;">
-        Xin chào <strong style="color:#34D399;">${name}</strong>,
-      </p>
-      <p style="color:#CBD5E1;font-size:14px;margin:0 0 24px;line-height:1.6;">
-        🎉 Chúc mừng! Chúng tôi đã nhận được thanh toán của bạn thành công!
-      </p>
-
-      <!-- Success Badge -->
-      <div style="background:rgba(52,211,153,0.1);border:2px solid rgba(52,211,153,0.3);border-radius:12px;padding:20px;margin-bottom:20px;text-align:center;">
-        <div style="color:#34D399;font-size:28px;font-weight:800;margin-bottom:4px;">${formattedPrice} đ</div>
-        <div style="color:#6EE7B7;font-size:13px;">Đã thanh toán thành công</div>
+      <!-- BIG SUCCESS -->
+      <div style="text-align:center;margin-bottom:32px;">
+        <div style="font-size:64px;margin-bottom:12px;">🎉</div>
+        <h1 style="color:#FFFFFF;font-size:32px;line-height:1.2;margin:0 0 8px;font-weight:900;">
+          CHÚC MỪNG, ${firstName.toUpperCase()}!
+        </h1>
+        <p style="color:#34D399;font-size:18px;margin:0;font-weight:700;">
+          Bạn vừa đưa ra quyết định thay đổi cuộc chơi.
+        </p>
       </div>
 
-      <!-- Order Details -->
-      <div style="background:rgba(99,102,241,0.08);border:1px solid rgba(99,102,241,0.2);border-radius:12px;padding:20px;margin-bottom:20px;">
-        <h3 style="color:#818CF8;font-size:14px;text-transform:uppercase;letter-spacing:1px;margin:0 0 16px;">📦 Chi Tiết Giao Dịch</h3>
+      <!-- GREEN DIVIDER -->
+      <div style="width:100%;height:3px;background:linear-gradient(90deg,transparent,#34D399,transparent);margin:0 0 32px;"></div>
+
+      <!-- RECEIPT BOX -->
+      <div style="border:2px solid #1F2937;border-radius:12px;overflow:hidden;margin-bottom:32px;">
+        
+        <!-- Box Header -->
+        <div style="background:#065F46;padding:14px 20px;">
+          <h2 style="color:#FFFFFF;font-size:14px;margin:0;font-weight:800;text-transform:uppercase;letter-spacing:1px;">📦 BIÊN NHẬN GIAO DỊCH</h2>
+        </div>
+
+        <!-- Box Content -->
+        <div style="background:#0A0A0A;padding:20px;">
+          <table style="width:100%;border-collapse:collapse;">
+            <tr>
+              <td style="color:#6B7280;font-size:13px;padding:10px 0;border-bottom:1px solid #1F2937;">Sản phẩm</td>
+              <td style="color:#FFFFFF;font-size:13px;padding:10px 0;text-align:right;font-weight:700;border-bottom:1px solid #1F2937;">${courseName}</td>
+            </tr>
+            <tr>
+              <td style="color:#6B7280;font-size:13px;padding:10px 0;border-bottom:1px solid #1F2937;">Mã đơn hàng</td>
+              <td style="color:#F59E0B;font-size:14px;padding:10px 0;text-align:right;font-weight:800;letter-spacing:2px;border-bottom:1px solid #1F2937;">${paymentCode}</td>
+            </tr>
+            <tr>
+              <td style="color:#6B7280;font-size:13px;padding:10px 0;border-bottom:1px solid #1F2937;">Thời gian</td>
+              <td style="color:#FFFFFF;font-size:13px;padding:10px 0;text-align:right;font-weight:600;border-bottom:1px solid #1F2937;">${formattedDate}</td>
+            </tr>
+            <tr>
+              <td style="color:#6B7280;font-size:13px;padding:10px 0;">Trạng thái</td>
+              <td style="padding:10px 0;text-align:right;">
+                <span style="background:#059669;color:#FFF;font-size:12px;font-weight:800;padding:4px 12px;border-radius:20px;text-transform:uppercase;">ĐÃ THANH TOÁN</span>
+              </td>
+            </tr>
+          </table>
+
+          <!-- Amount -->
+          <div style="background:#111827;border-radius:8px;padding:16px;margin-top:16px;text-align:center;">
+            <div style="color:#6B7280;font-size:12px;text-transform:uppercase;letter-spacing:1px;margin-bottom:4px;">TỔNG THANH TOÁN</div>
+            <div style="color:#34D399;font-size:32px;font-weight:900;">${formattedPrice} đ</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- WHAT HAPPENS NEXT -->
+      <div style="background:#111827;border-radius:12px;padding:24px;margin-bottom:32px;">
+        <h3 style="color:#F59E0B;font-size:16px;margin:0 0 16px;font-weight:900;text-transform:uppercase;">⚡ ĐIỀU GÌ SẼ XẢY RA TIẾP THEO?</h3>
+        
         <table style="width:100%;border-collapse:collapse;">
           <tr>
-            <td style="color:#94A3B8;font-size:13px;padding:8px 0;border-bottom:1px solid rgba(148,163,184,0.1);">Sản phẩm</td>
-            <td style="color:#F8FAFC;font-size:13px;padding:8px 0;text-align:right;font-weight:600;border-bottom:1px solid rgba(148,163,184,0.1);">${courseName}</td>
+            <td style="color:#F59E0B;font-size:22px;padding:8px 16px 8px 0;vertical-align:top;width:40px;font-weight:900;">01</td>
+            <td style="padding:8px 0;border-bottom:1px solid #1F2937;">
+              <div style="color:#FFFFFF;font-size:14px;font-weight:700;margin-bottom:2px;">NHẬN LIÊN HỆ TỪ ĐỘI NGŨ</div>
+              <div style="color:#9CA3AF;font-size:13px;">Trong vòng 24 giờ, chúng tôi sẽ gọi/nhắn tin hướng dẫn bạn truy cập.</div>
+            </td>
           </tr>
           <tr>
-            <td style="color:#94A3B8;font-size:13px;padding:8px 0;border-bottom:1px solid rgba(148,163,184,0.1);">Số tiền</td>
-            <td style="color:#34D399;font-size:15px;padding:8px 0;text-align:right;font-weight:700;border-bottom:1px solid rgba(148,163,184,0.1);">${formattedPrice} đ</td>
+            <td style="color:#F59E0B;font-size:22px;padding:12px 16px 8px 0;vertical-align:top;font-weight:900;">02</td>
+            <td style="padding:12px 0 8px;border-bottom:1px solid #1F2937;">
+              <div style="color:#FFFFFF;font-size:14px;font-weight:700;margin-bottom:2px;">SETUP HỆ THỐNG</div>
+              <div style="color:#9CA3AF;font-size:13px;">Được kèm cặp 1-1 để triển khai vào doanh nghiệp của bạn.</div>
+            </td>
           </tr>
           <tr>
-            <td style="color:#94A3B8;font-size:13px;padding:8px 0;border-bottom:1px solid rgba(148,163,184,0.1);">Mã đơn hàng</td>
-            <td style="color:#F59E0B;font-size:14px;padding:8px 0;text-align:right;font-weight:700;letter-spacing:2px;border-bottom:1px solid rgba(148,163,184,0.1);">${paymentCode}</td>
-          </tr>
-          <tr>
-            <td style="color:#94A3B8;font-size:13px;padding:8px 0;">Thời gian</td>
-            <td style="color:#F8FAFC;font-size:13px;padding:8px 0;text-align:right;font-weight:600;">${formattedDate}</td>
+            <td style="color:#F59E0B;font-size:22px;padding:12px 16px 8px 0;vertical-align:top;font-weight:900;">03</td>
+            <td style="padding:12px 0 8px;">
+              <div style="color:#FFFFFF;font-size:14px;font-weight:700;margin-bottom:2px;">THẤY KẾT QUẢ</div>
+              <div style="color:#9CA3AF;font-size:13px;">Bắt đầu nhận được lead + doanh thu từ hệ thống automation.</div>
+            </td>
           </tr>
         </table>
       </div>
 
-      <!-- Next Steps -->
-      <div style="background:rgba(245,158,11,0.08);border:1px solid rgba(245,158,11,0.2);border-radius:12px;padding:20px;margin-bottom:24px;">
-        <h3 style="color:#F59E0B;font-size:14px;text-transform:uppercase;letter-spacing:1px;margin:0 0 12px;">📞 Bước Tiếp Theo</h3>
-        <ul style="color:#CBD5E1;font-size:13px;margin:0;padding-left:16px;line-height:2;">
-          <li>Đội ngũ hỗ trợ sẽ liên hệ bạn trong <strong style="color:#F8FAFC;">24 giờ</strong> để hướng dẫn truy cập.</li>
-          <li>Vui lòng giữ điện thoại để nhận cuộc gọi/tin nhắn từ chúng tôi.</li>
-          <li>Nếu cần hỗ trợ gấp, hãy trả lời email này.</li>
-        </ul>
+      <!-- MOTIVATIONAL QUOTE -->
+      <div style="border-left:4px solid #F59E0B;padding:16px 24px;margin-bottom:32px;">
+        <p style="color:#F8FAFC;font-size:16px;font-style:italic;margin:0 0 8px;line-height:1.6;">
+          "Người thành công ra quyết định nhanh và đổi ý chậm. Bạn vừa chứng minh mình là một trong số đó."
+        </p>
+        <p style="color:#F59E0B;font-size:13px;margin:0;font-weight:700;">— CHÚNG TÔI TIN TƯỞNG BẠN 100%.</p>
       </div>
 
-      <!-- Divider -->
-      <hr style="border:none;border-top:1px solid rgba(148,163,184,0.15);margin:24px 0;">
+      <!-- GUARANTEE REMINDER -->
+      <div style="background:#1E1B4B;border:1px solid #4338CA;border-radius:12px;padding:20px;text-align:center;margin-bottom:32px;">
+        <div style="font-size:28px;margin-bottom:8px;">🛡️</div>
+        <p style="color:#A5B4FC;font-size:14px;margin:0;line-height:1.6;">
+          Nhắc lại: Bạn được <strong style="color:#FFFFFF;">BẢO HÀNH 100% HOÀN TIỀN</strong> nếu không hài lòng trong 14 ngày. Không hỏi lằng nhằng. Bạn giữ luôn tài liệu bonus.
+        </p>
+      </div>
 
-      <!-- Footer -->
-      <p style="color:#64748B;font-size:12px;text-align:center;margin:0;line-height:1.5;">
-        Cảm ơn bạn đã tin tưởng và lựa chọn chúng tôi! 💚<br>
-        Email này được gửi tự động. Nếu bạn cần hỗ trợ, vui lòng trả lời email này.<br>
+    </div>
+
+    <!-- FOOTER -->
+    <div style="background:#0A0A0A;padding:20px 32px;text-align:center;">
+      <p style="color:#374151;font-size:11px;margin:0;line-height:1.6;">
+        Email này được gửi tự động sau khi hệ thống xác nhận thanh toán thành công.<br>
+        Nếu bạn cần hỗ trợ, trả lời trực tiếp email này.<br>
         © ${new Date().getFullYear()} ClickFunnels. All rights reserved.
       </p>
     </div>
+
   </div>
 </body>
 </html>`;
@@ -140,7 +182,7 @@ export default async function handler(req, res) {
     const info = await transporter.sendMail({
       from: `"ClickFunnels" <${process.env.GMAIL_USER}>`,
       to: email,
-      subject: `✅ Thanh toán thành công — ${courseName}`,
+      subject: `🎉 ${firstName}, BẠN ĐÃ VÀO — Thanh toán xác nhận thành công`,
       html: htmlContent,
     });
 
