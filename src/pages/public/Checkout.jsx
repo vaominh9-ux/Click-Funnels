@@ -272,7 +272,7 @@ const Checkout = () => {
             Bạn sẽ nhận được email xác nhận và link truy cập khóa học trong ít phút.
           </p>
           
-          <button className="checkout-btn" onClick={() => navigate('/')} style={{marginTop: '24px'}}>
+          <button className="checkout-btn" onClick={() => navigate(`/khoa-hoc/${courseId}`)} style={{marginTop: '24px'}}>
             Về Trang Chủ
           </button>
         </div>
