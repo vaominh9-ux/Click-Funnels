@@ -192,6 +192,12 @@ const AffiliateDashboard = () => {
     return null;
   };
 
+  // Tính toán kích thước font chữ dựa trên số lượng ký tự để chống tràn khung
+  const revenueStrLength = formatCompactParts(filteredData.revenueStr).value.length;
+  const dynamicRevenueFontSize = revenueStrLength >= 15 ? 'clamp(1.3rem, 3vw, 1.8rem)' : // > 100 Tỷ
+                                 revenueStrLength >= 11 ? 'clamp(1.6rem, 3.5vw, 2.4rem)' : // > 1 Tỷ
+                                                          'clamp(2.2rem, 5vw, 3.6rem)';    // Bình thường
+
   return (
     <div className="dashboard-wrapper">
 
@@ -242,7 +248,7 @@ const AffiliateDashboard = () => {
               <div
                 title={new Intl.NumberFormat('vi-VN').format(filteredData.revenueStr) + ' đ'}
                 style={{
-                  fontSize: 'clamp(1.8rem, 4vw, 3.6rem)',
+                  fontSize: dynamicRevenueFontSize,
                   fontWeight: 900,
                   color: '#9F1239',
                   textShadow: '0 2px 10px rgba(159,18,57,0.15)',
