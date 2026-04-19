@@ -208,6 +208,10 @@ const EmailSettings = () => {
   const [regSubject, setRegSubject] = useState(DEFAULT_REG_SUBJECT);
   const [regHtml, setRegHtml] = useState(DEFAULT_REG_HTML);
 
+  // Pay state
+  const [paySubject, setPaySubject] = useState(DEFAULT_PAY_SUBJECT);
+  const [payHtml, setPayHtml] = useState(DEFAULT_PAY_HTML);
+
   // View mode
   const [viewMode, setViewMode] = useState('visual'); // 'visual' or 'code'
   const iframeRef = useRef(null);
