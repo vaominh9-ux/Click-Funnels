@@ -1,8 +1,19 @@
 // Vercel Serverless Function — Gửi Email Xác Nhận Đăng Ký
 // Route: POST /api/email/send-registration
-// Gửi email cảm ơn + hướng dẫn thanh toán cho khách sau khi đăng ký
+// Dùng Nodemailer + Gmail SMTP (miễn phí, không cần domain riêng)
 
-import { Resend } from 'resend';
+import nodemailer from 'nodemailer';
+
+// Tạo transporter Gmail SMTP (reuse across invocations)
+const createTransporter = () => {
+  return nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.GMAIL_USER,
+      pass: process.env.GMAIL_APP_PASSWORD,
+    },
+  });
+};
 
 export default async function handler(req, res) {
   // CORS headers
@@ -18,9 +29,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ success: false, message: 'Method not allowed' });
   }
 
-  const RESEND_API_KEY = process.env.RESEND_API_KEY;
-  if (!RESEND_API_KEY) {
-    console.error('Missing RESEND_API_KEY');
+  if (!process.env.GMAIL_USER || !process.env.GMAIL_APP_PASSWORD) {
+    console.error('Missing Gmail SMTP credentials');
     return res.status(500).json({ success: false, message: 'Email service not configured' });
   }
 
@@ -32,7 +42,7 @@ export default async function handler(req, res) {
       return res.status(200).json({ success: true, message: 'No email provided, skipped' });
     }
 
-    const resend = new Resend(RESEND_API_KEY);
+    const transporter = createTransporter();
 
     const formattedPrice = Number(coursePrice).toLocaleString('vi-VN');
     const bankName = bankConfig?.bankName || 'BIDV';
@@ -129,20 +139,15 @@ export default async function handler(req, res) {
 </body>
 </html>`;
 
-    const { data, error } = await resend.emails.send({
-      from: 'ClickFunnels <onboarding@resend.dev>',
-      to: [email],
+    const info = await transporter.sendMail({
+      from: `"ClickFunnels" <${process.env.GMAIL_USER}>`,
+      to: email,
       subject: `📋 Xác nhận đăng ký — ${courseName}`,
       html: htmlContent,
     });
 
-    if (error) {
-      console.error('Resend error (registration):', error);
-      return res.status(500).json({ success: false, message: error.message });
-    }
-
-    console.log(`✅ Registration email sent to ${email}, ID: ${data.id}`);
-    return res.status(200).json({ success: true, emailId: data.id });
+    console.log(`✅ Registration email sent to ${email}, ID: ${info.messageId}`);
+    return res.status(200).json({ success: true, messageId: info.messageId });
 
   } catch (error) {
     console.error('Send registration email error:', error);
