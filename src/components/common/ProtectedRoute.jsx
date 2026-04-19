@@ -77,7 +77,7 @@ const ProtectedRoute = ({ children, requiredRole }) => {
     // Affiliate Portal Routes: Check affiliate approval status
     if (role === 'affiliate' && approvalStatus !== 'active') {
       return (
-        <div style={{ height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: '#F9FAFB' }}>
+        <div style={{ minHeight: 'calc(100vh / var(--ui-zoom, 1))', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', background: '#F9FAFB' }}>
           <div style={{ background: 'white', padding: '40px', borderRadius: '16px', boxShadow: '0 10px 25px -5px rgba(0,0,0,0.1)', textAlign: 'center', maxWidth: '440px', border: '1px solid #E5E7EB' }}>
             {approvalStatus === 'pending' ? (
               <>
