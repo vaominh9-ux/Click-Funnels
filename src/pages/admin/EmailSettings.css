@@ -1,0 +1,254 @@
+.email-settings-container {
+    padding: 24px;
+    max-width: 1400px;
+    margin: 0 auto;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.es-header {
+    margin-bottom: 24px;
+}
+
+.es-subtitle {
+    color: #9CA3AF;
+    font-size: 14px;
+    margin: 4px 0 0 0;
+}
+
+.es-tabs {
+    display: flex;
+    gap: 8px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid #1F2937;
+    padding-bottom: 16px;
+}
+
+.es-tab {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: #111827;
+    border: 1px solid #1F2937;
+    border-radius: 8px;
+    color: #9CA3AF;
+    font-size: 14px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.es-tab:hover {
+    color: #F3F4F6;
+    border-color: #374151;
+}
+
+.es-tab.active {
+    background: rgba(59, 130, 246, 0.1);
+    border-color: #3B82F6;
+    color: #3B82F6;
+}
+
+.es-content {
+    display: flex;
+    gap: 24px;
+    flex: 1;
+    min-height: 0;
+}
+
+.es-col-left {
+    flex: 2;
+    display: flex;
+    flex-direction: column;
+}
+
+.es-col-right {
+    flex: 1;
+}
+
+.es-card {
+    background: #111827;
+    border: 1px solid #1F2937;
+    border-radius: 12px;
+    padding: 24px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+.es-card-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 20px;
+}
+
+.es-card-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #F9FAFB;
+    font-weight: 600;
+}
+
+.es-card-header svg {
+    color: #60A5FA;
+}
+
+.es-form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    flex: 1;
+}
+
+.es-field {
+    display: flex;
+    flex-direction: column;
+}
+
+.es-field label {
+    font-size: 13px;
+    color: #E5E7EB;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+.es-field input {
+    background: #000000;
+    border: 1px solid #374151;
+    color: #F9FAFB;
+    padding: 12px 14px;
+    border-radius: 8px;
+    font-size: 14px;
+}
+
+.es-field input:focus {
+    outline: none;
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.es-html-editor {
+    width: 100%;
+    flex: 1;
+    min-height: 400px;
+    background: #000000;
+    border: 1px solid #374151;
+    color: #34D399; /* Green text for code feeling */
+    padding: 16px;
+    border-radius: 8px;
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    resize: vertical;
+}
+
+.es-html-editor:focus {
+    outline: none;
+    border-color: #3B82F6;
+    box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+}
+
+.es-restore-btn {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: transparent;
+    border: none;
+    color: #9CA3AF;
+    font-size: 12px;
+    cursor: pointer;
+    transition: color 0.2s;
+    padding: 4px 8px;
+    border-radius: 4px;
+}
+
+.es-restore-btn:hover {
+    color: #F87171;
+    background: rgba(248, 113, 113, 0.1);
+}
+
+.es-actions {
+    margin-top: 24px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.es-save-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    background: #3B82F6;
+    color: white;
+    border: none;
+    padding: 12px 24px;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.es-save-btn:hover:not(:disabled) {
+    background: #2563EB;
+}
+
+.es-save-btn:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
+}
+
+.es-guide {
+    background: rgba(31, 41, 55, 0.5);
+    border-radius: 8px;
+    padding: 16px;
+    flex: 1;
+    overflow-y: auto;
+}
+
+.es-guide p {
+    color: #D1D5DB;
+    font-size: 13px;
+    margin-top: 0;
+    line-height: 1.5;
+}
+
+.es-guide ul {
+    margin: 0;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.es-guide li {
+    color: #9CA3AF;
+    font-size: 13px;
+}
+
+.es-guide code {
+    background: #000000;
+    color: #F59E0B;
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'Courier New', Courier, monospace;
+    font-weight: 600;
+}
+
+.es-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    color: #9CA3AF;
+    gap: 16px;
+}
+
+@media (max-width: 1024px) {
+    .es-content {
+        flex-direction: column;
+    }
+}
