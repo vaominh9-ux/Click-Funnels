@@ -196,7 +196,6 @@ const Checkout = () => {
 
       // === GỬI EMAIL XÁC NHẬN ĐĂNG KÝ (fire-and-forget) ===
       if (leadInfo.email) {
-        addToast('Đang gửi email tự động...', 'info');
         const baseUrl = import.meta.env.VITE_API_URL || (import.meta.env.DEV ? 'http://localhost:3000' : '');
         fetch(`${baseUrl}/api/email/send-registration`, {
           method: 'POST',
@@ -210,18 +209,9 @@ const Checkout = () => {
             paymentCode: paymentCode,
             bankConfig: bankConfig
           })
-        }).then(async r => {
-          const d = await r.json();
-          if (r.ok && d.success) {
-            addToast('Đã gửi email đăng ký!', 'success');
-          } else {
-            console.error('Email API failed:', d);
-            addToast('Lỗi gửi mail: ' + (d.message || r.statusText), 'error');
-          }
-        }).catch(err => {
-          console.warn('Email send failed (non-blocking):', err);
-          addToast('Không thể kết nối Server Gửi Email.', 'error');
-        });
+        }).then(r => r.json())
+          .then(d => console.log('📧 Registration email status:', d))
+          .catch(err => console.warn('Email send failed (non-blocking):', err));
       }
       
     } catch (error) {
