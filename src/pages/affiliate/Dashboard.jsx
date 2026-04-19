@@ -192,11 +192,10 @@ const AffiliateDashboard = () => {
     return null;
   };
 
-  // Căn chỉnh chữ lớn nhất có thể theo chiều ngang thẻ lưới 2 cột
+  // Kích thước mượt và hoàn toàn KHÔNG THỂ BỊ TRÀN nhờ CSS Container Queries (cqw)
   const revenueStrLength = formatCompactParts(filteredData.revenueStr).value.length;
-  const dynamicRevenueFontSize = revenueStrLength >= 17 ? 'clamp(1.8rem, 4.5vw, 2.8rem)' : // Dạng >= 10.000 Tỷ
-                                 revenueStrLength >= 13 ? 'clamp(2.2rem, 5vw, 3.3rem)' :   // Dạng >= 10 Tỷ
-                                                          'clamp(2.5rem, 5vw, 3.6rem)';    // Bình thường
+  // Công thức: 100cqw (độ rộng khung) / số lượng ký tự * hệ số (1.3)
+  const dynamicRevenueFontSize = `clamp(1rem, ${(100 / Math.max(10, revenueStrLength)) * 1.35}cqw, 3.6rem)`;
 
   return (
     <div className="dashboard-wrapper">
@@ -225,7 +224,7 @@ const AffiliateDashboard = () => {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '20px' }}>
 
             {/* THẺ DOANH THU ĐƯỢC THIẾT KẾ FOMO - GLOWING EFFECT */}
-            <div className="cf-card fomo-glow-card" style={{ display: 'flex', flexDirection: 'column', padding: '24px', gridColumn: 'span 2', position: 'relative', overflow: 'hidden' }}>
+            <div className="cf-card fomo-glow-card" style={{ display: 'flex', flexDirection: 'column', padding: '24px', gridColumn: 'span 2', position: 'relative', overflow: 'hidden', containerType: 'inline-size' }}>
               <div className="fomo-shimmer"></div>
 
               {/* HEADER ROW: Icon + Title + Badge */}
