@@ -4,7 +4,7 @@
 
 .crm-container {
   padding: 0;
-  height: calc(100vh - 80px);
+  height: calc(100vh / var(--ui-zoom, 1) - 60px); /* Bù trừ tỷ lệ thu phóng để dài sát đáy */
   display: flex;
   flex-direction: column;
   gap: 20px;
@@ -185,6 +185,7 @@
 .kanban-cards {
   flex: 1;
   overflow-y: auto;
+  overflow-x: hidden; /* Cấm trượt ngang */
   padding: 10px;
   display: flex;
   flex-direction: column;
@@ -228,6 +229,9 @@
   display: flex;
   align-items: center;
   gap: 6px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .lead-card-footer {
