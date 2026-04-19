@@ -173,7 +173,7 @@ export default function LeadsCRM() {
     return (
       <div className="crm-container">
         <div className="crm-header">
-          <h1>CRM</h1>
+          <h1>CRM Khách Hàng</h1>
           <Skeleton width="200px" height="36px" />
         </div>
         <div className="crm-stats-bar">
@@ -210,7 +210,7 @@ export default function LeadsCRM() {
     <div className="crm-container">
       {/* Header */}
       <div className="crm-header">
-        <h1>CRM</h1>
+        <h1>CRM Khách Hàng</h1>
         <div className="crm-header-actions">
           <div className="crm-search">
             <Search size={16} color="#9CA3AF" />

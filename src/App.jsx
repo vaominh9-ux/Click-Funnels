@@ -184,7 +184,7 @@ const App = () => {
           } />
           <Route path="/admin/leads" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="CRM">
+              <MainLayout title="CRM Khách Hàng">
                 <AdminLeadsCRM />
               </MainLayout>
             </ProtectedRoute>
