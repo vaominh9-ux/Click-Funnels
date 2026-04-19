@@ -30,10 +30,10 @@
     align-items: center;
     gap: 8px;
     padding: 10px 16px;
-    background: #111827;
-    border: 1px solid #1F2937;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
     border-radius: 8px;
-    color: #9CA3AF;
+    color: #6B7280;
     font-size: 14px;
     font-weight: 500;
     cursor: pointer;
@@ -41,14 +41,15 @@
 }
 
 .es-tab:hover {
-    color: #F3F4F6;
-    border-color: #374151;
+    color: #111827;
+    border-color: #D1D5DB;
+    background: #F9FAFB;
 }
 
 .es-tab.active {
-    background: rgba(59, 130, 246, 0.1);
+    background: #EFF6FF;
     border-color: #3B82F6;
-    color: #3B82F6;
+    color: #2563EB;
 }
 
 .es-content {
@@ -59,18 +60,19 @@
 }
 
 .es-col-left {
-    flex: 2;
+    flex: 5;
     display: flex;
     flex-direction: column;
 }
 
 .es-col-right {
-    flex: 1;
+    flex: 2;
 }
 
 .es-card {
-    background: #111827;
-    border: 1px solid #1F2937;
+    background: #FFFFFF;
+    border: 1px solid #E5E7EB;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
     border-radius: 12px;
     padding: 24px;
     height: 100%;
@@ -88,12 +90,12 @@
 .es-card-header h3 {
     margin: 0;
     font-size: 16px;
-    color: #F9FAFB;
+    color: #111827;
     font-weight: 600;
 }
 
 .es-card-header svg {
-    color: #60A5FA;
+    color: #3B82F6;
 }
 
 .es-form {
@@ -110,15 +112,15 @@
 
 .es-field label {
     font-size: 13px;
-    color: #E5E7EB;
-    font-weight: 500;
+    color: #374151;
+    font-weight: 600;
     margin-bottom: 8px;
 }
 
 .es-field input {
-    background: #000000;
-    border: 1px solid #374151;
-    color: #F9FAFB;
+    background: #FFFFFF;
+    border: 1px solid #D1D5DB;
+    color: #111827;
     padding: 12px 14px;
     border-radius: 8px;
     font-size: 14px;
@@ -133,10 +135,10 @@
 .es-html-editor {
     width: 100%;
     flex: 1;
-    min-height: 400px;
-    background: #000000;
-    border: 1px solid #374151;
-    color: #34D399; /* Green text for code feeling */
+    min-height: 500px;
+    background: #F8FAFC;
+    border: 1px solid #CBD5E1;
+    color: #0F172A;
     padding: 16px;
     border-radius: 8px;
     font-family: 'Courier New', Courier, monospace;
@@ -155,19 +157,21 @@
     display: flex;
     align-items: center;
     gap: 6px;
-    background: transparent;
-    border: none;
-    color: #9CA3AF;
+    background: #F3F4F6;
+    border: 1px solid #E5E7EB;
+    color: #6B7280;
     font-size: 12px;
+    font-weight: 500;
     cursor: pointer;
-    transition: color 0.2s;
-    padding: 4px 8px;
-    border-radius: 4px;
+    transition: all 0.2s;
+    padding: 6px 10px;
+    border-radius: 6px;
 }
 
 .es-restore-btn:hover {
-    color: #F87171;
-    background: rgba(248, 113, 113, 0.1);
+    color: #DC2626;
+    background: #FEE2E2;
+    border-color: #FCA5A5;
 }
 
 .es-actions {
@@ -201,7 +205,8 @@
 }
 
 .es-guide {
-    background: rgba(31, 41, 55, 0.5);
+    background: #F9FAFB;
+    border: 1px solid #E5E7EB;
     border-radius: 8px;
     padding: 16px;
     flex: 1;
@@ -209,7 +214,7 @@
 }
 
 .es-guide p {
-    color: #D1D5DB;
+    color: #4B5563;
     font-size: 13px;
     margin-top: 0;
     line-height: 1.5;
@@ -224,13 +229,13 @@
 }
 
 .es-guide li {
-    color: #9CA3AF;
+    color: #374151;
     font-size: 13px;
 }
 
 .es-guide code {
-    background: #000000;
-    color: #F59E0B;
+    background: #E5E7EB;
+    color: #B45309;
     padding: 2px 6px;
     border-radius: 4px;
     font-family: 'Courier New', Courier, monospace;

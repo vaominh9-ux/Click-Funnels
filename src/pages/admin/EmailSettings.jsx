@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { Save, Loader2, Mail, LayoutTemplate, PenTool, CheckCircle, RefreshCcw } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Save, Loader2, Mail, LayoutTemplate, PenTool, CheckCircle, RefreshCcw, Code, Eye } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import './EmailSettings.css';
@@ -208,13 +208,55 @@ const EmailSettings = () => {
   const [regSubject, setRegSubject] = useState(DEFAULT_REG_SUBJECT);
   const [regHtml, setRegHtml] = useState(DEFAULT_REG_HTML);
 
-  // Pay state
-  const [paySubject, setPaySubject] = useState(DEFAULT_PAY_SUBJECT);
-  const [payHtml, setPayHtml] = useState(DEFAULT_PAY_HTML);
+  // View mode
+  const [viewMode, setViewMode] = useState('visual'); // 'visual' or 'code'
+  const iframeRef = useRef(null);
 
   useEffect(() => {
     loadSettings();
   }, []);
+
+  // Sync iframe content to state when typing
+  useEffect(() => {
+    if (viewMode === 'visual' && iframeRef.current && !loading) {
+      const doc = iframeRef.current.contentDocument;
+      if (doc) {
+        doc.open();
+        doc.write(activeTab === 'registration' ? regHtml : payHtml);
+        doc.close();
+        doc.designMode = 'on';
+
+        // Custom styling for the editor environment
+        const style = doc.createElement('style');
+        style.textContent = `
+          body { cursor: text; }
+          a { cursor: pointer; }
+          ::-webkit-scrollbar { width: 8px; }
+          ::-webkit-scrollbar-track { background: #111; }
+          ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+          ::-webkit-scrollbar-thumb:hover { background: #555; }
+        `;
+        doc.head.appendChild(style);
+
+        const handleInput = () => {
+          const docHTML = doc.body.innerHTML;
+          const cssText = doc.body.style.cssText;
+          const headHTML = doc.head.innerHTML;
+          const html = '<!DOCTYPE html>\\n<html>\\n<head>\\n' + headHTML + '\\n</head>\\n<body style="' + cssText + '">\\n' + docHTML + '\\n</body>\\n</html>';
+          // Remove the injected style
+          let cleanHtml = html.replace(new RegExp('<style>[^<]*cursor: text[^<]*</style>', 'g'), '');
+          if (activeTab === 'registration') {
+            setRegHtml(cleanHtml);
+          } else {
+            setPayHtml(cleanHtml);
+          }
+        };
+
+        doc.body.addEventListener('input', handleInput);
+        doc.body.addEventListener('keyup', handleInput);
+      }
+    }
+  }, [viewMode, activeTab, loading]);
 
   const loadSettings = async () => {
     setLoading(true);
@@ -343,18 +385,60 @@ const EmailSettings = () => {
               </div>
 
               <div className="es-field" style={{ flex: 1, display: 'flex', flexDirection: 'column' }}>
-                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
-                  <label style={{ marginBottom: 0 }}>Mã Nguồn HTML (Nội dung)</label>
-                  <button type="button" className="es-restore-btn" onClick={restoreDefault}>
-                    <RefreshCcw size={14} /> Khôi phục mặc định
-                  </button>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: '8px' }}>
+                  <div>
+                    <label style={{ marginBottom: 0 }}>Nội dung Email</label>
+                    <p style={{ margin: '4px 0 0 0', fontSize: '12px', color: '#6B7280' }}>
+                      {viewMode === 'visual' ? 'Click trực tiếp vào chữ bên dưới để chỉnh sửa!' : 'Dành cho người biết lập trình HTML.'}
+                    </p>
+                  </div>
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <div style={{ display: 'flex', background: '#F3F4F6', borderRadius: '8px', padding: '4px' }}>
+                      <button 
+                        type="button" 
+                        onClick={() => setViewMode('visual')}
+                        style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 12px', border: 'none', background: viewMode === 'visual' ? '#FFFFFF' : 'transparent', color: viewMode === 'visual' ? '#3B82F6' : '#6B7280', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: 600, boxShadow: viewMode === 'visual' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none' }}>
+                        <Eye size={14} /> Trực Quan
+                      </button>
+                      <button 
+                        type="button" 
+                        onClick={() => setViewMode('code')}
+                        style={{ display: 'flex', alignItems: 'center', gap: '4px', padding: '6px 12px', border: 'none', background: viewMode === 'code' ? '#FFFFFF' : 'transparent', color: viewMode === 'code' ? '#3B82F6' : '#6B7280', borderRadius: '6px', cursor: 'pointer', fontSize: '13px', fontWeight: 600, boxShadow: viewMode === 'code' ? '0 1px 2px rgba(0,0,0,0.05)' : 'none' }}>
+                        <Code size={14} /> Mã Code
+                      </button>
+                    </div>
+                    <button type="button" className="es-restore-btn" onClick={restoreDefault} style={{ marginLeft: '12px' }}>
+                      <RefreshCcw size={14} /> Khôi phục gốc
+                    </button>
+                  </div>
                 </div>
-                <textarea 
-                  value={currentHtml}
-                  onChange={(e) => handleHtmlChange(e.target.value)}
-                  className="es-html-editor"
-                  spellCheck="false"
-                />
+                
+                <div style={{ flex: 1, display: 'flex', border: '1px solid #D1D5DB', borderRadius: '8px', overflow: 'hidden', background: viewMode === 'visual' ? '#E5E7EB' : '#F8FAFC' }}>
+                  {viewMode === 'visual' ? (
+                    <div style={{ display: 'flex', justifyContent: 'center', padding: '24px 0', width: '100%', overflowY: 'auto' }}>
+                      <iframe 
+                        ref={iframeRef}
+                        style={{ 
+                          width: '100%', 
+                          maxWidth: '600px', 
+                          height: '600px', 
+                          border: 'none', 
+                          background: '#FFFFFF',
+                          boxShadow: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)'
+                        }}
+                        title="Live Email Editor"
+                      />
+                    </div>
+                  ) : (
+                    <textarea 
+                      value={currentHtml}
+                      onChange={(e) => handleHtmlChange(e.target.value)}
+                      className="es-html-editor"
+                      style={{ border: 'none', borderRadius: 0, minHeight: '600px' }}
+                      spellCheck="false"
+                    />
+                  )}
+                </div>
               </div>
             </div>
 
