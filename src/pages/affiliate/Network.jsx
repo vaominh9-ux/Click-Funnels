@@ -119,6 +119,7 @@ const AffiliateNetwork = () => {
     switch (status) {
       case 'active': return <span className="badge badge-cleared" style={{display:'inline-flex',alignItems:'center',gap:4}}><CheckCircle size={12}/> Hoạt động</span>;
       case 'pending': return <span className="badge badge-pending" style={{display:'inline-flex',alignItems:'center',gap:4}}><Clock size={12}/> Chờ duyệt</span>;
+      case 'rejected': return <span className="badge" style={{background:'#FEE2E2',color:'#991B1B',display:'inline-flex',alignItems:'center',gap:4}}><XCircle size={12}/> Bị khóa</span>;
       default: return <span className="badge" style={{background:'#FEE2E2',color:'#991B1B',display:'inline-flex',alignItems:'center',gap:4}}><XCircle size={12}/> Bị khóa</span>;
     }
   };
@@ -235,7 +236,7 @@ const AffiliateNetwork = () => {
                         </button>
                       ) : user.approval_status === 'active' ? (
                         <button 
-                          onClick={() => handleApproval(user.id, 'blocked')}
+                          onClick={() => handleApproval(user.id, 'rejected')}
                           style={{background: '#FEE2E2', color: '#991B1B', border: 'none', padding: '6px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4}}
                         >
                           <XCircle size={14}/> Khóa
