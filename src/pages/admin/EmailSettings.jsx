@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { Save, Loader2, Mail, LayoutTemplate, PenTool, CheckCircle, RefreshCcw, Code, Eye } from 'lucide-react';
+import { Save, Loader2, Mail, LayoutTemplate, PenTool, CheckCircle, RefreshCcw, Code, Eye, Send } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import './EmailSettings.css';
@@ -216,6 +216,9 @@ const EmailSettings = () => {
   const [viewMode, setViewMode] = useState('visual'); // 'visual' or 'code'
   const iframeRef = useRef(null);
 
+  // Test Email state
+  const [sendingTest, setSendingTest] = useState(false);
+
   useEffect(() => {
     loadSettings();
   }, []);
@@ -334,6 +337,46 @@ const EmailSettings = () => {
     }
   };
 
+  const currentSubject = activeTab === 'registration' ? regSubject : paySubject;
+  const currentHtml = activeTab === 'registration' ? regHtml : payHtml;
+
+  const handleSendTest = async () => {
+    const testEmail = window.prompt('Nhập địa chỉ email để nhận kết quả test (Ví dụ: email-cua-ban@gmail.com):');
+    if (!testEmail) return;
+
+    setSendingTest(true);
+    addToast('Đang gửi email test...', 'info');
+
+    try {
+      // Gọi API Vercel Serverless để gửi email (không cần lưu mới có thể test)
+      const baseUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000';
+      const response = await fetch(`${baseUrl}/api/email/send-test`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          toEmail: testEmail,
+          subject: currentSubject,
+          htmlBody: currentHtml
+        })
+      });
+
+      const data = await response.json();
+
+      if (response.ok && data.success) {
+        addToast(`Đã gửi email test thành công đến ${testEmail}`, 'success');
+      } else {
+        throw new Error(data.message || 'Lỗi từ server');
+      }
+    } catch (err) {
+      console.error('Lỗi khi gửi test:', err);
+      addToast('Không thể gửi email test: ' + err.message, 'error');
+    } finally {
+      setSendingTest(false);
+    }
+  };
+
   if (loading) {
     return (
       <div className="email-settings-container">
@@ -344,9 +387,6 @@ const EmailSettings = () => {
       </div>
     );
   }
-
-  const currentSubject = activeTab === 'registration' ? regSubject : paySubject;
-  const currentHtml = activeTab === 'registration' ? regHtml : payHtml;
 
   const handleSubjectChange = (val) => activeTab === 'registration' ? setRegSubject(val) : setPaySubject(val);
   const handleHtmlChange = (val) => activeTab === 'registration' ? setRegHtml(val) : setPayHtml(val);
@@ -429,6 +469,14 @@ const EmailSettings = () => {
             </div>
 
             <div className="es-actions">
+              <button 
+                className="es-save-btn" 
+                onClick={handleSendTest} 
+                disabled={sendingTest || loading || saving}
+                style={{ background: '#F59E0B', marginRight: '10px' }}
+              >
+                {sendingTest ? <><Loader2 size={16} className="spin" /> Đang gửi...</> : <><Send size={16} /> Gửi Test Mẫu Này</>}
+              </button>
               <button className="es-save-btn" onClick={handleSave} disabled={saving}>
                 {saving ? <><Loader2 size={16} className="spin" /> Đang lưu...</> : <><Save size={16} /> Lưu Thay Đổi</>}
               </button>
