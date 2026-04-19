@@ -171,15 +171,9 @@ const AffiliateDashboard = () => {
     ? ((filteredData.leads / filteredData.clicks) * 100).toFixed(1)
     : '0.0';
 
-  // Format số gọn tinh tế (Tách giá trị và Đơn vị để làm đẹp UI)
+  // Xóa logic rút gọn, hiển thị đầy đủ số theo yêu cầu của user
   const formatCompactParts = (num) => {
     if (!num) return { value: '0', unit: 'đ' };
-    if (num >= 1e9) {
-      return { value: (num / 1e9).toLocaleString('vi-VN', { maximumFractionDigits: 1 }), unit: 'Tỷ' };
-    }
-    if (num >= 1e6) {
-      return { value: (num / 1e6).toLocaleString('vi-VN', { maximumFractionDigits: 1 }), unit: 'Tr' };
-    }
     return { value: new Intl.NumberFormat('vi-VN').format(num), unit: 'đ' };
   };
 
@@ -248,7 +242,7 @@ const AffiliateDashboard = () => {
               <div
                 title={new Intl.NumberFormat('vi-VN').format(filteredData.revenueStr) + ' đ'}
                 style={{
-                  fontSize: '3.6rem',
+                  fontSize: 'clamp(1.8rem, 4vw, 3.6rem)',
                   fontWeight: 900,
                   color: '#9F1239',
                   textShadow: '0 2px 10px rgba(159,18,57,0.15)',
