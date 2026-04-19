@@ -125,6 +125,26 @@ const Sidebar = ({ onClose }) => {
             )}
           </div>
 
+          {/* MẠNG LƯỚI - CHỈ ADMIN ĐƯỢC THẤY */}
+          {isAdmin && (
+            <div className="nav-group-wrapper">
+              <div className="nav-group-header" onClick={() => toggleGroup('network')}>
+                <div style={{display: 'flex', alignItems: 'center', gap: '10px'}}>
+                  <Users size={18} />
+                  <span>Mạng Lưới</span>
+                </div>
+              </div>
+              
+              {openGroups.network && (
+                <div className="nav-sub-items-tree">
+                  <NavLink to="/portal/network/direct" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                    <span className="nav-sub-item-text">Mạng Lưới Đối Tác</span>
+                  </NavLink>
+                </div>
+              )}
+            </div>
+          )}
+
           {/* QUẢN TRỊ HỆ THỐNG — Chỉ Admin thấy */}
           {isAdmin && (
           <div className="nav-group-wrapper">
