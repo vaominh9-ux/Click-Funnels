@@ -90,12 +90,13 @@
   background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
   color: #FFFFFF;
   border: none;
-  padding: 22px 48px;
-  font-size: 1.2rem;
+  padding: 18px 24px;
+  font-size: 1.05rem;
   font-weight: 900;
   font-family: 'Montserrat', sans-serif;
   text-transform: uppercase;
-  letter-spacing: 1px;
+  letter-spacing: 0.5px;
+  white-space: nowrap;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 0 30px rgba(239, 68, 68, 0.4), 0 10px 25px rgba(0, 0, 0, 0.3);
