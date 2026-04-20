@@ -128,61 +128,6 @@
   font-size: 13px;
 }
 
-/* TABLE LAYOUT FIX */
-.cf-card .table-responsive {
-  overflow-x: auto;
-}
-
-.cf-card .cf-table {
-  table-layout: fixed;
-  width: 100%;
-  min-width: 700px;
-}
-
-.cf-card .cf-table th:nth-child(1),
-.cf-card .cf-table td:nth-child(1) {
-  width: 22%;
-}
-
-.cf-card .cf-table th:nth-child(2),
-.cf-card .cf-table td:nth-child(2) {
-  width: 25%;
-}
-
-.cf-card .cf-table th:nth-child(3),
-.cf-card .cf-table td:nth-child(3) {
-  width: 13%;
-}
-
-.cf-card .cf-table th:nth-child(4),
-.cf-card .cf-table td:nth-child(4) {
-  width: 14%;
-}
-
-.cf-card .cf-table th:nth-child(5),
-.cf-card .cf-table td:nth-child(5) {
-  width: 13%;
-}
-
-.cf-card .cf-table th:nth-child(6),
-.cf-card .cf-table td:nth-child(6) {
-  width: 13%;
-}
-
-.mc-course-tag {
-  display: inline-block;
-  background: rgba(59,130,246, 0.08);
-  color: #2563eb;
-  padding: 4px 10px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: 600;
-  max-width: 100%;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
 /* RESPONSIVE */
 @media (max-width: 900px) {
   .mc-stats-grid {
