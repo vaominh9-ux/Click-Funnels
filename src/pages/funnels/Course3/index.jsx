@@ -131,6 +131,10 @@ const AICoachPage = () => {
               "Trong một thế giới phức tạp, nơi hầu như tất cả mọi người đều có thể truy cập vào cùng một nguồn thông tin, bạn có thể mang lại <strong>giá trị mới</strong> bằng cách kết nối các ý tưởng lại với nhau theo những <strong>cách mới lạ.</strong>"
             </div>
 
+            <div className="aicoach-image-container" style={{ margin: '40px 0' }}>
+              <img src="/images/course3/aicoach-system-premium.png" alt="Hệ thống hoá thông tin" className="aicoach-img-styled" />
+            </div>
+
             <p>Bây giờ là thời điểm tốt nhất để tạo ra một sản phẩm thông tin chất lượng. Tuy nhiên có một chú ý cực kỳ quan trọng:</p>
             <p style={{ fontSize: '1.5rem', fontWeight: 900, color: '#EF4444', textAlign: 'center', margin: '30px 0', letterSpacing: '1px' }}>
               "CHẤT LƯỢNG PHẢI LUÔN CAO HƠN GIÁ BÁN"
