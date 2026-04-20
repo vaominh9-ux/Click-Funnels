@@ -83,7 +83,8 @@ export default async function handler(req, res) {
         courseName: courseName || 'Không xác định',
         courseId: courseId || null,
         source: source || 'direct',
-        messageTemplate: `🔥 CÓ KHÁCH ĐĂNG KÝ MỚI 🔥\n🧑 Tên: ${name}\n📞 SĐT: ${phone}\n🛒 Phễu: ${courseName || 'Khác'}\n${email ? `📧 Email: ${email}` : ''}`
+        adminNotificationTemplate: `🔥 CÓ KHÁCH ĐĂNG KÝ MỚI 🔥\n🧑 Tên: ${name}\n📞 SĐT: ${phone}\n🛒 Phễu: ${courseName || 'Khác'}\n${email ? `📧 Email: ${email}` : ''}`,
+        customerWelcomeTemplate: `Xin chào ${name} 🎉\nChúc mừng bạn đã đăng ký thành công chương trình: ${courseName || 'Của hệ thống'}.\n\nTrợ lý AI của chúng tôi sẽ tự động kết nối và hỗ trợ bạn qua Zalo này nhé. Vui lòng chú ý tin nhắn!`
       },
       // Metadata hữu ích cho n8n
       meta: {
