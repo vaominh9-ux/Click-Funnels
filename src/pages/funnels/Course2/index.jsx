@@ -202,46 +202,48 @@ const Course2 = () => {
 
         {/* ─── PHẦN 6: "THE GRAND SLAM OFFER" ─── */}
         <section className="c2-offer-section mt-24">
-          <h2 className="c2-section-title text-center mb-10">BẠN SẼ NHẬN ĐƯỢC GÌ HÔM NAY?</h2>
+          <h2 className="c2-section-title text-center mb-10">BẠN SẼ SỞ HỮU TOÀN BỘ TÀI SẢN NÀY</h2>
           
           <div className="c2-offer-board">
             <ul className="c2-value-list">
               <li>
-                <span>🎓 4 Tuần Đào Tạo LIVE Chuyên Sâu (32 Giờ)</span>
+                <div className="offer-item"><div className="offer-icon"><CheckCircle2 size={24} /></div> <span>4 Tuần Đào Tạo LIVE Chuyên Sâu (32 Giờ)</span></div>
                 <span className="value">15.000.000₫</span>
               </li>
               <li>
-                <span>🤖 20+ AI Workflow Automation (Copy-paste deploy)</span>
+                <div className="offer-item"><div className="offer-icon"><Settings size={24} /></div> <span>20+ AI Workflow Automation (Copy-paste deploy)</span></div>
                 <span className="value">20.000.000₫</span>
               </li>
               <li>
-                <span>📣 Template Chiến Dịch Ads B2B (Facebook + TikTok)</span>
+                <div className="offer-item"><div className="offer-icon"><BarChart size={24} /></div> <span>Template Chiến Dịch Ads B2B (Facebook + TikTok)</span></div>
                 <span className="value">5.000.000₫</span>
               </li>
               <li>
-                <span>📋 Bộ Tài Liệu Agency: Hợp đồng, Proposal, Báo giá</span>
+                <div className="offer-item"><div className="offer-icon"><Briefcase size={24} /></div> <span>Bộ Tài Liệu Agency: Hợp đồng, Proposal, Báo giá</span></div>
                 <span className="value">3.000.000₫</span>
               </li>
               <li>
-                <span>📚 Thư Viện 4.000+ Prompt Chuyên Sâu B2B</span>
+                <div className="offer-item"><div className="offer-icon"><Zap size={24} /></div> <span>Thư Viện 4.000+ Prompt Chuyên Sâu B2B</span></div>
                 <span className="value">2.000.000₫</span>
               </li>
               <li>
-                <span>🎥 Bản Ghi Hình Khóa Học Phân Giải Cao 4K</span>
+                <div className="offer-item"><div className="offer-icon"><MonitorPlay size={24} /></div> <span>Bản Ghi Hình Khóa Học Phân Giải Cao 4K (Vĩnh Viễn)</span></div>
                 <span className="value">1.000.000₫</span>
               </li>
               <li>
-                <span>🔓 Tài Khoản Hệ Thống Workflow PRO (1 Năm)</span>
+                <div className="offer-item"><div className="offer-icon"><ShieldCheck size={24} /></div> <span>Tài Khoản Hệ Thống Workflow PRO (1 Năm)</span></div>
                 <span className="value">1.490.000₫</span>
               </li>
               <li className="c2-offer-bonus">
-                <span>🎁 SUPER BONUS: Cộng Đồng AI Agency Mastermind</span>
-                <span className="value text-gold">VÔ GIÁ</span>
+                <div className="offer-item"><div className="offer-icon bonus-icon"><Star size={24} /></div> <div><strong>SUPER BONUS:</strong><br/><span className="text-sm">Truy Cập Cộng Đồng AI Agency Mastermind</span></div></div>
+                <span className="value bonus-value">VÔ GIÁ</span>
               </li>
             </ul>
             <div className="c2-offer-total">
-              <div className="total-label">TỔNG GIÁ TRỊ TÀI SẢN:</div>
-              <div className="total-price strike font-bold text-3xl">&gt; 47.490.000₫</div>
+              <div className="total-label">TỔNG GIÁ TRỊ NHẬN ĐƯỢC:</div>
+              <div className="total-price-wrap">
+                <div className="total-price strike">&gt; 47.490.000₫</div>
+              </div>
             </div>
           </div>
         </section>

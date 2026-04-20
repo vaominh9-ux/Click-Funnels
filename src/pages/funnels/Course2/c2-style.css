@@ -457,7 +457,7 @@
   border: 1px solid #E2E8F0;
   border-radius: 24px;
   padding: 50px;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.1);
   position: relative;
   overflow: hidden;
 }
@@ -465,7 +465,7 @@
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0; height: 6px;
-  background: linear-gradient(90deg, #1E3A8A, #3B82F6);
+  background: linear-gradient(90deg, #1E3A8A, #3B82F6, #60A5FA);
 }
 .c2-value-list {
   list-style: none;
@@ -476,51 +476,88 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 0;
+  padding: 20px;
   border-bottom: 1px solid #F1F5F9;
   font-size: 1.15rem;
   font-weight: 500;
   color: #334155;
+  transition: all 0.2s ease;
+  border-radius: 12px;
+}
+.c2-value-list li:hover {
+  background: #F8FAFC;
+  transform: translateX(5px);
 }
 .c2-value-list li:last-child {
   border-bottom: none;
 }
+.offer-item {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.offer-icon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  border-radius: 12px;
+  background: #EFF6FF;
+  color: #2563EB;
+  flex-shrink: 0;
+}
 .c2-value-list .value {
   font-weight: 800;
-  font-family: 'Montserrat', sans-serif;
+  font-family: 'Inter', sans-serif;
   color: #64748B;
+  background: #F1F5F9;
+  padding: 6px 16px;
+  border-radius: 99px;
+  font-size: 1rem;
+  letter-spacing: 0.5px;
 }
 .c2-offer-bonus {
-  background: #FFFBEB;
-  margin: 0 -20px;
-  padding: 20px !important;
-  border-radius: 12px;
+  background: #FFFBEB !important;
+  margin: 16px -10px 0;
+  padding: 24px !important;
+  border-radius: 16px;
   border: 1px dashed #FDE68A !important;
-  margin-top: 10px;
+  box-shadow: 0 10px 20px rgba(251, 191, 36, 0.1);
 }
-.c2-offer-bonus span:first-child {
-  font-weight: 800;
+.c2-offer-bonus .bonus-icon {
+  background: #FEF3C7;
   color: #D97706;
 }
+.c2-offer-bonus strong {
+  font-weight: 900;
+  color: #B45309;
+}
+.c2-offer-bonus .bonus-value {
+  background: #F59E0B;
+  color: #FFFFFF;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.2);
+}
 .c2-offer-total {
-  background: #F8FAFC;
+  background: #0F172A;
   border-radius: 16px;
-  padding: 30px;
+  padding: 30px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border: 1px solid #E2E8F0;
+  box-shadow: 0 15px 30px rgba(15, 23, 42, 0.2);
+  color: #FFFFFF;
 }
 .c2-offer-total .total-label {
-  font-size: 1.5rem;
-  font-weight: 900;
+  font-size: 1.4rem;
+  font-weight: 800;
   font-family: 'Montserrat', sans-serif;
-  color: #475569;
+  color: #94A3B8;
 }
 .c2-offer-total .total-price {
   font-size: 2.2rem;
   font-weight: 900;
-  color: #94A3B8;
+  color: #475569;
   font-family: 'Montserrat', sans-serif;
 }
 
