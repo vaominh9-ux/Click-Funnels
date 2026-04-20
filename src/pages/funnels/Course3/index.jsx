@@ -1,154 +1,180 @@
-import React, { useEffect, useState } from 'react';
-import './c3-style.css'; // Phong cách Đẳng Cấp: THE BLACK CARD (Elite Mastermind)
-import { useFunnelTracking } from '../utils';
-import LeadModal from '../components/LeadModal';
-import { FUNNEL_COURSES } from '../config';
-import { 
-  Play, ArrowRight, ShieldAlert, Cpu, Network, Briefcase, Lock, Fingerprint
-} from 'lucide-react';
+import React from 'react';
+import './c3-premium.css';
 
-const COURSE_INFO = FUNNEL_COURSES['khoa-hoc-3'];
-
-const Course3 = () => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
-
-  useFunnelTracking();
+const AICoachPage = () => {
+  const scrollToForm = () => {
+    const formSection = document.getElementById('apply-form');
+    if (formSection) {
+      formSection.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
 
   return (
-    <div className="c3-elite-wrapper">
-      <div className="c3-elite-inner">
-        {/* HERO SECTION */}
-        <section className="c3-hero">
-          <div className="c3-top-secret-badge">
-            <Fingerprint size={16} /> DỰ ÁN MẬT DÀNH RIÊNG CHO FOUNDER & CEO 2026
-          </div>
-          
-          <h1 className="c3-elite-title">
-            BÍ MẬT XÂY DỰNG AGENCY TỰ VẬN HÀNH <br/> ĐẠT DOANH SỐ <span className="c3-gold-text">10 TỶ/NĂM</span> MÀ KHÔNG CẦN BẠN CÓ MẶT
-          </h1>
-          
-          <p className="c3-hero-sub">
-            Giải phóng bản thân khỏi mớ hỗn độn hàng ngày. Đây là hệ thống đóng gói toàn bộ quy trình CRM, Phân bổ Lead và Bảng lương tự động hóa để nhân bản doanh nghiệp của bạn lên quy mô 100 nhân sự.
+    <div className="aicoach-wrapper">
+      {/* 1. HERO SECTION */}
+      <section className="aicoach-hero">
+        <div className="aicoach-kicker">
+          ⚠️ Lưu Ý: Cần đọc cẩn thận nội dung bên dưới để tránh bỏ lỡ cơ hội mới
+        </div>
+
+        <h1>Sự thật đằng sau một Doanh Nhân Thông Tin có thu nhập <span className="aicoach-highlight">20,000 USD</span> hàng tháng...</h1>
+
+        <div className="lead-in">
+          <p>
+            "Sản phẩm thông tin" bao gồm mọi thứ, từ cuốn ebook vài đô la cho đến những khóa học chuyên sâu trị giá 50,000 USD.
           </p>
+          <p>
+            Những người như <strong>Tai Lopez, Sam Ovens, Grant Cardone</strong> đều đạt <strong>8 con số mỗi năm</strong> từ bán "thông tin". Và rất nhiều cá nhân khác cũng kiếm <strong>6-7 con số</strong> bằng sản phẩm thông tin trong thị trường ngách.
+          </p>
+          <p style={{ fontWeight: 700, marginTop: '20px', color: '#111827' }}>
+            "Cơn sốt vàng" sản phẩm thông tin chưa kết thúc — <span className="aicoach-highlight">nó chỉ mới bắt đầu.</span>
+          </p>
+        </div>
 
-          <div className="c3-vsl-board" onClick={() => setIsModalOpen(true)}>
-            <div className="c3-vsl-inner">
-              <div className="c3-play-btn">
-                <div><Play size={40} color="#BF953F" fill="#BF953F" /></div>
-              </div>
-              <div className="c3-vsl-text">MỞ KHÓA TÀI LIỆU (18 PHÚT)</div>
-            </div>
+        <button className="aicoach-btn" onClick={scrollToForm}>
+          📋 TÔI MUỐN ỨNG TUYỂN VÀO AI COACH
+        </button>
+      </section>
+
+      {/* 2. STORY SECTION */}
+      <section className="aicoach-story-section">
+        <div className="aicoach-letter">
+          <p style={{ fontWeight: '600' }}>Bài viết này trả lời 3 câu hỏi:</p>
+          <p><strong>1.</strong> Còn CƠ HỘI nào cho những người muốn thâm nhập vào thế giới sản phẩm thông tin không?</p>
+          <p><strong>2.</strong> Ai nên (và ai KHÔNG nên) xem xét việc xây dựng sản phẩm thông tin?</p>
+          <p><strong>3.</strong> Cần gì để tung ra sản phẩm thông tin thành công? Làm sao giảm tối đa sai lầm?</p>
+
+          <div className="aicoach-blockquote">
+            Và cuối cùng — một chiến lược sát thủ đang rất hiệu quả trong thị trường này.<br />
+            <strong>Nhưng trước đó, hãy nói về... những con bọ.</strong>
           </div>
 
-          <div className="c3-cta-wrap">
-            <button className="c3-elite-btn" onClick={() => setIsModalOpen(true)}>
-              TÔI ĐÃ SẴN SÀNG THOÁT KHỎI VẬN HÀNH <ArrowRight size={28} strokeWidth={3} />
-            </button>
-            <p className="c3-limited">Lưu ý: Chỉ tiếp nhận 20 CEO trong tháng này để đảm bảo chất lượng Coaching.</p>
-          </div>
-        </section>
+          <h3>🐛 Tinh Hoàn Của Bọ Cánh Cứng Dạy Bạn Điều Gì Về Kinh Doanh Online?</h3>
 
-        {/* THE BOARDROOM MODULES */}
-        <section className="c3-boardroom">
-          <h2 className="c3-elite-title" style={{ textAlign: 'center', fontSize: '32px', marginBottom: '8px' }}>CỖ MÁY IN TIỀN TỰ ĐỘNG</h2>
-          <p style={{ textAlign: 'center', color: '#94A3B8', fontSize: '16px', marginBottom: '40px' }}>Ba mảnh ghép hoàn hảo để chuyển hóa từ "Người làm nghề" sang "Chủ doanh nghiệp".</p>
-          
-          <div className="c3-grid-3">
-            <div className="c3-card">
-              <Network className="c3-card-icon" size={40} strokeWidth={1.5} />
-              <h3 className="c3-card-title">HỆ THỐNG DATA PIPELINE</h3>
-              <p>Setup guồng máy tự động kéo Data từ đa kênh đổ thẳng vào CRM, và chia đều cho hàng trăm nhân viên Sales chỉ bằng trí tuệ nhân tạo (AI).</p>
-            </div>
+          <p>Sinh vật mạnh nhất hành tinh không phải voi châu Phi — mà là <strong>con bọ cánh cứng nhỏ xíu</strong>, với sức mạnh bằng 1,141 lần trọng lượng cơ thể.</p>
+          <p>Nhưng sức mạnh lại tạo ra một vấn đề độc đáo... Có 2 loại bọ đực:</p>
 
-            <div className="c3-card">
-              <Briefcase className="c3-card-icon" size={40} strokeWidth={1.5} />
-              <h3 className="c3-card-title">NHÂN BẢN DOANH NGHIỆP</h3>
-              <p>Cơ chế thiết lập Lương cúp cứng, thưởng dật cấp và Phả hệ Affiliate nội bộ khiến nhân sự cày cuốc 200% sức lực mà không cần giám sát.</p>
-            </div>
+          <p>🦬 <strong>Bọ lớn có sừng:</strong> Dành phần lớn thời gian choảng nhau với các con đực khác và xây hầm bảo vệ con cái. Mạnh nhưng kiệt sức.</p>
+          <p>🐜 <strong>Bọ nhỏ không sừng:</strong> Trong khi bọ lớn đang đánh nhau và xây hầm, bọ nhỏ lẻn vào, liên lạc với nhiều con cái, hưởng chiến lợi phẩm.</p>
 
-            <div className="c3-card">
-              <Cpu className="c3-card-icon" size={40} strokeWidth={1.5} />
-              <h3 className="c3-card-title">MÀNG LỌC BẢO MẬT MATRIX</h3>
-              <p>Áp dụng hệ thống Role-Level Security (RLS) để cô lập dữ liệu. Không một nhân sự cấp dưới nào có quyền tải trộm Data khách hàng của công ty.</p>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      {/* THE DOSSIER (OFFER STACK) */}
-      <section className="c3-dossier-section">
-        <div className="c3-elite-inner">
-          <div className="c3-dossier-box">
-            <div className="c3-dossier-header">
-              <h2 className="c3-elite-title" style={{ fontSize: '28px', color: '#BF953F', margin: 0 }}>HỒ SƠ NHƯỢNG QUYỀN (DOSSIER)</h2>
-            </div>
-            
-            <div className="c3-dossier-body">
-              <div className="c3-dossier-row">
-                <span>Khung Sườn ERP/CRM Bản Quyền 2026</span>
-                <span className="c3-dossier-val">45.000.000 đ</span>
-              </div>
-              <div className="c3-dossier-row">
-                <span>(File Tuyệt Mật) Hợp Đồng Khoán Việc KPI & Cổ Phần Chéo</span>
-                <span className="c3-dossier-val">22.000.000 đ</span>
-              </div>
-              <div className="c3-dossier-row">
-                <span>(Vault 3) Group Coaching Cấp Cao Cùng Founder Thứ 7 Hàng Tuần</span>
-                <span className="c3-dossier-val">50.000.000 đ</span>
-              </div>
-              <div className="c3-dossier-row" style={{ borderBottom: 'none' }}>
-                <span style={{ color: '#E11D48' }}>*QUYỀN LỢI ĐẶC BIỆT: 1 Vé Thăm Khám Trực Tiếp Trụ Sở DUHAVA</span>
-                <span className="c3-dossier-val" style={{ color: '#E11D48' }}>Vô Giá</span>
-              </div>
-              
-              <div className="c3-dossier-total">
-                ĐỊNH GIÁ TÀI SẢN: <span className="c3-dossier-strike">117.000.000 đ</span>
-              </div>
-
-              <div className="c3-dossier-price">
-                <span className="c3-gold-text">CHỈ THEO YÊU CẦU</span>
-              </div>
-              <p style={{ textAlign: 'center', color: '#94A3B8', fontSize: '14px', marginTop: '8px' }}>
-                (Mức giá kích hoạt hiện tại: {COURSE_INFO.price.toLocaleString('vi-VN')} đ)
-              </p>
-
-              <div className="c3-cta-wrap" style={{ marginTop: '40px', marginBottom: 0 }}>
-                <button className="c3-elite-btn" style={{ width: '100%' }} onClick={() => setIsModalOpen(true)}>
-                  <Lock size={20} /> KIỂM TRA ĐIỀU KIỆN ỨNG TUYỂN
-                </button>
-              </div>
-            </div>
+          <div className="aicoach-blockquote">
+            <strong>Bài Học Kinh Doanh:</strong> Chiến lược có thể đánh bại lợi thế.<br />
+            Nếu bạn không phải ông lớn, không mạnh — hãy dùng sự linh hoạt và đa dạng hóa cơ hội để đạt mục tiêu.
           </div>
 
-          {/* IRONCLAD GUARANTEE */}
-          <div className="c3-ironclad">
-            <div className="c3-seal">
-               <ShieldAlert size={48} color="#E11D48" />
-            </div>
-            <div className="c3-ironclad-title">BẢN CAM KẾT HOÀN VỐN DOANH NGHIỆP</div>
-            <p style={{ fontSize: '16px', color: '#CBD5E1', lineHeight: 1.8 }}>
-              Hệ thống này được thiết kế không phải để nằm trên giấy. Nếu sau khi triển khai toàn bộ khung sườn CRM và Automation mà doanh số của công ty bạn không tăng chi phí nhân sự không giảm, 
-              <strong> chúng tôi sẽ bay trực tiếp đến văn phòng của bạn để Setup lại. Và nếu vẫn không thành công, 100% chi phí chuyển giao sẽ được bồi hoàn. Không hỏi han lằng nhằng.</strong>
-            </p>
+          <p><strong>Người Tí Hon có lợi thế linh hoạt.</strong> Khi mọi thứ không như mong đợi? Chúng ta dễ dàng chỉnh sửa, thậm chí đập đi xây lại. Điều bất khả thi với doanh nghiệp cồng kềnh.</p>
+        </div>
+      </section>
+
+      {/* 3. QUALIFICATION SECTION */}
+      <section className="aicoach-qualifications">
+        <div className="aicoach-qualifications-inner">
+          <h2 style={{ textAlign: 'center', fontSize: '2.5rem', marginBottom: '10px' }}>Ai Nên Tham Gia?</h2>
+          <p style={{ textAlign: 'center', color: '#6b7280', fontSize: '1.2rem' }}>Không Phải Ai Cũng Phù Hợp. Bạn Có Những Phẩm Chất Này Không?</p>
+
+          <ul>
+            <li>Không ngại đầu tư thời gian và năng lượng để <strong>học cách sáng tạo liên tục</strong>.</li>
+            <li>Đủ khiêm tốn để thừa nhận <strong>cần giúp đỡ</strong> — và đủ quyết tâm để tìm ra nó.</li>
+            <li>Sẵn sàng <strong>lắng nghe nhu cầu khán giả</strong> thay vì cố chấp sở thích cá nhân.</li>
+            <li>Hiểu rằng nỗi sợ hãi là sản phẩm của sự thiếu hiểu biết — cần <strong>dùng kiến thức làm sáng tỏ</strong>.</li>
+            <li>Thích <strong>phát triển bản thân</strong> và giúp người khác cùng phát triển.</li>
+            <li><strong>Kiên nhẫn và quyết tâm</strong> tới cùng với mục tiêu.</li>
+          </ul>
+
+          <div className="aicoach-blockquote" style={{ textAlign: 'center', borderColor: '#000' }}>
+            "Tin xấu: Nó không dễ dàng. Nhưng tin tốt: VÌ nó không dễ dàng — đó chính là bộ lọc cho những ai sớm từ bỏ. Nếu ai cũng làm được, ai cũng kiếm 20K USD/tháng rồi."
           </div>
         </div>
       </section>
 
-      <footer style={{ padding: '40px 0', textAlign: 'center', background: '#000', color: '#334155', borderTop: '1px solid #0F172A' }}>
-        <p>&copy; 2026 DUHAVA Academy Elite. Classified Information.</p>
-      </footer>
+      {/* 4. GRAND SLAM OFFER */}
+      <section className="aicoach-offer-section">
+        <div className="aicoach-offer-stack">
+          <h2 style={{ textAlign: 'center', fontSize: '3rem', marginBottom: '50px' }}>THE GRAND SLAM OFFER</h2>
 
-      <LeadModal 
-        isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} 
-        courseId={COURSE_INFO.id} courseName={COURSE_INFO.name} 
-      />
+          <div className="aicoach-offer-item">
+            <div className="item-desc"><span>🎓</span> Bản vẽ Hệ Thống Doanh Nhân Thông Tin 20K USD/tháng</div>
+            <div className="price">50.000.000₫</div>
+          </div>
+          <div className="aicoach-offer-item">
+            <div className="item-desc"><span>📋</span> Chuyển giao kịch bản Phễu 3 tầng (Cheap → Core → High-End)</div>
+            <div className="price">20.000.000₫</div>
+          </div>
+          <div className="aicoach-offer-item">
+            <div className="item-desc"><span>👨‍🏫</span> Coach 1:1 đồng hành + Mentor sát cánh (30-90 ngày)</div>
+            <div className="price">30.000.000₫</div>
+          </div>
+          <div className="aicoach-offer-item">
+            <div className="item-desc"><span>🤖</span> Biệt đội AI Agents vận hành tự động (CSKH, Follow, Chốt Sale)</div>
+            <div className="price">10.000.000₫</div>
+          </div>
+          <div className="aicoach-offer-item">
+            <div className="item-desc"><span>📊</span> Template Grand Slam Offer + Kịch bản chốt sale High-Ticket</div>
+            <div className="price">5.000.000₫</div>
+          </div>
+          <div className="aicoach-offer-item" style={{ background: '#fffbeb', borderColor: '#fef08a' }}>
+            <div className="item-desc"><span>👑</span> Mastermind: Cộng đồng Doanh Nhân Thông Tin trọn đời</div>
+            <div className="price" style={{ color: '#d97706', fontWeight: '900' }}>VÔ GIÁ</div>
+          </div>
+
+          <div className="aicoach-total-box">
+            <h3 style={{ fontSize: '1.5rem', color: '#4b5563', marginBottom: '20px' }}>Tổng Giá Trị Bao Gồm:</h3>
+            <div className="aicoach-total-strike">115.000.000₫</div>
+            <div style={{ fontSize: '1.2rem', marginBottom: '10px', color: '#111827', fontWeight: 600 }}>Khoản Đầu Tư Của Bạn Ngay Hôm Nay:</div>
+            <div className="aicoach-total-final">19.997.000₫</div>
+
+            <button className="aicoach-btn" onClick={scrollToForm} style={{ fontSize: '1.5rem', padding: '24px 40px' }}>
+              👉 ĐĂNG KÝ ỨNG TUYỂN NGAY
+            </button>
+          </div>
+        </div>
+      </section>
+
+      {/* 5. FORM SECTION */}
+      <section className="aicoach-form-section" id="apply-form">
+        <div className="aicoach-form-container">
+          <h3>Đơn Ứng Tuyển</h3>
+          <p style={{ color: '#6b7280', marginBottom: '30px', textAlign: 'center' }}>
+            AI Coach Không Dành Cho Số Đông. Vui lòng điền thông tin bên dưới để chuyên gia của chúng tôi gọi điện phỏng vấn thẩm định.
+          </p>
+
+          <form onSubmit={(e) => { e.preventDefault(); alert('Đơn đăng ký mô phỏng thành công! Flow tiếp theo: Chuyên gia gọi điện.'); }}>
+            <div className="aicoach-form-group">
+              <label>Họ và Tên</label>
+              <input type="text" placeholder="Nhập họ tên của bạn..." required />
+            </div>
+
+            <div className="aicoach-form-group">
+              <label>Số điện thoại (Có Zalo)</label>
+              <input type="tel" placeholder="Nhập số điện thoại..." required />
+            </div>
+
+            <div className="aicoach-form-group">
+              <label>Nghề nghiệp / Doanh thu hiện tại</label>
+              <input type="text" placeholder="Ví dụ: Freelancer, 20tr/tháng..." required />
+            </div>
+
+            <button type="submit" className="aicoach-btn" style={{ width: '100%', marginTop: '10px' }}>
+              GỬI YÊU CẦU ỨNG TUYỂN
+            </button>
+          </form>
+
+          <div style={{ marginTop: '30px', fontSize: '0.85rem', color: '#9ca3af', textAlign: 'center' }}>
+            *BƯỚC 1: Điền form ứng tuyển.<br />
+            *BƯỚC 2: Chuyên gia gọi điện phỏng vấn.<br />
+            *BƯỚC 3: Nếu phù hợp → Chuyển khoản → Kích hoạt hành trình.
+          </div>
+        </div>
+      </section>
+
+      {/* FOOTER */}
+      <footer className="aicoach-footer">
+        © 2026 HUNGNPV. All rights reserved.<br />
+        HUNGNPV AI.VIBE.CODE <br />
+        🔒 Bảo mật SSL | Thanh toán an toàn
+      </footer>
     </div>
   );
 };
 
-
-export default Course3;
+export default AICoachPage;

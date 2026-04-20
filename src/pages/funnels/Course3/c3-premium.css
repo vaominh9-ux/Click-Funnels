@@ -1,0 +1,381 @@
+/* Reset -  Light Theme AI Coach Landing Page */
+
+.aicoach-wrapper {
+    padding: 0;
+    background-color: #ffffff;
+    color: #111827;
+    /* Very dark gray for text */
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    min-height: 100vh;
+    line-height: 1.6;
+    overflow-x: hidden;
+}
+
+/* Typography basics */
+.aicoach-wrapper h1,
+.aicoach-wrapper h2,
+.aicoach-wrapper h3 {
+    font-family: 'Montserrat', 'Inter', sans-serif;
+    font-weight: 900;
+    line-height: 1.2;
+    margin-top: 0;
+    color: #000000;
+}
+
+/* Utilities */
+.aicoach-highlight {
+    /* Hormozi Yellow Highlighter on Light BG */
+    background-color: #fef08a;
+    padding: 0 4px;
+    color: #000000;
+    border-radius: 2px;
+}
+
+.aicoach-red {
+    color: #dc2626;
+}
+
+.aicoach-green {
+    color: #059669;
+    /* Darker emerald for light bg */
+}
+
+/* Kicker / Warning */
+.aicoach-kicker {
+    border: 2px dashed #dc2626;
+    /* Warning Red */
+    color: #dc2626;
+    padding: 12px 20px;
+    display: inline-block;
+    font-weight: 900;
+    font-size: 0.95rem;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    margin-bottom: 30px;
+    background-color: #fef2f2;
+    /* Light red tint */
+}
+
+/* Button */
+.aicoach-btn {
+    background-color: #ef4444;
+    /* Aggressive Red CTA */
+    color: #ffffff;
+    border: none;
+    padding: 20px 40px;
+    font-size: 1.25rem;
+    font-weight: 900;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.4);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    width: 100%;
+    max-width: 500px;
+}
+
+.aicoach-btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 15px 35px rgba(239, 68, 68, 0.6);
+    background-color: #dc2626;
+}
+
+/* --- SECTIONS --- */
+
+/* Hero */
+.aicoach-hero {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 100px 24px 80px;
+    text-align: center;
+    background-color: #ffffff;
+}
+
+.aicoach-hero h1 {
+    font-size: 3.5rem;
+    margin-bottom: 30px;
+    text-transform: uppercase;
+    letter-spacing: -1px;
+}
+
+.aicoach-hero .lead-in {
+    font-size: 1.25rem;
+    color: #4b5563;
+    /* Gray 600 */
+    max-width: 800px;
+    margin: 0 auto 40px;
+    font-weight: 400;
+}
+
+.aicoach-hero .lead-in strong {
+    color: #000000;
+}
+
+/* Story/Letter */
+.aicoach-story-section {
+    background: #f9fafb;
+    /* Off white for contrast */
+    padding: 80px 24px;
+    border-top: 1px solid #e5e7eb;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.aicoach-letter {
+    max-width: 750px;
+    margin: 0 auto;
+    font-size: 1.2rem;
+    color: #374151;
+    /* Gray 700 */
+}
+
+.aicoach-letter h3 {
+    font-size: 1.8rem;
+    color: #000000;
+    margin-top: 40px;
+    margin-bottom: 20px;
+}
+
+.aicoach-letter p {
+    margin-bottom: 24px;
+}
+
+.aicoach-blockquote {
+    border-left: 5px solid #ef4444;
+    padding: 24px;
+    margin: 32px 0;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: #111827;
+    background: #ffffff;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+}
+
+/* Table */
+.aicoach-table-wrapper {
+    margin: 40px 0;
+    overflow-x: auto;
+}
+
+.aicoach-table {
+    width: 100%;
+    border-collapse: collapse;
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+}
+
+.aicoach-table th,
+.aicoach-table td {
+    padding: 16px 20px;
+    border: 1px solid #e5e7eb;
+    text-align: left;
+}
+
+.aicoach-table th {
+    background: #f9fafb;
+    color: #111827;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 1px;
+}
+
+/* Qualifications */
+.aicoach-qualifications {
+    background: #ffffff;
+    padding: 80px 24px;
+}
+
+.aicoach-qualifications-inner {
+    max-width: 750px;
+    margin: 0 auto;
+}
+
+.aicoach-qualifications ul {
+    list-style: none;
+    padding: 0;
+    margin-top: 30px;
+}
+
+.aicoach-qualifications li {
+    font-size: 1.2rem;
+    margin-bottom: 24px;
+    padding-left: 40px;
+    position: relative;
+    color: #111827;
+    font-weight: 500;
+}
+
+.aicoach-qualifications li::before {
+    content: '✅';
+    position: absolute;
+    left: 0;
+    font-size: 1.3rem;
+}
+
+/* Grand Slam Offer */
+.aicoach-offer-section {
+    background: #f3f4f6;
+    /* Light gray to ground the white boxes */
+    padding: 100px 24px;
+    border-top: 1px dashed #d1d5db;
+}
+
+.aicoach-offer-stack {
+    max-width: 800px;
+    margin: 0 auto;
+}
+
+.aicoach-offer-item {
+    background: #ffffff;
+    border: 1px solid #e5e7eb;
+    padding: 24px;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.04);
+    transition: transform 0.2s ease;
+    border-radius: 8px;
+}
+
+.aicoach-offer-item:hover {
+    transform: scale(1.01);
+    border-color: #ef4444;
+    box-shadow: 0 10px 15px rgba(0, 0, 0, 0.08);
+}
+
+.aicoach-offer-item .item-desc {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    color: #111827;
+    font-weight: 600;
+}
+
+.aicoach-offer-item .price {
+    color: #6b7280;
+    font-family: monospace;
+    font-size: 1.1rem;
+}
+
+.aicoach-total-box {
+    text-align: center;
+    margin-top: 60px;
+    padding: 40px;
+    background: #ffffff;
+    border: 2px dashed #ef4444;
+    border-radius: 12px;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.aicoach-total-strike {
+    font-size: 2rem;
+    color: #6b7280;
+    text-decoration: line-through;
+    margin-bottom: 10px;
+    font-weight: 800;
+}
+
+.aicoach-total-final {
+    font-size: 4.5rem;
+    color: #dc2626;
+    font-weight: 900;
+    margin-bottom: 20px;
+    line-height: 1;
+}
+
+/* Form Section */
+.aicoach-form-section {
+    padding: 80px 24px;
+    background: #ffffff;
+}
+
+.aicoach-form-container {
+    max-width: 600px;
+    margin: 0 auto;
+    background: #f8fafc;
+    padding: 50px;
+    border-radius: 16px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.1);
+}
+
+.aicoach-form-container h3 {
+    font-size: 2.2rem;
+    margin-bottom: 10px;
+    color: #0f172a;
+    text-align: center;
+}
+
+.aicoach-form-group {
+    margin-bottom: 24px;
+    text-align: left;
+}
+
+.aicoach-form-group label {
+    display: block;
+    margin-bottom: 8px;
+    color: #475569;
+    font-size: 0.95rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    font-weight: 700;
+}
+
+.aicoach-form-container input {
+    width: 100%;
+    padding: 16px;
+    background: #ffffff;
+    border: 2px solid #cbd5e1;
+    color: #0f172a;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    transition: border-color 0.3s;
+}
+
+.aicoach-form-container input:focus {
+    outline: none;
+    border-color: #ef4444;
+}
+
+/* Footer */
+.aicoach-footer {
+    text-align: center;
+    padding: 40px 24px;
+    color: #6b7280;
+    font-size: 0.9rem;
+    background: #e2e8f0;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .aicoach-hero h1 {
+        font-size: 2.2rem;
+    }
+
+    .aicoach-hero {
+        padding: 60px 20px 40px;
+    }
+
+    .aicoach-btn {
+        font-size: 1rem;
+        padding: 16px 20px;
+    }
+
+    .aicoach-total-final {
+        font-size: 3rem;
+    }
+
+    .aicoach-offer-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 12px;
+    }
+
+    .aicoach-form-container {
+        padding: 24px;
+    }
+}
