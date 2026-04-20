@@ -115,54 +115,54 @@ const Course2 = () => {
           <div className="c2-timeline-wrapper">
             
             <div className="c2-module-card">
-              <div className="module-week">TUẦN 1</div>
+              <div className="module-week"><span>TUẦN 1</span></div>
               <div className="module-content">
                 <h3 className="module-title">Nền Tảng Automation Chuyên Sâu</h3>
                 <ul className="module-list">
-                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Master n8n: Từ cơ bản đến nâng cao.</li>
-                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Xây hệ thống AI Agents tự suy luận (CSKH, chốt sale).</li>
-                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Build pipeline: Ý tưởng → Sản xuất → Phân phối → Chốt sale.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check flex-shrink-0" /> Master n8n: Từ cơ bản đến nâng cao.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check flex-shrink-0" /> Xây hệ thống AI Agents tự suy luận (CSKH, chốt sale).</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check flex-shrink-0" /> Build pipeline: Ý tưởng → Sản xuất → Phân phối → Chốt sale.</li>
                 </ul>
                 <div className="module-output"><strong>ĐẦU RA:</strong> Bộ 10+ workflow automation sẵn sàng deploy cho khách.</div>
               </div>
             </div>
 
             <div className="c2-module-card">
-              <div className="module-week">TUẦN 2</div>
+              <div className="module-week"><span>TUẦN 2</span></div>
               <div className="module-content">
                 <h3 className="module-title">Làm Chủ Ads & Traffic</h3>
                 <ul className="module-list">
-                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Facebook Ads cho B2B: Targeting doanh nghiệp, CEO, founders.</li>
-                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> TikTok Ads: Case study 100K-200K followers/tháng.</li>
-                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Chiến lược content marketing thu hút khách B2B.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check flex-shrink-0" /> Facebook Ads cho B2B: Targeting doanh nghiệp, CEO, founders.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check flex-shrink-0" /> TikTok Ads: Case study 100K-200K followers/tháng.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check flex-shrink-0" /> Chiến lược content marketing thu hút khách B2B.</li>
                 </ul>
                 <div className="module-output"><strong>ĐẦU RA:</strong> 3 chiến dịch Ads đang chạy + Content calendar 30 ngày.</div>
               </div>
             </div>
 
             <div className="c2-module-card">
-              <div className="module-week">TUẦN 3</div>
+              <div className="module-week"><span>TUẦN 3</span></div>
               <div className="module-content">
                 <h3 className="module-title">Xây Hệ Thống Agency</h3>
                 <ul className="module-list">
-                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Đóng gói dịch vụ AI cho doanh nghiệp (Basic-Pro-Enterprise).</li>
-                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Quy trình onboard khách hàng + delivery workflow.</li>
-                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Template hợp đồng, báo giá, proposal chuyên nghiệp.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check flex-shrink-0" /> Đóng gói dịch vụ AI cho doanh nghiệp (Basic-Pro-Enterprise).</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check flex-shrink-0" /> Quy trình onboard khách hàng + delivery workflow.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check flex-shrink-0" /> Template hợp đồng, báo giá, proposal chuyên nghiệp.</li>
                 </ul>
                 <div className="module-output"><strong>ĐẦU RA:</strong> Bộ tài liệu Agency hoàn chỉnh sẵn sàng mang đi bán.</div>
               </div>
             </div>
 
             <div className="c2-module-card highlight-module">
-              <div className="module-week">TUẦN 4</div>
+              <div className="module-week"><span>TUẦN 4</span></div>
               <div className="module-content">
-                <h3 className="module-title text-gold">Tối Ưu & Scale (Mở rộng)</h3>
+                <h3 className="module-title text-navy">Tối Ưu & Scale (Mở rộng)</h3>
                 <ul className="module-list">
-                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Tối ưu pipeline: Media AI 24/7 (Content, Hình ảnh, Video).</li>
-                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Thiết kế thị giác bằng thuật toán — A/B test trăm mẫu ads/ngày.</li>
-                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Sản xuất video thương mại chất lượng studio bằng AI.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check flex-shrink-0" /> Tối ưu pipeline: Media AI 24/7 (Content, Hình ảnh, Video).</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check flex-shrink-0" /> Thiết kế thị giác bằng thuật toán — A/B test trăm mẫu ads/ngày.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check flex-shrink-0" /> Sản xuất video thương mại chất lượng studio bằng AI.</li>
                 </ul>
-                <div className="module-output text-gold gold-glass"><strong>ĐẦU RA:</strong> Cỗ máy Agency tự vận hành, sẵn sàng scale lên 10+ khách.</div>
+                <div className="module-output text-navy gold-glass"><strong>ĐẦU RA:</strong> Cỗ máy Agency tự vận hành, sẵn sàng scale lên 10+ khách.</div>
               </div>
             </div>
 
