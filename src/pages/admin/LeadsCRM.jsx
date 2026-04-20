@@ -681,19 +681,27 @@ export default function LeadsCRM() {
 
             <div className="crm-modal-body" style={{flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'hidden'}}>
               <div className="crm-form-group">
-                <label style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                  <span>Sử Dụng Mẫu Email Có Sẵn (Xóa Đè)</span>
+                <div style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px'}}>
+                  <label style={{marginBottom: 0}}>Sử Dụng Mẫu Email Có Sẵn (Xóa Đè)</label>
                   <div style={{display: 'flex', gap: '8px'}}>
                     {selectedTemplate.startsWith('custom_') && (
-                      <button onClick={handleDeleteCustomTemplate} disabled={sendingBulk} style={{fontSize: '11px', padding: '2px 8px', background: '#FEF2F2', color: '#EF4444', border: '1px solid #FCA5A5', borderRadius: '4px', cursor: 'pointer'}}>
+                      <button 
+                        onClick={(e) => { e.preventDefault(); handleDeleteCustomTemplate(); }} 
+                        disabled={sendingBulk} 
+                        style={{fontSize: '11px', padding: '4px 10px', background: '#FEF2F2', color: '#EF4444', border: '1px solid #FCA5A5', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold'}}
+                      >
                         Xóa Mẫu Này
                       </button>
                     )}
-                    <button onClick={handleSaveCustomTemplate} disabled={sendingBulk} style={{fontSize: '11px', padding: '2px 8px', background: '#F0FDF4', color: '#16A34A', border: '1px solid #86EFAC', borderRadius: '4px', cursor: 'pointer'}}>
+                    <button 
+                      onClick={(e) => { e.preventDefault(); handleSaveCustomTemplate(); }} 
+                      disabled={sendingBulk} 
+                      style={{fontSize: '11px', padding: '4px 10px', background: '#F0FDF4', color: '#16A34A', border: '1px solid #86EFAC', borderRadius: '4px', cursor: 'pointer', fontWeight: 'bold'}}
+                    >
                       + Lưu Bản Đang Gõ Làm Mẫu Riêng
                     </button>
                   </div>
-                </label>
+                </div>
                 <select 
                   value={selectedTemplate} 
                   onChange={handleApplyTemplate}
