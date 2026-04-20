@@ -46,7 +46,7 @@ const Course2 = () => {
           
           <h1 className="c2-main-headline text-center">
             Lộ Trình Xây Dựng <span className="c2-metallic-text">AI Agency</span><br className="desktop-only" />
-            Làm Chủ Automation, Ads & Hệ Thống Corporate
+             Làm Chủ Automation, Ads & Hệ Thống Corporate
           </h1>
           
           <p className="c2-sub-headline text-center mb-10">
