@@ -394,6 +394,7 @@ const EmailSettings = () => {
   return (
     <div className="email-settings-container">
       <div className="es-header">
+        <h2>Mẫu Email (Templates)</h2>
         <p className="es-subtitle">Cấu hình tiêu đề và mã nguồn HTML cho các Email tự động gửi cho khách hàng.</p>
       </div>
 

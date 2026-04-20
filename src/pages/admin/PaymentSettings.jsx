@@ -144,6 +144,7 @@ const PaymentSettings = () => {
   return (
     <div className="payment-settings-container">
       <div className="ps-header">
+        <h2>Cấu Hình Thanh Toán</h2>
         <p className="ps-subtitle">Quản lý thông tin ngân hàng nhận tiền & mã QR cho trang Checkout.</p>
       </div>
 

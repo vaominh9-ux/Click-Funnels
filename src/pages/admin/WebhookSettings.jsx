@@ -162,6 +162,7 @@ const WebhookSettings = () => {
   return (
     <div className="webhook-settings-container">
       <div className="ws-header">
+        <h2>Webhook (n8n)</h2>
         <p className="ws-subtitle">Cấu hình Webhook để nhận thông báo Lead mới qua n8n → Zalo / Telegram / Email.</p>
       </div>
 
