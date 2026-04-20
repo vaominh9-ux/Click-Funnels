@@ -410,39 +410,132 @@
   line-height: 1.8;
 }
 
-/* ===== MATH BOX (Tỉnh Thức Với Con Số) ===== */
-.aicoach-math-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+/* ===== MATH STACK (Tỉnh Thức Với Con Số) ===== */
+.aicoach-math-stack {
+  display: flex;
+  flex-direction: column;
   gap: 16px;
   margin: 40px 0;
+  max-width: 650px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
-.aicoach-math-item {
-  background: #111827;
+.math-stack-card {
+  display: flex;
+  flex-direction: column;
+  background: rgba(17, 24, 39, 0.7);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border: 1px solid #1F2937;
   border-radius: 12px;
+  overflow: hidden;
+  transition: all 0.3s ease;
+}
+
+@media (min-width: 640px) {
+  .math-stack-card {
+    flex-direction: row;
+    align-items: stretch;
+  }
+}
+
+.math-stack-card .math-head {
+  background: rgba(0, 0, 0, 0.4);
   padding: 24px;
-  text-align: center;
-  transition: border-color 0.3s;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  border-bottom: 1px solid #1F2937;
+  min-width: 220px;
 }
 
-.aicoach-math-item:hover {
-  border-color: #F59E0B;
+@media (min-width: 640px) {
+  .math-stack-card .math-head {
+    border-bottom: none;
+    border-right: 1px solid #1F2937;
+  }
 }
 
-.aicoach-math-item .math-number {
-  font-family: 'Montserrat', sans-serif;
-  font-size: 2rem;
-  font-weight: 900;
-  color: #F59E0B;
-  display: block;
-  margin-bottom: 8px;
-}
-
-.aicoach-math-item .math-label {
+.math-stack-card .math-body {
+  padding: 24px;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  font-size: 1.05rem;
   color: #9CA3AF;
-  font-size: 0.9rem;
+  line-height: 1.6;
+}
+
+.math-stack-card .math-number {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.8rem;
+  font-weight: 900;
+  color: #FCD34D;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.math-stack-card .math-label {
+  font-size: 0.95rem;
+  color: #6B7280;
+  font-weight: 600;
+}
+
+.math-stack-card strong {
+  color: #EF4444;
+}
+
+/* Tier Specifics (Psychological contrast) */
+.tier-1, .tier-2, .tier-4 {
+  opacity: 0.7;
+}
+
+.tier-1:hover, .tier-2:hover, .tier-4:hover {
+  opacity: 1;
+  border-color: #374151;
+}
+
+/* The Trap */
+.math-trap {
+  border: 2px solid rgba(239, 68, 68, 0.4);
+  box-shadow: 0 0 30px rgba(239, 68, 68, 0.15), inset 0 0 20px rgba(239, 68, 68, 0.05);
+  transform: scale(1.02);
+  z-index: 10;
+  position: relative;
+  background: rgba(31, 41, 55, 0.9);
+}
+
+.math-trap .math-head {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.1) 0%, rgba(0,0,0,0.5) 100%);
+  border-right-color: rgba(239, 68, 68, 0.3);
+}
+
+.math-trap .math-number {
+  color: #EF4444;
+}
+
+.math-trap .math-label {
+  color: #FCA5A5;
+}
+
+.math-trap .math-body p {
+  color: #E5E7EB;
+}
+
+.trap-label {
+  color: #EF4444;
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: rgba(239, 68, 68, 0.1);
+  padding: 4px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  align-self: flex-start;
+  margin-bottom: 12px;
 }
 
 /* ===== STRATEGY CARDS (3 Chiến Lược) ===== */

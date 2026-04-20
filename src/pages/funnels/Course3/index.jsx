@@ -152,22 +152,46 @@ const AICoachPage = () => {
 
             <p>Bạn thỉnh thoảng vẫn thấy các phép toán như: "Để kiếm 1.000.000 đô la, tất cả những gì bạn cần là..."</p>
 
-            <div className="aicoach-math-grid">
-              <div className="aicoach-math-item">
-                <span className="math-number">100.000</span>
-                <span className="math-label">lần bán × $10</span>
+            <div className="aicoach-math-stack">
+              <div className="math-stack-card tier-1">
+                <div className="math-head">
+                  <span className="math-number">100.000</span>
+                  <span className="math-label">lần bán × $10</span>
+                </div>
+                <div className="math-body">
+                  <p>Bạn sẽ <strong>sạt nghiệp</strong> vì chi phí quảng cáo (Ads) trước khi tìm được 100.000 khách hàng lạ mặt.</p>
+                </div>
               </div>
-              <div className="aicoach-math-item">
-                <span className="math-number">10.000</span>
-                <span className="math-label">lần bán × $100</span>
+
+              <div className="math-stack-card tier-2">
+                <div className="math-head">
+                  <span className="math-number">10.000</span>
+                  <span className="math-label">lần bán × $100</span>
+                </div>
+                <div className="math-body">
+                  <p>Yêu cầu một hệ thống Marketing khổng lồ để duy trì 10 ngàn lượt mua hàng đều đặn.</p>
+                </div>
               </div>
-              <div className="aicoach-math-item">
-                <span className="math-number">1.000</span>
-                <span className="math-label">lần bán × $1.000</span>
+
+              <div className="math-stack-card tier-3 math-trap">
+                <div className="math-head">
+                  <span className="math-number">1.000</span>
+                  <span className="math-label">lần bán × $1.000</span>
+                </div>
+                <div className="math-body">
+                  <div className="trap-label">⚠️ CÁI BẪY THỰC TẾ</div>
+                  <p>Hầu hết mọi người thất bại ở đây. Cực kỳ khó để khiến 1 người lạ tin tưởng và trả $1.000 ngay lần đầu tiên chạm mặt bạn mà không qua "nuôi dưỡng".</p>
+                </div>
               </div>
-              <div className="aicoach-math-item">
-                <span className="math-number">100</span>
-                <span className="math-label">lần bán × $10.000</span>
+
+              <div className="math-stack-card tier-4">
+                <div className="math-head">
+                  <span className="math-number">100</span>
+                  <span className="math-label">lần bán × $10.000</span>
+                </div>
+                <div className="math-body">
+                  <p>Đòi hỏi bạn phải là một chuyên gia danh tiếng hạng A và có kỹ năng chốt sale High-ticket thượng thừa.</p>
+                </div>
               </div>
             </div>
 
