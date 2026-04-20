@@ -168,9 +168,9 @@ const WorkshopSettings = () => {
       const doc = iframeRef.current.contentDocument;
       if (doc) {
         doc.open();
-        // Replace {{zaloGroupLink}} just for visual reference (don't save replaced back)
-        let visualHtml = config.htmlBody.replace(/{{zaloGroupLink}}/g, config.zaloGroupLink);
-        visualHtml = visualHtml.replace(/{{firstName}}/g, 'Hưng');
+        // Không replace các biến thành nội dung fix cứng
+        // Nếu replace, khi gõ phím lưu HTML sẽ bị đè chữ cứng làm mất lệnh tự động
+        let visualHtml = config.htmlBody;
         doc.write(visualHtml);
         doc.close();
         doc.designMode = 'on';
@@ -367,6 +367,9 @@ const WorkshopSettings = () => {
                       onClick={() => {
                         if (window.confirm('Bạn có chắc chắn muốn xóa mẫu hiện tại và tải lại Template Gốc (đã tối ưu Mobile) không?')) {
                           setConfig({...config, htmlBody: DEFAULT_WORKSHOP_HTML});
+                          // Ép Iframe cập nhật lại ngay lập tức bằng cách chớp viewMode
+                          setViewMode('code');
+                          setTimeout(() => setViewMode('visual'), 50);
                           addToast('Đã khôi phục Template Gốc! Nhớ bấm Lưu Cấu Hình để áp dụng chính thức.', 'success');
                         }
                       }}
