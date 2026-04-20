@@ -473,6 +473,24 @@
   font-family: 'Montserrat', sans-serif;
 }
 
+/* PRICE REVEAL */
+.final-price-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+.price-pointer {
+  font-size: 2.2rem;
+  font-weight: 900;
+  color: #111827;
+}
+.final-price {
+  font-size: 3.8rem;
+  line-height: 1;
+}
+
 /* RISK REVERSAL */
 .risk-reversal-box {
   max-width: 600px;
@@ -541,7 +559,18 @@
   .total-price { font-size: 1.8rem; }
   
   .close-section .strike-price { font-size: 2rem; }
-  .close-section .final-price { font-size: 2.8rem; }
+  .final-price-container { 
+    flex-direction: column; 
+    gap: 4px; 
+    border: 2px dashed #FCA5A5; 
+    padding: 24px 16px; 
+    border-radius: 16px; 
+    background: #FEF2F2; 
+    margin: 16px auto 24px;
+    max-width: 320px;
+  }
+  .price-pointer { font-size: 1.6rem; }
+  .final-price { font-size: 2.8rem; }
   .risk-reversal-box { padding: 24px 20px; }
   
   .w-full-mobile { width: 100%; }

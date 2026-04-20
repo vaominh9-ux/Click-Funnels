@@ -214,7 +214,10 @@ const Course1 = () => {
             <p>Nếu thuê mentor 1:1 → <strong>10-20 triệu</strong> cho vài buổi.</p>
             <p className="mt-6 text-lg">Nhưng hôm nay, trọn gói "Khởi Sự 0 Đồng":</p>
             <h3 className="strike-price text-gray-500 font-bold line-through text-3xl mt-4">20.990.000₫</h3>
-            <h1 className="final-price text-red-600 text-5xl font-black mt-2 mb-2">👉 CHỈ {COURSE_INFO.price.toLocaleString('vi-VN')}₫</h1>
+            <div className="final-price-container mt-2 mb-4">
+              <span className="price-pointer">👉 CHỈ</span>
+              <h1 className="final-price text-red-600 font-black m-0">{COURSE_INFO.price.toLocaleString('vi-VN')}₫</h1>
+            </div>
             <p className="price-subtext text-gray-500 italic mb-8">(Rẻ hơn 1 bữa tiệc — nhưng bạn mang về 1 NGHỀ kiếm tiền cả đời)</p>
           </div>
 
