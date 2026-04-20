@@ -214,10 +214,16 @@
   display: grid;
   grid-template-columns: 1.1fr 0.9fr;
   gap: 60px;
-  align-items: center;
+  align-items: stretch;
   max-width: 1100px;
   margin: 0 auto;
   text-align: left;
+}
+
+.hero-content-left {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 }
 
 .hero-punch-list {
