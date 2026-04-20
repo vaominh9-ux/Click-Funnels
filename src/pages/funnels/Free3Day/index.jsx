@@ -33,7 +33,7 @@ const Free3DayLanding = () => {
 
           <h1 className="main-headline">
             <span className="text-highlight">3 Buổi Tối Thực Hành AI</span><br />
-            Tự Tay Build Ứng Dụng — Không Cần Biết Code
+            Tự Tay Build Ứng Dụng - Không Cần Biết Code
           </h1>
 
           <p className="sub-headline mb-8">
