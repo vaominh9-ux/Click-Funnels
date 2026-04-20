@@ -192,6 +192,9 @@ const Sidebar = ({ onClose }) => {
                 <NavLink to="/admin/email-settings" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Mẫu Email (Templates)</span>
                 </NavLink>
+                <NavLink to="/admin/webhook-settings" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Webhook (n8n → Zalo)</span>
+                </NavLink>
               </div>
             )}
           </div>

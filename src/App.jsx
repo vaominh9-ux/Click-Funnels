@@ -31,6 +31,7 @@ import AdminConversions from './pages/admin/Conversions';
 import AdminPaymentSettings from './pages/admin/PaymentSettings';
 import AdminEmailSettings from './pages/admin/EmailSettings';
 import AdminWorkshopSettings from './pages/admin/WorkshopSettings';
+import AdminWebhookSettings from './pages/admin/WebhookSettings';
 
 import ClickTracker from './pages/public/ClickTracker';
 import Checkout from './pages/public/Checkout';
@@ -217,6 +218,13 @@ const App = () => {
             <ProtectedRoute requiredRole="admin">
               <MainLayout title="Phễu Hội Thảo (Free)">
                 <AdminWorkshopSettings />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/webhook-settings" element={
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Cấu Hình Webhook (n8n)">
+                <AdminWebhookSettings />
               </MainLayout>
             </ProtectedRoute>
           } />

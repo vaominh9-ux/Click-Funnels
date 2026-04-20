@@ -1,0 +1,313 @@
+/* ==============================================
+   WEBHOOK SETTINGS — Admin Config Page
+   Pattern: PaymentSettings.css
+   ============================================== */
+
+.webhook-settings-container {
+  padding: 0;
+}
+
+.ws-header {
+  margin-bottom: 32px;
+}
+
+.ws-subtitle {
+  color: #6B7280;
+  font-size: 14px;
+  margin: 0;
+}
+
+.ws-card {
+  background: #FFFFFF;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  transition: box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+}
+
+.ws-card:hover {
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+}
+
+.ws-card-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 20px;
+  color: #111827;
+}
+
+.ws-card-header h3 {
+  font-size: 16px;
+  font-weight: 700;
+  margin: 0;
+}
+
+.ws-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.ws-field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.ws-field label {
+  font-size: 13px;
+  font-weight: 600;
+  color: #374151;
+}
+
+.ws-field input,
+.ws-field select,
+.ws-field textarea {
+  padding: 10px 14px;
+  border: 1px solid #D1D5DB;
+  border-radius: 10px;
+  font-size: 14px;
+  color: #111827;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: #fff;
+  font-family: inherit;
+}
+
+.ws-field input:focus,
+.ws-field select:focus,
+.ws-field textarea:focus {
+  outline: none;
+  border-color: #3B82F6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.ws-field textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.ws-hint {
+  font-size: 12px;
+  color: #9CA3AF;
+  margin-top: 2px;
+}
+
+.ws-save-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 28px;
+  background: linear-gradient(135deg, #3B82F6, #2563EB);
+  color: #fff;
+  border: none;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+}
+
+.ws-save-btn:hover:not(:disabled) {
+  background: linear-gradient(135deg, #2563EB, #1D4ED8);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+}
+
+.ws-save-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Status indicator */
+.ws-status {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 500;
+}
+
+.ws-status.connected {
+  background: #F0FDF4;
+  color: #166534;
+  border: 1px solid #BBF7D0;
+}
+
+.ws-status.disconnected {
+  background: #FEF2F2;
+  color: #991B1B;
+  border: 1px solid #FECACA;
+}
+
+.ws-status.pending {
+  background: #FFFBEB;
+  color: #92400E;
+  border: 1px solid #FDE68A;
+}
+
+/* Test button */
+.ws-test-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 10px 20px;
+  background: #F3F4F6;
+  color: #374151;
+  border: 1px solid #D1D5DB;
+  border-radius: 10px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.ws-test-btn:hover:not(:disabled) {
+  background: #E5E7EB;
+  border-color: #9CA3AF;
+}
+
+.ws-test-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Event log */
+.ws-event-log {
+  background: #111827;
+  color: #E5E7EB;
+  border-radius: 10px;
+  padding: 16px;
+  font-family: 'JetBrains Mono', 'Fira Code', monospace;
+  font-size: 12px;
+  line-height: 1.6;
+  max-height: 200px;
+  overflow-y: auto;
+  white-space: pre-wrap;
+}
+
+.ws-event-log .log-success { color: #6EE7B7; }
+.ws-event-log .log-error { color: #FCA5A5; }
+.ws-event-log .log-info { color: #93C5FD; }
+
+/* Grid layout */
+.ws-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: stretch;
+}
+
+.ws-col-left, .ws-col-right {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.ws-col-left .ws-card, .ws-col-right .ws-card {
+  /* Let card stretch or grow, depending on how we decide. For now flex: 1 doesn't hurt if we want them equal height occasionally. */
+}
+
+@media (max-width: 900px) {
+  .ws-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Loading */
+.ws-loading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 60px 0;
+  color: #6B7280;
+  gap: 12px;
+}
+
+.spin {
+  animation: spin-anim 1s linear infinite;
+}
+@keyframes spin-anim {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+/* Toggle switch */
+.ws-toggle-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #F3F4F6;
+}
+
+.ws-toggle-row:last-child {
+  border-bottom: none;
+}
+
+.ws-toggle-label {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.ws-toggle-label strong {
+  font-size: 14px;
+  color: #111827;
+}
+
+.ws-toggle-label span {
+  font-size: 12px;
+  color: #9CA3AF;
+}
+
+.ws-toggle {
+  position: relative;
+  width: 44px;
+  height: 24px;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.ws-toggle input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.ws-toggle-slider {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: #D1D5DB;
+  border-radius: 24px;
+  transition: 0.3s;
+}
+
+.ws-toggle-slider::before {
+  content: '';
+  position: absolute;
+  width: 18px;
+  height: 18px;
+  left: 3px;
+  bottom: 3px;
+  background: #fff;
+  border-radius: 50%;
+  transition: 0.3s;
+}
+
+.ws-toggle input:checked + .ws-toggle-slider {
+  background: #3B82F6;
+}
+
+.ws-toggle input:checked + .ws-toggle-slider::before {
+  transform: translateX(20px);
+}

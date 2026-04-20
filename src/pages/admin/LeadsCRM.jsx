@@ -1,7 +1,8 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Search, Plus, X, Phone, Mail, MessageSquare, Calendar, ArrowRight, User, MapPin } from 'lucide-react';
+import { Search, Plus, X, Phone, Mail, MessageSquare, Calendar, ArrowRight, User, MapPin, Filter, LayoutGrid, List } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
+import { FUNNEL_COURSES } from '../funnels/config';
 import Skeleton from '../../components/common/Skeleton';
 import './LeadsCRM.css';
 
@@ -44,6 +45,15 @@ export default function LeadsCRM() {
   const [searchQuery, setSearchQuery] = useState('');
   const [showAddModal, setShowAddModal] = useState(false);
   const [selectedLead, setSelectedLead] = useState(null);
+  const [viewMode, setViewMode] = useState('kanban');
+  const [funnelFilter, setFunnelFilter] = useState('');
+  
+  // Bulk Email states
+  const [selectedLeads, setSelectedLeads] = useState([]);
+  const [showBulkEmailModal, setShowBulkEmailModal] = useState(false);
+  const [bulkEmailConfig, setBulkEmailConfig] = useState({ subject: '', htmlBody: '' });
+  const [sendingBulk, setSendingBulk] = useState(false);
+  const [bulkProgress, setBulkProgress] = useState({ sent: 0, total: 0, failed: 0 });
   const [activities, setActivities] = useState([]);
   const [newActivity, setNewActivity] = useState({ type: 'note', content: '' });
   const [formData, setFormData] = useState({
@@ -161,13 +171,110 @@ export default function LeadsCRM() {
     fetchActivities(lead.id);
   };
 
-  const filteredLeads = leads.filter(lead =>
-    lead.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    lead.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-    lead.phone?.includes(searchQuery)
-  );
+  const filteredLeads = leads.filter(lead => {
+    const matchSearch = lead.name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lead.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      lead.phone?.includes(searchQuery);
+    const matchFunnel = !funnelFilter || lead.course_id === funnelFilter;
+    return matchSearch && matchFunnel;
+  });
 
   const getLeadsByStage = (stage) => filteredLeads.filter(l => l.stage === stage);
+
+  // --- Bulk Selection Logic ---
+  const toggleSelectLead = (leadId) => {
+    setSelectedLeads(prev => 
+      prev.includes(leadId) ? prev.filter(id => id !== leadId) : [...prev, leadId]
+    );
+  };
+
+  const toggleSelectAll = () => {
+    if (selectedLeads.length === filteredLeads.length && filteredLeads.length > 0) {
+      setSelectedLeads([]);
+    } else {
+      setSelectedLeads(filteredLeads.map(l => l.id));
+    }
+  };
+
+  const handleSendBulkEmail = async () => {
+    // Lấy những lead có email hợp lệ
+    const targets = leads.filter(l => selectedLeads.includes(l.id) && l.email);
+    const contacts = targets.map(t => ({ id: t.id, email: t.email, name: t.name }));
+    
+    if (contacts.length === 0) {
+      addToast('Không có email hợp lệ nào trong số khách bạn chọn!', 'error');
+      return;
+    }
+    if (!bulkEmailConfig.subject.trim() || !bulkEmailConfig.htmlBody.trim()) {
+      addToast('Tiêu đề và nội dung email không được để trống.', 'error');
+      return;
+    }
+
+    setSendingBulk(true);
+    setBulkProgress({ sent: 0, total: contacts.length, failed: 0 });
+
+    const CHUNK_SIZE = 15; // Mỗi lượt bắn 15 email để chống timeout Vercel
+    let sentSuccessCount = 0;
+    let sentFailedCount = 0;
+    
+    // Mảng gom các activity để log hàng loạt vào DB
+    let activitiesToInsert = [];
+
+    const baseUrl = import.meta.env.VITE_API_BASE || (import.meta.env.DEV ? 'http://localhost:3000' : '');
+
+    for (let i = 0; i < contacts.length; i += CHUNK_SIZE) {
+      const chunk = contacts.slice(i, i + CHUNK_SIZE);
+      try {
+        const res = await fetch(`${baseUrl}/api/email/bulk-send`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contacts: chunk,
+            subject: bulkEmailConfig.subject,
+            htmlBody: bulkEmailConfig.htmlBody
+          })
+        });
+        
+        const data = await res.json();
+        if (data.details) {
+          data.details.forEach(item => {
+            if (item && item.error) {
+              sentFailedCount++;
+            } else {
+              sentSuccessCount++;
+              // Tìm đúng lead dựa trên email để gắn log
+              const targetContact = chunk.find(c => c.email === item.email);
+              if (targetContact) {
+                activitiesToInsert.push({
+                  lead_id: targetContact.id,
+                  type: 'email',
+                  content: `Đã gửi thư loạt: "${bulkEmailConfig.subject}"`
+                });
+              }
+            }
+          });
+        } else {
+            // Fallback (chưa hỗ trợ log chi tiết)
+            sentSuccessCount += chunk.length;
+        }
+
+      } catch (err) {
+        console.error("Bulk chunk error:", err);
+        sentFailedCount += chunk.length;
+      }
+
+      setBulkProgress({ sent: sentSuccessCount, total: contacts.length, failed: sentFailedCount });
+    }
+
+    // Sau khi gửi xong, ghi Log Activity vào Supabase 1 lượt
+    if (activitiesToInsert.length > 0) {
+      const { error: logError } = await supabase.from('lead_activities').insert(activitiesToInsert);
+      if (logError) console.error("Lỗi khi lưu log email:", logError);
+    }
+
+    setSendingBulk(false);
+    addToast(`Hoàn tất! Gửi thành công: ${sentSuccessCount}, Thất bại: ${sentFailedCount}`, 'success');
+  };
 
   if (loading) {
     return (
@@ -221,6 +328,24 @@ export default function LeadsCRM() {
               onChange={(e) => setSearchQuery(e.target.value)}
             />
           </div>
+          <select
+            className="crm-funnel-filter"
+            value={funnelFilter}
+            onChange={(e) => setFunnelFilter(e.target.value)}
+          >
+            <option value="">Tất cả phễu</option>
+            {Object.entries(FUNNEL_COURSES).map(([key, val]) => (
+              <option key={key} value={key}>{val.name.split(':')[0].trim()}</option>
+            ))}
+          </select>
+          <div className="crm-view-toggles">
+            <button className={`view-toggle-btn ${viewMode === 'kanban' ? 'active' : ''}`} onClick={() => setViewMode('kanban')} title="Dạng Bảng Kanban">
+              <LayoutGrid size={16} />
+            </button>
+            <button className={`view-toggle-btn ${viewMode === 'table' ? 'active' : ''}`} onClick={() => setViewMode('table')} title="Dạng Danh Sách">
+              <List size={16} />
+            </button>
+          </div>
           <button className="crm-btn-add" onClick={() => setShowAddModal(true)}>
             <Plus size={16} />
             Thêm Khách
@@ -252,8 +377,9 @@ export default function LeadsCRM() {
         </div>
       </div>
 
-      {/* Kanban Board */}
-      <div className="kanban-board">
+      {/* Main View Content */}
+      {viewMode === 'kanban' ? (
+        <div className="kanban-board">
         {STAGES.map(stage => (
           <div className={`kanban-column stage-${stage.key}`} key={stage.key}>
             <div className="kanban-column-header">
@@ -290,6 +416,11 @@ export default function LeadsCRM() {
                       {lead.profiles?.full_name && <span><User size={12} /> {lead.profiles.full_name}</span>}
                     </div>
                     <div className="lead-card-footer">
+                      {lead.course_id && (
+                        <span className={`lead-course-badge course-${lead.course_id}`}>
+                          {FUNNEL_COURSES[lead.course_id]?.name?.split(':')[0]?.trim() || lead.course_id}
+                        </span>
+                      )}
                       <span className={`lead-source-badge source-${lead.source}`}>
                         {SOURCES.find(s => s.key === lead.source)?.label || lead.source}
                       </span>
@@ -304,6 +435,199 @@ export default function LeadsCRM() {
           </div>
         ))}
       </div>
+      ) : (
+        <div className="crm-table-view">
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th style={{ width: '40px', textAlign: 'center' }}>
+                  <input 
+                    type="checkbox" 
+                    checked={filteredLeads.length > 0 && selectedLeads.length === filteredLeads.length}
+                    onChange={toggleSelectAll} 
+                  />
+                </th>
+                <th style={{ width: '23%' }}>KHÁCH HÀNG</th>
+                <th style={{ width: '20%' }}>THÔNG TIN LH</th>
+                <th style={{ width: '25%' }}>PHỄU & NGUỒN</th>
+                <th style={{ width: '15%' }}>GIAI ĐOẠN</th>
+                <th style={{ width: '12%' }}>NGÀY TẠO</th>
+              </tr>
+            </thead>
+            <tbody>
+              {filteredLeads.length === 0 ? (
+                <tr>
+                  <td colSpan="6" style={{ textAlign: 'center', padding: '40px', color: '#64748B' }}>Chưa có khách hàng nào</td>
+                </tr>
+              ) : (
+                filteredLeads.map(lead => (
+                  <tr key={lead.id} onClick={() => openLeadDetail(lead)} style={{ cursor: 'pointer' }}>
+                    <td onClick={(e) => e.stopPropagation()} style={{ textAlign: 'center' }}>
+                      <input 
+                        type="checkbox" 
+                        checked={selectedLeads.includes(lead.id)}
+                        onChange={() => toggleSelectLead(lead.id)}
+                      />
+                    </td>
+                    <td>
+                      <div style={{ fontWeight: 600, color: '#111827', fontSize: '0.9rem' }}>{lead.name}</div>
+                      {lead.profiles?.full_name && (
+                        <div style={{ fontSize: '0.78rem', color: '#6B7280', marginTop: '4px' }}>
+                          <User size={12} style={{ verticalAlign: 'text-bottom', marginRight: '4px' }} /> 
+                          {lead.profiles.full_name}
+                        </div>
+                      )}
+                    </td>
+                    <td>
+                      {lead.phone && <div style={{ fontSize: '0.85rem', color: '#374151', marginBottom: '4px' }}><Phone size={12} style={{ marginRight: '4px', verticalAlign: 'text-bottom' }} /> {lead.phone}</div>}
+                      {lead.email && <div style={{ fontSize: '0.85rem', color: '#374151' }}><Mail size={12} style={{ marginRight: '4px', verticalAlign: 'text-bottom' }} /> {lead.email}</div>}
+                      {!lead.phone && !lead.email && <span style={{ color: '#9CA3AF', fontSize: '0.85rem' }}>—</span>}
+                    </td>
+                    <td>
+                      <div style={{ display: 'flex', gap: '6px', flexWrap: 'wrap' }}>
+                        {lead.course_id && (
+                          <span className={`lead-course-badge course-${lead.course_id}`}>
+                            {FUNNEL_COURSES[lead.course_id]?.name?.split(':')[0]?.trim() || lead.course_id}
+                          </span>
+                        )}
+                        <span className={`lead-source-badge source-${lead.source}`}>
+                          {SOURCES.find(s => s.key === lead.source)?.label || lead.source}
+                        </span>
+                      </div>
+                    </td>
+                    <td>
+                      <span className={`stage-btn s-${lead.stage} active`} style={{ cursor: 'default', display: 'inline-flex', alignItems: 'center', pointerEvents: 'none' }}>
+                        {STAGES.find(s => s.key === lead.stage)?.emoji} {STAGES.find(s => s.key === lead.stage)?.label || lead.stage}
+                      </span>
+                    </td>
+                    <td style={{ fontSize: '0.85rem', color: '#6B7280' }}>
+                      {formatDate(lead.created_at)}
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
+      )}
+
+      {/* Floating Bulk Action Bar */}
+      {selectedLeads.length > 0 && (
+        <div className="crm-bulk-action-bar">
+          <div className="bulk-info">
+            Đã chọn <strong style={{color:'#3B82F6', fontSize:'16px'}}>{selectedLeads.length}</strong> khách hàng
+          </div>
+          <div className="bulk-actions">
+            <button className="bulk-btn-cancel" onClick={() => setSelectedLeads([])}>Bỏ chọn</button>
+            <button className="bulk-btn-send" onClick={() => setShowBulkEmailModal(true)}>
+              <Mail size={16} /> Gửi Email Hàng Loạt
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* Bulk Email Modal */}
+      {showBulkEmailModal && (
+        <div className="crm-modal-backdrop" onClick={() => !sendingBulk && setShowBulkEmailModal(false)}>
+          <div className="crm-modal email-modal" onClick={(e) => e.stopPropagation()} style={{maxWidth: '1000px', height: '90vh', display: 'flex', flexDirection: 'column'}}>
+            <div className="crm-modal-header">
+              <div>
+                <h2>Gửi Email Hàng Loạt</h2>
+                <p style={{margin:0, fontSize:'13px', color:'#6B7280'}}>Gửi tới <strong>{selectedLeads.length}</strong> khách hàng đã chọn (Áp dụng cho khách có email hợp lệ)</p>
+              </div>
+              <button className="crm-modal-close" onClick={() => !sendingBulk && setShowBulkEmailModal(false)} disabled={sendingBulk}>
+                <X size={18} />
+              </button>
+            </div>
+
+            <div className="crm-modal-body" style={{flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'hidden'}}>
+              <div className="crm-form-group">
+                <label>Tiêu Đề Email (Subject)</label>
+                <input 
+                  type="text" 
+                  value={bulkEmailConfig.subject}
+                  onChange={(e) => setBulkEmailConfig({...bulkEmailConfig, subject: e.target.value})}
+                  placeholder="Ví dụ: Lộ trình cá nhân hóa cho {{name}}..."
+                  disabled={sendingBulk}
+                />
+              </div>
+              
+              <div style={{ display: 'flex', gap: '20px', flex: 1, minHeight: '300px' }}>
+                <div className="crm-form-group" style={{flex: 1}}>
+                  <label>Nội Dung (Mã HTML)</label>
+                  <textarea 
+                    value={bulkEmailConfig.htmlBody}
+                    onChange={(e) => setBulkEmailConfig({...bulkEmailConfig, htmlBody: e.target.value})}
+                    placeholder={`<p>Chào {{name}},</p>\n\n<p>Cảm ơn bạn đã quan tâm...</p>`}
+                    style={{flex: 1, fontFamily: 'monospace', fontSize: '13px'}}
+                    disabled={sendingBulk}
+                  />
+                  <p style={{fontSize: '12px', color: '#9CA3AF', margin: '4px 0 0'}}>
+                    Mẹo: Dùng thẻ <code>&lt;br/&gt;</code> để xuống dòng. Biến <code>{`{{name}}`}</code> sẽ tự động thay bằng tên khách.
+                  </p>
+                </div>
+
+                <div className="crm-form-group" style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
+                  <label style={{display: 'flex', justifyContent: 'space-between'}}>
+                    <span>Xem Trước (Live Preview)</span>
+                    <span style={{fontSize: '11px', fontWeight: 'normal', color: '#9CA3AF'}}>Hiển thị minh họa giả lập</span>
+                  </label>
+                  <div style={{
+                    flex: 1, 
+                    border: '1px solid #D1D5DB', 
+                    borderRadius: '8px', 
+                    background: '#fff', 
+                    overflow: 'hidden',
+                  }}>
+                    <iframe 
+                      title="Email Preview"
+                      srcDoc={bulkEmailConfig.htmlBody ? bulkEmailConfig.htmlBody.replace(/{{name}}/g, '<b>Nguyễn Văn A</b>') : '<div style="color:#9CA3AF; padding:20px; font-family:sans-serif; font-size:13px">Bản xem trước sẽ hiển thị ở đây...</div>'}
+                      style={{width: '100%', height: '100%', border: 'none', display: 'block'}}
+                    />
+                  </div>
+                </div>
+              </div>
+
+              {/* Progress Bar Area */}
+              {sendingBulk && (
+                <div style={{background: '#F3F4F6', padding: '16px', borderRadius: '10px'}}>
+                  <div style={{display: 'flex', justifyContent: 'space-between', fontSize: '13px', fontWeight: 600, marginBottom: '8px', color: '#374151'}}>
+                    <span>Tiến độ gửi...</span>
+                    <span>{bulkProgress.sent + bulkProgress.failed} / {bulkProgress.total}</span>
+                  </div>
+                  <div style={{width: '100%', height: '8px', background: '#E5E7EB', borderRadius: '4px', overflow: 'hidden'}}>
+                    <div style={{
+                      width: `${((bulkProgress.sent + bulkProgress.failed) / (bulkProgress.total || 1)) * 100}%`,
+                      height: '100%',
+                      background: '#3B82F6',
+                      transition: 'width 0.3s'
+                    }}></div>
+                  </div>
+                  <div style={{fontSize: '12px', color: '#6B7280', marginTop: '8px'}}>
+                    Thành công: <span style={{color: '#10B981', fontWeight: 700}}>{bulkProgress.sent}</span> | 
+                    Lỗi: <span style={{color: '#EF4444', fontWeight: 700}}>{bulkProgress.failed}</span>
+                  </div>
+                  <div style={{fontSize: '11px', color: '#F59E0B', marginTop: '6px', fontStyle: 'italic'}}>
+                    ⚠️ Vui lòng KHÔNG đóng / tải lại trình duyệt lúc này. Việc gửi chia nhỏ để tránh máy chủ bị sập & Gmail khóa acc.
+                  </div>
+                </div>
+              )}
+            </div>
+
+            <div className="crm-modal-footer">
+              <button className="crm-btn-cancel" onClick={() => setShowBulkEmailModal(false)} disabled={sendingBulk}>Hủy bỏ</button>
+              <button 
+                className="crm-btn-save" 
+                onClick={handleSendBulkEmail} 
+                disabled={sendingBulk || !bulkEmailConfig.subject || !bulkEmailConfig.htmlBody}
+                style={{display: 'flex', gap: '8px', alignItems: 'center'}}
+              >
+                {sendingBulk ? '⏳ Đang Xử Lý...' : '🚀 Bắt Đầu Gửi Ngay'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Add Lead Modal */}
       {showAddModal && (

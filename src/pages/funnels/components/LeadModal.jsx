@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../../lib/supabase';
 import { getRefCode } from '../utils';
+import { notifyNewLead } from '../utils/notifyWebhook';
 import './LeadModal.css';
 
 const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
@@ -90,6 +91,7 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
           name: formData.name,
           phone: formData.phone,
           email: formData.email,
+          course_id: courseId,
           affiliate_id: finalAffiliateId,
           link_id: linkId,
           source: refCode ? 'referral' : 'direct',
@@ -98,6 +100,17 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
         }]);
 
       if (insertError) throw insertError;
+
+      // 3.5 Gửi Webhook thông báo lead mới (fire-and-forget, không block UX)
+      notifyNewLead({
+        leadId: newLeadId,
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        courseName,
+        courseId,
+        source: refCode ? 'referral' : 'direct'
+      });
 
       // Lưu lại cache thông tin Lead vào SessionStorage để sang trang Checkout xài
       sessionStorage.setItem('tempLeadInfo', JSON.stringify({
@@ -149,9 +162,10 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
             />
           </div>
           <div className="form-group">
-            <label>Email (Không bắt buộc)</label>
+            <label>Email *</label>
             <input 
               type="email" 
+              required
               placeholder="Nhập email"
               value={formData.email}
               onChange={e => setFormData({...formData, email: e.target.value})}

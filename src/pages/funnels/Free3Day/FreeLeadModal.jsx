@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { supabase } from '../../../lib/supabase';
 import { getRefCode } from '../utils';
+import { notifyNewLead } from '../utils/notifyWebhook';
 import './FreeLeadModal.css';
 
 const WORKSHOP_API = '/api/email/send-workshop';
@@ -91,6 +92,7 @@ const FreeLeadModal = ({ isOpen, onClose, courseId, courseName }) => {
           name: formData.name,
           phone: formData.phone,
           email: formData.email,
+          course_id: courseId,
           affiliate_id: finalAffiliateId,
           link_id: linkId,
           source: refCode ? 'referral' : 'direct',
@@ -99,6 +101,17 @@ const FreeLeadModal = ({ isOpen, onClose, courseId, courseName }) => {
         }]);
 
       if (insertError) throw insertError;
+
+      // 3.5 Gửi Webhook thông báo lead mới (fire-and-forget)
+      notifyNewLead({
+        leadId: newLeadId,
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        courseName,
+        courseId,
+        source: refCode ? 'referral' : 'direct'
+      });
 
       // 4. Gọi API gửi Email Workshop + Lịch .ICS
       if (formData.email) {

@@ -260,6 +260,168 @@
 .source-referral { background: #FFFBEB; color: #D97706; }
 .source-other { background: #F3F4F6; color: #6B7280; }
 
+/* Funnel Filter Dropdown */
+.crm-funnel-filter {
+  padding: 8px 12px;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 0.82rem;
+  color: #374151;
+  background: #F9FAFB;
+  cursor: pointer;
+  outline: none;
+  transition: border-color 0.2s;
+  min-width: 140px;
+}
+
+.crm-funnel-filter:focus {
+  border-color: #3B82F6;
+  background: #fff;
+}
+
+/* View Toggle Buttons */
+.crm-view-toggles {
+  display: flex;
+  background: #F3F4F6;
+  padding: 4px;
+  border-radius: 8px;
+  border: 1px solid #E5E7EB;
+}
+
+.view-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 12px;
+  border-radius: 6px;
+  border: none;
+  background: transparent;
+  color: #6B7280;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.view-toggle-btn:hover {
+  color: #374151;
+}
+
+.view-toggle-btn.active {
+  background: #fff;
+  color: #111827;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+/* Table View Container */
+.crm-table-view {
+  flex: 1;
+  background: #fff;
+  border-radius: 12px;
+  border: 1px solid #E5E7EB;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+.crm-table-view .admin-table {
+  margin: 0;
+  border-radius: 0;
+  border: none;
+}
+
+/* Bulk Action Bar */
+.crm-bulk-action-bar {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.15), 0 0 0 1px rgba(0,0,0,0.05);
+  display: flex;
+  align-items: center;
+  gap: 24px;
+  padding: 12px 24px;
+  z-index: 900;
+  animation: slideUpFade 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes slideUpFade {
+  from { opacity: 0; transform: translate(-50%, 20px); }
+  to { opacity: 1; transform: translate(-50%, 0); }
+}
+
+.crm-bulk-action-bar .bulk-info {
+  font-size: 0.9rem;
+  color: #374151;
+}
+
+.crm-bulk-action-bar .bulk-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.bulk-btn-cancel {
+  padding: 8px 16px;
+  border-radius: 8px;
+  background: #F3F4F6;
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #4B5563;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.bulk-btn-cancel:hover { background: #E5E7EB; }
+
+.bulk-btn-send {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 20px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #10B981, #059669);
+  border: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #fff;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 4px 12px rgba(16,185,129,0.2);
+}
+.bulk-btn-send:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(16,185,129,0.3);
+}
+
+/* Course/Funnel Badge */
+.lead-course-badge {
+  font-size: 0.65rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+  white-space: nowrap;
+  background: #DBEAFE;
+  color: #1E40AF;
+}
+
+.lead-course-badge.course-free-3day { background: #D1FAE5; color: #065F46; }
+.lead-course-badge.course-khoa-hoc-1 { background: #DBEAFE; color: #1E40AF; }
+.lead-course-badge.course-khoa-hoc-2 { background: #E0E7FF; color: #3730A3; }
+.lead-course-badge.course-khoa-hoc-3 { background: #FDE68A; color: #92400E; }
+.lead-course-badge.course-khoa-hoc-4 { background: #FECACA; color: #991B1B; }
+
+.lead-card-footer {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+  padding-top: 10px;
+  border-top: 1px solid #F3F4F6;
+}
+
 .lead-value {
   font-size: 0.8rem;
   font-weight: 700;

@@ -1,13 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import LeadModal from '../components/LeadModal';
 import './c3-premium.css';
 
 const AICoachPage = () => {
-  const scrollToForm = () => {
-    const formSection = document.getElementById('apply-form');
-    if (formSection) {
-      formSection.scrollIntoView({ behavior: 'smooth' });
-    }
-  };
+  const [showModal, setShowModal] = useState(false);
 
   return (
     <div className="aicoach-wrapper">
@@ -31,7 +27,7 @@ const AICoachPage = () => {
           </p>
         </div>
 
-        <button className="aicoach-btn" onClick={scrollToForm}>
+        <button className="aicoach-btn" onClick={() => setShowModal(true)}>
           📋 TÔI MUỐN ỨNG TUYỂN VÀO AI COACH
         </button>
       </section>
@@ -123,14 +119,14 @@ const AICoachPage = () => {
             <div style={{ fontSize: '1.2rem', marginBottom: '10px', color: '#111827', fontWeight: 600 }}>Khoản Đầu Tư Của Bạn Ngay Hôm Nay:</div>
             <div className="aicoach-total-final">19.997.000₫</div>
 
-            <button className="aicoach-btn" onClick={scrollToForm} style={{ fontSize: '1.5rem', padding: '24px 40px' }}>
+            <button className="aicoach-btn" onClick={() => setShowModal(true)} style={{ fontSize: '1.5rem', padding: '24px 40px' }}>
               👉 ĐĂNG KÝ ỨNG TUYỂN NGAY
             </button>
           </div>
         </div>
       </section>
 
-      {/* 5. FORM SECTION */}
+      {/* 5. FORM SECTION - CTA cuối trang */}
       <section className="aicoach-form-section" id="apply-form">
         <div className="aicoach-form-container">
           <h3>Đơn Ứng Tuyển</h3>
@@ -138,26 +134,9 @@ const AICoachPage = () => {
             AI Coach Không Dành Cho Số Đông. Vui lòng điền thông tin bên dưới để chuyên gia của chúng tôi gọi điện phỏng vấn thẩm định.
           </p>
 
-          <form onSubmit={(e) => { e.preventDefault(); alert('Đơn đăng ký mô phỏng thành công! Flow tiếp theo: Chuyên gia gọi điện.'); }}>
-            <div className="aicoach-form-group">
-              <label>Họ và Tên</label>
-              <input type="text" placeholder="Nhập họ tên của bạn..." required />
-            </div>
-
-            <div className="aicoach-form-group">
-              <label>Số điện thoại (Có Zalo)</label>
-              <input type="tel" placeholder="Nhập số điện thoại..." required />
-            </div>
-
-            <div className="aicoach-form-group">
-              <label>Nghề nghiệp / Doanh thu hiện tại</label>
-              <input type="text" placeholder="Ví dụ: Freelancer, 20tr/tháng..." required />
-            </div>
-
-            <button type="submit" className="aicoach-btn" style={{ width: '100%', marginTop: '10px' }}>
-              GỬI YÊU CẦU ỨNG TUYỂN
-            </button>
-          </form>
+          <button className="aicoach-btn" onClick={() => setShowModal(true)} style={{ width: '100%', fontSize: '1.3rem', padding: '20px 40px' }}>
+            📋 ĐIỀN ĐƠN ỨNG TUYỂN NGAY
+          </button>
 
           <div style={{ marginTop: '30px', fontSize: '0.85rem', color: '#9ca3af', textAlign: 'center' }}>
             *BƯỚC 1: Điền form ứng tuyển.<br />
@@ -166,6 +145,14 @@ const AICoachPage = () => {
           </div>
         </div>
       </section>
+
+      {/* LEAD MODAL - Dùng chung component */}
+      <LeadModal
+        isOpen={showModal}
+        onClose={() => setShowModal(false)}
+        courseId="khoa-hoc-3"
+        courseName="AI COACH: AI Coach / AI Trainer"
+      />
 
       {/* FOOTER */}
       <footer className="aicoach-footer">
