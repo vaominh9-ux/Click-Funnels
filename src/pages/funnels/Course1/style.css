@@ -483,43 +483,66 @@
 }
 
 /* RESPONSIVE */
-@media (max-width: 768px) {
-  .hormozi-container { padding: 30px 16px; }
-  .hq-banner { font-size: 12px; padding: 10px 12px; line-height: 1.4; }
+  @media (max-width: 768px) {
+  .hormozi-container { padding: 40px 16px; }
+  .hq-banner { font-size: 11px; padding: 12px 10px; line-height: 1.5; }
   
-  .main-headline { font-size: 2rem; margin-bottom: 16px; }
-  .sub-headline { font-size: 1.1rem; margin-bottom: 24px; }
+  .hero-section { padding: 10px 0 30px; }
+  .main-headline { font-size: 2.1rem; margin-bottom: 16px; line-height: 1.25; padding: 0 10px; }
+  .sub-headline { font-size: 1.15rem; margin-bottom: 30px; padding: 0 10px; }
   
   .hero-details { 
     flex-direction: column; 
     gap: 16px; 
-    align-items: center; 
-    padding: 20px; 
-    border-radius: 12px;
+    align-items: flex-start; 
+    padding: 24px; 
+    border-radius: 16px;
+    background: #F8FAFC;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,0.02);
   }
-  .detail-item { text-align: center; flex-direction: column; gap: 8px; }
+  .detail-item { text-align: left; flex-direction: row; gap: 16px; width: 100%; }
   .detail-item span { font-size: 13px; }
+  .detail-item strong { font-size: 15px; }
   
-  .hormozi-btn { font-size: 15px !important; padding: 16px 20px !important; width: 100%; white-space: normal; line-height: 1.4;}
-  .btn-large { font-size: 15px; width: 100%; padding: 16px 20px; }
+  .hormozi-btn { font-size: 16px !important; padding: 18px 20px !important; width: 100%; white-space: normal; line-height: 1.4; border-radius: 12px;}
+  .btn-large { font-size: 16px; width: 100%; padding: 18px 20px; }
   
-  .section-title { font-size: 1.8rem; margin-bottom: 24px; }
+  .section-title { font-size: 1.8rem; margin-bottom: 24px; line-height: 1.3;}
   
-  .problem-box { padding: 24px 20px; }
-  .problem-title { font-size: 1.5rem; }
-  .pain-list li { font-size: 1rem; flex-direction: column; align-items: center; text-align: center; gap: 10px;}
+  .problem-box { padding: 24px 20px; border-radius: 16px; }
+  .problem-title { font-size: 1.6rem; margin-bottom: 20px; }
+  .pain-list li { font-size: 1.05rem; flex-direction: row; align-items: flex-start; text-align: left; gap: 12px;}
+  .problem-conclusion { font-size: 1.15rem; }
   
-  .solution-steps { gap: 12px; }
-  .s-step { padding: 16px 20px; gap: 16px; }
+  .solution-steps { gap: 16px; }
+  .s-step { padding: 16px; gap: 16px; border-radius: 12px; }
+  .s-number { width: 32px; height: 32px; font-size: 1rem; }
+  .s-step p { font-size: 1.05rem; }
   
-  .expert-box { grid-template-columns: 1fr; padding: 24px; gap: 24px; }
-  .expert-info h2 { font-size: 1.5rem; }
+  .timeline-container { gap: 16px; }
+  .t-card { padding: 20px; border-radius: 16px; }
+  .t-day { font-size: 11px; padding: 4px 10px; margin-bottom: 10px; }
+  .t-title { font-size: 1.25rem; }
+  .t-desc { font-size: 1rem; }
   
-  .offer-box { padding: 30px 20px; }
-  .value-stack-list li { flex-direction: column; text-align: center; gap: 8px; font-size: 1rem; }
-  .offer-total { flex-direction: column; text-align: center; gap: 10px; padding: 20px; }
+  .expert-box { grid-template-columns: 1fr; padding: 24px 20px; gap: 24px; border-radius: 16px; }
+  .expert-info h2 { font-size: 1.6rem; }
+  .expert-stats li { font-size: 0.95rem; }
+  
+  .offer-section { padding-top: 10px; }
+  .offer-box { padding: 30px 20px; border-radius: 20px; }
+  .value-stack-list li { flex-direction: column; text-align: left; gap: 4px; font-size: 1.05rem; align-items: flex-start; padding: 20px 0; }
+  .value-stack-list .value { font-size: 1.2rem; align-self: flex-start; margin-top: 4px; color: #9CA3AF; }
+  .offer-bonus { flex-direction: column; align-items: flex-start; }
+  .offer-bonus .value { color: #FCA5A5 !important; }
+  
+  .offer-total { flex-direction: column; text-align: center; gap: 6px; padding: 20px; margin-top: 10px; }
+  .total-label { font-size: 1.4rem; }
   .total-price { font-size: 1.8rem; }
   
-  .text-5xl { font-size: 2.5rem; }
+  .close-section .strike-price { font-size: 2rem; }
+  .close-section .final-price { font-size: 2.8rem; }
+  .risk-reversal-box { padding: 24px 20px; }
+  
   .w-full-mobile { width: 100%; }
 }
