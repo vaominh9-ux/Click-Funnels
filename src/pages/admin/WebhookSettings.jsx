@@ -18,6 +18,10 @@ const WebhookSettings = () => {
   const [enablePayment, setEnablePayment] = useState(true);
   const [adminTemplate, setAdminTemplate] = useState('🔥 CÓ KHÁCH ĐĂNG KÝ MỚI 🔥\n🧑 Tên: {{name}}\n📞 SĐT: {{phone}}\n🛒 Phễu: {{courseName}}\n📧 Email: {{email}}');
   const [customerTemplate, setCustomerTemplate] = useState('Xin chào {{name}} 🎉\nChúc mừng bạn đã đăng ký thành công chương trình: {{courseName}}.\n\nTrợ lý AI của chúng tôi sẽ tự động kết nối và hỗ trợ bạn qua Zalo này nhé. Vui lòng chú ý tin nhắn!');
+  
+  const [paymentAdminTemplate, setPaymentAdminTemplate] = useState('💰 TING TING! KHÁCH CHỐT ĐƠN 💰\n🧑 Khách: {{name}}\n📞 SĐT: {{phone}}\n🛒 Mua: {{courseName}}\n💸 Số tiền: {{amount}}đ');
+  const [paymentCustomerTemplate, setPaymentCustomerTemplate] = useState('Xin chào {{name}} 💖\nThanh toán của bạn cho khóa: {{courseName}} đã thành công.\n\nHệ thống đã ghi nhận số tiền {{amount}}đ. Đội ngũ AI sẽ sớm liên hệ xác nhận thủ tục vào lớp học với bạn nhé!');
+  
   const [testLog, setTestLog] = useState([]);
   const [activeTab, setActiveTab] = useState('connection');
 
@@ -45,6 +49,8 @@ const WebhookSettings = () => {
         setEnablePayment(config.enablePayment !== false);
         if (config.adminTemplate) setAdminTemplate(config.adminTemplate);
         if (config.customerTemplate) setCustomerTemplate(config.customerTemplate);
+        if (config.paymentAdminTemplate) setPaymentAdminTemplate(config.paymentAdminTemplate);
+        if (config.paymentCustomerTemplate) setPaymentCustomerTemplate(config.paymentCustomerTemplate);
       }
     } catch (err) {
       console.error('Load webhook settings error:', err);
@@ -67,7 +73,9 @@ const WebhookSettings = () => {
             enableNewLead,
             enablePayment,
             adminTemplate,
-            customerTemplate
+            customerTemplate,
+            paymentAdminTemplate,
+            paymentCustomerTemplate
           },
           updated_at: new Date().toISOString(),
           updated_by: user?.id
@@ -315,33 +323,70 @@ const WebhookSettings = () => {
               </div>
               
               <div className="ws-form">
-                <div className="ws-field">
-                  <label style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>Mẫu Gửi Khách Hàng (Zalo OA/SMS)</span>
-                    <span style={{ fontSize: '11px', fontWeight: 'normal', color: '#6B7280' }}>
-                      Biến: <code onClick={() => handleCopyUrl('{{name}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{name}}"}</code>{' '}
-                      <code onClick={() => handleCopyUrl('{{phone}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{phone}}"}</code>{' '}
-                      <code onClick={() => handleCopyUrl('{{courseName}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{courseName}}"}</code>
-                    </span>
-                  </label>
-                  <textarea
-                    value={customerTemplate}
-                    onChange={(e) => setCustomerTemplate(e.target.value)}
-                    placeholder="Xin chào {{name}}..."
-                    style={{ minHeight: '160px', fontSize: '13px', fontFamily: 'inherit' }}
-                  />
+                <div style={{ paddingBottom: '12px', borderBottom: '2px solid #E5E7EB', marginBottom: '12px' }}>
+                  <h4 style={{ margin: '0 0 16px 0', color: '#111827', display: 'flex', alignItems: 'center', gap: '6px' }}><Bell size={16} /> Thông Báo: Đăng Ký Mới</h4>
+                  
+                  <div className="ws-field" style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span>Mẫu Gửi Khách Hàng (Zalo OA/SMS)</span>
+                      <span style={{ fontSize: '11px', fontWeight: 'normal', color: '#6B7280' }}>
+                        Biến: <code onClick={() => handleCopyUrl('{{name}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{name}}"}</code>{' '}
+                        <code onClick={() => handleCopyUrl('{{phone}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{phone}}"}</code>{' '}
+                        <code onClick={() => handleCopyUrl('{{courseName}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{courseName}}"}</code>
+                      </span>
+                    </label>
+                    <textarea
+                      value={customerTemplate}
+                      onChange={(e) => setCustomerTemplate(e.target.value)}
+                      placeholder="Xin chào {{name}}..."
+                      style={{ minHeight: '120px', fontSize: '13px', fontFamily: 'inherit' }}
+                    />
+                  </div>
+
+                  <div className="ws-field">
+                    <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                      <span>Mẫu Thông Báo Admin (Telegram/Zalo Nhóm)</span>
+                    </label>
+                    <textarea
+                      value={adminTemplate}
+                      onChange={(e) => setAdminTemplate(e.target.value)}
+                      placeholder="🔥 CÓ KHÁCH ĐĂNG KÝ MỚI 🔥..."
+                      style={{ minHeight: '120px', fontSize: '13px', fontFamily: 'inherit' }}
+                    />
+                  </div>
                 </div>
 
-                <div className="ws-field">
-                  <label style={{ display: 'flex', justifyContent: 'space-between' }}>
-                    <span>Mẫu Thông Báo Admin (Telegram/Zalo Nhóm)</span>
-                  </label>
-                  <textarea
-                    value={adminTemplate}
-                    onChange={(e) => setAdminTemplate(e.target.value)}
-                    placeholder="🔥 CÓ KHÁCH ĐĂNG KÝ MỚI 🔥..."
-                    style={{ minHeight: '160px', fontSize: '13px', fontFamily: 'inherit' }}
-                  />
+                <div style={{ paddingTop: '8px' }}>
+                  <h4 style={{ margin: '0 0 16px 0', color: '#16A34A', display: 'flex', alignItems: 'center', gap: '6px' }}><Zap size={16} /> Thông Báo: Thanh Toán Thành Công</h4>
+                  
+                  <div className="ws-field" style={{ marginBottom: '20px' }}>
+                    <label style={{ display: 'flex', justifyContent: 'space-between', color: '#166534' }}>
+                      <span>Mẫu Nhắn Khách Hàng (Ting Ting)</span>
+                      <span style={{ fontSize: '11px', fontWeight: 'normal', color: '#6B7280' }}>
+                        Biến: <code onClick={() => handleCopyUrl('{{amount}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{amount}}"}</code>{' '}
+                        <code onClick={() => handleCopyUrl('{{name}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{name}}"}</code>{' '}
+                        <code onClick={() => handleCopyUrl('{{courseName}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{courseName}}"}</code>
+                      </span>
+                    </label>
+                    <textarea
+                      value={paymentCustomerTemplate}
+                      onChange={(e) => setPaymentCustomerTemplate(e.target.value)}
+                      placeholder="Xin chào {{name}}, cám ơn bạn đã thanh toán..."
+                      style={{ minHeight: '120px', fontSize: '13px', fontFamily: 'inherit', borderColor: '#BBF7D0', background: '#F0FDF4' }}
+                    />
+                  </div>
+
+                  <div className="ws-field">
+                    <label style={{ display: 'flex', justifyContent: 'space-between', color: '#166534' }}>
+                      <span>Mẫu Báo Cáo Admin Doanh Thu</span>
+                    </label>
+                    <textarea
+                      value={paymentAdminTemplate}
+                      onChange={(e) => setPaymentAdminTemplate(e.target.value)}
+                      placeholder="💰 TING TING! SẾP ƠI QUAY XE..."
+                      style={{ minHeight: '120px', fontSize: '13px', fontFamily: 'inherit', borderColor: '#BBF7D0', background: '#F0FDF4' }}
+                    />
+                  </div>
                 </div>
               </div>
             </div>

@@ -183,6 +183,64 @@ export default async function handler(req, res) {
           .then(d => console.log('📧 Payment success email:', d.success ? 'sent' : 'failed'))
           .catch(err => console.warn('Payment email failed (non-blocking):', err));
         }
+
+        // === GỬI N8N WEBHOOK (SỰ KIỆN THANH TOÁN) ===
+        try {
+          const settingsRes = await fetch(
+            `${SUPABASE_URL}/rest/v1/system_settings?key=eq.webhook_config&select=value`,
+            { headers: { 'apikey': SUPABASE_KEY, 'Authorization': `Bearer ${SUPABASE_KEY}` } }
+          );
+          const settingsData = await settingsRes.json();
+          if (Array.isArray(settingsData) && settingsData.length > 0 && settingsData[0].value) {
+            const config = settingsData[0].value;
+            const n8nUrl = config.n8nWebhookUrl || process.env.N8N_WEBHOOK_URL;
+            if (config.enablePayment !== false && n8nUrl) { // enablePayment mặc định true nếu không set
+              // Hàm replace template
+              const replaceVars = (tmpl) => {
+                if (!tmpl) return '';
+                const map = {
+                  name: orderInfo.customer_name || 'Quý khách',
+                  phone: orderInfo.customer_info?.phone || '',
+                  email: orderInfo.customer_info?.email || '',
+                  courseName: orderInfo.product_name || 'Khóa học',
+                  amount: orderInfo.sale_amount ? orderInfo.sale_amount.toLocaleString('vi-VN') : '0'
+                };
+                return tmpl.replace(/{{(\w+)}}/g, (_, k) => map[k] || '');
+              };
+
+              // Tự fallback nếu chưa cấu hình
+              const fbAdmin = `💰 TING TING! KHÁCH CHỐT ĐƠN 💰\n🧑 Khách: {{name}}\n📞 SĐT: {{phone}}\n🛒 Mua: {{courseName}}\n💸 Số tiền: {{amount}}đ`;
+              const fbCust  = `Xin chào {{name}} 💖\nThanh toán của bạn cho khóa: {{courseName}} đã thành công.\n\nHệ thống đã ghi nhận số tiền {{amount}}đ. Đội ngũ AI sẽ sớm liên hệ xác nhận thủ tục vào lớp học với bạn nhé!`;
+
+              const pAdminTmpl = replaceVars(config.paymentAdminTemplate || fbAdmin);
+              const pCustTmpl = replaceVars(config.paymentCustomerTemplate || fbCust);
+
+              // Đẩy sang n8n
+              fetch(n8nUrl, {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  event: 'payment_success',
+                  timestamp: new Date().toISOString(),
+                  lead: {
+                    name: orderInfo.customer_name,
+                    phone: orderInfo.customer_info?.phone,
+                    email: orderInfo.customer_info?.email,
+                    courseName: orderInfo.product_name,
+                    amount: orderInfo.sale_amount,
+                    adminNotificationTemplate: pAdminTmpl,
+                    customerWelcomeTemplate: pCustTmpl
+                  },
+                  meta: { platform: 'ClickFunnels', environment: process.env.VERCEL_ENV || 'production' }
+                })
+              })
+              .then(res => console.log('✅ n8n payment webhook triggered'))
+              .catch(e => console.warn('N8N Payment webhook failed:', e));
+            }
+          }
+        } catch (n8nErr) {
+          console.warn('N8N configuration/fetch error (non-blocking):', n8nErr);
+        }
       }
     } catch (emailErr) {
       // Email lỗi không ảnh hưởng đến webhook response
