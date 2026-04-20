@@ -82,7 +82,8 @@ export default async function handler(req, res) {
         email: email || null,
         courseName: courseName || 'Không xác định',
         courseId: courseId || null,
-        source: source || 'direct'
+        source: source || 'direct',
+        messageTemplate: `🔥 CÓ KHÁCH ĐĂNG KÝ MỚI 🔥\n🧑 Tên: ${name}\n📞 SĐT: ${phone}\n🛒 Phễu: ${courseName || 'Khác'}\n${email ? `📧 Email: ${email}` : ''}`
       },
       // Metadata hữu ích cho n8n
       meta: {

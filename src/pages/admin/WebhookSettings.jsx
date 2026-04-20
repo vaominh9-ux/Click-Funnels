@@ -306,7 +306,8 @@ const WebhookSettings = () => {
     "phone": "0901234567",
     "email": "email@example.com",
     "courseName": "AI COACH",
-    "source": "referral"
+    "source": "referral",
+    "messageTemplate": "🔥 CÓ KHÁCH...\\n🧑 Tên: ..."
   }
 }`}
                 </pre>
