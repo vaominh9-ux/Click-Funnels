@@ -171,62 +171,102 @@
 .section-title {
   font-size: 2.2rem;
   font-weight: 800;
+  letter-spacing: -0.02em;
 }
 
 .curriculum-cards {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
+  gap: 30px;
+  align-items: stretch;
 }
 
 .c-card {
-  background: #F9FAFB;
-  border: 1px solid #E5E7EB;
-  border-radius: 16px;
-  padding: 32px 24px;
+  background: #FFFFFF;
+  border: 1px solid #F3F4F6;
+  border-radius: 24px;
+  padding: 40px 32px;
   position: relative;
-  transition: transform 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 20px -2px rgba(0, 0, 0, 0.03), 0 10px 15px -3px rgba(0, 0, 0, 0.02);
+  display: flex;
+  flex-direction: column;
 }
 
-.c-card:hover { transform: translateY(-5px); }
+.c-card:hover { 
+  transform: translateY(-8px); 
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.05), 0 10px 10px -5px rgba(0, 0, 0, 0.02);
+  border-color: #E5E7EB;
+}
 
 .highlight-card {
-  background: #FEF2F2;
-  border: 2px solid #FCA5A5;
+  background: linear-gradient(180deg, #FEF2F2 0%, #FFFFFF 100%);
+  border: 2px solid #FECACA;
+  box-shadow: 0 15px 35px -5px rgba(220, 38, 38, 0.1);
+  transform: scale(1.02); /* Làm nó to hơn một chút ngay cả khi chưa hover */
+  z-index: 2;
+}
+
+.highlight-card:hover {
+  transform: scale(1.02) translateY(-8px);
+  box-shadow: 0 25px 40px -5px rgba(220, 38, 38, 0.15);
+  border-color: #FCA5A5;
 }
 
 .c-day {
-  display: inline-block;
-  background: #111827;
-  color: white;
-  font-size: 12px;
+  display: inline-flex;
+  background: #F3F4F6;
+  color: #4B5563;
+  font-size: 13px;
   font-weight: 800;
-  padding: 4px 12px;
-  border-radius: 6px;
-  margin-bottom: 16px;
-  letter-spacing: 1px;
+  padding: 6px 16px;
+  border-radius: 8px;
+  margin-bottom: 24px;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  align-self: flex-start;
+}
+
+.highlight-card .c-day {
+  background: linear-gradient(135deg, #EF4444, #DC2626) !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.3);
 }
 
 .c-title {
-  font-size: 1.25rem;
-  font-weight: 800;
-  margin-bottom: 20px;
-  min-height: 56px; /* Align heights */
+  font-size: 1.4rem;
+  font-weight: 900;
+  margin-bottom: 24px;
+  line-height: 1.35;
+  color: #111827;
+}
+
+.highlight-card .c-title {
+  color: #991B1B;
 }
 
 .c-list {
   list-style: none;
   padding: 0;
   margin: 0;
+  flex: 1;
 }
 
 .c-list li {
   display: flex;
   align-items: flex-start;
+  gap: 14px;
   font-size: 15px;
-  color: #374151;
-  margin-bottom: 12px;
-  line-height: 1.5;
+  color: #4B5563;
+  margin-bottom: 16px;
+  line-height: 1.6;
+  font-weight: 500;
+}
+
+.c-list li svg {
+  margin-top: 3px;
+  margin-right: 0 !important; /* Loại bỏ margin dính viền cũ */
+  filter: drop-shadow(0 2px 4px rgba(0,0,0,0.05));
 }
 
 /* BOTTOM CTA */
