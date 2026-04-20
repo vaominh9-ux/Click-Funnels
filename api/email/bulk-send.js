@@ -32,8 +32,8 @@ export default async function handler(req, res) {
     // Thực tế nên check auth của token Bearer cho chặt chẽ nếu cần, 
     // hiện tại dùng pass-through cơ bản cho demo MVP.
 
-    const EMAIL_USER = import.meta.env?.VITE_SMTP_USER || process.env.VITE_SMTP_USER || process.env.SMTP_USER;
-    const EMAIL_PASS = import.meta.env?.VITE_SMTP_PASS || process.env.VITE_SMTP_PASS || process.env.SMTP_PASS;
+    const EMAIL_USER = process.env.GMAIL_USER || process.env.SMTP_USER || process.env.VITE_SMTP_USER;
+    const EMAIL_PASS = process.env.GMAIL_APP_PASSWORD || process.env.SMTP_PASS || process.env.VITE_SMTP_PASS;
 
     if (!EMAIL_USER || !EMAIL_PASS) {
       console.error('Missing SMTP Configuration');

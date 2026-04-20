@@ -236,7 +236,11 @@ export default function LeadsCRM() {
         });
         
         const data = await res.json();
-        if (data.details) {
+        
+        if (!res.ok || !data.success) {
+          sentFailedCount += chunk.length;
+          console.error("Bulk email error response:", data);
+        } else if (data.details) {
           data.details.forEach(item => {
             if (item && item.error) {
               sentFailedCount++;
@@ -254,7 +258,7 @@ export default function LeadsCRM() {
             }
           });
         } else {
-            // Fallback (chưa hỗ trợ log chi tiết)
+            // Fallback thành công (khi server trả về success nhưng ko có details)
             sentSuccessCount += chunk.length;
         }
 
