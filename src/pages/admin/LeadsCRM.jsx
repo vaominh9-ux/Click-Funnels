@@ -420,8 +420,11 @@ export default function LeadsCRM() {
   if (loading) {
     return (
       <div className="crm-container">
-        <div className="crm-header">
-          <h1>CRM Khách Hàng</h1>
+        <div className="crm-header" style={{ alignItems: 'flex-start' }}>
+          <div>
+            <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827', margin: 0 }}>CRM Khách Hàng</h2>
+            <p className="text-muted" style={{ marginTop: '6px', fontSize: '13px', color: '#6B7280' }}>Quản trị hành trình khách hàng qua các Phễu và quản lý tương tác Leads.</p>
+          </div>
           <Skeleton width="200px" height="36px" />
         </div>
         <div className="crm-stats-bar">
@@ -457,8 +460,11 @@ export default function LeadsCRM() {
   return (
     <div className="crm-container">
       {/* Header */}
-      <div className="crm-header">
-        <h1>CRM Khách Hàng</h1>
+      <div className="crm-header" style={{ alignItems: 'flex-start' }}>
+        <div>
+          <h2 style={{ fontSize: '24px', fontWeight: 'bold', color: '#111827', margin: 0 }}>CRM Khách Hàng</h2>
+          <p className="text-muted" style={{ marginTop: '6px', fontSize: '13px', color: '#6B7280' }}>Quản trị hành trình khách hàng qua các Phễu và quản lý tương tác Leads.</p>
+        </div>
         <div className="crm-header-actions">
           <div className="crm-search">
             <Search size={16} color="#9CA3AF" />
