@@ -30,7 +30,7 @@ const DEFAULT_WORKSHOP_HTML = `<!DOCTYPE html>
         Bạn đã đăng ký thành công <strong style="color:#A78BFA;">Workshop 3 Buổi Tối Thực Hành AI</strong>.
       </p>
       <p style="color:#9CA3AF;font-size:14px;line-height:1.6;margin:0 0 24px;">
-        Dưới đây là lịch 3 buổi học. Bấm nút "+ Thêm vào Google Calendar" ở từng buổi hoặc Tải file Lịch (.ics) đính kèm email này để ghim vào Lịch cá nhân nhé!
+        Dưới đây là lịch 3 buổi học. Bấm nút "+ Thêm vào Google Calendar" ở từng buổi để ghim lịch vào điện thoại và nhận thông báo trước giờ học nhé!
       </p>
 
       <!-- Lịch 3 buổi -->
@@ -41,16 +41,6 @@ const DEFAULT_WORKSHOP_HTML = `<!DOCTYPE html>
         <table style="width:100%;border-collapse:collapse;background:#13131a;">
           {{sessionsHTML}}
         </table>
-      </div>
-
-      <!-- NÚT THÊM VÀO LỊCH -->
-      <div style="text-align:center;margin-bottom:24px;">
-        <div style="background:#13131a;border:2px solid #7c3aed;border-radius:12px;padding:20px;display:inline-block;width:100%;box-sizing:border-box;">
-          <p style="color:#A78BFA;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;">👇 LÊN LỊCH NHANH QUA FILE ĐÍNH KÈM (Apple / Outlook)</p>
-          <div style="background:linear-gradient(135deg,#7c3aed,#2563eb);border-radius:8px;padding:12px 20px;display:inline-block;">
-            <span style="color:#fff;font-size:14px;font-weight:800;">📅 TẢI FILE "workshop-ai.ics" BÊN DƯỚI EMAIL</span>
-          </div>
-        </div>
       </div>
 
       <!-- Link Zalo -->

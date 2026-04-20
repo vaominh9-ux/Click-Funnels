@@ -211,13 +211,12 @@ export default async function handler(req, res) {
       }
     }
 
-    // 1. Tạo file .ICS chứa cả 3 buổi
-    const icsContent = generateICS(config);
+    // 1. (Đã bỏ file .ICS theo yêu cầu)
 
     // 2. Build email HTML
     const htmlContent = buildWorkshopEmailHTML(name, config);
 
-    // 3. Gửi email kèm file .ICS đính kèm
+    // 3. Gửi email
     const transporter = createTransporter();
     
     // Ghi đè subject nếu Admin có cấu hình
@@ -230,21 +229,9 @@ export default async function handler(req, res) {
       to: email,
       subject: finalSubject,
       html: htmlContent,
-      icalEvent: {
-        filename: 'workshop-ai.ics',
-        method: 'PUBLISH',
-        content: icsContent,
-      },
-      attachments: [
-        {
-          filename: 'workshop-ai.ics',
-          content: icsContent,
-          contentType: 'text/calendar; charset=utf-8; method=PUBLISH',
-        }
-      ],
     });
 
-    console.log(`✅ Workshop email + ICS sent to ${email}, ID: ${info.messageId}`);
+    console.log(`✅ Workshop email sent to ${email}, ID: ${info.messageId}`);
     return res.status(200).json({ 
       success: true, 
       messageId: info.messageId,

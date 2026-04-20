@@ -140,7 +140,7 @@ const FreeLeadModal = ({ isOpen, onClose, courseId, courseName }) => {
           <h2>Đăng Ký Thành Công!</h2>
           <p className="success-msg">
             {formData.email 
-              ? <>Chúng tôi đã gửi <strong>lịch 3 buổi học</strong> vào email <strong>{formData.email}</strong>. Mở file đính kèm để thêm vào lịch nhé!</>
+              ? <>Chúng tôi đã gửi <strong>lịch 3 buổi học</strong> vào email <strong>{formData.email}</strong>. Kiểm tra email để ghim vào Lịch nhé!</>
               : <>Bạn đã đăng ký thành công! Vào nhóm Zalo để nhận lịch học.</>
             }
           </p>
