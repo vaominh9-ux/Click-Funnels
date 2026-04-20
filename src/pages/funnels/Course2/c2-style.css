@@ -181,13 +181,13 @@
   height: 100%;
   background: linear-gradient(120deg, transparent, rgba(255, 236, 179, 0.8), transparent);
   transform: skewX(-20deg);
-  animation: sweepGold 3s infinite;
+  animation: sweepGold 5s infinite cubic-bezier(0.25, 1, 0.5, 1);
   pointer-events: none;
   z-index: 10;
 }
 @keyframes sweepGold {
   0% { left: -150%; }
-  20% { left: 150%; }
+  40% { left: 150%; }
   100% { left: 150%; }
 }
 
