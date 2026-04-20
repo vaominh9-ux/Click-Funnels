@@ -363,6 +363,19 @@ const WorkshopSettings = () => {
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '8px' }}>
                   <label style={{ margin: 0 }}>Nội dung Email (HTML)</label>
                   <div className="mode-toggle">
+                    <button 
+                      onClick={() => {
+                        if (window.confirm('Bạn có chắc chắn muốn xóa mẫu hiện tại và tải lại Template Gốc (đã tối ưu Mobile) không?')) {
+                          setConfig({...config, htmlBody: DEFAULT_WORKSHOP_HTML});
+                          addToast('Đã khôi phục Template Gốc! Nhớ bấm Lưu Cấu Hình để áp dụng chính thức.', 'success');
+                        }
+                      }}
+                      title="Sử dụng mẫu chuẩn tối ưu cho điện thoại"
+                      style={{ background: '#374151', padding: '4px 8px', color: '#fff', borderRadius: '4px', border: 'none', fontSize: '12px', cursor: 'pointer', marginRight: '8px' }}
+                    >
+                      <RefreshCcw size={14} style={{ display: 'inline', marginRight: '4px', verticalAlign: 'text-bottom' }} /> 
+                      Khôi phục Mặc định
+                    </button>
                     <button className={viewMode === 'visual' ? 'active' : ''} onClick={() => setViewMode('visual')}><Eye size={14}/> Trực quan</button>
                     <button className={viewMode === 'code' ? 'active' : ''} onClick={() => setViewMode('code')}><Code size={14}/> Mã Code (Khuyên dùng)</button>
                   </div>
