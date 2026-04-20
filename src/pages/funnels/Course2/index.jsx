@@ -303,8 +303,7 @@ const Course2 = () => {
             <div className="shield-icon-luxury"><ShieldCheck size={48} /></div>
             <h3>Khế Ước Thép: Build Agency Không Ra Kết Quả = Đền Tiền</h3>
             <p>
-              Nếu trải qua Bootcamp 4 Tuần mà bạn không thể thiết lập 1 quy trình Agency AI tiêu chuẩn... 
-              Hệ thống sẽ cử <strong>Chuyên gia 1-Kèm-1</strong> để đưa bạn đến đích. Nếu sau 30 ngày vẫn thất bại? Chúng tôi xin lỗi & <strong>Transfer hoàn tiền gốc 100%</strong> vào ngay tài khoản.
+              Hệ thống sẽ cử <strong>Chuyên gia 1-Kèm-1</strong> đồng hành nếu bạn vướng mắc sau 4 tuần Bootcamp. Nhưng nếu sau 30 ngày vẫn thực chiến thất bại? Chúng tôi xin lỗi & <strong>Transfer hoàn tiền học phí 100%</strong> ngay lập tức.
             </p>
           </div>
 
