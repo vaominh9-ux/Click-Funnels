@@ -199,3 +199,39 @@
   from { opacity: 0; transform: translateY(20px); }
   to { opacity: 1; transform: translateY(0); }
 }
+
+/* RESPONSIVE CHO MODAL ĐĂNG KÝ TRÊN MOBILE */
+@media (max-width: 768px) {
+  .lead-modal-backdrop {
+    padding: 16px;
+  }
+  .lead-modal-card {
+    padding: 28px 20px;
+    border-radius: 12px;
+  }
+  .lead-modal-card h2 {
+    font-size: 1.35rem;
+    margin-bottom: 8px;
+    padding-right: 32px;
+  }
+  .lead-modal-card p {
+    font-size: 0.9rem;
+    margin-bottom: 24px;
+  }
+  .lead-form .form-group {
+    margin-bottom: 16px;
+  }
+  .lead-form input {
+    padding: 12px 14px;
+    font-size: 1rem; /* Ngăn chặn Zoom tự động trên Safari iOS */
+  }
+  .free-submit-btn {
+    padding: 14px;
+    font-size: 1rem;
+  }
+  .close-btn {
+    top: 16px;
+    right: 16px;
+    font-size: 24px;
+  }
+}

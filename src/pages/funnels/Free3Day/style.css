@@ -261,14 +261,39 @@
   margin: 0;
 }
 
-/* RESPONSIVE */
+/* RESPONSIVE TRẢI NGHIỆM ĐỈNH CAO MOBILE */
 @media (max-width: 768px) {
-  .main-headline { font-size: 2.2rem; }
-  .curriculum-cards { grid-template-columns: 1fr; }
-  .c-title { min-height: auto; }
-  .hero-details { flex-direction: column; gap: 20px; align-items: flex-start; padding: 20px; }
-  .w-full-mobile { width: 100%; padding: 16px; font-size: 16px; }
-  .btn-large { padding: 16px; font-size: 16px; width: 100%;}
-  .cta-box { padding: 40px 20px; }
-  .cta-box h2 { font-size: 2rem; }
+  .hormozi-container { padding: 30px 16px; }
+  
+  .hq-banner { font-size: 12px; padding: 10px 12px; line-height: 1.4; }
+  
+  .main-headline { font-size: 1.8rem; margin-bottom: 16px; }
+  .sub-headline { font-size: 1.05rem; margin-bottom: 24px; }
+  
+  .hero-details { 
+    flex-direction: column; 
+    gap: 16px; 
+    align-items: center; 
+    padding: 20px; 
+    border-radius: 12px;
+  }
+  .detail-item { text-align: center; flex-direction: column; gap: 8px; }
+  .detail-item span { font-size: 13px; }
+  .detail-item strong { font-size: 15px; }
+
+  .hormozi-btn { font-size: 15px !important; padding: 16px 20px !important; width: 100%; white-space: normal; line-height: 1.4;}
+  .btn-large { font-size: 15px; width: 100%; padding: 16px 20px; }
+  
+  .section-title { font-size: 1.8rem; margin-bottom: 32px; }
+  
+  .curriculum-cards { grid-template-columns: 1fr; gap: 16px; }
+  .c-card { padding: 24px 20px; border-radius: 12px; }
+  .c-title { min-height: auto; font-size: 1.15rem; margin-bottom: 16px; }
+  .c-list li { font-size: 14px; margin-bottom: 10px; }
+  
+  .cta-box { padding: 32px 20px; border-radius: 16px; }
+  .cta-box h2 { font-size: 1.8rem; margin-bottom: 12px;}
+  .cta-box p { font-size: 1rem; margin-bottom: 24px; }
+
+  .w-full-mobile { width: 100%; }
 }
