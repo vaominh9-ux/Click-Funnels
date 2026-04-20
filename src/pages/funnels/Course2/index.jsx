@@ -331,7 +331,7 @@ const Course2 = () => {
           <div className="c2-footer-upsell-glass c2-glass-panel mb-12 relative overflow-hidden">
              <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-50"></div>
             <Star size={34} className="mx-auto text-amber-500 mb-6 fill-amber-300 drop-shadow-md" />
-            <p className="text-xl leading-relaxed text-slate-800">
+            <p className="text-base md:text-xl leading-relaxed text-slate-800">
               <em>"Mảnh ghép tối thượng: Những Founder xuất sắc của Master Board sẽ được đặc cách trải nghiệm <strong>AI COACH D.M V.I.P (19.997.000₫)</strong> — Gói huấn luyện bí mật giúp bạn đóng gói bản thân thành Nhà Đào Tạo có hệ sinh thái vệ tinh!"</em>
             </p>
           </div>
