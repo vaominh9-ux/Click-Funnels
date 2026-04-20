@@ -1,73 +1,47 @@
-import React, { Suspense, useEffect } from 'react';
+﻿import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ToastProvider } from './components/common/Toast';
 import './index.css';
 
-// ============================================================
-// STATIC IMPORTS — Landing Pages + Checkout (khách hàng vào nhiều)
-// Giữ static để load TỨC THÌ, không chờ lazy chunk
-// ============================================================
+// Layouts & Auth
+import MainLayout from './layouts/AffiliateLayout';
+import ProtectedRoute from './components/common/ProtectedRoute';
+import Login from './pages/auth/Login';
+import Register from './pages/auth/Register';
+
+// Affiliate Pages
+import AffiliateDashboard from './pages/affiliate/Dashboard';
+import AffiliateCampaigns from './pages/affiliate/Campaigns';
+import AffiliateLinks from './pages/affiliate/AffiliateLinks';
+import AffiliateNetwork from './pages/affiliate/Network';
+import AffiliateSettings from './pages/affiliate/Settings';
+import UpgradeStore from './pages/affiliate/UpgradeStore';
+import RollupLedger from './pages/affiliate/RollupLedger';
+import MyCustomers from './pages/affiliate/MyCustomers';
+
+// Admin Pages
+import AdminDashboard from './pages/admin/Dashboard';
+import AdminAffiliatesList from './pages/admin/AffiliatesList';
+import AdminCommissionPlans from './pages/admin/CommissionPlans';
+import AdminPayouts from './pages/admin/Payouts';
+import AdminStaffManagement from './pages/admin/StaffManagement';
+import AdminCampaignManager from './pages/admin/CampaignManager';
+import AdminLeadsCRM from './pages/admin/LeadsCRM';
+import AdminConversions from './pages/admin/Conversions';
+import AdminPaymentSettings from './pages/admin/PaymentSettings';
+import AdminEmailSettings from './pages/admin/EmailSettings';
+import AdminWorkshopSettings from './pages/admin/WorkshopSettings';
+import AdminWebhookSettings from './pages/admin/WebhookSettings';
+
+import ClickTracker from './pages/public/ClickTracker';
+import Checkout from './pages/public/Checkout';
+
+// Landing Pages (Funnels)
 import Course1 from './pages/funnels/Course1';
 import Course2 from './pages/funnels/Course2';
 import Course3 from './pages/funnels/Course3';
 import Course4 from './pages/funnels/Course4';
 import Free3Day from './pages/funnels/Free3Day';
-import ClickTracker from './pages/public/ClickTracker';
-import Checkout from './pages/public/Checkout';
-
-// ============================================================
-// LAZY IMPORTS — Admin, Affiliate, Auth (chỉ load khi cần)
-// Tách thành chunks riêng → giảm ~60% bundle cho Landing Pages
-// ============================================================
-
-// Layouts & Auth
-const MainLayout = React.lazy(() => import('./layouts/AffiliateLayout'));
-const ProtectedRoute = React.lazy(() => import('./components/common/ProtectedRoute'));
-const Login = React.lazy(() => import('./pages/auth/Login'));
-const Register = React.lazy(() => import('./pages/auth/Register'));
-
-// Affiliate Pages
-const AffiliateDashboard = React.lazy(() => import('./pages/affiliate/Dashboard'));
-const AffiliateCampaigns = React.lazy(() => import('./pages/affiliate/Campaigns'));
-const AffiliateLinks = React.lazy(() => import('./pages/affiliate/AffiliateLinks'));
-const AffiliateNetwork = React.lazy(() => import('./pages/affiliate/Network'));
-const AffiliateSettings = React.lazy(() => import('./pages/affiliate/Settings'));
-const UpgradeStore = React.lazy(() => import('./pages/affiliate/UpgradeStore'));
-const RollupLedger = React.lazy(() => import('./pages/affiliate/RollupLedger'));
-const MyCustomers = React.lazy(() => import('./pages/affiliate/MyCustomers'));
-
-// Admin Pages
-const AdminDashboard = React.lazy(() => import('./pages/admin/Dashboard'));
-const AdminAffiliatesList = React.lazy(() => import('./pages/admin/AffiliatesList'));
-const AdminCommissionPlans = React.lazy(() => import('./pages/admin/CommissionPlans'));
-const AdminPayouts = React.lazy(() => import('./pages/admin/Payouts'));
-const AdminStaffManagement = React.lazy(() => import('./pages/admin/StaffManagement'));
-const AdminCampaignManager = React.lazy(() => import('./pages/admin/CampaignManager'));
-const AdminLeadsCRM = React.lazy(() => import('./pages/admin/LeadsCRM'));
-const AdminConversions = React.lazy(() => import('./pages/admin/Conversions'));
-const AdminPaymentSettings = React.lazy(() => import('./pages/admin/PaymentSettings'));
-const AdminEmailSettings = React.lazy(() => import('./pages/admin/EmailSettings'));
-const AdminWorkshopSettings = React.lazy(() => import('./pages/admin/WorkshopSettings'));
-const AdminWebhookSettings = React.lazy(() => import('./pages/admin/WebhookSettings'));
-
-// ============================================================
-// Fallback Loading Component — hiện khi lazy chunk đang tải
-// ============================================================
-const LazyFallback = () => (
-  <div style={{
-    display: 'flex', alignItems: 'center', justifyContent: 'center',
-    height: '100vh', background: '#F9FAFB'
-  }}>
-    <div style={{ textAlign: 'center' }}>
-      <div style={{
-        width: '40px', height: '40px', border: '4px solid #E5E7EB',
-        borderTopColor: '#3B82F6', borderRadius: '50%',
-        animation: 'spin 0.8s linear infinite', margin: '0 auto 12px'
-      }} />
-      <p style={{ color: '#6B7280', fontSize: '14px', margin: 0 }}>Đang tải...</p>
-    </div>
-  </div>
-);
 
 const ZoomController = () => {
   const location = useLocation();
@@ -91,7 +65,7 @@ const App = () => {
       <Router>
         <ZoomController />
         <Routes>
-          {/* ====== PUBLIC ROUTES — STATIC, TỐC ĐỘ TỐI ĐA ====== */}
+          {/* Public Routes */}
           <Route path="/khoa-hoc/3-ngay-mien-phi" element={<Free3Day />} />
           <Route path="/khoa-hoc/khoa-hoc-1" element={<Course1 />} />
           <Route path="/khoa-hoc/khoa-hoc-2" element={<Course2 />} />
@@ -100,199 +74,159 @@ const App = () => {
           <Route path="/checkout/:courseId" element={<Checkout />} />
           <Route path="/go/:refCode" element={<ClickTracker />} />
 
-          {/* ====== AUTH ROUTES — LAZY ====== */}
-          <Route path="/auth/login" element={<Suspense fallback={<LazyFallback />}><Login /></Suspense>} />
-          <Route path="/auth/register" element={<Suspense fallback={<LazyFallback />}><Register /></Suspense>} />
+          {/* Auth Routes */}
+          <Route path="/auth/login" element={<Login />} />
+          <Route path="/auth/register" element={<Register />} />
 
-          {/* ====== AFFILIATE PORTAL — LAZY ====== */}
+          {/* Affiliate Portal Routes */}
           <Route path="/portal" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute>
-                <MainLayout title="Thống Kê Thu Nhập">
-                  <AffiliateDashboard />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute>
+              <MainLayout title="Thß╗æng K├¬ Thu Nhß║¡p">
+                <AffiliateDashboard />
+              </MainLayout>
+            </ProtectedRoute>
           } />
 
           <Route path="/portal/campaigns/*" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute>
-                <MainLayout title="Chiến Dịch (Campaigns)">
-                  <AffiliateCampaigns />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute>
+              <MainLayout title="Chiß║┐n Dß╗ïch (Campaigns)">
+                <AffiliateCampaigns />
+              </MainLayout>
+            </ProtectedRoute>
           } />
 
           <Route path="/portal/network/*" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute>
-                <MainLayout title="Mạng Lưới Bán Hàng">
-                  <AffiliateNetwork />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute>
+              <MainLayout title="Mß║íng L╞░ß╗¢i B├ín H├áng">
+                <AffiliateNetwork />
+              </MainLayout>
+            </ProtectedRoute>
           } />
 
           <Route path="/portal/settings" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute>
-                <MainLayout title="Cài Đặt Cá Nhân">
-                  <AffiliateSettings />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute>
+              <MainLayout title="C├ái ─Éß║╖t C├í Nh├ón">
+                <AffiliateSettings />
+              </MainLayout>
+            </ProtectedRoute>
           } />
 
           <Route path="/affiliate/store" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute>
-                <MainLayout title="Nâng Cấp Cửa Hàng">
-                  <UpgradeStore />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute>
+              <MainLayout title="N├óng Cß║Ñp Cß╗¡a H├áng">
+                <UpgradeStore />
+              </MainLayout>
+            </ProtectedRoute>
           } />
 
           <Route path="/affiliate/ledger" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute>
-                <MainLayout title="Lịch Sử Dòng Tiền Tràn">
-                  <RollupLedger />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute>
+              <MainLayout title="Lß╗ïch Sß╗¡ D├▓ng Tiß╗ün Tr├án">
+                <RollupLedger />
+              </MainLayout>
+            </ProtectedRoute>
           } />
 
           <Route path="/affiliate/links" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute>
-                <MainLayout title="Links & UTM Tracking">
-                  <AffiliateLinks />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute>
+              <MainLayout title="Links & UTM Tracking">
+                <AffiliateLinks />
+              </MainLayout>
+            </ProtectedRoute>
           } />
 
           <Route path="/portal/customers" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute>
-                <MainLayout title="Khách Hàng Của Tôi">
-                  <MyCustomers />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute>
+              <MainLayout title="Kh├ích H├áng Cß╗ºa T├┤i">
+                <MyCustomers />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           
-          {/* ====== ADMIN PORTAL — LAZY ====== */}
+          {/* Admin Portal Routes */}
           <Route path="/admin" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute requiredRole="admin">
-                <MainLayout title="Bảng Điều Khiển Quản Trị">
-                  <AdminDashboard />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Bß║úng ─Éiß╗üu Khiß╗ân Quß║ún Trß╗ï">
+                <AdminDashboard />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           <Route path="/admin/affiliates" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute requiredRole="admin">
-                <MainLayout title="Quản Lý CTV (Affiliates)">
-                  <AdminAffiliatesList />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Quß║ún L├╜ CTV (Affiliates)">
+                <AdminAffiliatesList />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           <Route path="/admin/staff" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute requiredRole="admin">
-                <MainLayout title="Nhân Sự & Phân Quyền">
-                  <AdminStaffManagement />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Nh├ón Sß╗▒ & Ph├ón Quyß╗ün">
+                <AdminStaffManagement />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           <Route path="/admin/commissions" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute requiredRole="admin">
-                <MainLayout title="Cấu Hình Hoa Hồng">
-                  <AdminCommissionPlans />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Cß║Ñu H├¼nh Hoa Hß╗ông">
+                <AdminCommissionPlans />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           <Route path="/admin/campaign-links" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute requiredRole="admin">
-                <MainLayout title="Nguồn Link Landing Page">
-                  <AdminCampaignManager />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Nguß╗ôn Link Landing Page">
+                <AdminCampaignManager />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           <Route path="/admin/payouts" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute requiredRole="admin">
-                <MainLayout title="Duyệt Rút Tiền">
-                  <AdminPayouts />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Duyß╗çt R├║t Tiß╗ün">
+                <AdminPayouts />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           <Route path="/admin/leads" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute requiredRole="admin">
-                <MainLayout title="CRM Khách Hàng">
-                  <AdminLeadsCRM />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="CRM Kh├ích H├áng">
+                <AdminLeadsCRM />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           <Route path="/admin/conversions" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute requiredRole="admin">
-                <MainLayout title="Quản Lý Đơn Hàng & Hoa Hồng">
-                  <AdminConversions />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Quß║ún L├╜ ─É╞ín H├áng & Hoa Hß╗ông">
+                <AdminConversions />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           <Route path="/admin/payment-settings" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute requiredRole="admin">
-                <MainLayout title="Cấu Hình Thanh Toán">
-                  <AdminPaymentSettings />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Cß║Ñu H├¼nh Thanh To├ín">
+                <AdminPaymentSettings />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           <Route path="/admin/email-settings" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute requiredRole="admin">
-                <MainLayout title="Mẫu Email (Templates)">
-                  <AdminEmailSettings />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Mß║½u Email (Templates)">
+                <AdminEmailSettings />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           <Route path="/admin/workshop-config" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute requiredRole="admin">
-                <MainLayout title="Phễu Hội Thảo (Free)">
-                  <AdminWorkshopSettings />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Phß╗àu Hß╗Öi Thß║úo (Free)">
+                <AdminWorkshopSettings />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           <Route path="/admin/webhook-settings" element={
-            <Suspense fallback={<LazyFallback />}>
-              <ProtectedRoute requiredRole="admin">
-                <MainLayout title="Cấu Hình Webhook (n8n)">
-                  <AdminWebhookSettings />
-                </MainLayout>
-              </ProtectedRoute>
-            </Suspense>
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Cß║Ñu H├¼nh Webhook (n8n)">
+                <AdminWebhookSettings />
+              </MainLayout>
+            </ProtectedRoute>
           } />
           
           {/* Default Route */}
@@ -304,4 +238,3 @@ const App = () => {
 };
 
 export default App;
-
