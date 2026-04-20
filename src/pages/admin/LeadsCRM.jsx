@@ -114,6 +114,7 @@ export default function LeadsCRM() {
   const [selectedLead, setSelectedLead] = useState(null);
   const [viewMode, setViewMode] = useState('kanban');
   const [funnelFilter, setFunnelFilter] = useState('');
+  const [stageFilter, setStageFilter] = useState('');
   
   // Bulk Email states
   const [selectedLeads, setSelectedLeads] = useState([]);
@@ -255,7 +256,8 @@ export default function LeadsCRM() {
       lead.email?.toLowerCase().includes(searchQuery.toLowerCase()) ||
       lead.phone?.includes(searchQuery);
     const matchFunnel = !funnelFilter || lead.course_id === funnelFilter;
-    return matchSearch && matchFunnel;
+    const matchStage = !stageFilter || lead.stage === stageFilter;
+    return matchSearch && matchFunnel && matchStage;
   });
 
   const getLeadsByStage = (stage) => filteredLeads.filter(l => l.stage === stage);
@@ -477,6 +479,21 @@ export default function LeadsCRM() {
               <option key={key} value={key}>{val.name.split(':')[0].trim()}</option>
             ))}
           </select>
+          
+          {viewMode === 'table' && (
+            <select
+              className="crm-funnel-filter"
+              value={stageFilter}
+              onChange={(e) => setStageFilter(e.target.value)}
+              style={{ minWidth: '160px' }}
+            >
+              <option value="">Tất cả giai đoạn</option>
+              {STAGES.map(stage => (
+                <option key={stage.key} value={stage.key}>{stage.label}</option>
+              ))}
+            </select>
+          )}
+
           <div className="crm-view-toggles">
             <button className={`view-toggle-btn ${viewMode === 'kanban' ? 'active' : ''}`} onClick={() => setViewMode('kanban')} title="Dạng Bảng Kanban">
               <LayoutGrid size={16} />
