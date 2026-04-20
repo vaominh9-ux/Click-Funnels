@@ -143,13 +143,13 @@ function buildWorkshopEmailHTML(name, config) {
 
     return `
     <tr>
-      <td style="padding:12px 16px;border-bottom:1px solid #2a2a3a;color:#A78BFA;font-weight:800;font-size:14px;width:70px;vertical-align:top;">
-        Buổi ${i + 1}
+      <td style="padding:12px 10px;border-bottom:1px solid #2a2a3a;vertical-align:top;width:55px;">
+        <span style="color:#A78BFA;font-weight:800;font-size:13px;white-space:nowrap;">Buổi ${i + 1}</span>
       </td>
-      <td style="padding:12px 16px;border-bottom:1px solid #2a2a3a;">
-        <div style="color:#FFFFFF;font-weight:700;font-size:14px;margin-bottom:4px;">${s.title.split('—').pop()?.trim() || s.title}</div>
-        <div style="color:#9CA3AF;font-size:13px;margin-bottom:8px;">📅 ${formatDate(s.date)} &nbsp;|&nbsp; ⏰ ${s.startTime} - ${s.endTime}</div>
-        <a href="${gCalUrl}" target="_blank" style="display:inline-block;background:#374151;color:#E5E7EB;padding:4px 12px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600;">+ Thêm vào Google Calendar</a>
+      <td style="padding:12px 10px 12px 0;border-bottom:1px solid #2a2a3a;">
+        <div style="color:#FFFFFF;font-weight:700;font-size:14px;margin-bottom:4px;line-height:1.4;">${s.title.split('—').pop()?.trim() || s.title}</div>
+        <div style="color:#9CA3AF;font-size:12px;margin-bottom:10px;line-height:1.5;">📅 ${formatDate(s.date)} <br/>⏰ ${s.startTime} - ${s.endTime}</div>
+        <a href="${gCalUrl}" target="_blank" style="display:inline-block;background:#374151;color:#E5E7EB;padding:6px 12px;border-radius:4px;text-decoration:none;font-size:11px;font-weight:700;">+ Thêm vào Google Calendar</a>
       </td>
     </tr>
   `}).join('');
