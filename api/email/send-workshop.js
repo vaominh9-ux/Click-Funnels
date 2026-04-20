@@ -125,17 +125,34 @@ function buildWorkshopEmailHTML(name, config) {
     return `${days[date.getDay()]}, ${d}/${m}/${y}`;
   };
 
-  const sessionsHTML = config.sessions.map((s, i) => `
+  const toGoogleDate = (dateStr, timeStr) => {
+    const [year, month, day] = dateStr.split('-');
+    const [hour, minute] = timeStr.split(':');
+    const utcDate = new Date(Date.UTC(year, month - 1, day, hour - 7, minute, 0));
+    const pad = (n) => String(n).padStart(2, '0');
+    return `${utcDate.getUTCFullYear()}${pad(utcDate.getUTCMonth() + 1)}${pad(utcDate.getUTCDate())}T${pad(utcDate.getUTCHours())}${pad(utcDate.getUTCMinutes())}00Z`;
+  };
+
+  const sessionsHTML = config.sessions.map((s, i) => {
+    const start = toGoogleDate(s.date, s.startTime);
+    const end = toGoogleDate(s.date, s.endTime);
+    const text = encodeURIComponent(s.title);
+    const details = encodeURIComponent(s.description + '\\n\\nLink Zoom: ' + config.zoomLink + '\\nNhóm Zalo: ' + config.zaloGroupLink);
+    const location = encodeURIComponent('Online Zoom');
+    const gCalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${text}&dates=${start}/${end}&details=${details}&location=${location}`;
+
+    return `
     <tr>
-      <td style="padding:12px 16px;border-bottom:1px solid #1F2937;color:#A78BFA;font-weight:800;font-size:15px;width:80px;vertical-align:top;">
+      <td style="padding:12px 16px;border-bottom:1px solid #2a2a3a;color:#A78BFA;font-weight:800;font-size:14px;width:70px;vertical-align:top;">
         Buổi ${i + 1}
       </td>
-      <td style="padding:12px 16px;border-bottom:1px solid #1F2937;">
+      <td style="padding:12px 16px;border-bottom:1px solid #2a2a3a;">
         <div style="color:#FFFFFF;font-weight:700;font-size:14px;margin-bottom:4px;">${s.title.split('—').pop()?.trim() || s.title}</div>
-        <div style="color:#9CA3AF;font-size:13px;">📅 ${formatDate(s.date)} &nbsp;|&nbsp; ⏰ ${s.startTime} - ${s.endTime}</div>
+        <div style="color:#9CA3AF;font-size:13px;margin-bottom:8px;">📅 ${formatDate(s.date)} &nbsp;|&nbsp; ⏰ ${s.startTime} - ${s.endTime}</div>
+        <a href="${gCalUrl}" target="_blank" style="display:inline-block;background:#374151;color:#E5E7EB;padding:4px 12px;border-radius:6px;text-decoration:none;font-size:12px;font-weight:600;">+ Thêm vào Google Calendar</a>
       </td>
     </tr>
-  `).join('');
+  `}).join('');
 
   // Nếu DB có lưu htmlBody thì dùng, nếu không thì trả về rỗng (fallback ở Frontend đã lo)
   let htmlResult = config.htmlBody || '';

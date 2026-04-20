@@ -15,28 +15,28 @@ const DEFAULT_WORKSHOP_HTML = `<!DOCTYPE html>
 <body style="margin:0;padding:0;background-color:#0a0a0f;font-family:Arial,Helvetica,sans-serif;">
   <div style="max-width:600px;margin:0 auto;">
     <!-- Header -->
-    <div style="background:linear-gradient(135deg,#7c3aed,#2563eb);padding:12px 24px;text-align:center;">
-      <span style="color:#fff;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:2px;">✅ ĐĂNG KÝ THÀNH CÔNG — WORKSHOP AI MIỄN PHÍ</span>
+    <div style="background:linear-gradient(135deg,#7c3aed,#2563eb);padding:10px 24px;text-align:center;">
+      <span style="color:#fff;font-size:12px;font-weight:800;text-transform:uppercase;letter-spacing:2px;">✅ ĐĂNG KÝ THÀNH CÔNG — WORKSHOP AI MIỄN PHÍ</span>
     </div>
     
     <!-- Body -->
-    <div style="background:#0a0a0f;padding:40px 32px;">
-      <h1 style="color:#FFFFFF;font-size:26px;line-height:1.3;margin:0 0 8px;font-weight:900;">
+    <div style="background:#0a0a0f;padding:32px 24px;">
+      <h1 style="color:#FFFFFF;font-size:22px;line-height:1.4;margin:0 0 8px;font-weight:900;">
         Chào {{firstName}}! 🎉
       </h1>
-      <div style="width:60px;height:4px;background:linear-gradient(135deg,#7c3aed,#2563eb);margin:0 0 24px;border-radius:2px;"></div>
+      <div style="width:60px;height:4px;background:linear-gradient(135deg,#7c3aed,#2563eb);margin:0 0 20px;border-radius:2px;"></div>
       
-      <p style="color:#D1D5DB;font-size:16px;line-height:1.7;margin:0 0 8px;">
+      <p style="color:#D1D5DB;font-size:15px;line-height:1.6;margin:0 0 8px;">
         Bạn đã đăng ký thành công <strong style="color:#A78BFA;">Workshop 3 Buổi Tối Thực Hành AI</strong>.
       </p>
-      <p style="color:#9CA3AF;font-size:14px;line-height:1.6;margin:0 0 32px;">
-        Dưới đây là lịch 3 buổi học. Bấm nút bên dưới để thêm tất cả vào lịch — hệ thống sẽ tự nhắc bạn trước 30 phút.
+      <p style="color:#9CA3AF;font-size:14px;line-height:1.6;margin:0 0 24px;">
+        Dưới đây là lịch 3 buổi học. Bấm nút "+ Thêm vào Google Calendar" ở từng buổi hoặc Tải file Lịch (.ics) đính kèm email này để ghim vào Lịch cá nhân nhé!
       </p>
 
       <!-- Lịch 3 buổi -->
-      <div style="border:1px solid #2a2a3a;border-radius:12px;overflow:hidden;margin-bottom:28px;">
-        <div style="background:#1a1a25;padding:14px 16px;">
-          <h2 style="color:#FFFFFF;font-size:15px;margin:0;font-weight:800;">📅 LỊCH HỌC 3 BUỔI</h2>
+      <div style="border:1px solid #2a2a3a;border-radius:12px;overflow:hidden;margin-bottom:24px;">
+        <div style="background:#1a1a25;padding:12px 16px;">
+          <h2 style="color:#FFFFFF;font-size:14px;margin:0;font-weight:800;">📅 LỊCH HỌC 3 BUỔI</h2>
         </div>
         <table style="width:100%;border-collapse:collapse;background:#13131a;">
           {{sessionsHTML}}
@@ -44,25 +44,25 @@ const DEFAULT_WORKSHOP_HTML = `<!DOCTYPE html>
       </div>
 
       <!-- NÚT THÊM VÀO LỊCH -->
-      <div style="text-align:center;margin-bottom:28px;">
-        <div style="background:#13131a;border:2px solid #7c3aed;border-radius:12px;padding:24px;display:inline-block;width:100%;box-sizing:border-box;">
-          <p style="color:#A78BFA;font-size:13px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:0 0 12px;">👇 BẤM MỞ FILE (.ICS) ĐÍNH KÈM GÓC DƯỚI EMAIL</p>
-          <div style="background:linear-gradient(135deg,#7c3aed,#2563eb);border-radius:8px;padding:14px 24px;display:inline-block;">
-            <span style="color:#fff;font-size:16px;font-weight:800;">📅 MỞ FILE "workshop-ai.ics" ĐỂ LÊN LỊCH</span>
+      <div style="text-align:center;margin-bottom:24px;">
+        <div style="background:#13131a;border:2px solid #7c3aed;border-radius:12px;padding:20px;display:inline-block;width:100%;box-sizing:border-box;">
+          <p style="color:#A78BFA;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:1px;margin:0 0 10px;">👇 LÊN LỊCH NHANH QUA FILE ĐÍNH KÈM (Apple / Outlook)</p>
+          <div style="background:linear-gradient(135deg,#7c3aed,#2563eb);border-radius:8px;padding:12px 20px;display:inline-block;">
+            <span style="color:#fff;font-size:14px;font-weight:800;">📅 TẢI FILE "workshop-ai.ics" BÊN DƯỚI EMAIL</span>
           </div>
         </div>
       </div>
 
       <!-- Link Zalo -->
-      <div style="border:1px solid #10b981;border-radius:12px;padding:20px;text-align:center;margin-bottom:28px;background:rgba(16,185,129,0.08);">
-        <p style="color:#10b981;font-size:14px;font-weight:700;margin:0 0 12px;">💬 THAM GIA NHÓM ZALO ĐỂ NHẬN LINK ZOOM</p>
-        <a href="{{zaloGroupLink}}" style="background:#10b981;color:#fff;padding:12px 32px;border-radius:8px;text-decoration:none;font-weight:700;font-size:15px;display:inline-block;">VÀO NHÓM ZALO NGAY</a>
+      <div style="border:1px solid #10b981;border-radius:12px;padding:16px;text-align:center;margin-bottom:24px;background:rgba(16,185,129,0.08);">
+        <p style="color:#10b981;font-size:13px;font-weight:700;margin:0 0 10px;">💬 THAM GIA NHÓM ZALO ĐỂ NHẬN LINK ZOOM</p>
+        <a href="{{zaloGroupLink}}" style="background:#10b981;color:#fff;padding:10px 24px;border-radius:8px;text-decoration:none;font-weight:700;font-size:14px;display:inline-block;">VÀO NHÓM ZALO NGAY</a>
       </div>
     </div>
     
     <!-- Footer -->
-    <div style="background:#050508;padding:20px 32px;text-align:center;">
-      <p style="color:#4B5563;font-size:11px;margin:0;line-height:1.6;">
+    <div style="background:#050508;padding:16px 24px;text-align:center;">
+      <p style="color:#4B5563;font-size:11px;margin:0;line-height:1.5;">
         Email gửi tự động. © {{year}} HungNPV AI Workshop.
       </p>
     </div>
