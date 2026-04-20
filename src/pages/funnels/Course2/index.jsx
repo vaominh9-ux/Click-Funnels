@@ -188,7 +188,7 @@ const Course2 = () => {
         <section className="c2-expert-section mt-32">
           <div className="c2-expert-luxury c2-glass-panel border-premium">
             <div className="expert-image-wrapper">
-              <img src="https://ui-avatars.com/api/?name=Hung+NPV&size=500&background=F8FAFC&color=1E293B&font-size=0.33&bold=true" alt="Mr. Hưng NPV" className="luxury-img" />
+              <img src="/img-expert.jpg" alt="Mr. Hưng NPV" className="luxury-img object-cover object-top" onError={(e) => { e.target.src = "https://ui-avatars.com/api/?name=Hung+NPV&size=500&background=F8FAFC&color=1E293B&font-size=0.33&bold=true"; }} />
               <div className="luxury-badge c2-metallic-text-bg">MASTER / FOUNDER</div>
             </div>
             <div className="expert-info">
