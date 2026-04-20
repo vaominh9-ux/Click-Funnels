@@ -308,9 +308,9 @@ const Course2 = () => {
           </div>
 
           <div className="c2-final-cta-area mt-20 mb-24 z-20 position-relative">
-            <div className="c2-urgency-luxury mx-auto mb-8 box-shadow-glow">
-              <span className="live-dot"></span>
-              <strong>GIỚI HẠN ALPHA V.I.P:</strong> Board sẽ khóa Slot ngay khi đủ sức chứa. Value sẽ TĂNG ở Ver kế!
+            <div className="c2-urgency-luxury mx-auto mb-8 box-shadow-glow items-start md:items-center text-left md:text-center">
+              <span className="live-dot shrink-0 mt-1 md:mt-0"></span>
+              <span><strong>GIỚI HẠN ALPHA V.I.P:</strong> Board sẽ khóa Slot ngay khi đủ sức chứa. Value sẽ TĂNG ở Ver kế!</span>
             </div>
             <button 
               className="c2-btn-elite btn-massive mx-auto w-full-mobile shadow-massive-gold pulse-gold"
