@@ -3,8 +3,8 @@ import './c2-style.css';
 import { useFunnelTracking } from '../utils';
 import LeadModal from '../components/LeadModal';
 import { FUNNEL_COURSES } from '../config';
-import { 
-  CheckCircle2, XCircle, ArrowRight, ArrowDown, 
+import {
+  CheckCircle2, XCircle, ArrowRight, ArrowDown,
   ShieldCheck, MonitorPlay, Calendar, Zap, Star,
   Briefcase, BarChart, Settings, Crown
 } from 'lucide-react';
@@ -43,17 +43,17 @@ const Course2 = () => {
           <div className="c2-premium-badge mx-auto mb-6">
             <span className="c2-shimmer-bg">MASTER CLASS 2.0</span>
           </div>
-          
+
           <h1 className="c2-main-headline text-center">
             Lộ Trình Xây Dựng <span className="c2-metallic-text">AI Agency</span><br className="desktop-only" />{' '}
             Làm Chủ Automation & Ads B2B
           </h1>
-          
+
           <p className="c2-sub-headline text-center mb-10">
             Cú nhảy vọt từ Freelancer đơn lẻ lên mốc <strong>50 - 100&nbsp;triệu/tháng</strong>. Bí mật xây dựng hệ thống Agency phòng ban độ phân giải cao phục vụ Doanh nghiệp — tự động hóa 100%.
           </p>
 
-          <button 
+          <button
             className="c2-btn-elite pulse-gold mx-auto w-full-mobile"
             onClick={() => setIsModalOpen(true)}
           >
@@ -95,8 +95,8 @@ const Course2 = () => {
 
         {/* ─── PHẦN 3: "THE SOLUTION" ─── */}
         <section className="c2-solution-section mt-24 text-center">
-          <h2 className="c2-section-title">BẠN SẼ XÂY DỰNG 3 TRỤ CỘT CỦA MỘT<br/><span className="c2-metallic-text">AI AGENCY ĐẬM CHẤT ELITE</span></h2>
-          
+          <h2 className="c2-section-title">BẠN SẼ XÂY DỰNG 3 TRỤ CỘT CỦA MỘT<br /><span className="c2-metallic-text">AI AGENCY ĐẬM CHẤT ELITE</span></h2>
+
           <div className="c2-pillars-grid mt-14">
             <div className="c2-pillar-card neumorphic">
               <div className="pillar-icon-luxury"><Settings size={30} /></div>
@@ -123,7 +123,7 @@ const Course2 = () => {
         <section className="c2-timeline-section mt-32">
           <h2 className="c2-section-title text-center mb-14">LỘ TRÌNH 4 TUẦN CHIẾN LƯỢC</h2>
           <div className="c2-timeline-wrapper">
-            
+
             <div className="c2-module-card c2-glass-panel">
               <div className="module-week elite-tag text-emerald-800 bg-emerald-100">
                 <span>TUẦN 1: AUTOMATION</span>
@@ -168,7 +168,7 @@ const Course2 = () => {
 
             <div className="c2-module-card highlight-elite-timeline c2-glass-panel relative overflow-hidden">
               <div className="c2-shimmer-bg absolute top-0 -left-full w-full h-full opacity-10"></div>
-              <div className="module-week elite-tag text-yellow-900 bg-yellow-200" style={{background: 'linear-gradient(135deg, #FDE68A 0%, #D97706 100%)', color: '#fff'}}>
+              <div className="module-week elite-tag text-yellow-900 bg-yellow-200" style={{ background: 'linear-gradient(135deg, #FDE68A 0%, #D97706 100%)', color: '#fff' }}>
                 <span>TUẦN 4: SCALE & MEDIA</span>
               </div>
               <div className="module-content">
@@ -196,15 +196,15 @@ const Course2 = () => {
               <p className="expert-title">CEO — Duhava Technology JSC | Cựu Chuyên Gia B2B</p>
               <ul className="expert-stats">
                 <li>
-                  <div className="luxury-bullet"></div> 
+                  <div className="luxury-bullet"></div>
                   <span className="flex-1">Huấn luyện AI in-house: <strong>BIDV, Vinhomes, Droppii, Mitsubishi...</strong></span>
                 </li>
                 <li>
-                  <div className="luxury-bullet"></div> 
+                  <div className="luxury-bullet"></div>
                   <span className="flex-1"><strong>500,000+ followers</strong> TikTok & Sinh thái Group 200,000+</span>
                 </li>
                 <li>
-                  <div className="luxury-bullet"></div> 
+                  <div className="luxury-bullet"></div>
                   <span className="flex-1"><strong>10+ năm kinh nghiệm</strong> cố vấn Doanh nghiệp Doanh thu chục Tỷ</span>
                 </li>
               </ul>
@@ -218,7 +218,7 @@ const Course2 = () => {
         {/* ─── PHẦN 6: "THE GRAND SLAM OFFER VIP PASS" ─── */}
         <section className="c2-offer-section mt-32">
           <h2 className="c2-section-title text-center mb-12">THẺ HỘI VIÊN MASTER — <br className="mobile-break" /><span className="c2-metallic-text">VIP PASS</span></h2>
-          
+
           <div className="vip-pass-board">
             <div className="vip-animated-border"></div>
             <div className="vip-pass-inner c2-glass-panel">
@@ -256,10 +256,10 @@ const Course2 = () => {
                   <div className="offer-item"><div className="offer-icon"><ShieldCheck size={24} /></div> <span>License Phần mềm Workflow Chuyên Nghiệp (1 Năm)</span></div>
                   <span className="value-pill">1.490.000₫</span>
                 </li>
-                
+
                 <li className="c2-offer-bonus-luxury">
                   <div className="offer-item">
-                    <div className="offer-icon bonus-icon"><Crown size={24} /></div> 
+                    <div className="offer-icon bonus-icon"><Crown size={24} /></div>
                     <div className="bonus-text-wrap">
                       <strong className="c2-metallic-text">QUYỀN LỢI ĐỈNH CAO:</strong>
                       <span className="bonus-desc">Khóa V.I.P Server AI Agency Mastermind</span>
@@ -270,14 +270,10 @@ const Course2 = () => {
               </ul>
 
               <div className="c2-total-wealth-box">
-                <div className="wealth-ticket-top">
-                  <span className="wealth-label-new">TỔNG TÀI SẢN KẾT TINH</span>
-                  <div className="wealth-original-price">Trị giá: <span className="line-through text-red-500 font-bold tracking-widest pl-2">47.490.000₫</span></div>
-                </div>
-                <div className="wealth-ticket-divider"></div>
-                <div className="wealth-ticket-bottom">
-                  <span className="c2-metallic-text wealth-free-text">MIỄN PHÍ</span>
-                  <div className="wealth-sub-label">Đặc quyền đính kèm khi kích hoạt Thẻ vào lúc này</div>
+                <div className="wealth-label">TỔNG TÀI SẢN KẾT TINH:</div>
+                <div className="wealth-price">
+                  <span className="text-red-500 line-through font-medium text-xl mr-0 mb-2 md:mb-0 md:mr-4 md:text-2xl whitespace-nowrap">&gt; 47.490.000₫</span>
+                  <span className="text-white font-black text-3xl md:text-4xl whitespace-nowrap">MIỄN PHÍ</span>
                 </div>
               </div>
             </div>
@@ -291,9 +287,9 @@ const Course2 = () => {
               <p>Chi phí tự xây dựng đội IT, Data thử sai: <strong>Tối thiểu 50.000.000₫ & 6 tháng đẫm máu.</strong></p>
               <p className="mt-2">Chi phí để Consultant Setup hộ: <strong>70.000.000₫ cho 1 lần lên sóng.</strong></p>
             </div>
-            
+
             <p className="text-xl font-bold tracking-widest uppercase mt-12 text-slate-700">Giá Vé Lên Tàu Hôm Nay:</p>
-            
+
             <div className="c2-final-price-luxury my-8 relative inline-block">
               <h1 className="c2-metallic-text text-8xl md:text-[7rem] px-8 tracking-tighter drop-shadow-xl z-10 relative">{COURSE_INFO.price.toLocaleString('vi-VN')}₫</h1>
             </div>
@@ -316,7 +312,7 @@ const Course2 = () => {
               <span className="live-dot shrink-0 mt-1 md:mt-0"></span>
               <span><strong>GIỚI HẠN ALPHA V.I.P:</strong> Board sẽ khóa Slot ngay khi đủ sức chứa. Value sẽ TĂNG ở Ver kế!</span>
             </div>
-            <button 
+            <button
               className="c2-btn-elite btn-massive mx-auto w-full-mobile shadow-massive-gold pulse-gold"
               onClick={() => setIsModalOpen(true)}
             >
@@ -332,7 +328,7 @@ const Course2 = () => {
       <footer className="c2-footer-luxury">
         <div className="hormozi-container text-center">
           <div className="c2-footer-upsell-glass c2-glass-panel mb-12 relative overflow-hidden">
-             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-50"></div>
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent opacity-50"></div>
             <Star size={34} className="mx-auto text-amber-500 mb-6 fill-amber-300 drop-shadow-md" />
             <p className="text-base md:text-xl leading-relaxed text-slate-800">
               <em>"Mảnh ghép tối thượng: Những Founder xuất sắc của Master Board sẽ được đặc cách trải nghiệm <strong>AI COACH D.M V.I.P (19.997.000₫)</strong> — Gói huấn luyện bí mật giúp bạn đóng gói bản thân thành Nhà Đào Tạo có hệ sinh thái vệ tinh!"</em>
@@ -341,16 +337,16 @@ const Course2 = () => {
           <div className="c2-footer-bottom-l">
             <div className="footer-logo c2-metallic-text font-black text-2xl tracking-widest mb-4">MASTER X</div>
             <p className="font-semibold text-slate-600 tracking-wide block">© {new Date().getFullYear()} DUHAVA JSC / THE AUTOMATION BOARD.</p>
-            <p className="mt-3 text-slate-400 text-sm tracking-wider">Cơ Sở Dữ Liệu Khép Kín Trực Thuộc HUNGNPV CORPORATION.<br/><span className="mt-2 text-slate-500 font-medium inline-block flex items-center justify-center gap-2">🔒 END-TO-END ENCRYPTED | VISA / NAPAS Cổng VIP</span></p>
+            <p className="mt-3 text-slate-400 text-sm tracking-wider">Cơ Sở Dữ Liệu Khép Kín Trực Thuộc HUNGNPV CORPORATION.<br /><span className="mt-2 text-slate-500 font-medium inline-block flex items-center justify-center gap-2">🔒 END-TO-END ENCRYPTED | VISA / NAPAS Cổng VIP</span></p>
           </div>
         </div>
       </footer>
 
       {/* LEAD MODAL */}
-      <LeadModal 
-        isOpen={isModalOpen} 
-        onClose={() => setIsModalOpen(false)} 
-        courseId={COURSE_INFO.id} 
+      <LeadModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        courseId={COURSE_INFO.id}
         courseName={COURSE_INFO.name}
       />
     </div>

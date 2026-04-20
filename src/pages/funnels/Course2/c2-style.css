@@ -983,27 +983,42 @@
 }
 
 .c2-total-wealth-box {
-  background: linear-gradient(135deg, #111827 0%, #000000 100%);
-  border: 1px solid #334155;
-  border-top: 4px solid #D97706;
-  border-radius: 0 !important;
+  background: #000;
+  border-radius: 20px;
+  padding: 20px 30px;
   display: flex;
-  flex-direction: column;
-  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-  margin-top: 40px;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 10px 30px -10px rgba(0, 0, 0, 0.4);
+  border: 1px solid #333;
   position: relative;
-  overflow: visible;
+  overflow: hidden;
+  margin-top: 24px;
 }
-.wealth-ticket-top { padding: 30px; text-align: center; }
-.wealth-label-new { display: block; font-size: 1.1rem; font-weight: 800; color: #94A3B8; letter-spacing: 4px; margin-bottom: 12px; }
-.wealth-original-price { font-size: 1.2rem; color: #64748B; font-style: italic; }
-.wealth-ticket-divider { width: 100%; height: 2px; border-bottom: 2px dashed #475569; position: relative; }
-.wealth-ticket-divider::before, .wealth-ticket-divider::after { content: ''; position: absolute; top: -10px; width: 22px; height: 22px; background-color: #F8FAFC; border-radius: 50%; z-index: 2; }
-.wealth-ticket-divider::before { left: -12px; border-right: 1px solid #334155;}
-.wealth-ticket-divider::after { right: -12px; border-left: 1px solid #334155;}
-.wealth-ticket-bottom { padding: 30px; text-align: center; background: radial-gradient(circle at center, rgba(217,119,6,0.15) 0%, transparent 60%); }
-.wealth-free-text { font-size: 4rem; font-weight: 900; line-height: 1; display: inline-block; margin-bottom: 10px; text-shadow: 0 10px 30px rgba(217, 119, 6, 0.3); }
-.wealth-sub-label { font-size: 0.85rem; color: #D97706; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
+
+.c2-total-wealth-box::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 4px;
+  width: 100%;
+  background: #D97706;
+}
+
+.wealth-label {
+  font-size: 1.15rem;
+  font-weight: 800;
+  font-family: 'Montserrat', sans-serif;
+  color: #94A3B8;
+  letter-spacing: 0.5px;
+}
+
+.wealth-price {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
 
 /* PRICE REVEAL */
 .c2-price-context-luxury {
@@ -1283,7 +1298,25 @@
     margin-top: 10px;
   }
 
+  .c2-total-wealth-box {
+    flex-direction: column;
+    text-align: center;
+    gap: 4px;
+    padding: 16px 20px;
+    margin-top: 16px;
+  }
 
+  .wealth-label {
+    font-size: 0.95rem;
+  }
+
+  .wealth-price {
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+  }
 
   .text-8xl {
     font-size: 3.2rem;
@@ -1298,7 +1331,7 @@
     padding: 40px 20px 30px;
     margin-top: 50px;
   }
-  
+
   .c2-risk-reversal-luxury h3 {
     font-size: 1.25rem;
     margin-bottom: 12px;
