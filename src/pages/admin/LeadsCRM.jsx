@@ -122,6 +122,7 @@ export default function LeadsCRM() {
   const [sendingBulk, setSendingBulk] = useState(false);
   const [bulkProgress, setBulkProgress] = useState({ sent: 0, total: 0, failed: 0 });
   const [selectedTemplate, setSelectedTemplate] = useState('empty');
+  const [customTemplates, setCustomTemplates] = useState({});
   const [activities, setActivities] = useState([]);
   const [newActivity, setNewActivity] = useState({ type: 'note', content: '' });
   const [formData, setFormData] = useState({
@@ -146,6 +147,16 @@ export default function LeadsCRM() {
 
   useEffect(() => {
     fetchLeads();
+    
+    // Load custom templates
+    const saved = localStorage.getItem('custom_email_templates');
+    if (saved) {
+      try {
+        setCustomTemplates(JSON.parse(saved));
+      } catch (e) {
+        console.error("Failed to parse custom templates");
+      }
+    }
   }, [fetchLeads]);
 
   const fetchActivities = async (leadId) => {
@@ -267,7 +278,7 @@ export default function LeadsCRM() {
   const handleApplyTemplate = (e) => {
     const tKey = e.target.value;
     setSelectedTemplate(tKey);
-    const tmpl = EMAIL_TEMPLATES[tKey];
+    const tmpl = EMAIL_TEMPLATES[tKey] || customTemplates[tKey];
     if (tmpl) {
       if (tKey === 'empty' && window.confirm("Bạn có chắc muốn xóa trắng nội dung để chuyển về Mẫu Trống?")) {
         setBulkEmailConfig({ subject: '', htmlBody: '' });
@@ -278,10 +289,45 @@ export default function LeadsCRM() {
         if (!confirmMsg || window.confirm(confirmMsg)) {
           setBulkEmailConfig({ subject: tmpl.subject, htmlBody: tmpl.html });
         } else {
-          // Revert selection if rejected
           setSelectedTemplate('empty'); 
         }
       }
+    }
+  };
+
+  const handleSaveCustomTemplate = () => {
+    if (!bulkEmailConfig.subject.trim() || !bulkEmailConfig.htmlBody.trim()) {
+      addToast('Vui lòng nhập cả Tiêu đề và Nội dung HTML trước khi lưu!', 'warning');
+      return;
+    }
+    const name = window.prompt("Nhập tên cho Mẫu Email này (Ví dụ: Mẫu Khuyến Mãi Cuối Tháng):");
+    if (!name) return;
+
+    const id = 'custom_' + Date.now();
+    const newTemplates = {
+      ...customTemplates,
+      [id]: {
+        name: `⭐ ${name}`,
+        subject: bulkEmailConfig.subject,
+        html: bulkEmailConfig.htmlBody
+      }
+    };
+    setCustomTemplates(newTemplates);
+    localStorage.setItem('custom_email_templates', JSON.stringify(newTemplates));
+    setSelectedTemplate(id);
+    addToast('Đã lưu mẫu thành công!', 'success');
+  };
+
+  const handleDeleteCustomTemplate = () => {
+    if (!selectedTemplate.startsWith('custom_')) return;
+    if (window.confirm("Bạn có chắc muốn xóa mẫu tùy chỉnh này?")) {
+      const newTemplates = { ...customTemplates };
+      delete newTemplates[selectedTemplate];
+      setCustomTemplates(newTemplates);
+      localStorage.setItem('custom_email_templates', JSON.stringify(newTemplates));
+      setSelectedTemplate('empty');
+      setBulkEmailConfig({ subject: '', htmlBody: '' });
+      addToast('Đã xóa mẫu!', 'success');
     }
   };
 
@@ -635,16 +681,37 @@ export default function LeadsCRM() {
 
             <div className="crm-modal-body" style={{flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'hidden'}}>
               <div className="crm-form-group">
-                <label>Sử Dụng Mẫu Email Có Sẵn (Xóa Đè)</label>
+                <label style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+                  <span>Sử Dụng Mẫu Email Có Sẵn (Xóa Đè)</span>
+                  <div style={{display: 'flex', gap: '8px'}}>
+                    {selectedTemplate.startsWith('custom_') && (
+                      <button onClick={handleDeleteCustomTemplate} disabled={sendingBulk} style={{fontSize: '11px', padding: '2px 8px', background: '#FEF2F2', color: '#EF4444', border: '1px solid #FCA5A5', borderRadius: '4px', cursor: 'pointer'}}>
+                        Xóa Mẫu Này
+                      </button>
+                    )}
+                    <button onClick={handleSaveCustomTemplate} disabled={sendingBulk} style={{fontSize: '11px', padding: '2px 8px', background: '#F0FDF4', color: '#16A34A', border: '1px solid #86EFAC', borderRadius: '4px', cursor: 'pointer'}}>
+                      + Lưu Bản Đang Gõ Làm Mẫu Riêng
+                    </button>
+                  </div>
+                </label>
                 <select 
                   value={selectedTemplate} 
                   onChange={handleApplyTemplate}
                   disabled={sendingBulk}
                   style={{ fontWeight: 600, color: selectedTemplate === 'empty' ? '#6B7280' : '#111827', background: selectedTemplate === 'empty' ? '#fff' : '#EFF6FF', border: selectedTemplate === 'empty' ? '1px solid #D1D5DB' : '1px solid #3B82F6' }}
                 >
-                  {Object.entries(EMAIL_TEMPLATES).map(([key, val]) => (
-                    <option key={key} value={key}>{val.name}</option>
-                  ))}
+                  <optgroup label="Mẫu Hệ Thống">
+                    {Object.entries(EMAIL_TEMPLATES).map(([key, val]) => (
+                      <option key={key} value={key}>{val.name}</option>
+                    ))}
+                  </optgroup>
+                  {Object.keys(customTemplates).length > 0 && (
+                    <optgroup label="Mẫu Của Tôi (Đã Lưu)">
+                      {Object.entries(customTemplates).map(([key, val]) => (
+                        <option key={key} value={key}>{val.name}</option>
+                      ))}
+                    </optgroup>
+                  )}
                 </select>
               </div>
 
