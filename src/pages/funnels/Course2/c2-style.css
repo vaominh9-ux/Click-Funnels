@@ -323,6 +323,7 @@
   .vip-pass-board { padding: 10px; }
   .vip-pass-inner { padding: 30px 16px; }
   .vip-header h3 { font-size: 1.4rem; padding: 10px 20px; letter-spacing: 2px;}
+  .vip-header p { font-size: 0.8rem; letter-spacing: 0.5px; white-space: nowrap; }
   .c2-value-list li { padding: 16px 0; align-items: flex-start; flex-direction: column; gap: 10px; background: transparent !important; box-shadow: none !important;}
   .offer-item { gap: 12px; }
   .value-pill { font-size: 1rem; align-self: flex-start; margin-left: 44px; margin-top: 4px; padding: 6px 14px;}
