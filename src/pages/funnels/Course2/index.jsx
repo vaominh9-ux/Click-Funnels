@@ -58,7 +58,7 @@ const Course2 = () => {
             onClick={() => setIsModalOpen(true)}
           >
             <Crown size={24} className="mr-2 text-yellow-100" />
-            ĐĂNG KÝ MASTER LỘ TRÌNH NGAY — {COURSE_INFO.price.toLocaleString('vi-VN')}₫
+            ĐĂNG KÝ MASTER LỘ TRÌNH NGAY
           </button>
         </section>
 
