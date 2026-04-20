@@ -196,22 +196,116 @@
   font-weight: 700;
 }
 
-.aicoach-hero .lead-in {
-  font-size: 1.25rem;
-  color: #9CA3AF;
-  max-width: 750px;
-  margin: 0 auto 50px;
+/* ===== HERO GRID LAYOUT ===== */
+.aicoach-hero-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.9fr;
+  gap: 60px;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto;
+  text-align: left;
 }
 
-.aicoach-hero .lead-in strong {
+.hero-punch-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 40px;
+}
+
+.hero-punch-list li {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  margin-bottom: 24px;
+  font-size: 1.15rem;
+  color: #9CA3AF;
+  line-height: 1.6;
+}
+
+.hero-punch-list .icon {
+  font-size: 1.4rem;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.3);
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.hero-punch-list strong {
   color: #FFFFFF;
 }
 
-.aicoach-hero .lead-in .closing-line {
-  font-weight: 700;
-  margin-top: 24px;
-  color: #E5E7EB;
-  font-size: 1.3rem;
+/* Image styling */
+.hero-content-right {
+  position: relative;
+}
+
+.hero-image-wrapper {
+  position: relative;
+  border-radius: 16px;
+  overflow: hidden;
+  border: 1px solid #1F2937;
+  box-shadow: 0 25px 50px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(245, 158, 11, 0.1);
+}
+
+.hero-image-wrapper img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.hero-image-overlay {
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background: linear-gradient(135deg, rgba(0,0,0,0.1) 0%, rgba(0,0,0,0.7) 100%);
+  mix-blend-mode: multiply;
+}
+
+.hero-floating-stat {
+  position: absolute;
+  bottom: -20px;
+  left: -30px;
+  background: #0A0A0A;
+  border: 1px solid #F59E0B;
+  padding: 16px 24px;
+  border-radius: 12px;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(245, 158, 11, 0.15);
+  z-index: 2;
+  animation: floatStat 4s ease-in-out infinite;
+}
+
+.hero-floating-stat .stat-label {
+  display: block;
+  font-size: 0.85rem;
+  color: #9CA3AF;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 4px;
+}
+
+.hero-floating-stat .stat-value {
+  display: block;
+  font-size: 1.8rem;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 900;
+  color: #F59E0B;
+  line-height: 1;
+}
+
+.hero-floating-stat .stat-value span {
+  font-size: 1rem;
+  color: #6B7280;
+  font-weight: 600;
+}
+
+@keyframes floatStat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
 }
 
 /* ===== BLOCKQUOTE ===== */
@@ -712,5 +806,15 @@
   .aicoach-blockquote {
     padding: 20px 24px;
     font-size: 1.05rem;
+  }
+
+  .aicoach-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 40px;
+  }
+  
+  .hero-floating-stat {
+    left: 16px;
+    bottom: 16px;
   }
 }

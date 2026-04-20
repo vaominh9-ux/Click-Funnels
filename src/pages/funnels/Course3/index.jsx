@@ -27,21 +27,46 @@ const AICoachPage = () => {
           trong ngành công nghiệp sản phẩm thông tin và những điều bạn cần làm để khai thác <span className="aicoach-gold">mỏ vàng lộ thiên</span> này?
         </h2>
 
-        <div className="lead-in">
-          <p>
-            "Sản phẩm thông tin" bao gồm mọi thứ, từ cuốn sách Kindle vài đô la cho đến những khóa học chuyên sâu trị giá 50,000 USD.
-          </p>
-          <p>
-            Những người như <strong>Tai Lopez, Sam Ovens, Grant Cardone</strong> đều đạt <strong>8 con số mỗi năm</strong> từ bán "thông tin". Và rất nhiều cá nhân khác cũng kiếm <strong className="aicoach-gold">6-7 con số</strong> bằng sản phẩm thông tin trong thị trường ngách.
-          </p>
-          <p className="closing-line">
-            "Cơn sốt vàng" sản phẩm thông tin chưa kết thúc — <span className="aicoach-highlight">nó chỉ mới bắt đầu.</span>
-          </p>
-        </div>
+        <div className="aicoach-hero-grid">
+          <div className="hero-content-left">
+            <ul className="hero-punch-list">
+              <li>
+                <span className="icon">📈</span>
+                <div>
+                  <strong>Thị trường bùng nổ:</strong> Từ cuốn eBook vài đô la đến những khóa học chuyên sâu trị giá 50.000 USD.
+                </div>
+              </li>
+              <li>
+                <span className="icon">👑</span>
+                <div>
+                  <strong>Sự thật 8 con số:</strong> Tai Lopez, Sam Ovens, Grant Cardone đều đạt 8 con số mỗi năm nhờ bán "thông tin".
+                </div>
+              </li>
+              <li>
+                <span className="icon">🔥</span>
+                <div>
+                  <strong>Cơ hội hoàng kim:</strong> "Cơn sốt vàng" này chưa hề kết thúc — <span className="aicoach-highlight">nó chỉ mới bắt đầu.</span>
+                </div>
+              </li>
+            </ul>
 
-        <button className="aicoach-btn" onClick={openModal}>
-          📋 TÔI MUỐN ỨNG TUYỂN VÀO AI COACH
-        </button>
+            <button className="aicoach-btn" onClick={openModal}>
+              📋 TÔI MUỐN ỨNG TUYỂN VÀO AI COACH
+            </button>
+          </div>
+
+          <div className="hero-content-right">
+            <div className="hero-image-wrapper">
+              <img src="https://images.unsplash.com/photo-1649180556628-9ba704115795?q=80&w=800&auto=format&fit=crop" alt="Billionaire Info Business" />
+              <div className="hero-image-overlay"></div>
+              
+              <div className="hero-floating-stat">
+                <span className="stat-label">Lợi nhuận mục tiêu</span>
+                <span className="stat-value">$20,000<span>/tháng</span></span>
+              </div>
+            </div>
+          </div>
+        </div>
       </section>
 
       {/* ============================================================
