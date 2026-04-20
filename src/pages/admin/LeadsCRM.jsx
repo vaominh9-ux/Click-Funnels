@@ -38,6 +38,73 @@ const formatDate = (dateStr) => {
   return d.toLocaleDateString('vi-VN', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' });
 };
 
+const EMAIL_TEMPLATES = {
+  empty: {
+    name: '-- Mẫu Trống (Tự gõ) --',
+    subject: '',
+    html: ''
+  },
+  zoom_free: {
+    name: '🔴 [Nhắc Học] Khóa Lớp 3 Ngày - Đã đến giờ vào Zoom',
+    subject: '🔴 [HỌC VIÊN] Đã đến giờ vào lớp 3 Ngày Thực Chiến AI - Zoom đang mở!',
+    html: `<div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px; border-radius: 12px; border: 1px solid #e5e7eb;">
+  
+  <div style="text-align: center; padding-bottom: 20px; border-bottom: 2px solid #e5e7eb;">
+    <h1 style="color: #ef4444; margin: 0; font-size: 24px; font-weight: 800; letter-spacing: -0.5px;">THÔNG BÁO VÀO LỚP</h1>
+    <p style="color: #6b7280; font-size: 14px; margin-top: 5px;">Khóa học 3 Ngày Thực Chiến AI</p>
+  </div>
+
+  <div style="padding: 30px 20px; background: #ffffff; border-radius: 10px; margin-top: 20px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+    <h2 style="color: #1f2937; font-size: 20px; margin-bottom: 15px;">Xin chào {{name}}, 🎉</h2>
+    
+    <p style="color: #374151; line-height: 1.6; font-size: 15px;">
+      Xin thông báo phòng Zoom hiện tại đã mở cửa. Vui lòng bấm vào nút dưới đây để tham gia lớp học ngay bây giờ để không bỏ lỡ phần nội dung cực kỳ quan trọng ở đầu buổi.
+    </p>
+
+    <div style="text-align: center; margin: 30px 0;">
+      <a href="[ĐIỀN LINK ZOOM VÀO ĐÂY]" style="background-color: #2563eb; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; font-size: 15px; display: inline-block;">👉 VÀO LỚP ZOOM NGAY</a>
+    </div>
+
+    <div style="background-color: #fffbeb; border-left: 4px solid #f59e0b; padding: 15px; margin: 20px 0; border-radius: 0 8px 8px 0;">
+      <p style="margin: 0; color: #b45309; font-size: 14px;">
+        💡 <strong>Passcode nếu có:</strong> [ĐIỀN PASS VÀO ĐÂY]
+      </p>
+    </div>
+  </div>
+
+  <div style="text-align: center; margin-top: 30px; color: #9ca3af; font-size: 12px; line-height: 1.5;">
+    <p>© 2026 Admin System.<br>Bạn nhận được email này vì đã đăng ký tham gia khóa học.</p>
+  </div>
+</div>`
+  },
+  zoom_premium: {
+    name: '💎 [Nhắc Học] Khóa Trả Phí - Đã đến giờ vào Zoom',
+    subject: '💎 [HỌC VIÊN CHUYÊN SÂU] Mời bạn vào lớp (Link Zoom)',
+    html: `<div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px; border-radius: 12px; border: 1px solid #e5e7eb;">
+  <div style="padding: 30px 20px; background: #ffffff; border-radius: 10px; margin-top: 10px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+    <h2 style="color: #1f2937; font-size: 20px; margin-bottom: 15px;">Xin chào {{name}},</h2>
+    <p style="color: #374151; line-height: 1.6; font-size: 15px;"> Lớp học chuyên sâu của chúng ta bắt đầu trong ít phút nữa. Bạn nhớ chuẩn bị tài liệu và mạng internet ổn định nhé.</p>
+    <div style="text-align: center; margin: 30px 0;">
+      <a href="[ĐIỀN LINK ZOOM VÀO ĐÂY]" style="background-color: #10b981; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; font-size: 15px; display: inline-block;">VÀO PHÒNG ZOOM KÍN</a>
+    </div>
+  </div>
+</div>`
+  },
+  consult: {
+    name: '💼 [Tư Vấn] Gửi tài liệu và Lộ trình',
+    subject: 'Tài liệu và Lộ trình cá nhân hóa đặc biệt dành riêng cho bạn ({{name}})',
+    html: `<div style="font-family: 'Helvetica Neue', Arial, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb; padding: 20px; border-radius: 12px; border: 1px solid #e5e7eb;">
+  <div style="padding: 30px 20px; background: #ffffff; border-radius: 10px; margin-top: 10px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);">
+    <h2 style="color: #1f2937; font-size: 20px; margin-bottom: 15px;">Xin chào {{name}},</h2>
+    <p style="color: #374151; line-height: 1.6; font-size: 15px;">Cảm ơn bạn đã trò chuyện và quan tâm tới sản phẩm của chúng tôi. Dưới đây là bộ tài liệu Lộ Trình mà tôi đã hứa gửi cho bạn.</p>
+    <div style="text-align: center; margin: 30px 0;">
+      <a href="[LINK_TAI_LIEU_CUA_BAN]" style="background-color: #6366f1; color: #ffffff; text-decoration: none; padding: 14px 28px; border-radius: 8px; font-weight: 600; font-size: 15px; display: inline-block;">📥 TẢI XUỐNG TÀI LIỆU</a>
+    </div>
+  </div>
+</div>`
+  }
+};
+
 export default function LeadsCRM() {
   const addToast = useToast();
   const [leads, setLeads] = useState([]);
@@ -54,6 +121,7 @@ export default function LeadsCRM() {
   const [bulkEmailConfig, setBulkEmailConfig] = useState({ subject: '', htmlBody: '' });
   const [sendingBulk, setSendingBulk] = useState(false);
   const [bulkProgress, setBulkProgress] = useState({ sent: 0, total: 0, failed: 0 });
+  const [selectedTemplate, setSelectedTemplate] = useState('empty');
   const [activities, setActivities] = useState([]);
   const [newActivity, setNewActivity] = useState({ type: 'note', content: '' });
   const [formData, setFormData] = useState({
@@ -193,6 +261,27 @@ export default function LeadsCRM() {
       setSelectedLeads([]);
     } else {
       setSelectedLeads(filteredLeads.map(l => l.id));
+    }
+  };
+
+  const handleApplyTemplate = (e) => {
+    const tKey = e.target.value;
+    setSelectedTemplate(tKey);
+    const tmpl = EMAIL_TEMPLATES[tKey];
+    if (tmpl) {
+      if (tKey === 'empty' && window.confirm("Bạn có chắc muốn xóa trắng nội dung để chuyển về Mẫu Trống?")) {
+        setBulkEmailConfig({ subject: '', htmlBody: '' });
+      } else if (tKey !== 'empty') {
+        const confirmMsg = bulkEmailConfig.subject || bulkEmailConfig.htmlBody ? 
+          "Bạn đang có nội dung trên form. Chuyển mẫu sẽ xóa đè nội dung cũ. Bạn tiếp tục chứ?" : null;
+        
+        if (!confirmMsg || window.confirm(confirmMsg)) {
+          setBulkEmailConfig({ subject: tmpl.subject, htmlBody: tmpl.html });
+        } else {
+          // Revert selection if rejected
+          setSelectedTemplate('empty'); 
+        }
+      }
     }
   };
 
@@ -546,6 +635,20 @@ export default function LeadsCRM() {
 
             <div className="crm-modal-body" style={{flex: 1, display: 'flex', flexDirection: 'column', gap: '16px', overflowY: 'hidden'}}>
               <div className="crm-form-group">
+                <label>Sử Dụng Mẫu Email Có Sẵn (Xóa Đè)</label>
+                <select 
+                  value={selectedTemplate} 
+                  onChange={handleApplyTemplate}
+                  disabled={sendingBulk}
+                  style={{ fontWeight: 600, color: selectedTemplate === 'empty' ? '#6B7280' : '#111827', background: selectedTemplate === 'empty' ? '#fff' : '#EFF6FF', border: selectedTemplate === 'empty' ? '1px solid #D1D5DB' : '1px solid #3B82F6' }}
+                >
+                  {Object.entries(EMAIL_TEMPLATES).map(([key, val]) => (
+                    <option key={key} value={key}>{val.name}</option>
+                  ))}
+                </select>
+              </div>
+
+              <div className="crm-form-group">
                 <label>Tiêu Đề Email (Subject)</label>
                 <input 
                   type="text" 
@@ -566,9 +669,6 @@ export default function LeadsCRM() {
                     style={{flex: 1, fontFamily: 'monospace', fontSize: '13px'}}
                     disabled={sendingBulk}
                   />
-                  <p style={{fontSize: '12px', color: '#9CA3AF', margin: '4px 0 0'}}>
-                    Mẹo: Dùng thẻ <code>&lt;br/&gt;</code> để xuống dòng. Biến <code>{`{{name}}`}</code> sẽ tự động thay bằng tên khách.
-                  </p>
                 </div>
 
                 <div className="crm-form-group" style={{flex: 1, display: 'flex', flexDirection: 'column'}}>
