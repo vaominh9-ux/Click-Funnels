@@ -45,12 +45,12 @@ const Course2 = () => {
           </div>
           
           <h1 className="c2-main-headline text-center">
-            Lộ Trình Xây Dựng <span className="c2-metallic-text">AI Agency</span><br className="desktop-only" />
-             Làm Chủ Automation, Ads & Hệ Thống Corporate
+            Lộ Trình Xây Dựng <span className="c2-metallic-text">AI Agency</span><br className="desktop-only" />{' '}
+            Làm Chủ Automation & Ads B2B
           </h1>
           
           <p className="c2-sub-headline text-center mb-10">
-            Bạn đã biết kiếm tiền từ AI 5-15 triệu/tháng. Giờ hãy SCALE lên <strong>50-100&nbsp;triệu/tháng</strong> bằng cách xây dựng hệ thống Agency AI phục vụ doanh nghiệp — có quy trình, có đội ngũ AI, có khách ổn định.
+            Cú nhảy vọt từ Freelancer đơn lẻ lên mốc <strong>50 - 100&nbsp;triệu/tháng</strong>. Bí mật xây dựng hệ thống Agency phòng ban độ phân giải cao phục vụ Doanh nghiệp — tự động hóa 100%.
           </p>
 
           <button 
