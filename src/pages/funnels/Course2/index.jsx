@@ -272,8 +272,8 @@ const Course2 = () => {
               <div className="c2-total-wealth-box">
                 <div className="wealth-label">TỔNG TÀI SẢN KẾT TINH:</div>
                 <div className="wealth-price">
-                  <span className="strike text-slate-400 font-medium text-xl mr-4 md:text-2xl">&gt; 47.490.000₫</span>
-                  <span className="text-white font-black text-3xl md:text-4xl">MIỄN PHÍ</span>
+                  <span className="text-red-500 line-through font-medium text-xl mr-0 mb-2 md:mb-0 md:mr-4 md:text-2xl whitespace-nowrap">&gt; 47.490.000₫</span>
+                  <span className="text-white font-black text-3xl md:text-4xl whitespace-nowrap">MIỄN PHÍ</span>
                 </div>
               </div>
             </div>
