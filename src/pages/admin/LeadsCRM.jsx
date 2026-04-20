@@ -622,7 +622,7 @@ export default function LeadsCRM() {
       {/* Bulk Email Modal */}
       {showBulkEmailModal && (
         <div className="crm-modal-backdrop" onClick={() => !sendingBulk && setShowBulkEmailModal(false)}>
-          <div className="crm-modal email-modal" onClick={(e) => e.stopPropagation()} style={{maxWidth: '1000px', height: '90vh', display: 'flex', flexDirection: 'column'}}>
+          <div className="crm-modal email-modal" onClick={(e) => e.stopPropagation()} style={{maxWidth: '1000px', height: '95vh', maxHeight: '95vh', display: 'flex', flexDirection: 'column'}}>
             <div className="crm-modal-header">
               <div>
                 <h2>Gửi Email Hàng Loạt</h2>
