@@ -57,7 +57,7 @@ const AICoachPage = () => {
 
           <div className="hero-content-right">
             <div className="hero-image-wrapper">
-              <img src="https://images.unsplash.com/photo-1649180556628-9ba704115795?q=80&w=800&auto=format&fit=crop" alt="Billionaire Info Business" />
+              <img src="/images/course3/aicoach-hero-premium.png" alt="Billionaire Info Business AI Coach" />
               <div className="hero-image-overlay"></div>
             </div>
               
