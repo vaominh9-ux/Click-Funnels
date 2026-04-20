@@ -27,6 +27,8 @@ export default async function handler(req, res) {
     // 1. Lấy cấu hình Webhook từ Supabase system_settings (Admin UI)
     let n8nWebhookUrl = null;
     let enableNewLead = true;
+    let adminTemplateCustom = null;
+    let customerTemplateCustom = null;
 
     const SUPABASE_URL = process.env.VITE_SUPABASE_URL || process.env.SUPABASE_URL;
     const SUPABASE_KEY = process.env.SUPABASE_SERVICE_KEY || process.env.VITE_SUPABASE_ANON_KEY;
@@ -42,6 +44,8 @@ export default async function handler(req, res) {
           const config = settingsData[0].value;
           n8nWebhookUrl = config.n8nWebhookUrl || null;
           enableNewLead = config.enableNewLead !== false; // mặc định true
+          adminTemplateCustom = config.adminTemplate || null;
+          customerTemplateCustom = config.customerTemplate || null;
         }
       } catch (dbErr) {
         console.warn('Could not fetch webhook config from DB:', dbErr);
@@ -72,6 +76,16 @@ export default async function handler(req, res) {
     }
 
     // 3. Chuẩn bị payload gửi sang n8n
+    
+    // Hàm thay biến mẫu câu
+    const replaceVars = (template) => {
+      if (!template) return '';
+      return template.replace(/{{(\w+)}}/g, (_, k) => req.body[k] || '');
+    };
+
+    const adminTemplateFallback = `🔥 CÓ KHÁCH ĐĂNG KÝ MỚI 🔥\n🧑 Tên: {{name}}\n📞 SĐT: {{phone}}\n🛒 Phễu: {{courseName}}\n📧 Email: {{email}}`;
+    const customerTemplateFallback = `Xin chào {{name}} 🎉\nChúc mừng bạn đã đăng ký thành công chương trình: {{courseName}}.\n\nTrợ lý AI của chúng tôi sẽ tự động kết nối và hỗ trợ bạn qua Zalo này nhé. Vui lòng chú ý tin nhắn!`;
+
     const webhookPayload = {
       event: 'new_lead',
       timestamp: new Date().toISOString(),
@@ -83,8 +97,8 @@ export default async function handler(req, res) {
         courseName: courseName || 'Không xác định',
         courseId: courseId || null,
         source: source || 'direct',
-        adminNotificationTemplate: `🔥 CÓ KHÁCH ĐĂNG KÝ MỚI 🔥\n🧑 Tên: ${name}\n📞 SĐT: ${phone}\n🛒 Phễu: ${courseName || 'Khác'}\n${email ? `📧 Email: ${email}` : ''}`,
-        customerWelcomeTemplate: `Xin chào ${name} 🎉\nChúc mừng bạn đã đăng ký thành công chương trình: ${courseName || 'Của hệ thống'}.\n\nTrợ lý AI của chúng tôi sẽ tự động kết nối và hỗ trợ bạn qua Zalo này nhé. Vui lòng chú ý tin nhắn!`
+        adminNotificationTemplate: replaceVars(adminTemplateCustom || adminTemplateFallback),
+        customerWelcomeTemplate: replaceVars(customerTemplateCustom || customerTemplateFallback)
       },
       // Metadata hữu ích cho n8n
       meta: {

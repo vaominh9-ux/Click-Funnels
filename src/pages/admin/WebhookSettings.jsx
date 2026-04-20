@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Save, Loader2, Webhook, Zap, Send, CheckCircle, XCircle, AlertCircle, Copy, RefreshCw, Bell } from 'lucide-react';
+import { Save, Loader2, Webhook, Zap, Send, CheckCircle, AlertCircle, Copy, RefreshCw, Bell, Link, MessageSquare } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import './WebhookSettings.css';
@@ -16,10 +16,17 @@ const WebhookSettings = () => {
   const [n8nWebhookUrl, setN8nWebhookUrl] = useState('');
   const [enableNewLead, setEnableNewLead] = useState(true);
   const [enablePayment, setEnablePayment] = useState(true);
+  const [adminTemplate, setAdminTemplate] = useState('🔥 CÓ KHÁCH ĐĂNG KÝ MỚI 🔥\n🧑 Tên: {{name}}\n📞 SĐT: {{phone}}\n🛒 Phễu: {{courseName}}\n📧 Email: {{email}}');
+  const [customerTemplate, setCustomerTemplate] = useState('Xin chào {{name}} 🎉\nChúc mừng bạn đã đăng ký thành công chương trình: {{courseName}}.\n\nTrợ lý AI của chúng tôi sẽ tự động kết nối và hỗ trợ bạn qua Zalo này nhé. Vui lòng chú ý tin nhắn!');
   const [testLog, setTestLog] = useState([]);
+  const [activeTab, setActiveTab] = useState('connection');
+
+  // Internal state
+  const [notifyLeadUrl, setNotifyLeadUrl] = useState('');
 
   useEffect(() => {
     loadSettings();
+    setNotifyLeadUrl(`${API_BASE}/api/webhook/notify-lead`);
   }, []);
 
   const loadSettings = async () => {
@@ -36,6 +43,8 @@ const WebhookSettings = () => {
         setN8nWebhookUrl(config.n8nWebhookUrl || '');
         setEnableNewLead(config.enableNewLead !== false);
         setEnablePayment(config.enablePayment !== false);
+        if (config.adminTemplate) setAdminTemplate(config.adminTemplate);
+        if (config.customerTemplate) setCustomerTemplate(config.customerTemplate);
       }
     } catch (err) {
       console.error('Load webhook settings error:', err);
@@ -57,6 +66,8 @@ const WebhookSettings = () => {
             n8nWebhookUrl: n8nWebhookUrl.trim(),
             enableNewLead,
             enablePayment,
+            adminTemplate,
+            customerTemplate
           },
           updated_at: new Date().toISOString(),
           updated_by: user?.id
@@ -99,54 +110,42 @@ const WebhookSettings = () => {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          name: '[TEST] Admin Test',
-          phone: '0900000000',
-          email: 'test@clickfunnels.vn',
-          courseName: '[TEST] Kiểm tra Webhook',
-          courseId: 'test',
-          source: 'admin-test',
-          leadId: 'test-' + Date.now()
+          name: 'Nguyễn Test',
+          phone: '0901234567',
+          email: 'test@example.com',
+          courseName: 'Khóa Học Mẫu',
+          source: 'admin-test'
         })
       });
 
-      const result = await response.json();
-
-      if (result.webhookSent) {
-        addLog(`✅ Webhook đã gửi thành công! n8n status: ${result.n8nStatus}`, 'success');
-        addToast('Test webhook thành công! Kiểm tra n8n & Zalo.', 'success');
+      const resData = await response.json();
+      
+      if (response.ok && resData.success !== false) {
+        addLog('✅ n8n đã nhận thành công (Status 200)');
+        addToast('Test Webhook thành công!', 'success');
       } else {
-        addLog(`⚠️ Webhook chưa gửi được: ${result.message}`, 'error');
-        addToast('Webhook chưa gửi được. Kiểm tra URL.', 'error');
+        addLog(`❌ Lỗi từ n8n: ${resData.message || 'Unknown error'}`);
+        addToast('Test Webhook thất bại!', 'error');
       }
     } catch (err) {
-      addLog(`❌ Lỗi: ${err.message}`, 'error');
-      addToast('Lỗi kết nối: ' + err.message, 'error');
+      addLog(`❌ Lỗi kết nối: ${err.message}`);
+      addToast('Không thể gửi test Webhook', 'error');
     } finally {
       setTesting(false);
     }
   };
 
-  const handleCopyUrl = (url) => {
-    navigator.clipboard.writeText(url);
-    addToast('Đã sao chép!', 'success');
+  const handleCopyUrl = (text) => {
+    navigator.clipboard.writeText(text);
+    addToast('Đã copy: ' + text);
   };
 
-  const notifyLeadUrl = `${window.location.hostname === 'localhost' ? 'https://click-funnels.vercel.app' : window.location.origin}/api/webhook/notify-lead`;
-
-  // Determine connection status
-  const getStatus = () => {
-    if (!n8nWebhookUrl.trim()) return 'disconnected';
-    return 'connected';
-  };
-  const status = getStatus();
+  const status = n8nWebhookUrl ? 'connected' : 'disconnected';
 
   if (loading) {
     return (
-      <div className="webhook-settings-container">
-        <div className="ws-loading">
-          <Loader2 size={32} className="spin" />
-          <p>Đang tải cấu hình...</p>
-        </div>
+      <div className="webhook-settings-container" style={{ display: 'flex', justifyContent: 'center', padding: '60px' }}>
+        <Loader2 className="spin text-blue-500" size={32} />
       </div>
     );
   }
@@ -166,138 +165,124 @@ const WebhookSettings = () => {
         )}
       </div>
 
-      <div className="ws-grid">
-        {/* Cột trái: Cấu hình */}
-        <div className="ws-col-left">
-          <div className="ws-card">
-            <div className="ws-card-header">
-              <Webhook size={20} />
-              <h3>Kết Nối n8n Webhook</h3>
-            </div>
+      <div className="ws-tabs">
+        <button 
+          className={`ws-tab ${activeTab === 'connection' ? 'active' : ''}`}
+          onClick={() => setActiveTab('connection')}
+        >
+          <Link size={16} /> Kết Nối & Hướng Dẫn
+        </button>
+        <button 
+          className={`ws-tab ${activeTab === 'messages' ? 'active' : ''}`}
+          onClick={() => setActiveTab('messages')}
+        >
+          <MessageSquare size={16} /> Mẫu Giao Tiếp & Kích Hoạt
+        </button>
+      </div>
 
-            <div className="ws-form">
-              <div className="ws-field">
-                <label>n8n Webhook URL *</label>
-                <input
-                  type="url"
-                  value={n8nWebhookUrl}
-                  onChange={(e) => setN8nWebhookUrl(e.target.value)}
-                  placeholder="https://your-n8n.com/webhook/xxxx-xxxx"
-                />
-                <span className="ws-hint">
-                  Lấy URL này từ node "Webhook" trong n8n workflow. Chọn method POST.
-                </span>
+      {activeTab === 'connection' && (
+        <div className="ws-grid">
+          {/* Cột trái: Cấu hình */}
+          <div className="ws-col-left">
+            <div className="ws-card">
+              <div className="ws-card-header">
+                <Webhook size={20} />
+                <h3>Kết Nối n8n Webhook</h3>
               </div>
 
-              <div className="ws-field">
-                <label>API Endpoint (Hệ thống tự động gọi)</label>
-                <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+              <div className="ws-form">
+                <div className="ws-field">
+                  <label>n8n Webhook URL *</label>
                   <input
-                    type="text"
-                    value={notifyLeadUrl}
-                    readOnly
-                    style={{ flex: 1, backgroundColor: '#F3F4F6', color: '#6B7280' }}
+                    type="url"
+                    value={n8nWebhookUrl}
+                    onChange={(e) => setN8nWebhookUrl(e.target.value)}
+                    placeholder="https://your-n8n.com/webhook/xxxx-xxxx"
                   />
-                  <button type="button" onClick={() => handleCopyUrl(notifyLeadUrl)} style={{ padding: '10px 14px', background: '#E5E7EB', border: '1px solid #D1D5DB', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <Copy size={16} color="#4B5563" />
-                  </button>
+                  <span className="ws-hint">
+                    Lấy URL này từ node "Webhook" trong n8n workflow. Chọn method POST.
+                  </span>
                 </div>
-                <span className="ws-hint">
-                  Endpoint nội bộ — Frontend tự gọi khi có Lead. Bạn không cần cấu hình gì thêm.
-                </span>
-              </div>
 
-              <hr style={{ borderTop: '1px solid #E5E7EB', borderBottom: 'none', margin: '8px 0 0 0' }} />
-
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
-                <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#111827', fontWeight: 600, fontSize: '14px' }}>
-                  <Zap size={16} color="#F59E0B" /> Kiểm Tra Kết Nối
-                </div>
-                <p style={{ fontSize: '13px', color: '#6B7280', margin: '0 0 8px', lineHeight: 1.5 }}>
-                  Gửi một Lead giả lập tới Webhook để kiểm tra liên kết.
-                </p>
-                <button className="ws-test-btn" onClick={handleTest} disabled={testing || !n8nWebhookUrl.trim()} style={{ width: '100%' }}>
-                  {testing ? (
-                    <><Loader2 size={16} className="spin" /> Đang gửi test...</>
-                  ) : (
-                    <><Send size={16} /> Gửi Test Webhook</>
-                  )}
-                </button>
-                {testLog.length > 0 && (
-                  <div className="ws-event-log" style={{ marginTop: '8px' }}>
-                    {testLog.map((log, i) => (
-                      <div key={i} className={log.includes('✅') ? 'log-success' : log.includes('❌') || log.includes('⚠️') ? 'log-error' : 'log-info'}>
-                        {log}
-                      </div>
-                    ))}
+                <div className="ws-field">
+                  <label>API Endpoint (Hệ thống tự động gọi)</label>
+                  <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                    <input
+                      type="text"
+                      value={notifyLeadUrl}
+                      readOnly
+                      style={{ flex: 1, backgroundColor: '#F3F4F6', color: '#6B7280' }}
+                    />
+                    <button type="button" onClick={() => handleCopyUrl(notifyLeadUrl)} style={{ padding: '10px 14px', background: '#E5E7EB', border: '1px solid #D1D5DB', borderRadius: '10px', cursor: 'pointer', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                      <Copy size={16} color="#4B5563" />
+                    </button>
                   </div>
-                )}
+                  <span className="ws-hint">
+                    Endpoint nội bộ — Frontend tự gọi khi có Lead. Bạn không cần cấu hình gì thêm.
+                  </span>
+                </div>
+
+                <hr style={{ borderTop: '1px solid #E5E7EB', borderBottom: 'none', margin: '8px 0 0 0' }} />
+
+                <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginTop: '8px' }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '8px', color: '#111827', fontWeight: 600, fontSize: '14px' }}>
+                    <Zap size={16} color="#F59E0B" /> Kiểm Tra Kết Nối
+                  </div>
+                  <p style={{ fontSize: '13px', color: '#6B7280', margin: '0 0 8px', lineHeight: 1.5 }}>
+                    Gửi một Lead giả lập tới Webhook để kiểm tra liên kết.
+                  </p>
+                  <button className="ws-test-btn" onClick={handleTest} disabled={testing || !n8nWebhookUrl.trim()} style={{ width: '100%' }}>
+                    {testing ? (
+                      <><Loader2 size={16} className="spin" /> Đang gửi test...</>
+                    ) : (
+                      <><Send size={16} /> Gửi Test Webhook</>
+                    )}
+                  </button>
+                  {testLog.length > 0 && (
+                    <div className="ws-event-log" style={{ marginTop: '8px' }}>
+                      {testLog.map((log, i) => (
+                        <div key={i} className={log.includes('✅') ? 'log-success' : log.includes('❌') || log.includes('⚠️') ? 'log-error' : 'log-info'}>
+                          {log}
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
               </div>
-
-            </div>
-          </div>
-
-          {/* Sự kiện Trigger */}
-          <div className="ws-card">
-            <div className="ws-card-header">
-              <Bell size={20} />
-              <h3>Sự Kiện Kích Hoạt (Events)</h3>
-            </div>
-
-            <div className="ws-toggle-row">
-              <div className="ws-toggle-label">
-                <strong>🔔 Lead Mới Đăng Ký</strong>
-                <span>Gửi thông báo khi khách hàng để lại thông tin trên Landing Page</span>
-              </div>
-              <label className="ws-toggle">
-                <input type="checkbox" checked={enableNewLead} onChange={(e) => setEnableNewLead(e.target.checked)} />
-                <span className="ws-toggle-slider"></span>
-              </label>
-            </div>
-
-            <div className="ws-toggle-row">
-              <div className="ws-toggle-label">
-                <strong>💰 Thanh Toán Thành Công</strong>
-                <span>Gửi thông báo khi SePay xác nhận thanh toán</span>
-              </div>
-              <label className="ws-toggle">
-                <input type="checkbox" checked={enablePayment} onChange={(e) => setEnablePayment(e.target.checked)} />
-                <span className="ws-toggle-slider"></span>
-              </label>
             </div>
             
-            <button className="ws-save-btn" onClick={handleSave} disabled={saving} style={{ marginTop: '32px' }}>
-              {saving ? (
-                <><Loader2 size={16} className="spin" /> Đang lưu...</>
-              ) : (
-                <><Save size={16} /> Lưu Cấu Hình Webhook</>
-              )}
-            </button>
-          </div>
-        </div>
-
-        {/* Cột phải: Hướng dẫn */}
-        <div className="ws-col-right">
-          {/* Hướng dẫn */}
-          <div className="ws-card">
-            <div className="ws-card-header">
-              <RefreshCw size={20} />
-              <h3>Hướng Dẫn Setup n8n</h3>
+            <div className="ws-actions" style={{ marginTop: '8px' }}>
+              <button className="ws-save-btn" onClick={handleSave} disabled={saving} style={{width: '100%'}}>
+                {saving ? (
+                  <><Loader2 size={16} className="spin" /> Đang lưu...</>
+                ) : (
+                  <><Save size={16} /> Lưu Cấu Hình Webhook</>
+                )}
+              </button>
             </div>
+          </div>
 
-            <div style={{ fontSize: '13px', color: '#4B5563', lineHeight: 1.8 }}>
-              <ol style={{ paddingLeft: '20px', margin: 0 }}>
-                <li><strong>Tạo Workflow mới</strong> trên n8n</li>
-                <li>Thêm node <strong>"Webhook"</strong> → Method: POST → Copy URL</li>
-                <li>Dán URL webhook vào ô bên trái</li>
-                <li>Thêm node <strong>"HTTP Request"</strong> gọi Zalo OA API hoặc dùng node <strong>"Zalo"</strong> (community)</li>
-                <li>Bấm <strong>"Gửi Test"</strong> để kiểm tra</li>
-                <li><strong>Activate</strong> workflow trên n8n</li>
-              </ol>
+          {/* Cột phải: Hướng dẫn */}
+          <div className="ws-col-right">
+            <div className="ws-card">
+              <div className="ws-card-header">
+                <RefreshCw size={20} />
+                <h3>Hướng Dẫn Setup n8n</h3>
+              </div>
 
-              <div style={{ marginTop: '16px', padding: '12px', background: '#F3F4F6', borderRadius: '8px', fontSize: '12px' }}>
-                <strong>📦 Payload gửi tới n8n:</strong>
-                <pre style={{ margin: '8px 0 0', whiteSpace: 'pre-wrap', color: '#374151' }}>
+              <div style={{ fontSize: '13px', color: '#4B5563', lineHeight: 1.8 }}>
+                <ol style={{ paddingLeft: '20px', margin: 0 }}>
+                  <li><strong>Tạo Workflow mới</strong> trên n8n</li>
+                  <li>Thêm node <strong>"Webhook"</strong> → Method: POST → Copy URL</li>
+                  <li>Dán URL webhook vào ô bên trái</li>
+                  <li>Thêm node <strong>"HTTP Request"</strong> gọi Zalo OA API hoặc dùng node <strong>"Zalo"</strong> (community)</li>
+                  <li>Bấm <strong>"Gửi Test"</strong> để kiểm tra</li>
+                  <li><strong>Activate</strong> workflow trên n8n</li>
+                </ol>
+
+                <div style={{ marginTop: '16px', padding: '12px', background: '#F3F4F6', borderRadius: '8px', fontSize: '12px' }}>
+                  <strong>📦 Payload gửi tới n8n:</strong>
+                  <pre style={{ margin: '8px 0 0', whiteSpace: 'pre-wrap', color: '#374151' }}>
 {`{
   "event": "new_lead",
   "timestamp": "2026-04-20T...",
@@ -311,12 +296,109 @@ const WebhookSettings = () => {
     "customerWelcomeTemplate": "Xin chào Nguyễn Văn A 🎉\\nChúc mừng..."
   }
 }`}
-                </pre>
+                  </pre>
+                </div>
               </div>
             </div>
           </div>
         </div>
-      </div>
+      )}
+
+      {activeTab === 'messages' && (
+        <div className="ws-grid">
+          {/* Cột trái: Form cấu hình mẫu */}
+          <div className="ws-col-left">
+            <div className="ws-card">
+              <div className="ws-card-header">
+                <MessageSquare size={20} />
+                <h3>Cấu Hình Mẫu Giao Tiếp</h3>
+              </div>
+              
+              <div className="ws-form">
+                <div className="ws-field">
+                  <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Mẫu Gửi Khách Hàng (Zalo OA/SMS)</span>
+                    <span style={{ fontSize: '11px', fontWeight: 'normal', color: '#6B7280' }}>
+                      Biến: <code onClick={() => handleCopyUrl('{{name}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{name}}"}</code>{' '}
+                      <code onClick={() => handleCopyUrl('{{phone}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{phone}}"}</code>{' '}
+                      <code onClick={() => handleCopyUrl('{{courseName}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{courseName}}"}</code>
+                    </span>
+                  </label>
+                  <textarea
+                    value={customerTemplate}
+                    onChange={(e) => setCustomerTemplate(e.target.value)}
+                    placeholder="Xin chào {{name}}..."
+                    style={{ minHeight: '160px', fontSize: '13px', fontFamily: 'inherit' }}
+                  />
+                </div>
+
+                <div className="ws-field">
+                  <label style={{ display: 'flex', justifyContent: 'space-between' }}>
+                    <span>Mẫu Thông Báo Admin (Telegram/Zalo Nhóm)</span>
+                  </label>
+                  <textarea
+                    value={adminTemplate}
+                    onChange={(e) => setAdminTemplate(e.target.value)}
+                    placeholder="🔥 CÓ KHÁCH ĐĂNG KÝ MỚI 🔥..."
+                    style={{ minHeight: '160px', fontSize: '13px', fontFamily: 'inherit' }}
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Cột phải: Sự Kiện Trigger và Node Lưu */}
+          <div className="ws-col-right">
+            <div className="ws-card">
+              <div className="ws-card-header">
+                <Bell size={20} />
+                <h3>Sự Kiện Kích Hoạt (Events)</h3>
+              </div>
+
+              <div className="ws-toggle-row">
+                <div className="ws-toggle-label">
+                  <strong>🔔 Lead Mới Đăng Ký</strong>
+                  <span>Gửi thông báo khi khách hàng để lại thông tin trên Landing Page</span>
+                </div>
+                <label className="ws-toggle">
+                  <input
+                    type="checkbox"
+                    checked={enableNewLead}
+                    onChange={(e) => setEnableNewLead(e.target.checked)}
+                  />
+                  <span className="ws-toggle-slider"></span>
+                </label>
+              </div>
+
+              <div className="ws-toggle-row">
+                <div className="ws-toggle-label">
+                  <strong>💰 Thanh Toán Thành Công</strong>
+                  <span>Gửi tin xác nhận khi khách thanh toán khóa học qua SePay</span>
+                </div>
+                <label className="ws-toggle">
+                  <input
+                    type="checkbox"
+                    checked={enablePayment}
+                    onChange={(e) => setEnablePayment(e.target.checked)}
+                  />
+                  <span className="ws-toggle-slider"></span>
+                </label>
+              </div>
+
+              <div className="ws-actions" style={{ marginTop: '32px' }}>
+                <button className="ws-save-btn" onClick={handleSave} disabled={saving} style={{width: '100%'}}>
+                  {saving ? (
+                    <><Loader2 size={16} className="spin" /> Đang lưu...</>
+                  ) : (
+                    <><Save size={16} /> Lưu Cấu Hình Khóa & Sự Kiện</>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+      
     </div>
   );
 };
