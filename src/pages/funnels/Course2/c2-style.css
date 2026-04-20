@@ -384,12 +384,16 @@
 }
 .expert-image {
   position: relative;
+  width: 100%;
 }
 .expert-image img {
   width: 100%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
   border-radius: 16px;
   box-shadow: 0 10px 20px rgba(0,0,0,0.1);
   border: 1px solid #E2E8F0;
+  display: block;
 }
 .c2-badge {
   position: absolute;
@@ -404,6 +408,7 @@
   border-radius: 99px;
   white-space: nowrap;
   letter-spacing: 1px;
+  z-index: 2;
 }
 .expert-info h2 {
   font-size: 1.8rem;
@@ -427,6 +432,9 @@
   font-size: 1.05rem;
   color: #475569;
   margin-bottom: 12px;
+}
+.expert-stats li span {
+  flex: 1;
 }
 .expert-stats li strong { color: #0F172A; }
 .expert-info .expert-quote {

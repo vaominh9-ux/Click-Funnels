@@ -173,16 +173,25 @@ const Course2 = () => {
         <section className="c2-expert-section mt-24">
           <div className="c2-expert-glass">
             <div className="expert-image">
-              <img src="https://images.unsplash.com/photo-1556761175-5973dc0f32d7?auto=format&fit=crop&q=80&w=400" alt="Mr. Hưng NPV" />
+              <img src="https://ui-avatars.com/api/?name=Hung+NPV&size=400&background=1E3A8A&color=fff&font-size=0.33" alt="Mr. Hưng NPV" />
               <div className="c2-badge">CHUYÊN GIA B2B</div>
             </div>
             <div className="expert-info">
               <h2>Mr. Nguyễn Phước Vĩnh Hưng (Hưng NPV)</h2>
               <p className="expert-title">Founder & CEO — Duhava Technology JSC</p>
               <ul className="expert-stats">
-                <li><CheckCircle2 size={18} className="text-navy icon-check mr-3 flex-shrink-0" /> Huấn luyện in-house: <strong>BIDV, Vinhomes, Droppii, Mitsubishi...</strong></li>
-                <li><CheckCircle2 size={18} className="text-navy icon-check mr-3 flex-shrink-0" /> <strong>500,000+ followers</strong> TikTok & Quản trị Group 200,000+</li>
-                <li><CheckCircle2 size={18} className="text-navy icon-check mr-3 flex-shrink-0" /> <strong>10+ năm</strong> tư vấn doanh nghiệp & kinh doanh online</li>
+                <li>
+                  <CheckCircle2 size={18} className="text-navy icon-check mr-3 flex-shrink-0" /> 
+                  <span className="flex-1">Huấn luyện in-house: <strong>BIDV, Vinhomes, Droppii, Mitsubishi...</strong></span>
+                </li>
+                <li>
+                  <CheckCircle2 size={18} className="text-navy icon-check mr-3 flex-shrink-0" /> 
+                  <span className="flex-1"><strong>500,000+ followers</strong> TikTok & Quản trị Group 200,000+</span>
+                </li>
+                <li>
+                  <CheckCircle2 size={18} className="text-navy icon-check mr-3 flex-shrink-0" /> 
+                  <span className="flex-1"><strong>10+ năm</strong> tư vấn doanh nghiệp & kinh doanh online</span>
+                </li>
               </ul>
               <div className="expert-quote">
                 "Mô hình AI Agency chính là cỗ máy in tiền mà tôi đang vận hành. Trong chương trình này, tôi chuyển giao <strong>CHÍNH XÁC</strong> hệ thống đó cho bạn — 100% không giấu nghề."
