@@ -100,7 +100,7 @@
 
 /* ─── METALLIC KHẮC CHỮ VÀNG VIP ─── */
 .c2-metallic-text {
-  background: linear-gradient(to right, #92400E 0%, #FDE68A 25%, #D97706 50%, #78350F 75%, #FDE68A 100%);
+  background: linear-gradient(to right, #92400E 0%, #FCD34D 25%, #D97706 50%, #78350F 75%, #FCD34D 100%);
   background-size: 200% auto;
   color: #000;
   background-clip: text;
@@ -109,6 +109,7 @@
   -webkit-text-fill-color: transparent;
   animation: shine 4s linear infinite;
   display: inline-block;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));
 }
 .c2-metallic-text-bg {
   background: linear-gradient(to right, #D97706 0%, #FDE68A 50%, #D97706 100%);

@@ -188,7 +188,7 @@ const Course2 = () => {
         <section className="c2-expert-section mt-32">
           <div className="c2-expert-luxury c2-glass-panel border-premium">
             <div className="expert-image-wrapper">
-              <img src="https://ui-avatars.com/api/?name=Hưng+NPV&size=500&background=F8FAFC&color=1E293B&font-size=0.33&bold=true" alt="Mr. Hưng NPV" className="luxury-img" />
+              <img src="https://ui-avatars.com/api/?name=Hung+NPV&size=500&background=F8FAFC&color=1E293B&font-size=0.33&bold=true" alt="Mr. Hưng NPV" className="luxury-img" />
               <div className="luxury-badge c2-metallic-text-bg">MASTER / FOUNDER</div>
             </div>
             <div className="expert-info">
@@ -270,9 +270,10 @@ const Course2 = () => {
               </ul>
 
               <div className="c2-total-wealth-box">
-                <div className="wealth-label">TỔNG TÀI SẢN KẾT KẾT:</div>
+                <div className="wealth-label">TỔNG TÀI SẢN KẾT TINH:</div>
                 <div className="wealth-price">
-                  <span className="strike text-gray-500 font-bold text-2xl mr-4">&gt; 47.490.000₫</span>
+                  <span className="strike text-slate-400 font-medium text-xl mr-4 md:text-2xl">&gt; 47.490.000₫</span>
+                  <span className="text-white font-black text-3xl md:text-4xl">MIỄN PHÍ</span>
                 </div>
               </div>
             </div>
