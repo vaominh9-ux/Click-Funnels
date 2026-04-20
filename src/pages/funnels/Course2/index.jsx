@@ -177,7 +177,7 @@ const Course2 = () => {
                   <li><CheckCircle2 size={18} className="text-amber-600 icon-check flex-shrink-0" /> Generative A/B Test: Trăm mẫu Ads Visual mỗi buổi sáng.</li>
                   <li><CheckCircle2 size={18} className="text-amber-600 icon-check flex-shrink-0" /> Xuất Video Thương Mại phân giải Studio qua AI Renderer.</li>
                 </ul>
-                <div className="module-output-elite bg-amber-50 border-amber-200 text-amber-900 text-gold-shadow"><strong>ĐẦU RA BÙNG NỔ:</strong> Agency siêu tốc, khả năng phục vụ >10+ Corporation.</div>
+                <div className="module-output-elite bg-amber-50 border-amber-200 text-amber-900 text-gold-shadow"><strong>ĐẦU RA BÙNG NỔ:</strong> Agency siêu tốc, khả năng phục vụ &gt;10+ Corporation.</div>
               </div>
             </div>
 
