@@ -302,6 +302,7 @@
   .c2-problem-box { padding: 30px 20px; }
   .problem-title { font-size: 1.4rem; }
   .c2-pain-list li { font-size: 1.05rem; padding: 16px; flex-direction: column; gap: 10px; border-radius: 12px;}
+  .highlight-elite { font-size: 1.15rem; padding: 16px 20px; }
   
   .c2-pillars-grid { grid-template-columns: 1fr; gap: 20px; }
   .c2-pillar-card { padding: 30px 20px; }
