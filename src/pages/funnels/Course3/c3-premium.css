@@ -230,6 +230,28 @@
   color: #F59E0B;
 }
 
+/* ===== IMAGES ===== */
+.aicoach-image-container {
+  display: flex;
+  justify-content: center;
+  margin: 45px 0;
+}
+
+.aicoach-img-styled {
+  max-width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+  border: 2px solid #1F2937;
+  transition: transform 0.3s ease, border-color 0.3s ease;
+  background-color: #FFFFFF; /* Ensure white background for transparent document images */
+}
+
+.aicoach-img-styled:hover {
+  transform: translateY(-5px);
+  border-color: #F59E0B;
+}
+
 /* ===== STORY / LETTER ===== */
 .aicoach-letter {
   max-width: 750px;

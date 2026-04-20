@@ -64,6 +64,10 @@ const AICoachPage = () => {
 
             <h3>🐛 Tinh Hoàn Của Bọ Cánh Cứng Dạy Bạn Điều Gì Về Kinh Doanh Online?</h3>
 
+            <div className="aicoach-image-container">
+              <img src="/images/course3/beetle.png" alt="Con bọ cánh cứng" className="aicoach-img-styled" style={{maxWidth: '450px'}} />
+            </div>
+
             <p>Sinh vật mạnh nhất hành tinh không phải voi châu Phi — mà là <strong className="aicoach-white">con bọ cánh cứng nhỏ xíu</strong>, với sức mạnh bằng <span className="aicoach-gold">1,141 lần</span> trọng lượng cơ thể.</p>
             <p>Nhưng sức mạnh lại tạo ra một vấn đề độc đáo... Có 2 loại bọ đực:</p>
 
@@ -143,6 +147,15 @@ const AICoachPage = () => {
             </div>
 
             <p>Mặc dù phép toán không sai, nhưng kiếm được hơn 1.000 khách hàng mua ngay một sản phẩm là <strong className="aicoach-white">siêu thử thách</strong>.</p>
+            
+            <div className="aicoach-image-container">
+              <img src="/images/course3/funnel-math.png" alt="Mô hình phễu kinh doanh" className="aicoach-img-styled" />
+            </div>
+
+            <p style={{textAlign: 'center', fontSize: '1.2rem', color: '#E5E7EB'}}>
+              <strong>Mục Tiêu: 21.000 USD/Tháng.</strong> Dùng 1.000 USD để thu hút 1.000 người nhận quà miễn phí, và dần chuyển đổi họ qua các tầng phễu hệ thống.
+            </p>
+
             <p>Chúng tôi tin rằng không có gì sai khi muốn kiếm một triệu đô — nhưng rất nhiều người nhìn vào con số đó mà <span className="aicoach-red">không hiểu thực tế đằng sau nó</span>.</p>
 
             <div className="aicoach-blockquote">
@@ -164,6 +177,10 @@ const AICoachPage = () => {
           <p style={{ textAlign: 'center', color: '#9CA3AF', maxWidth: '650px', margin: '0 auto 50px', fontSize: '1.15rem' }}>
             Những chiến lược không chỉ hiệu quả mà còn bền vững — đã được chứng minh trong thực tế.
           </p>
+
+          <div className="aicoach-image-container">
+            <img src="/images/course3/funnel.png" alt="Phễu 3 chiến lược sát thủ" className="aicoach-img-styled" style={{maxWidth: '350px'}} />
+          </div>
 
           <div className="aicoach-strategy-card">
             <h4><span className="aicoach-gold">01.</span> Trải Nghiệm WOW — Tặng Miễn Phí Giá Trị Cao</h4>
