@@ -317,7 +317,7 @@
   background: #fff;
   border-radius: 12px;
   border: 1px solid #E5E7EB;
-  overflow: hidden;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
 }
