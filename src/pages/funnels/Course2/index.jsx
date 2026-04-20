@@ -58,24 +58,24 @@ const Course2 = () => {
             <h2 className="mb-8 problem-title">BẠN ĐANG KIẾM TIỀN TỪ AI — NHƯNG...</h2>
             <ul className="c2-pain-list">
               <li>
-                <div className="icon-wrap"><XCircle size={22} className="text-red-400" /></div>
+                <div className="icon-wrap"><XCircle size={22} className="text-red-500" /></div>
                 <span>Vẫn đang làm TỪNG JOB MỘT — thu nhập phụ thuộc vào <strong>SỐ GIỜ</strong> làm việc?</span>
               </li>
               <li>
-                <div className="icon-wrap"><XCircle size={22} className="text-red-400" /></div>
+                <div className="icon-wrap"><XCircle size={22} className="text-red-500" /></div>
                 <span>Không biết cách <strong>chạy Ads</strong> để tìm khách hàng doanh nghiệp lớn (B2B)?</span>
               </li>
               <li>
-                <div className="icon-wrap"><XCircle size={22} className="text-red-400" /></div>
+                <div className="icon-wrap"><XCircle size={22} className="text-red-500" /></div>
                 <span>Muốn xây <strong>Agency</strong> nhưng không biết cách tạo hệ thống automation để phục vụ nhiều khách cùng lúc?</span>
               </li>
               <li>
-                <div className="icon-wrap"><XCircle size={22} className="text-red-400" /></div>
+                <div className="icon-wrap"><XCircle size={22} className="text-red-500" /></div>
                 <span>Thấy cơ hội AI Agency đang BÙNG NỔ nhưng sợ <strong>mình không đủ "chuyên gia"</strong> để bán cho doanh nghiệp?</span>
               </li>
             </ul>
             <div className="problem-arrow my-8">
-              <ArrowDown size={36} className="text-gold opacity-70 mx-auto" />
+              <ArrowDown size={36} className="text-navy opacity-50 mx-auto" />
             </div>
             <div className="c2-problem-conclusion highlight-card">
               <strong>→ KHÓA MASTER sẽ biến bạn từ Freelancer đơn lẻ thành CHỦ AGENCY có hệ thống.</strong>
@@ -119,9 +119,9 @@ const Course2 = () => {
               <div className="module-content">
                 <h3 className="module-title">Nền Tảng Automation Chuyên Sâu</h3>
                 <ul className="module-list">
-                  <li><CheckCircle2 size={18} className="text-gold" /> Master n8n: Từ cơ bản đến nâng cao.</li>
-                  <li><CheckCircle2 size={18} className="text-gold" /> Xây hệ thống AI Agents tự suy luận (CSKH, chốt sale).</li>
-                  <li><CheckCircle2 size={18} className="text-gold" /> Build pipeline: Ý tưởng → Sản xuất → Phân phối → Chốt sale.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Master n8n: Từ cơ bản đến nâng cao.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Xây hệ thống AI Agents tự suy luận (CSKH, chốt sale).</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Build pipeline: Ý tưởng → Sản xuất → Phân phối → Chốt sale.</li>
                 </ul>
                 <div className="module-output"><strong>ĐẦU RA:</strong> Bộ 10+ workflow automation sẵn sàng deploy cho khách.</div>
               </div>
@@ -132,9 +132,9 @@ const Course2 = () => {
               <div className="module-content">
                 <h3 className="module-title">Làm Chủ Ads & Traffic</h3>
                 <ul className="module-list">
-                  <li><CheckCircle2 size={18} className="text-gold" /> Facebook Ads cho B2B: Targeting doanh nghiệp, CEO, founders.</li>
-                  <li><CheckCircle2 size={18} className="text-gold" /> TikTok Ads: Case study 100K-200K followers/tháng.</li>
-                  <li><CheckCircle2 size={18} className="text-gold" /> Chiến lược content marketing thu hút khách B2B.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Facebook Ads cho B2B: Targeting doanh nghiệp, CEO, founders.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> TikTok Ads: Case study 100K-200K followers/tháng.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Chiến lược content marketing thu hút khách B2B.</li>
                 </ul>
                 <div className="module-output"><strong>ĐẦU RA:</strong> 3 chiến dịch Ads đang chạy + Content calendar 30 ngày.</div>
               </div>
@@ -145,9 +145,9 @@ const Course2 = () => {
               <div className="module-content">
                 <h3 className="module-title">Xây Hệ Thống Agency</h3>
                 <ul className="module-list">
-                  <li><CheckCircle2 size={18} className="text-gold" /> Đóng gói dịch vụ AI cho doanh nghiệp (Basic-Pro-Enterprise).</li>
-                  <li><CheckCircle2 size={18} className="text-gold" /> Quy trình onboard khách hàng + delivery workflow.</li>
-                  <li><CheckCircle2 size={18} className="text-gold" /> Template hợp đồng, báo giá, proposal chuyên nghiệp.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Đóng gói dịch vụ AI cho doanh nghiệp (Basic-Pro-Enterprise).</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Quy trình onboard khách hàng + delivery workflow.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Template hợp đồng, báo giá, proposal chuyên nghiệp.</li>
                 </ul>
                 <div className="module-output"><strong>ĐẦU RA:</strong> Bộ tài liệu Agency hoàn chỉnh sẵn sàng mang đi bán.</div>
               </div>
@@ -158,9 +158,9 @@ const Course2 = () => {
               <div className="module-content">
                 <h3 className="module-title text-gold">Tối Ưu & Scale (Mở rộng)</h3>
                 <ul className="module-list">
-                  <li><CheckCircle2 size={18} className="text-gold" /> Tối ưu pipeline: Media AI 24/7 (Content, Hình ảnh, Video).</li>
-                  <li><CheckCircle2 size={18} className="text-gold" /> Thiết kế thị giác bằng thuật toán — A/B test trăm mẫu ads/ngày.</li>
-                  <li><CheckCircle2 size={18} className="text-gold" /> Sản xuất video thương mại chất lượng studio bằng AI.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Tối ưu pipeline: Media AI 24/7 (Content, Hình ảnh, Video).</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Thiết kế thị giác bằng thuật toán — A/B test trăm mẫu ads/ngày.</li>
+                  <li><CheckCircle2 size={18} className="text-navy icon-check" /> Sản xuất video thương mại chất lượng studio bằng AI.</li>
                 </ul>
                 <div className="module-output text-gold gold-glass"><strong>ĐẦU RA:</strong> Cỗ máy Agency tự vận hành, sẵn sàng scale lên 10+ khách.</div>
               </div>
@@ -180,9 +180,9 @@ const Course2 = () => {
               <h2>Mr. Nguyễn Phước Vĩnh Hưng (Hưng NPV)</h2>
               <p className="expert-title">Founder & CEO — Duhava Technology JSC</p>
               <ul className="expert-stats">
-                <li><CheckCircle2 size={18} className="text-gold mr-3 flex-shrink-0" /> Huấn luyện in-house: <strong>BIDV, Vinhomes, Droppii, Mitsubishi...</strong></li>
-                <li><CheckCircle2 size={18} className="text-gold mr-3 flex-shrink-0" /> <strong>500,000+ followers</strong> TikTok & Quản trị Group 200,000+</li>
-                <li><CheckCircle2 size={18} className="text-gold mr-3 flex-shrink-0" /> <strong>10+ năm</strong> tư vấn doanh nghiệp & kinh doanh online</li>
+                <li><CheckCircle2 size={18} className="text-navy icon-check mr-3 flex-shrink-0" /> Huấn luyện in-house: <strong>BIDV, Vinhomes, Droppii, Mitsubishi...</strong></li>
+                <li><CheckCircle2 size={18} className="text-navy icon-check mr-3 flex-shrink-0" /> <strong>500,000+ followers</strong> TikTok & Quản trị Group 200,000+</li>
+                <li><CheckCircle2 size={18} className="text-navy icon-check mr-3 flex-shrink-0" /> <strong>10+ năm</strong> tư vấn doanh nghiệp & kinh doanh online</li>
               </ul>
               <div className="expert-quote">
                 "Mô hình AI Agency chính là cỗ máy in tiền mà tôi đang vận hành. Trong chương trình này, tôi chuyển giao <strong>CHÍNH XÁC</strong> hệ thống đó cho bạn — 100% không giấu nghề."
@@ -193,7 +193,7 @@ const Course2 = () => {
 
         {/* ─── PHẦN 6: "THE GRAND SLAM OFFER" ─── */}
         <section className="c2-offer-section mt-24">
-          <h2 className="c2-section-title text-center text-white mb-10">BẠN SẼ NHẬN ĐƯỢC GÌ HÔM NAY?</h2>
+          <h2 className="c2-section-title text-center mb-10">BẠN SẼ NHẬN ĐƯỢC GÌ HÔM NAY?</h2>
           
           <div className="c2-offer-board">
             <ul className="c2-value-list">
@@ -231,8 +231,8 @@ const Course2 = () => {
               </li>
             </ul>
             <div className="c2-offer-total">
-              <div className="total-label text-gray-400">TỔNG GIÁ TRỊ TÀI SẢN:</div>
-              <div className="total-price strike text-gray-500 font-bold text-3xl">&gt; 47.490.000₫</div>
+              <div className="total-label">TỔNG GIÁ TRỊ TÀI SẢN:</div>
+              <div className="total-price strike font-bold text-3xl">&gt; 47.490.000₫</div>
             </div>
           </div>
         </section>
@@ -245,21 +245,21 @@ const Course2 = () => {
               <p className="mt-2">Nếu thuê consultant setup Agency → Mất <strong>30-50 triệu</strong> cho vài buổi tư vấn.</p>
             </div>
             
-            <p className="text-xl text-gray-300 font-bold tracking-wide uppercase mt-8">Hôm Nay, Toàn Bộ Hệ Thống MASTER:</p>
+            <p className="text-xl font-bold tracking-wide uppercase mt-8 text-navy">Hôm Nay, Toàn Bộ Hệ Thống MASTER:</p>
             
             <div className="c2-final-price-container">
               <span className="c2-price-pointer">👉 MỨC ĐẦU TƯ:</span>
-              <h1 className="c2-final-price">{COURSE_INFO.price.toLocaleString('vi-VN')}₫</h1>
+              <h1 className="c2-final-price text-navy">{COURSE_INFO.price.toLocaleString('vi-VN')}₫</h1>
             </div>
-            <p className="c2-price-subtext italic mt-4 text-gray-400">
+            <p className="c2-price-subtext italic mt-4">
               (Rẻ hơn 1 tháng tiền thuê văn phòng — nhưng bạn mang về 1 AGENCY Thực Thụ)
             </p>
           </div>
 
           <div className="c2-risk-reversal mx-auto mt-14">
-            <ShieldCheck size={56} className="mx-auto text-green-400 mb-6" />
-            <h3 className="text-2xl font-bold mb-4 text-white">🛡️ CAM KẾT VÀNG: KHÔNG BUILD ĐƯỢC AGENCY = HOÀN TIỀN</h3>
-            <p className="text-gray-300 text-lg leading-relaxed px-4">
+            <ShieldCheck size={56} className="mx-auto text-green-600 mb-6" />
+            <h3 className="text-2xl font-bold mb-4 text-green-700">🛡️ CAM KẾT VÀNG: KHÔNG BUILD ĐƯỢC AGENCY = HOÀN TIỀN</h3>
+            <p className="text-lg leading-relaxed px-4">
               Nếu sau 4 tuần học thực chiến mà bạn chưa setup xong 1 hệ thống Agency AI hoạt động trơn tru... 
               hãy liên hệ với trợ lý. Bạn sẽ được <strong>hỗ trợ 1:1</strong> cho tới khi ra kết quả, hoặc <strong>hoàn tiền 100%</strong> không lằng nhằng.
             </p>
@@ -286,13 +286,13 @@ const Course2 = () => {
         <div className="hormozi-container text-center">
           <div className="c2-footer-upsell mb-10">
             <Star size={28} className="mx-auto text-gold mb-4 fill-current" />
-            <p className="text-gray-300 text-lg leading-relaxed">
+            <p className="text-lg leading-relaxed">
               <em>"Những Agency Owner xuất sắc nhất sau khoá học sẽ được mời trực tiếp tham gia chương trình đặc quyền <strong>AI COACH / AI TRAINER (19.997.000₫)</strong> — nơi bạn được hướng dẫn cách NHÂN BẢN chính mình thành người đào tạo và kiếm tiền thụ động từ thị trường B2B."</em>
             </p>
           </div>
           <div className="c2-footer-bottom">
-            <p className="font-bold text-gray-400">© {new Date().getFullYear()} DUHAVA JSC / MASTER SYSTEMS.</p>
-            <p className="mt-2 text-gray-600 text-sm">Tất cả bản quyền hệ thống thuộc về HUNGNPV AI.VIBE.CODE.<br/><span className="mt-1 inline-block">🔒 Bảo mật SSL | Hỗ trợ VNPay & Credit Card</span></p>
+            <p className="font-bold">© {new Date().getFullYear()} DUHAVA JSC / MASTER SYSTEMS.</p>
+            <p className="mt-2 text-sm">Tất cả bản quyền hệ thống thuộc về HUNGNPV AI.VIBE.CODE.<br/><span className="mt-1 inline-block text-navy">🔒 Bảo mật SSL | Hỗ trợ VNPay & Credit Card</span></p>
           </div>
         </div>
       </footer>
