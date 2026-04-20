@@ -1,0 +1,274 @@
+/* === ALEX HORMOZI LIGHT THEME (Clean, Direct, High Conversion) === */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+
+.hormozi-light-page {
+  background-color: #FFFFFF;
+  color: #111827;
+  font-family: 'Inter', sans-serif;
+  min-height: 100vh;
+  line-height: 1.6;
+}
+
+/* Typography Overrides */
+.hormozi-light-page h1, 
+.hormozi-light-page h2, 
+.hormozi-light-page h3 {
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: -0.02em;
+  margin: 0;
+  color: #111827;
+}
+
+/* HELPER CLASSES */
+.text-center { text-align: center; }
+.mx-auto { margin-left: auto; margin-right: auto; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mb-8 { margin-bottom: 2rem; }
+.mb-10 { margin-bottom: 2.5rem; }
+.mt-4 { margin-top: 1rem; }
+.mt-16 { margin-top: 4rem; }
+.text-highlight { color: #DC2626; /* Deep Red */ }
+.icon-red { color: #DC2626; }
+.text-green-600 { color: #059669; }
+.text-red-600 { color: #DC2626; }
+.bg-red { background: #DC2626 !important; color: white !important;}
+.flex-shrink-0 { flex-shrink: 0; }
+.ml-2 { margin-left: 0.5rem; }
+
+/* STICKY BANNER */
+.hq-banner {
+  background: #FEF2F2;
+  border-bottom: 2px solid #FCA5A5;
+  color: #991B1B;
+  padding: 12px 20px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+}
+.hq-banner p { margin: 0; }
+.hq-banner strong { font-weight: 800; color: #DC2626; }
+
+/* CONTAINER */
+.hormozi-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 60px 24px;
+}
+
+/* HERO SECTION */
+.hero-section {
+  padding: 20px 0 40px;
+}
+
+.badge-pill {
+  background: #111827;
+  color: #FFFFFF;
+  display: inline-block;
+  padding: 6px 16px;
+  border-radius: 99px;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.main-headline {
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1.2;
+  margin-bottom: 20px;
+  text-transform: uppercase;
+}
+
+.sub-headline {
+  font-size: 1.25rem;
+  color: #4B5563;
+  max-width: 700px;
+  margin-left: auto;
+  margin-right: auto;
+}
+.sub-headline strong { color: #111827; font-weight: 700;}
+
+/* HERO DETAILS BAR */
+.hero-details {
+  display: flex;
+  justify-content: center;
+  gap: 40px;
+  flex-wrap: wrap;
+  padding: 24px;
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 12px;
+  max-width: 800px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.detail-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-align: left;
+}
+.detail-item span {
+  font-size: 14px;
+  color: #4B5563;
+  line-height: 1.4;
+}
+.detail-item strong {
+  color: #111827;
+  font-size: 16px;
+}
+
+/* HORMOZI BUTTON */
+.hormozi-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #DC2626; /* High convert Red */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-family: 'Montserrat', sans-serif;
+  font-weight: 800;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.4);
+  text-transform: uppercase;
+}
+
+.hormozi-btn:hover {
+  background: #B91C1C;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 15px -3px rgba(220, 38, 38, 0.5);
+}
+
+.btn-large {
+  font-size: 18px;
+  padding: 20px 40px;
+  letter-spacing: 0.5px;
+}
+
+.pulse-animation {
+  animation: pulse-red 2s infinite;
+}
+
+@keyframes pulse-red {
+  0% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0.7); }
+  70% { box-shadow: 0 0 0 15px rgba(220, 38, 38, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(220, 38, 38, 0); }
+}
+
+.security-note {
+  font-size: 13px;
+  color: #6B7280;
+}
+
+/* CURRICULUM SECTION */
+.section-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+}
+
+.curriculum-cards {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+.c-card {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 16px;
+  padding: 32px 24px;
+  position: relative;
+  transition: transform 0.3s ease;
+}
+
+.c-card:hover { transform: translateY(-5px); }
+
+.highlight-card {
+  background: #FEF2F2;
+  border: 2px solid #FCA5A5;
+}
+
+.c-day {
+  display: inline-block;
+  background: #111827;
+  color: white;
+  font-size: 12px;
+  font-weight: 800;
+  padding: 4px 12px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  letter-spacing: 1px;
+}
+
+.c-title {
+  font-size: 1.25rem;
+  font-weight: 800;
+  margin-bottom: 20px;
+  min-height: 56px; /* Align heights */
+}
+
+.c-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.c-list li {
+  display: flex;
+  align-items: flex-start;
+  font-size: 15px;
+  color: #374151;
+  margin-bottom: 12px;
+  line-height: 1.5;
+}
+
+/* BOTTOM CTA */
+.cta-box {
+  background: #111827;
+  color: white;
+  padding: 60px 40px;
+  border-radius: 24px;
+}
+.cta-box h2 {
+  color: white;
+  font-size: 2.5rem;
+}
+.cta-box p {
+  color: #9CA3AF;
+  font-size: 1.1rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* FOOTER */
+.h-footer {
+  background: #F3F4F6;
+  text-align: center;
+  padding: 30px;
+  border-top: 1px solid #E5E7EB;
+}
+.h-footer p {
+  color: #6B7280;
+  font-size: 13px;
+  margin: 0;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .main-headline { font-size: 2.2rem; }
+  .curriculum-cards { grid-template-columns: 1fr; }
+  .c-title { min-height: auto; }
+  .hero-details { flex-direction: column; gap: 20px; align-items: flex-start; padding: 20px; }
+  .w-full-mobile { width: 100%; padding: 16px; font-size: 16px; }
+  .btn-large { padding: 16px; font-size: 16px; width: 100%;}
+  .cta-box { padding: 40px 20px; }
+  .cta-box h2 { font-size: 2rem; }
+}

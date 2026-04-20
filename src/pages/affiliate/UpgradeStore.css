@@ -157,6 +157,14 @@
   cursor: pointer;
 }
 
+.store-card-footer {
+  margin-top: auto;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
 .store-btn.upgrade {
   background: white;
   border: 1px solid #3B82F6;

@@ -30,6 +30,7 @@ import AdminLeadsCRM from './pages/admin/LeadsCRM';
 import AdminConversions from './pages/admin/Conversions';
 import AdminPaymentSettings from './pages/admin/PaymentSettings';
 import AdminEmailSettings from './pages/admin/EmailSettings';
+import AdminWorkshopSettings from './pages/admin/WorkshopSettings';
 
 import ClickTracker from './pages/public/ClickTracker';
 import Checkout from './pages/public/Checkout';
@@ -39,6 +40,7 @@ import Course1 from './pages/funnels/Course1';
 import Course2 from './pages/funnels/Course2';
 import Course3 from './pages/funnels/Course3';
 import Course4 from './pages/funnels/Course4';
+import Free3Day from './pages/funnels/Free3Day';
 
 const ZoomController = () => {
   const location = useLocation();
@@ -63,6 +65,7 @@ const App = () => {
         <ZoomController />
         <Routes>
           {/* Public Routes */}
+          <Route path="/khoa-hoc/3-ngay-mien-phi" element={<Free3Day />} />
           <Route path="/khoa-hoc/khoa-hoc-1" element={<Course1 />} />
           <Route path="/khoa-hoc/khoa-hoc-2" element={<Course2 />} />
           <Route path="/khoa-hoc/khoa-hoc-3" element={<Course3 />} />
@@ -207,6 +210,13 @@ const App = () => {
             <ProtectedRoute requiredRole="admin">
               <MainLayout title="Mẫu Email (Templates)">
                 <AdminEmailSettings />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/workshop-config" element={
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Phễu Hội Thảo (Free)">
+                <AdminWorkshopSettings />
               </MainLayout>
             </ProtectedRoute>
           } />

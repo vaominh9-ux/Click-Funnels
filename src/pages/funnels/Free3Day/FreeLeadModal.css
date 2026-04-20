@@ -1,0 +1,201 @@
+/* === Free Lead Modal Styles (Copied and modified from LeadModal.css to isolate) === */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@700;800;900&family=Inter:wght@400;500;600;700&display=swap');
+
+.lead-modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6); 
+  backdrop-filter: blur(8px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 9999;
+  padding: 20px;
+  animation: fadeIn 0.3s ease-out forwards;
+}
+
+.lead-modal-card {
+  background: #FFFFFF;
+  width: 100%;
+  max-width: 480px;
+  border-radius: 16px;
+  padding: 40px 32px;
+  position: relative;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+  border: 1px solid #E2E8F0;
+  animation: slideUp 0.3s ease-out forwards;
+  color: #0F172A;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Gradient accent for Free Modal (Hormozi style red/orange or colorful for free) */
+.lead-modal-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 4px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+  background: linear-gradient(90deg, #DC2626, #EF4444, #F87171);
+}
+
+.free-modal-success::before {
+  background: linear-gradient(90deg, #7c3aed, #2563eb, #06b6d4);
+}
+
+.close-btn {
+  position: absolute;
+  top: 20px;
+  right: 24px;
+  background: none;
+  border: none;
+  font-size: 28px;
+  color: #94A3B8;
+  cursor: pointer;
+  transition: color 0.2s;
+  line-height: 1;
+}
+
+.close-btn:hover {
+  color: #EF4444;
+}
+
+.lead-modal-card h2 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  color: #0F172A;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.6rem;
+  font-weight: 800;
+  line-height: 1.3;
+  padding-right: 20px;
+}
+
+.lead-modal-card p {
+  color: #64748B;
+  font-size: 0.95rem;
+  margin-bottom: 30px;
+  line-height: 1.5;
+}
+
+.lead-form .form-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.lead-form label {
+  display: block;
+  margin-bottom: 8px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #334155;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.lead-form input {
+  width: 100%;
+  padding: 14px 16px;
+  border: 1px solid #CBD5E1;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-family: 'Inter', sans-serif;
+  background: #F8FAFC;
+  color: #0F172A;
+  transition: border-color 0.2s, box-shadow 0.2s, background-color 0.2s;
+  box-sizing: border-box;
+}
+
+.lead-form input:focus {
+  outline: none;
+  border-color: #DC2626;
+  box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.15);
+  background: #FFFFFF;
+}
+
+.free-submit-btn {
+  width: 100%;
+  padding: 16px;
+  background: #DC2626; /* Hormozi red */
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 700;
+  font-family: 'Montserrat', sans-serif;
+  cursor: pointer;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+  text-transform: uppercase;
+  box-shadow: 0 4px 6px -1px rgba(220, 38, 38, 0.4);
+}
+
+.free-submit-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  background: #B91C1C;
+  box-shadow: 0 8px 15px -3px rgba(220, 38, 38, 0.5);
+}
+
+.free-submit-btn:disabled {
+  background: #E2E8F0;
+  color: #94A3B8;
+  cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
+}
+
+.form-note {
+  text-align: center;
+  font-size: 0.8rem !important;
+  color: #94A3B8 !important;
+  margin-top: 12px;
+  margin-bottom: 0 !important;
+}
+
+/* Success Modal Styles */
+.free-modal-success {
+  text-align: center;
+}
+
+.success-icon {
+  font-size: 48px;
+  margin-bottom: 8px;
+}
+
+.success-msg {
+  color: #334155 !important;
+  font-size: 0.95rem !important;
+  line-height: 1.6 !important;
+}
+
+.free-zalo-btn {
+  display: block;
+  text-align: center;
+  text-decoration: none;
+  background: linear-gradient(135deg, #0068FF, #0052CC) !important;
+  box-shadow: 0 10px 20px -5px rgba(0, 104, 255, 0.3) !important;
+  margin-bottom: 0 !important;
+}
+
+.free-zalo-btn:hover {
+  background: linear-gradient(135deg, #0052CC, #003D99) !important;
+  box-shadow: 0 15px 25px -5px rgba(0, 104, 255, 0.4) !important;
+}
+
+.success-note {
+  font-size: 0.8rem !important;
+  color: #94A3B8 !important;
+  margin: 12px 0 0 !important;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}

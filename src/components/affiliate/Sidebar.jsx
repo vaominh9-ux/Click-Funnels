@@ -186,6 +186,9 @@ const Sidebar = ({ onClose }) => {
                 <NavLink to="/admin/payment-settings" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Cấu Hình Thanh Toán</span>
                 </NavLink>
+                <NavLink to="/admin/workshop-config" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Phễu Hội Thảo (Free)</span>
+                </NavLink>
                 <NavLink to="/admin/email-settings" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Mẫu Email (Templates)</span>
                 </NavLink>

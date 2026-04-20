@@ -179,19 +179,25 @@ export default function AdminCampaignManager() {
                 onChange={(e) => setNewCampaignUrl(e.target.value)}
                 required
               />
-              <div style={{ marginTop: '8px', display: 'flex', gap: '8px', fontSize: '12px' }}>
+              <div style={{ marginTop: '8px', display: 'flex', gap: '8px', fontSize: '12px', flexWrap: 'wrap' }}>
                 <span style={{ color: '#64748B' }}>Điền nhanh nguồn nội bộ:</span>
-                {[1, 2, 3, 4].map(num => (
+                {[
+                  { name: '3 Ngày Miễn Phí', path: '/khoa-hoc/3-ngay-mien-phi' },
+                  { name: 'STARTER', path: '/khoa-hoc/khoa-hoc-1' },
+                  { name: 'MASTER', path: '/khoa-hoc/khoa-hoc-2' },
+                  { name: 'AI COACH', path: '/khoa-hoc/khoa-hoc-3' },
+                  { name: 'AI PARTNER', path: '/khoa-hoc/khoa-hoc-4' },
+                ].map((course, idx) => (
                   <button 
-                    key={num}
+                    key={idx}
                     type="button" 
                     onClick={() => {
-                      setNewCampaignName(`Khóa Học ${num}`);
-                      setNewCampaignUrl(`${window.location.hostname === 'localhost' ? 'https://click-funnels.vercel.app' : window.location.origin}/khoa-hoc/khoa-hoc-${num}`);
+                      setNewCampaignName(course.name);
+                      setNewCampaignUrl(`${window.location.hostname === 'localhost' ? 'http://localhost:5173' : window.location.origin}${course.path}`);
                     }}
                     style={{ background: 'none', border: 'none', color: '#3B82F6', cursor: 'pointer', padding: 0, textDecoration: 'underline' }}
                   >
-                    Khóa {num}
+                    {course.name}
                   </button>
                 ))}
               </div>

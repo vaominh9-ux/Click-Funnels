@@ -1,15 +1,22 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import { Send, Download, Users, Briefcase } from 'lucide-react';
+import { FUNNEL_COURSES } from '../funnels/config';
 import './UpgradeStore.css';
+
+// Mapping offer ID → khóa học ID trong config.js
+const OFFER_TO_COURSE = {
+  'starter': 'khoa-hoc-1',
+  'master': 'khoa-hoc-2',
+  'ai-coach': 'khoa-hoc-3',
+  'ai-partner': 'khoa-hoc-4'
+};
 
 const OFFERS = [
   {
     id: 'starter',
     name: 'GÓI CRM STARTER B2B',
-    commission: 'Lên tới 50%',
-    max_earnings: '3,000,000 đ / Sale',
     target: 'Chủ shop nhỏ, kinh doanh cá nhân',
     features: [
       'Giải pháp chuyển đổi số bán hàng cơ bản',
@@ -21,8 +28,6 @@ const OFFERS = [
   {
     id: 'master',
     name: 'GÓI ERP MASTER B2B',
-    commission: 'Lên tới 50%',
-    max_earnings: '6,000,000 đ / Sale',
     target: 'Doanh nghiệp vừa, team Sales 5-10 người',
     features: [
       'Số hóa toàn diện dữ liệu khách hàng',
@@ -34,8 +39,6 @@ const OFFERS = [
   {
     id: 'ai-coach',
     name: 'HỆ THỐNG AI TỰ ĐỘNG HÓA',
-    commission: 'Lên tới 30%',
-    max_earnings: '19,000,000 đ / Sale',
     target: 'C-level, Giám đốc cần tối ưu quy trình',
     features: [
       'Tích hợp Chatbot AI chăm sóc đa kênh',
@@ -48,8 +51,6 @@ const OFFERS = [
   {
     id: 'ai-partner',
     name: 'ĐỐI TÁC CỔ ĐÔNG CHIẾN LƯỢC',
-    commission: 'Lên tới 20%',
-    max_earnings: '28,000,000 đ / Sale',
     target: 'Tập đoàn, chuỗi bán lẻ quy mô lớn',
     features: [
       'Triển khai phòng Marketing/IT in-house',
@@ -63,7 +64,51 @@ const OFFERS = [
 export default function UpgradeStore() {
   const [selectedOffer, setSelectedOffer] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [commissionPlans, setCommissionPlans] = useState([]);
   const addToast = useToast();
+
+  // Load commission_plans từ DB
+  useEffect(() => {
+    const loadPlans = async () => {
+      const { data } = await supabase
+        .from('commission_plans')
+        .select('*')
+        .order('created_at', { ascending: false });
+      setCommissionPlans(data || []);
+    };
+    loadPlans();
+  }, []);
+
+  // Lấy mức hoa hồng thực tế cho 1 offer
+  const getCommissionForOffer = (offerId) => {
+    const courseKey = OFFER_TO_COURSE[offerId];
+    
+    // Ưu tiên 1: plan type=product khớp courseId
+    if (courseKey) {
+      const productPlan = commissionPlans.find(p => 
+        p.type === 'product' && 
+        Array.isArray(p.applied_to) && 
+        p.applied_to.includes(courseKey)
+      );
+      if (productPlan) {
+        if (productPlan.rate_fixed && Number(productPlan.rate_fixed) > 0) {
+          return `${Number(productPlan.rate_fixed).toLocaleString('vi-VN')}đ`;
+        }
+        return `${productPlan.rate_percent || 0}%`;
+      }
+    }
+
+    // Ưu tiên 2: plan type=default
+    const defaultPlan = commissionPlans.find(p => p.type === 'default');
+    if (defaultPlan) {
+      if (defaultPlan.rate_fixed && Number(defaultPlan.rate_fixed) > 0) {
+        return `${Number(defaultPlan.rate_fixed).toLocaleString('vi-VN')}đ`;
+      }
+      return `${defaultPlan.rate_percent || 0}%`;
+    }
+
+    return '50%'; // Fallback
+  };
 
   const [formData, setFormData] = useState({
     name: '',
@@ -140,10 +185,9 @@ export default function UpgradeStore() {
             <div className="store-card-header">
               <h3 className="store-tier-name">{offer.name}</h3>
               <div className="store-commission-pot">
-                <span>Hoa hồng tối đa có thể nhận</span>
-                <div className="pot-value">{offer.max_earnings}</div>
+                <span>HOA HỒNG TỐI ĐA CÓ THỂ NHẬN</span>
+                <div className="pot-value">{getCommissionForOffer(offer.id)} / Sale</div>
               </div>
-              <div className="store-commission">Mức chia sẻ doanh thu: <span className="font-bold">{offer.commission}</span></div>
             </div>
             
             <div className="store-divider"></div>
@@ -162,8 +206,8 @@ export default function UpgradeStore() {
               ))}
             </ul>
             
-            <div className="store-card-footer mt-auto pt-4">
-              <button onClick={() => handleOpenLead(offer)} className={`store-btn upgrade ${offer.highlight ? 'pulse' : ''} mb-3`} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'}}>
+            <div className="store-card-footer">
+              <button onClick={() => handleOpenLead(offer)} className={`store-btn upgrade ${offer.highlight ? 'pulse' : ''}`} style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px'}}>
                 <Send size={18} />
                 GỬI THÔNG TIN KHÁCH HÀNG
               </button>

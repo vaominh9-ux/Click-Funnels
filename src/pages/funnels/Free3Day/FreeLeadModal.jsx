@@ -1,13 +1,16 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { supabase } from '../../../lib/supabase';
 import { getRefCode } from '../utils';
-import './LeadModal.css';
+import './FreeLeadModal.css';
 
-const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
-  const navigate = useNavigate();
+const WORKSHOP_API = '/api/email/send-workshop';
+const API_BASE = import.meta.env.VITE_API_BASE || (window.location.hostname === 'localhost' ? 'https://click-funnels.vercel.app' : '');
+
+const FreeLeadModal = ({ isOpen, onClose, courseId, courseName }) => {
   const [formData, setFormData] = useState({ name: '', phone: '', email: '' });
   const [loading, setLoading] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [zaloLink, setZaloLink] = useState('');
 
   if (!isOpen) return null;
 
@@ -22,7 +25,6 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
       // 1. Dò xem có Ref Code hợp lệ không và cơ chế Affiliate Trọn Đời (Lifetime)
       let lifetimeMatched = false;
       
-      // Ưu tiên 1 (Lifetime): Tìm xem Email này đã từng map với CTV nào chưa?
       if (formData.email) {
         const { data: existingLead } = await supabase
           .from('leads')
@@ -40,7 +42,6 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
         }
       }
 
-      // Ưu tiên 2: Truy vết theo link hiện tại nếu chưa có lịch sử Lifetime
       if (!lifetimeMatched && refCode) {
         let storedCampaignId = localStorage.getItem('aff_campaign_id');
         if (storedCampaignId === 'undefined' || storedCampaignId === 'null') storedCampaignId = null;
@@ -82,7 +83,7 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
       const newLeadId = generateUUID();
       const linkId = localStorage.getItem('aff_link_id') || null;
 
-      // 3. Chèn vào bảng leads
+      // 3. Chèn vào bảng leads (đánh dấu là registered cho phễu miễn phí)
       const { error: insertError } = await supabase
         .from('leads')
         .insert([{
@@ -94,38 +95,76 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
           link_id: linkId,
           source: refCode ? 'referral' : 'direct',
           stage: 'new',
-          notes: `Đăng ký từ khóa học: ${courseName}`
+          notes: `Đăng ký miễn phí từ: ${courseName}`
         }]);
 
       if (insertError) throw insertError;
 
-      // Lưu lại cache thông tin Lead vào SessionStorage để sang trang Checkout xài
-      sessionStorage.setItem('tempLeadInfo', JSON.stringify({
-        id: newLeadId,
-        name: formData.name,
-        phone: formData.phone,
-        email: formData.email,
-        affiliate_id: finalAffiliateId
-      }));
-
-      // 4. Chuyển sang Checkout với ID vừa tạo
-      navigate(`/checkout/${courseId}?lead_id=${newLeadId}`);
+      // 4. Gọi API gửi Email Workshop + Lịch .ICS
+      if (formData.email) {
+        try {
+          const response = await fetch(`${API_BASE}${WORKSHOP_API}`, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              name: formData.name,
+              email: formData.email,
+              phone: formData.phone,
+            }),
+          });
+          const result = await response.json();
+          if (result.zaloGroupLink) {
+            setZaloLink(result.zaloGroupLink);
+          }
+        } catch (emailErr) {
+          console.error('Gửi email workshop lỗi:', emailErr);
+        }
+      }
+      
+      // 5. Hiển thị màn hình thành công
+      setShowSuccess(true);
 
     } catch (err) {
-      console.error('Lỗi đăng ký Lead:', err);
+      console.error('Lỗi đăng ký Free Lead:', err);
       alert('Đã có lỗi xảy ra. Hãy thử lại!');
     } finally {
       setLoading(false);
     }
   };
 
+  if (showSuccess) {
+    return (
+      <div className="lead-modal-backdrop" onClick={onClose}>
+        <div className="lead-modal-card free-modal-success" onClick={e => e.stopPropagation()}>
+          <div className="success-icon">✅</div>
+          <h2>Đăng Ký Thành Công!</h2>
+          <p className="success-msg">
+            {formData.email 
+              ? <>Chúng tôi đã gửi <strong>lịch 3 buổi học</strong> vào email <strong>{formData.email}</strong>. Mở file đính kèm để thêm vào lịch nhé!</>
+              : <>Bạn đã đăng ký thành công! Vào nhóm Zalo để nhận lịch học.</>
+            }
+          </p>
+          <a 
+            href={zaloLink || 'https://zalo.me/g/xxxxxx'} 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="free-cta-button free-submit-btn free-zalo-btn"
+          >
+            💬 VÀO NHÓM ZALO NGAY
+          </a>
+          <p className="success-note">Link Zoom sẽ được gửi trong nhóm Zalo trước mỗi buổi học.</p>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="lead-modal-backdrop" onClick={onClose}>
       <div className="lead-modal-card" onClick={e => e.stopPropagation()}>
         <button className="close-btn" onClick={onClose}>&times;</button>
         
-        <h2>Đăng Ký {courseName}</h2>
-        <p>Vui lòng để lại thông tin để chúng tôi liên hệ tư vấn chuyên sâu.</p>
+        <h2>🆓 Đăng Ký Workshop Miễn Phí</h2>
+        <p>Điền thông tin để nhận lịch học + vào nhóm Zalo.</p>
         
         <form onSubmit={handleSubmit} className="lead-form">
           <div className="form-group">
@@ -139,6 +178,16 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
             />
           </div>
           <div className="form-group">
+            <label>Email (để nhận lịch học) *</label>
+            <input 
+              type="email" 
+              required
+              placeholder="Nhập email"
+              value={formData.email}
+              onChange={e => setFormData({...formData, email: e.target.value})}
+            />
+          </div>
+          <div className="form-group">
             <label>Số điện thoại *</label>
             <input 
               type="tel" 
@@ -148,22 +197,14 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
               onChange={e => setFormData({...formData, phone: e.target.value})}
             />
           </div>
-          <div className="form-group">
-            <label>Email (Không bắt buộc)</label>
-            <input 
-              type="email" 
-              placeholder="Nhập email"
-              value={formData.email}
-              onChange={e => setFormData({...formData, email: e.target.value})}
-            />
-          </div>
-          <button type="submit" disabled={loading} className="cta-button primary-cta submit-btn">
-            {loading ? 'Đang Xử Lý...' : 'Chuyển Tới Bước Thanh Toán'}
+          <button type="submit" disabled={loading} className="free-cta-button free-submit-btn">
+            {loading ? 'Đang Xử Lý...' : '🔥 ĐĂNG KÝ MIỄN PHÍ'}
           </button>
+          <p className="form-note">🔒 Không spam. Chỉ gửi lịch học + link Zoom.</p>
         </form>
       </div>
     </div>
   );
 };
 
-export default LeadModal;
+export default FreeLeadModal;

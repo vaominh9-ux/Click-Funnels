@@ -16,6 +16,7 @@ const AffiliateCampaigns = () => {
   const [campaigns, setCampaigns] = useState([]);
   const [userProfile, setUserProfile] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
+  const [commissionPlans, setCommissionPlans] = useState([]);
 
   const addToast = useToast();
 
@@ -52,10 +53,52 @@ const AffiliateCampaigns = () => {
       } else {
         setCampaigns(campaignData || []);
       }
+
+      // 4. Lấy tất cả commission plans để hiển thị đúng badge hoa hồng
+      const { data: plansData } = await supabase
+        .from('commission_plans')
+        .select('*')
+        .order('created_at', { ascending: false });
+      
+      setCommissionPlans(plansData || []);
     } catch (err) {
       console.error('Unexpected error:', err);
     }
     setLoading(false);
+  };
+
+  // Lấy mức hoa hồng thực tế từ commission_plans cho 1 campaign
+  const getCommissionDisplay = (campaign) => {
+    // Tìm courseId từ URL campaign (VD: /khoa-hoc/khoa-hoc-1 → 'khoa-hoc-1')
+    const url = campaign.landing_page_url || '';
+    const matchedCourseKey = Object.keys(FUNNEL_COURSES).find(k => url.includes(k));
+
+    // Ưu tiên 1: Tìm plan type=product khớp với khóa học này
+    if (matchedCourseKey) {
+      const productPlan = commissionPlans.find(p => 
+        p.type === 'product' && 
+        Array.isArray(p.applied_to) && 
+        p.applied_to.includes(matchedCourseKey)
+      );
+      if (productPlan) {
+        if (productPlan.rate_fixed && Number(productPlan.rate_fixed) > 0) {
+          return `${Number(productPlan.rate_fixed).toLocaleString('vi-VN')}đ`;
+        }
+        return `${productPlan.rate_percent || 0}%`;
+      }
+    }
+
+    // Ưu tiên 2: Lấy plan type=default (mức tiêu chuẩn toàn hệ thống)
+    const defaultPlan = commissionPlans.find(p => p.type === 'default');
+    if (defaultPlan) {
+      if (defaultPlan.rate_fixed && Number(defaultPlan.rate_fixed) > 0) {
+        return `${Number(defaultPlan.rate_fixed).toLocaleString('vi-VN')}đ`;
+      }
+      return `${defaultPlan.rate_percent || 0}%`;
+    }
+
+    // Fallback: Hiển thị commission_text từ campaigns hoặc mặc định
+    return campaign.commission_text || '50%';
   };
 
   const userTierRank = userProfile ? (TIER_RANK[userProfile.tier] || 1) : 1;
@@ -177,7 +220,7 @@ const AffiliateCampaigns = () => {
                 <div className="flex-between mb-2">
                   <h3 className="campaign-name">{camp.name}</h3>
                   <span className={locked ? "badge badge-pending" : "badge badge-cleared"}>
-                    {camp.commission_text || '50%'}
+                    {getCommissionDisplay(camp)} Lifetime
                   </span>
                 </div>
                 <p className="campaign-desc text-muted">{camp.description || 'Chiến dịch quảng bá sản phẩm.'}</p>
@@ -221,7 +264,7 @@ const AffiliateCampaigns = () => {
         }}>
           <div className="cf-card" onClick={e => e.stopPropagation()} style={{ width: '500px', maxWidth: '90%', padding: '32px' }}>
             <h2 className="mb-2">Nâng cấp Đặc Quyền: {selectedUpgrade.name}</h2>
-            <p className="text-muted mb-6">Mở khóa quyền phân phối chức năng và hưởng {selectedUpgrade.commission_text || '50%'}</p>
+            <p className="text-muted mb-6">Mở khóa quyền phân phối chức năng và hưởng {getCommissionDisplay(selectedUpgrade)} Lifetime</p>
             
             <div className="mb-6 p-4" style={{ backgroundColor: 'rgba(0,0,0,0.02)', borderRadius: '8px', border: '1px solid var(--cf-border)' }}>
               <div className="flex-between mb-2">
