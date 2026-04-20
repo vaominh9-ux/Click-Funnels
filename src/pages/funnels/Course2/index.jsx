@@ -39,7 +39,7 @@ const Course2 = () => {
       <div className="hormozi-container relative z-10">
 
         {/* ─── PHẦN 1: HERO (THE BIG PROMISE) ─── */}
-        <section className="c2-hero-section">
+        <section className="c2-hero-section text-center">
           <div className="c2-premium-badge mx-auto mb-6">
             <span className="c2-shimmer-bg">MASTER CLASS 2.0</span>
           </div>

@@ -175,7 +175,10 @@
 /* HERO SECTION */
 .c2-hero-section { position: relative; padding: 60px 0 70px; max-width: 1100px; margin: 0 auto;}
 .c2-premium-badge {
-  display: inline-block;
+  display: flex;
+  width: max-content;
+  align-items: center;
+  justify-content: center;
   padding: 8px 24px;
   border-radius: 50px;
   font-size: 0.85rem;
