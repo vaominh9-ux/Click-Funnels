@@ -224,9 +224,25 @@
   list-style: none;
   padding: 0;
   margin: 0 0 40px;
+  position: relative;
+}
+
+/* The Golden Thread */
+.hero-punch-list::before {
+  content: '';
+  position: absolute;
+  top: 30px;
+  bottom: 50px;
+  left: 49px;
+  width: 2px;
+  background: linear-gradient(to bottom, rgba(245, 158, 11, 0.8), rgba(245, 158, 11, 0.1));
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.5);
+  z-index: 0;
 }
 
 .hero-punch-list li {
+  position: relative;
+  z-index: 1;
   display: flex;
   align-items: flex-start;
   gap: 16px;
@@ -274,6 +290,18 @@
 /* Image styling */
 .hero-content-right {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
+}
+
+.hero-image-container {
+  position: relative;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .hero-image-wrapper {
@@ -312,8 +340,8 @@
 
 .hero-floating-stat {
   position: absolute;
-  bottom: -20px;
-  left: -30px;
+  bottom: -15px;
+  left: -20px;
   background: #0A0A0A;
   border: 1px solid #F59E0B;
   padding: 16px 24px;
@@ -321,6 +349,40 @@
   box-shadow: 0 15px 30px rgba(0, 0, 0, 0.8), 0 0 30px rgba(245, 158, 11, 0.15);
   z-index: 2;
   animation: floatStat 4s ease-in-out infinite;
+}
+
+/* Micro Trust Badge */
+.micro-trust-badge {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  margin-top: 30px;
+  padding: 16px 24px;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  backdrop-filter: blur(8px);
+}
+
+.trust-avatars {
+  display: flex;
+}
+
+.trust-avatars .avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #0A0A0A;
+  background-size: cover;
+  background-position: center;
+  margin-left: -10px;
+}
+.trust-avatars .avatar:first-child { margin-left: 0; }
+
+.micro-trust-badge .trust-text {
+  color: #9CA3AF;
+  font-size: 0.95rem;
+  font-weight: 500;
 }
 
 .hero-floating-stat .stat-label {

@@ -56,14 +56,27 @@ const AICoachPage = () => {
           </div>
 
           <div className="hero-content-right">
-            <div className="hero-image-wrapper">
-              <img src="/images/course3/aicoach-hero-premium.png" alt="Billionaire Info Business AI Coach" />
-              <div className="hero-image-overlay"></div>
+            <div className="hero-image-container">
+              <div className="hero-image-wrapper">
+                <img src="/images/course3/aicoach-hero-premium.png" alt="Billionaire Info Business AI Coach" />
+                <div className="hero-image-overlay"></div>
+              </div>
+                
+              <div className="hero-floating-stat">
+                <span className="stat-label">Lợi nhuận mục tiêu</span>
+                <span className="stat-value">$20,000<span>/tháng</span></span>
+              </div>
             </div>
-              
-            <div className="hero-floating-stat">
-              <span className="stat-label">Lợi nhuận mục tiêu</span>
-              <span className="stat-value">$20,000<span>/tháng</span></span>
+
+            <div className="micro-trust-badge">
+              <div className="trust-avatars">
+                <div className="avatar" style={{backgroundImage: 'url(https://i.pravatar.cc/100?img=11)'}}></div>
+                <div className="avatar" style={{backgroundImage: 'url(https://i.pravatar.cc/100?img=32)'}}></div>
+                <div className="avatar" style={{backgroundImage: 'url(https://i.pravatar.cc/100?img=68)'}}></div>
+                <div className="avatar" style={{backgroundImage: 'url(https://i.pravatar.cc/100?img=44)'}}></div>
+                <div className="avatar" style={{backgroundImage: 'url(https://i.pravatar.cc/100?img=53)'}}></div>
+              </div>
+              <span className="trust-text">Hàng trăm học viên đã áp dụng thành công</span>
             </div>
           </div>
         </div>
