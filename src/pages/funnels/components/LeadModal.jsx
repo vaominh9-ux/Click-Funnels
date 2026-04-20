@@ -109,7 +109,8 @@ const LeadModal = ({ isOpen, onClose, courseId, courseName }) => {
         email: formData.email,
         courseName,
         courseId,
-        source: refCode ? 'referral' : 'direct'
+        source: refCode ? 'referral' : 'direct',
+        isPaid: true
       });
 
       // Lưu lại cache thông tin Lead vào SessionStorage để sang trang Checkout xài

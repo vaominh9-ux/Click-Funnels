@@ -18,7 +18,7 @@ export default async function handler(req, res) {
   }
 
   try {
-    const { name, phone, email, courseName, courseId, source, leadId } = req.body;
+    const { name, phone, email, courseName, courseId, source, leadId, isPaid } = req.body;
 
     if (!name || !phone) {
       return res.status(400).json({ success: false, message: 'Missing required fields: name, phone' });
@@ -44,8 +44,13 @@ export default async function handler(req, res) {
           const config = settingsData[0].value;
           n8nWebhookUrl = config.n8nWebhookUrl || null;
           enableNewLead = config.enableNewLead !== false; // mặc định true
-          adminTemplateCustom = config.adminTemplate || null;
-          customerTemplateCustom = config.customerTemplate || null;
+          if (isPaid) {
+            adminTemplateCustom = config.paidPendingAdminTemplate || null;
+            customerTemplateCustom = config.paidPendingCustomerTemplate || null;
+          } else {
+            adminTemplateCustom = config.adminTemplate || null;
+            customerTemplateCustom = config.customerTemplate || null;
+          }
         }
       } catch (dbErr) {
         console.warn('Could not fetch webhook config from DB:', dbErr);
@@ -83,8 +88,13 @@ export default async function handler(req, res) {
       return template.replace(/{{(\w+)}}/g, (_, k) => req.body[k] || '');
     };
 
-    const adminTemplateFallback = `🔥 CÓ KHÁCH ĐĂNG KÝ MỚI 🔥\n🧑 Tên: {{name}}\n📞 SĐT: {{phone}}\n🛒 Phễu: {{courseName}}\n📧 Email: {{email}}`;
-    const customerTemplateFallback = `Xin chào {{name}} 🎉\nChúc mừng bạn đã đăng ký thành công chương trình: {{courseName}}.\n\nTrợ lý AI của chúng tôi sẽ tự động kết nối và hỗ trợ bạn qua Zalo này nhé. Vui lòng chú ý tin nhắn!`;
+    const adminTemplateFallback = isPaid 
+      ? `⏳ CÓ KHÁCH VÀO GIỎ HÀNG ⏳\n🧑 Tên: {{name}}\n📞 SĐT: {{phone}}\n🛒 Gói: {{courseName}}\nCần chú ý xem khách có thanh toán hay bị Rớt Lead không nhé!`
+      : `🔥 CÓ KHÁCH ĐĂNG KÝ MỚI 🔥\n🧑 Tên: {{name}}\n📞 SĐT: {{phone}}\n🛒 Phễu: {{courseName}}\n📧 Email: {{email}}`;
+      
+    const customerTemplateFallback = isPaid
+      ? `Xin chào {{name}} 👋\nBạn vừa đăng ký gói: {{courseName}}. Tuy nhiên hệ thống chưa ghi nhận thanh toán.\n\nBạn vui lòng quét mã QR gửi kèm hoặc hoàn tất quá trình thanh toán để chúng tôi có thể đưa bạn vào nhóm nhé!`
+      : `Xin chào {{name}} 🎉\nChúc mừng bạn đã đăng ký thành công chương trình: {{courseName}}.\n\nTrợ lý AI của chúng tôi sẽ tự động kết nối và hỗ trợ bạn qua Zalo này nhé. Vui lòng chú ý tin nhắn!`;
 
     const webhookPayload = {
       event: 'new_lead',

@@ -21,6 +21,9 @@ const WebhookSettings = () => {
   
   const [paymentAdminTemplate, setPaymentAdminTemplate] = useState('💰 TING TING! KHÁCH CHỐT ĐƠN 💰\n🧑 Khách: {{name}}\n📞 SĐT: {{phone}}\n🛒 Mua: {{courseName}}\n💸 Số tiền: {{amount}}đ');
   const [paymentCustomerTemplate, setPaymentCustomerTemplate] = useState('Xin chào {{name}} 💖\nThanh toán của bạn cho khóa: {{courseName}} đã thành công.\n\nHệ thống đã ghi nhận số tiền {{amount}}đ. Đội ngũ AI sẽ sớm liên hệ xác nhận thủ tục vào lớp học với bạn nhé!');
+
+  const [paidPendingAdminTemplate, setPaidPendingAdminTemplate] = useState('⏳ CÓ KHÁCH VÀO GIỎ HÀNG ⏳\n🧑 Tên: {{name}}\n📞 SĐT: {{phone}}\n🛒 Gói: {{courseName}}\nCần chú ý xem khách có thanh toán hay bị Rớt Lead không nhé!');
+  const [paidPendingCustomerTemplate, setPaidPendingCustomerTemplate] = useState('Xin chào {{name}} 👋\nBạn vừa đăng ký gói: {{courseName}}. Tuy nhiên hệ thống chưa ghi nhận thanh toán.\n\nBạn vui lòng quét mã QR gửi kèm hoặc hoàn tất quá trình thanh toán để chúng tôi có thể đưa bạn vào nhóm nhé!');
   
   const [testLog, setTestLog] = useState([]);
   const [activeTab, setActiveTab] = useState('connection');
@@ -52,6 +55,8 @@ const WebhookSettings = () => {
         if (config.customerTemplate) setCustomerTemplate(config.customerTemplate);
         if (config.paymentAdminTemplate) setPaymentAdminTemplate(config.paymentAdminTemplate);
         if (config.paymentCustomerTemplate) setPaymentCustomerTemplate(config.paymentCustomerTemplate);
+        if (config.paidPendingAdminTemplate) setPaidPendingAdminTemplate(config.paidPendingAdminTemplate);
+        if (config.paidPendingCustomerTemplate) setPaidPendingCustomerTemplate(config.paidPendingCustomerTemplate);
       }
     } catch (err) {
       console.error('Load webhook settings error:', err);
@@ -76,7 +81,9 @@ const WebhookSettings = () => {
             adminTemplate,
             customerTemplate,
             paymentAdminTemplate,
-            paymentCustomerTemplate
+            paymentCustomerTemplate,
+            paidPendingAdminTemplate,
+            paidPendingCustomerTemplate
           },
           updated_at: new Date().toISOString(),
           updated_by: user?.id
@@ -329,7 +336,8 @@ const WebhookSettings = () => {
                   onChange={(e) => setMessageType(e.target.value)}
                   style={{ padding: '6px 12px', borderRadius: '8px', border: '1px solid #D1D5DB', fontSize: '13px', fontWeight: 600, color: '#111827', outline: 'none', cursor: 'pointer', background: '#F9FAFB' }}
                 >
-                  <option value="new_lead">🔔 Sự kiện: Đăng Ký Mới</option>
+                  <option value="new_lead">🔔 Sự kiện: Đăng Ký Mới (Khóa Miễn Phí)</option>
+                  <option value="paid_pending">⏳ Sự kiện: Giỏ Hàng/Chưa TT (Gói Trả Phí)</option>
                   <option value="payment">💰 Sự kiện: Thanh Toán Thành Công</option>
                 </select>
               </div>
@@ -396,6 +404,39 @@ const WebhookSettings = () => {
                         onChange={(e) => setPaymentAdminTemplate(e.target.value)}
                         placeholder="💰 TING TING! SẾP ƠI QUAY XE..."
                         style={{ minHeight: '180px', fontSize: '13px', fontFamily: 'inherit', borderColor: '#BBF7D0', background: '#F0FDF4' }}
+                      />
+                    </div>
+                  </div>
+                )}
+
+                {messageType === 'paid_pending' && (
+                  <div>
+                    <div className="ws-field" style={{ marginBottom: '20px' }}>
+                      <label style={{ display: 'flex', justifyContent: 'space-between', color: '#B45309' }}>
+                        <span>Mẫu Nhắc Thanh Toán Khách Hàng (Zalo OA/SMS)</span>
+                        <span style={{ fontSize: '11px', fontWeight: 'normal', color: '#6B7280' }}>
+                          Biến: <code onClick={() => handleCopyUrl('{{name}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{name}}"}</code>{' '}
+                          <code onClick={() => handleCopyUrl('{{phone}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{phone}}"}</code>{' '}
+                          <code onClick={() => handleCopyUrl('{{courseName}}')} style={{cursor:'pointer', color:'#3B82F6'}}>{"{{courseName}}"}</code>
+                        </span>
+                      </label>
+                      <textarea
+                        value={paidPendingCustomerTemplate}
+                        onChange={(e) => setPaidPendingCustomerTemplate(e.target.value)}
+                        placeholder="Chúng tôi thấy bạn đang ở bước thanh toán..."
+                        style={{ minHeight: '180px', fontSize: '13px', fontFamily: 'inherit', borderColor: '#FEF3C7', background: '#FFFBEB' }}
+                      />
+                    </div>
+
+                    <div className="ws-field">
+                      <label style={{ display: 'flex', justifyContent: 'space-between', color: '#B45309' }}>
+                        <span>Mẫu Cảnh Báo Abandon Checkout (Cho Admin)</span>
+                      </label>
+                      <textarea
+                        value={paidPendingAdminTemplate}
+                        onChange={(e) => setPaidPendingAdminTemplate(e.target.value)}
+                        placeholder="⏳ CÓ KHÁCH VÀO GIỎ HÀNG..."
+                        style={{ minHeight: '180px', fontSize: '13px', fontFamily: 'inherit', borderColor: '#FEF3C7', background: '#FFFBEB' }}
                       />
                     </div>
                   </div>
