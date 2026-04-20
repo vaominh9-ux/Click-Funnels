@@ -1,6 +1,6 @@
 .ws-container {
-  padding: 24px;
-  background-color: #ffffff;
+  padding: 0;
+  background-color: transparent;
   min-height: calc(100vh - 64px);
   color: #0f172a;
 }
