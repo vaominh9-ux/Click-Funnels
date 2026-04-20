@@ -14,17 +14,22 @@ const AICoachPage = () => {
           ============================================================ */}
       <section className="aicoach-hero">
         <div className="aicoach-kicker">
-          ⚠️ Lưu Ý: Cần đọc cẩn thận nội dung bên dưới để tránh bỏ lỡ cơ hội mới
+          ⚠️ LƯU Ý: CẦN ĐỌC CẨN THẬN NỘI DUNG BÊN DƯỚI ĐỂ TRÁNH BỎ LỠ CƠ HỘI MỚI TRONG NGÀNH NÀY.
         </div>
 
         <h1>
-          Sự thật đằng sau một Doanh Nhân Thông Tin có thu nhập{' '}
-          <span className="aicoach-highlight">20,000 USD</span> hàng tháng...
+          SỰ THẬT ĐẰNG SAU MỘT DOANH NHÂN THÔNG TIN CÓ THU NHẬP
+          <span className="aicoach-headline-highlight"> 20,000 USD</span> HÀNG THÁNG...
         </h1>
+
+        <h2 className="aicoach-subheadline">
+          Lý do vì sao <span className="aicoach-gold">sản phẩm thông tin</span> đang lên ngôi? Những chiến lược nào hiệu quả nhất
+          trong ngành công nghiệp sản phẩm thông tin và những điều bạn cần làm để khai thác <span className="aicoach-gold">mỏ vàng lộ thiên</span> này?
+        </h2>
 
         <div className="lead-in">
           <p>
-            "Sản phẩm thông tin" bao gồm mọi thứ, từ cuốn ebook vài đô la cho đến những khóa học chuyên sâu trị giá 50,000 USD.
+            "Sản phẩm thông tin" bao gồm mọi thứ, từ cuốn sách Kindle vài đô la cho đến những khóa học chuyên sâu trị giá 50,000 USD.
           </p>
           <p>
             Những người như <strong>Tai Lopez, Sam Ovens, Grant Cardone</strong> đều đạt <strong>8 con số mỗi năm</strong> từ bán "thông tin". Và rất nhiều cá nhân khác cũng kiếm <strong className="aicoach-gold">6-7 con số</strong> bằng sản phẩm thông tin trong thị trường ngách.
