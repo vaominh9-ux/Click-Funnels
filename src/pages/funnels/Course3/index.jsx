@@ -59,11 +59,11 @@ const AICoachPage = () => {
             <div className="hero-image-wrapper">
               <img src="https://images.unsplash.com/photo-1649180556628-9ba704115795?q=80&w=800&auto=format&fit=crop" alt="Billionaire Info Business" />
               <div className="hero-image-overlay"></div>
+            </div>
               
-              <div className="hero-floating-stat">
-                <span className="stat-label">Lợi nhuận mục tiêu</span>
-                <span className="stat-value">$20,000<span>/tháng</span></span>
-              </div>
+            <div className="hero-floating-stat">
+              <span className="stat-label">Lợi nhuận mục tiêu</span>
+              <span className="stat-value">$20,000<span>/tháng</span></span>
             </div>
           </div>
         </div>
