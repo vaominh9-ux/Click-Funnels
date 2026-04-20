@@ -342,3 +342,35 @@
   .c2-footer-upsell-glass { padding: 30px 20px; margin-bottom: 40px; }
   .w-full-mobile { width: 100% !important; display: block; }
 }
+
+/* ===================================================================
+   FORCE SQUARE BLOCKS (BRUTALIST / SHARP CORPORATE STYLE)
+   =================================================================== */
+.c2-master-page .c2-premium-badge,
+.c2-master-page .c2-btn-elite,
+.c2-master-page .c2-problem-box,
+.c2-master-page .c2-pain-list li,
+.c2-master-page .highlight-elite,
+.c2-master-page .c2-pillar-card,
+.c2-master-page .pillar-icon-luxury,
+.c2-master-page .pillar-result,
+.c2-master-page .c2-module-card,
+.c2-master-page .elite-tag,
+.c2-master-page .module-output-elite,
+.c2-master-page .c2-expert-luxury,
+.c2-master-page .expert-image-wrapper,
+.c2-master-page .luxury-img,
+.c2-master-page .luxury-badge,
+.c2-master-page .vip-pass-board,
+.c2-master-page .vip-animated-border,
+.c2-master-page .vip-pass-inner,
+.c2-master-page .vip-header h3,
+.c2-master-page .c2-value-list li,
+.c2-master-page .offer-icon,
+.c2-master-page .value-pill,
+.c2-master-page .c2-total-wealth-box,
+.c2-master-page .c2-risk-reversal-luxury,
+.c2-master-page .c2-urgency-luxury,
+.c2-master-page .c2-footer-upsell-glass {
+  border-radius: 0 !important;
+}
