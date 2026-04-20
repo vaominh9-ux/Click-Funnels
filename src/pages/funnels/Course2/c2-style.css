@@ -983,39 +983,27 @@
 }
 
 .c2-total-wealth-box {
-  background: #000;
-  border-radius: 20px;
-  padding: 35px 50px;
+  background: linear-gradient(135deg, #111827 0%, #000000 100%);
+  border: 1px solid #334155;
+  border-top: 4px solid #D97706;
+  border-radius: 0 !important;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.4);
-  border: 1px solid #333;
+  flex-direction: column;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  margin-top: 40px;
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
-
-.c2-total-wealth-box::before {
-  content: '';
-  position: absolute;
-  left: 0;
-  top: 0;
-  height: 5px;
-  width: 100%;
-  background: #D97706;
-}
-
-.wealth-label {
-  font-size: 1.6rem;
-  font-weight: 900;
-  font-family: 'Montserrat', sans-serif;
-  color: #64748B;
-}
-
-.wealth-price {
-  display: flex;
-  align-items: center;
-}
+.wealth-ticket-top { padding: 30px; text-align: center; }
+.wealth-label-new { display: block; font-size: 1.1rem; font-weight: 800; color: #94A3B8; letter-spacing: 4px; margin-bottom: 12px; }
+.wealth-original-price { font-size: 1.2rem; color: #64748B; font-style: italic; }
+.wealth-ticket-divider { width: 100%; height: 2px; border-bottom: 2px dashed #475569; position: relative; }
+.wealth-ticket-divider::before, .wealth-ticket-divider::after { content: ''; position: absolute; top: -10px; width: 22px; height: 22px; background-color: #F8FAFC; border-radius: 50%; z-index: 2; }
+.wealth-ticket-divider::before { left: -12px; border-right: 1px solid #334155;}
+.wealth-ticket-divider::after { right: -12px; border-left: 1px solid #334155;}
+.wealth-ticket-bottom { padding: 30px; text-align: center; background: radial-gradient(circle at center, rgba(217,119,6,0.15) 0%, transparent 60%); }
+.wealth-free-text { font-size: 4rem; font-weight: 900; line-height: 1; display: inline-block; margin-bottom: 10px; text-shadow: 0 10px 30px rgba(217, 119, 6, 0.3); }
+.wealth-sub-label { font-size: 0.85rem; color: #D97706; text-transform: uppercase; letter-spacing: 2px; font-weight: 700; }
 
 /* PRICE REVEAL */
 .c2-price-context-luxury {
@@ -1295,22 +1283,7 @@
     margin-top: 10px;
   }
 
-  .c2-total-wealth-box {
-    flex-direction: column;
-    text-align: center;
-    gap: 16px;
-    padding: 30px 20px;
-  }
 
-  .wealth-label {
-    font-size: 1.3rem;
-  }
-
-  .wealth-price {
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
 
   .text-8xl {
     font-size: 3.2rem;
