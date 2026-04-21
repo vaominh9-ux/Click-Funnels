@@ -1,4 +1,4 @@
-﻿import React, { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { ToastProvider } from './components/common/Toast';
 import './index.css';
@@ -81,7 +81,7 @@ const App = () => {
           {/* Affiliate Portal Routes */}
           <Route path="/portal" element={
             <ProtectedRoute>
-              <MainLayout title="Thß╗æng K├¬ Thu Nhß║¡p">
+              <MainLayout title="Thống Kê Thu Nhập">
                 <AffiliateDashboard />
               </MainLayout>
             </ProtectedRoute>
@@ -89,7 +89,7 @@ const App = () => {
 
           <Route path="/portal/campaigns/*" element={
             <ProtectedRoute>
-              <MainLayout title="Chiß║┐n Dß╗ïch (Campaigns)">
+              <MainLayout title="Chiến Dịch (Campaigns)">
                 <AffiliateCampaigns />
               </MainLayout>
             </ProtectedRoute>
@@ -97,7 +97,7 @@ const App = () => {
 
           <Route path="/portal/network/*" element={
             <ProtectedRoute>
-              <MainLayout title="Mß║íng L╞░ß╗¢i B├ín H├áng">
+              <MainLayout title="Mạng Lưới Bán Hàng">
                 <AffiliateNetwork />
               </MainLayout>
             </ProtectedRoute>
@@ -105,7 +105,7 @@ const App = () => {
 
           <Route path="/portal/settings" element={
             <ProtectedRoute>
-              <MainLayout title="C├ái ─Éß║╖t C├í Nh├ón">
+              <MainLayout title="Cài Đặt Cá Nhân">
                 <AffiliateSettings />
               </MainLayout>
             </ProtectedRoute>
@@ -113,7 +113,7 @@ const App = () => {
 
           <Route path="/affiliate/store" element={
             <ProtectedRoute>
-              <MainLayout title="N├óng Cß║Ñp Cß╗¡a H├áng">
+              <MainLayout title="Nâng Cấp Cửa Hàng">
                 <UpgradeStore />
               </MainLayout>
             </ProtectedRoute>
@@ -121,7 +121,7 @@ const App = () => {
 
           <Route path="/affiliate/ledger" element={
             <ProtectedRoute>
-              <MainLayout title="Lß╗ïch Sß╗¡ D├▓ng Tiß╗ün Tr├án">
+              <MainLayout title="Lịch Sử Dòng Tiền Trán">
                 <RollupLedger />
               </MainLayout>
             </ProtectedRoute>
@@ -137,7 +137,7 @@ const App = () => {
 
           <Route path="/portal/customers" element={
             <ProtectedRoute>
-              <MainLayout title="Kh├ích H├áng Cß╗ºa T├┤i">
+              <MainLayout title="Khách Hàng Của Tôi">
                 <MyCustomers />
               </MainLayout>
             </ProtectedRoute>
@@ -146,84 +146,84 @@ const App = () => {
           {/* Admin Portal Routes */}
           <Route path="/admin" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="Bß║úng ─Éiß╗üu Khiß╗ân Quß║ún Trß╗ï">
+              <MainLayout title="Bảng Điều Khiển Quản Trị">
                 <AdminDashboard />
               </MainLayout>
             </ProtectedRoute>
           } />
           <Route path="/admin/affiliates" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="Quß║ún L├╜ CTV (Affiliates)">
+              <MainLayout title="Quản Lý CTV (Affiliates)">
                 <AdminAffiliatesList />
               </MainLayout>
             </ProtectedRoute>
           } />
           <Route path="/admin/staff" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="Nh├ón Sß╗▒ & Ph├ón Quyß╗ün">
+              <MainLayout title="Nhân Sự & Phân Quyền">
                 <AdminStaffManagement />
               </MainLayout>
             </ProtectedRoute>
           } />
           <Route path="/admin/commissions" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="Cß║Ñu H├¼nh Hoa Hß╗ông">
+              <MainLayout title="Cấu Hình Hoa Hồng">
                 <AdminCommissionPlans />
               </MainLayout>
             </ProtectedRoute>
           } />
           <Route path="/admin/campaign-links" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="Nguß╗ôn Link Landing Page">
+              <MainLayout title="Nguồn Link Landing Page">
                 <AdminCampaignManager />
               </MainLayout>
             </ProtectedRoute>
           } />
           <Route path="/admin/payouts" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="Duyß╗çt R├║t Tiß╗ün">
+              <MainLayout title="Duyệt Rút Tiền">
                 <AdminPayouts />
               </MainLayout>
             </ProtectedRoute>
           } />
           <Route path="/admin/leads" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="CRM Kh├ích H├áng">
+              <MainLayout title="CRM Khách Hàng">
                 <AdminLeadsCRM />
               </MainLayout>
             </ProtectedRoute>
           } />
           <Route path="/admin/conversions" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="Quß║ún L├╜ ─É╞ín H├áng & Hoa Hß╗ông">
+              <MainLayout title="Quản Lý Đơn Hàng & Hoa Hồng">
                 <AdminConversions />
               </MainLayout>
             </ProtectedRoute>
           } />
           <Route path="/admin/payment-settings" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="Cß║Ñu H├¼nh Thanh To├ín">
+              <MainLayout title="Cấu Hình Thanh Toán">
                 <AdminPaymentSettings />
               </MainLayout>
             </ProtectedRoute>
           } />
           <Route path="/admin/email-settings" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="Mß║½u Email (Templates)">
+              <MainLayout title="Mẫu Email (Templates)">
                 <AdminEmailSettings />
               </MainLayout>
             </ProtectedRoute>
           } />
           <Route path="/admin/workshop-config" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="Phß╗àu Hß╗Öi Thß║úo (Free)">
+              <MainLayout title="Phễu Hội Thảo (Free)">
                 <AdminWorkshopSettings />
               </MainLayout>
             </ProtectedRoute>
           } />
           <Route path="/admin/webhook-settings" element={
             <ProtectedRoute requiredRole="admin">
-              <MainLayout title="Cß║Ñu H├¼nh Webhook (n8n)">
+              <MainLayout title="Cấu Hình Webhook (n8n)">
                 <AdminWebhookSettings />
               </MainLayout>
             </ProtectedRoute>
