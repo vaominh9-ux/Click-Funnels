@@ -20,7 +20,7 @@ export const FUNNEL_COURSES = {
   'khoa-hoc-4': {
     id: 'khoa-hoc-4',
     name: 'AI PARTNER: Đỉnh Kim Tự Tháp',
-    price: 0,
+    price: 97000000,
     checkoutImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80',
   },
   'free-3day': {

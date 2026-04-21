@@ -1,6 +1,6 @@
 # 🔮 AI PARTNER — TẦNG 4: ĐỈNH KIM TỰ THÁP
 
-**Giá**: *(Cập nhật sau)*
+**Giá**: 97.000.000₫
 **Vị trí phễu**: Tầng 4 / 4 — "Ultra High-Ticket / Ascension"
 **Vai trò chiến lược**: Sản phẩm đỉnh cao. Done-With-You — Cầm tay chỉ việc 1:1 cùng Founder. Invitation-Only.
 **Nghề đầu ra**: **CEO Hệ Thống Online** — Sở hữu doanh nghiệp online hoàn chỉnh, thoát khỏi bẫy chuột.
@@ -222,7 +222,7 @@
 > - Zoom hàng tuần + TeamViewer
 > - Apps học tập mọi lúc mọi nơi
 >
-> **Mức Đầu Tư: *(Cập nhật sau)***
+> **Mức Đầu Tư: 97.000.000₫**
 
 ---
 
