@@ -73,19 +73,23 @@ const AffiliateCampaigns = () => {
     const url = campaign.landing_page_url || '';
     const matchedCourseKey = Object.keys(FUNNEL_COURSES).find(k => url.includes(k));
 
+    // Nếu không match được khóa học nào → trả về commission_text hoặc 0%
+    if (!matchedCourseKey) {
+      const raw = campaign.commission_text || '0%';
+      return raw.replace(/\s*Lifetime/gi, '').trim();
+    }
+
     // Ưu tiên 1: Tìm plan type=product khớp với khóa học này
-    if (matchedCourseKey) {
-      const productPlan = commissionPlans.find(p => 
-        p.type === 'product' && 
-        Array.isArray(p.applied_to) && 
-        p.applied_to.includes(matchedCourseKey)
-      );
-      if (productPlan) {
-        if (productPlan.rate_fixed && Number(productPlan.rate_fixed) > 0) {
-          return `${Number(productPlan.rate_fixed).toLocaleString('vi-VN')}đ`;
-        }
-        return `${productPlan.rate_percent || 0}%`;
+    const productPlan = commissionPlans.find(p => 
+      p.type === 'product' && 
+      Array.isArray(p.applied_to) && 
+      p.applied_to.includes(matchedCourseKey)
+    );
+    if (productPlan) {
+      if (productPlan.rate_fixed && Number(productPlan.rate_fixed) > 0) {
+        return `${Number(productPlan.rate_fixed).toLocaleString('vi-VN')}đ`;
       }
+      return `${productPlan.rate_percent || 0}%`;
     }
 
     // Ưu tiên 2: Lấy plan type=default (mức tiêu chuẩn toàn hệ thống)
@@ -97,8 +101,9 @@ const AffiliateCampaigns = () => {
       return `${defaultPlan.rate_percent || 0}%`;
     }
 
-    // Fallback: Hiển thị commission_text từ campaigns hoặc mặc định
-    return campaign.commission_text || '50%';
+    // Fallback
+    const rawFallback = campaign.commission_text || '0%';
+    return rawFallback.replace(/\s*Lifetime/gi, '').trim();
   };
 
   const userTierRank = userProfile ? (TIER_RANK[userProfile.tier] || 1) : 1;

@@ -40,6 +40,14 @@ const Course1 = () => {
             7 buổi tối, mỗi buổi 2 tiếng. Kết thúc lộ trình, bạn có <strong>KỸ NĂNG + KHÁCH HÀNG ĐẦU TIÊN.</strong>
           </p>
 
+          <div className="hero-image-wrapper mb-10" style={{borderRadius:'16px',overflow:'hidden',boxShadow:'0 20px 60px rgba(0,0,0,0.3)',maxWidth:'900px',margin:'2rem auto'}}>
+            <img 
+              src="/images/course1/hero-banner.png" 
+              alt="AI Freelancer - Lộ trình kiếm tiền từ AI" 
+              style={{width:'100%',display:'block'}}
+            />
+          </div>
+
           <div className="hero-details mb-10">
             <div className="detail-item">
               <Calendar className="icon-red" size={24} />
@@ -147,7 +155,7 @@ const Course1 = () => {
         <section className="expert-section mt-16">
           <div className="expert-box">
             <div className="expert-image">
-              <img src="https://images.unsplash.com/photo-1556761175-4b46a572b786?auto=format&fit=crop&q=80&w=400" alt="Mr. Hưng NPV" />
+              <img src="/1bc4f6aa-9251-4973-a1eb-ea7ca1c9187f.jpg" alt="Mr. Hưng NPV" />
             </div>
             <div className="expert-info">
               <h2>Mr. Nguyễn Phước Vĩnh Hưng (Hưng NPV)</h2>

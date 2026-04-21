@@ -107,7 +107,7 @@ export default function UpgradeStore() {
       return `${defaultPlan.rate_percent || 0}%`;
     }
 
-    return '50%'; // Fallback
+    return '0%'; // Fallback
   };
 
   const [formData, setFormData] = useState({
