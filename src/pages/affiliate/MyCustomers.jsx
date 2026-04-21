@@ -22,12 +22,12 @@ const MyCustomers = () => {
       const { data: { user } } = await supabase.auth.getUser();
       if (!user) return;
 
-      const leadsSub = supabase.channel('mycustomers_leads')
+      const leadsSub = supabase.channel(`mycustomers_leads_${Math.random()}`)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'leads', filter: `affiliate_id=eq.${user.id}` }, 
           () => loadCustomers())
         .subscribe();
 
-      const convSub = supabase.channel('mycustomers_conversions')
+      const convSub = supabase.channel(`mycustomers_conversions_${Math.random()}`)
         .on('postgres_changes', { event: '*', schema: 'public', table: 'conversions', filter: `affiliate_id=eq.${user.id}` }, 
           () => loadCustomers())
         .subscribe();

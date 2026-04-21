@@ -8,21 +8,18 @@ const AffiliateLayout = ({ children, title = "Overview" }) => {
   return (
     <div className="app-container">
       <div 
-        className={`cf-sidebar-wrapper ${isSidebarOpen ? 'mobile-open' : ''}`}
+        className="cf-sidebar-wrapper"
         style={{ display: 'contents' }}
       >
-        <div className={`cf-sidebar ${isSidebarOpen ? 'mobile-open' : ''}`}>
-          <Sidebar onClose={() => setIsSidebarOpen(false)} />
-        </div>
+        <Sidebar onClose={() => setIsSidebarOpen(false)} isOpen={isSidebarOpen} />
       </div>
       
-      {/* Overlay to close sidebar on mobile */}
-      <div 
-        className={`mobile-overlay ${isSidebarOpen ? 'open' : ''}`} 
-        onClick={() => setIsSidebarOpen(false)}
-      ></div>
-
       <div className="main-content">
+        {/* Overlay INSIDE main-content to fix z-index stacking with body zoom:80% */}
+        <div 
+          className={`mobile-overlay ${isSidebarOpen ? 'open' : ''}`} 
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
         <TopNav title={title} onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
         <div className="page-wrapper">
           {children}

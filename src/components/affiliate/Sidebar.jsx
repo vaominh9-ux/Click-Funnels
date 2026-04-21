@@ -4,7 +4,7 @@ import { LayoutDashboard, Megaphone, Users, Wallet, Settings, Search, Bell, Plus
 import { supabase } from '../../lib/supabase';
 import './Sidebar.css';
 
-const Sidebar = ({ onClose }) => {
+const Sidebar = ({ onClose, isOpen }) => {
   const navigate = useNavigate();
   const [profile, setProfile] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
@@ -51,7 +51,7 @@ const Sidebar = ({ onClose }) => {
   };
 
   return (
-    <aside className="cf-sidebar">
+    <aside className={`cf-sidebar ${isOpen ? 'mobile-open' : ''}`}>
       <div className="sidebar-header flex-between mb-4">
         <div className="brand-logo" style={{display: 'flex', flexDirection: 'row', alignItems: 'center', flexWrap: 'nowrap', gap: '8px', height: '100%'}}>
           <div style={{display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0}}>

@@ -1,7 +1,7 @@
 .cf-sidebar {
   width: 280px;
   flex-shrink: 0;
-  background-color: transparent;
+  background-color: var(--cf-sidebar-bg); /* Chỉnh sửa nền thay vì transparent để mobile hiển thị đúng */
   color: #9CA3AF;
   display: flex;
   flex-direction: column;

@@ -69,7 +69,7 @@ export default function AffiliateLinks() {
 
         // === REALTIME SUBSCRIPTION ===
         subscription = supabase
-          .channel('realtime_affiliate_links')
+          .channel(`realtime_affiliate_links_${Math.random()}`)
           .on('postgres_changes', { 
             event: '*', 
             schema: 'public', 

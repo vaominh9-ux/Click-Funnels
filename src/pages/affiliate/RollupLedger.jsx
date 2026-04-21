@@ -32,7 +32,7 @@ export default function RollupLedger() {
 
       // === REALTIME SUBSCRIPTION ===
       subscription = supabase
-        .channel('realtime_rollup_ledger')
+        .channel(`rollup_ledger_${Math.random()}`)
         .on('postgres_changes', {
           event: '*',
           schema: 'public',

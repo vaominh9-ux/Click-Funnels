@@ -39,7 +39,7 @@ const AffiliateNetwork = () => {
       await loadNetwork(user.id, adminMode);
 
       subscription = supabase
-        .channel('realtime_network')
+        .channel(`realtime_network_${Math.random()}`)
         .on('postgres_changes', { 
           event: '*', schema: 'public', table: 'profiles' 
         }, () => loadNetwork(user.id, adminMode))

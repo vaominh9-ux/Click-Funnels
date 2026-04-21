@@ -71,17 +71,17 @@ const AffiliateDashboard = () => {
 
         await loadData(user.id);
 
-        const profileSub = supabase.channel('dashboard_profile')
+        const profileSub = supabase.channel(`dashboard_profile_${Math.random()}`)
           .on('postgres_changes', { event: 'UPDATE', schema: 'public', table: 'profiles', filter: `id=eq.${user.id}` },
             () => loadData(user.id))
           .subscribe();
 
-        const convSub = supabase.channel('dashboard_conversions')
+        const convSub = supabase.channel(`dashboard_conversions_${Math.random()}`)
           .on('postgres_changes', { event: '*', schema: 'public', table: 'conversions', filter: `affiliate_id=eq.${user.id}` },
             () => loadData(user.id))
           .subscribe();
 
-        const linksSub = supabase.channel('dashboard_links')
+        const linksSub = supabase.channel(`dashboard_links_${Math.random()}`)
           .on('postgres_changes', { event: '*', schema: 'public', table: 'affiliate_links', filter: `affiliate_id=eq.${user.id}` },
             () => loadData(user.id))
           .subscribe();
@@ -381,6 +381,7 @@ const AffiliateDashboard = () => {
               </button>
             </div>
 
+            <div className="table-responsive">
             <table className="cf-table">
               <thead>
                 <tr>
@@ -434,6 +435,7 @@ const AffiliateDashboard = () => {
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
 
         </div>

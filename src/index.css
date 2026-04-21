@@ -357,14 +357,27 @@ button {
 }
 
 @media (max-width: 768px) {
+  html, body {
+    overflow-x: hidden !important;
+  }
+  
   .app-container {
     padding: 0;
+    width: 100%;
+    overflow-x: hidden !important;
   }
+  
   .main-content {
     border-radius: 0;
+    position: relative; /* Anchor for the absolute overlay inside */
+    width: 100%;
+    overflow-x: hidden !important;
   }
+  
   .page-wrapper {
     padding: 20px 16px;
+    width: 100%;
+    overflow-x: hidden !important;
   }
   
   .cf-sidebar {
@@ -377,13 +390,13 @@ button {
   
   .mobile-overlay {
     display: none;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100%;
+    height: 100%;
     background: rgba(0, 0, 0, 0.5);
-    z-index: 1000;
+    z-index: 50; /* Above topbar (z-index:10), below sidebar (z-index:1001) */
     opacity: 0;
     transition: opacity 0.3s;
     backdrop-filter: blur(2px);
@@ -424,6 +437,16 @@ button {
   /* Prevent table squeeze */
   .cf-table {
     white-space: nowrap;
+  }
+
+  .table-responsive {
+    width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Hide scrollbar for a cleaner look */
+  }
+  .table-responsive::-webkit-scrollbar { 
+    display: none; 
   }
   
   /* Fix alignment issues in mobile */
