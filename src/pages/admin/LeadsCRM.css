@@ -802,17 +802,82 @@
 }
 
 @media (max-width: 768px) {
+  /* Biến Kanban thành giao diện vuốt ngang mượt mà kiểu Trello, từ bỏ thiết kế xếp dọc (column) lê thê */
   .kanban-board {
-    flex-direction: column;
+    flex-direction: row;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    padding-bottom: 20px;
   }
+  
+  .kanban-board::-webkit-scrollbar {
+    display: none;
+  }
+
   .kanban-column {
-    min-width: 100%;
-    max-width: 100%;
+    min-width: 85vw; /* Chiếm 85% màn hình điểm nhấn để lộ 1 góc cột tiếp theo kích thích vuốt */
+    max-width: 85vw;
+    scroll-snap-align: center;
   }
-  .crm-form-grid {
-    grid-template-columns: 1fr;
-  }
+
+  .crm-form-grid,
   .lead-detail-grid {
     grid-template-columns: 1fr;
+  }
+
+  /* Header: Đưa tất cả Search, Lọc, Toggles, Nút Thêm vào một hàng nằm ngang vuốt mượt */
+  .crm-header-actions {
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    width: 100%;
+    padding-bottom: 8px; /* Chừa không gian vuốt */
+  }
+  
+  .crm-header-actions::-webkit-scrollbar {
+    display: none;
+  }
+
+  .crm-search {
+    flex: 0 0 220px; /* Giữ kích thước thanh tìm kiếm không bị bóp nghẹt */
+  }
+  
+  .crm-search input {
+    width: 100%;
+  }
+
+  /* Đảm bảo dropdown lọc và các nút không bị thu nhỏ */
+  .crm-funnel-filter, 
+  .crm-view-toggles, 
+  .crm-btn-add {
+    flex-shrink: 0;
+  }
+  
+  /* Bảng List View (Dạng danh sách) vuốt ngang chứ không bẻ hàng */
+  .admin-table th, .admin-table td {
+    white-space: nowrap;
+  }
+
+  /* Thành thao tác hàng loạt (Bulk Actions) ôm sát màn hình để dễ thao tác */
+  .crm-bulk-action-bar {
+    width: 90%;
+    bottom: 20px;
+    flex-direction: column;
+    gap: 12px;
+    text-align: center;
+    padding: 16px;
+  }
+  .crm-bulk-action-bar .bulk-actions {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+  .bulk-actions button {
+    flex: 1;
+    justify-content: center;
   }
 }

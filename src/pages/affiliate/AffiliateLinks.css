@@ -247,3 +247,113 @@
   border-radius: 9999px;
   font-size: 14px;
 }
+
+/* ═══════════════════════════════════════════════
+   TỐI ƯU MOBILE (≤ 768px)
+   ═══════════════════════════════════════════════ */
+@media (max-width: 768px) {
+  .links-header {
+    margin-bottom: 20px;
+  }
+  
+  .links-header h1 {
+    font-size: 20px;
+  }
+  
+  .links-header p {
+    font-size: 13px;
+  }
+
+  .generator-card {
+    padding: 20px;
+  }
+
+  .generator-header {
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+  }
+
+  .generator-header h3 {
+    font-size: 16px;
+  }
+
+  /* Form tạo UTM - Xếp Dọc trên mobile */
+  .generator-body {
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .form-group label {
+    font-size: 11px;
+  }
+
+  .form-group input, 
+  .select-wrapper select {
+    padding: 10px 12px;
+    font-size: 14px;
+  }
+
+  /* Khung kết quả Link */
+  .link-result-box {
+    flex-direction: column;
+    border-radius: 8px;
+  }
+
+  .link-url {
+    padding: 12px;
+    font-size: 13px;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .link-url::-webkit-scrollbar {
+    display: none;
+  }
+
+  .links-copy-btn {
+    padding: 12px;
+    width: 100%;
+  }
+
+  /* Bảng Theo Dõi */
+  .stats-header {
+    padding: 16px;
+    flex-direction: column;
+    align-items: flex-start !important;
+    gap: 12px;
+  }
+
+  .stats-header h3 {
+    font-size: 15px;
+  }
+
+  .filter-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .stats-table th, 
+  .stats-table td {
+    padding: 12px 10px;
+    font-size: 13px;
+    white-space: nowrap; /* Bắt buộc để không bị dồn ép cột */
+  }
+
+  .stats-table th {
+    font-size: 10px;
+  }
+
+  .conversion-badge {
+    padding: 2px 8px;
+    font-size: 12px;
+  }
+
+  /* Dành riêng cho code UTM Badge dài */
+  .stat-code {
+    display: block;
+    max-width: 150px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+}

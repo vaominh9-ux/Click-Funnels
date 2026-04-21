@@ -192,20 +192,61 @@
 @media (max-width: 768px) {
   .campaigns-grid {
     grid-template-columns: 1fr;
+    gap: 16px;
   }
+  
+  .campaign-card {
+    border-radius: 12px;
+  }
+  
+  .campaign-image {
+    height: 150px; /* Nhỏ gọn hơn trên mobile */
+  }
+  
+  .campaign-body {
+    padding: 16px; /* Giảm padding thừa */
+  }
+  
+  .campaign-name {
+    font-size: 15px;
+  }
+  
+  .campaign-desc {
+    font-size: 13px;
+    margin-bottom: 8px;
+  }
+
   .campaign-link-box {
-    flex-direction: column;
+    flex-direction: row; /* Hàng ngang như desktop */
+    align-items: stretch;
+    border-radius: 8px;
   }
+  
   .link-text {
-    width: 100%;
-    white-space: normal;
-    word-break: break-all;
+    flex: 1;
+    width: 0; /* Ép flex-child tuân thủ chiều rộng cha để vuốt ngang */
+    /* Scroll mượt ngang */
+    white-space: nowrap;
+    overflow-x: scroll;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Ẩn scrollbar */
+    padding: 12px 14px;
+    font-size: 13px;
   }
+  
+  .link-text::-webkit-scrollbar {
+    display: none;
+  }
+  
   .copy-btn {
-    border-left: none;
-    border-top: 1px solid var(--cf-border);
-    width: 100%;
-    padding: 10px;
-    text-align: center;
+    border-left: 1px solid var(--cf-border);
+    border-top: none;
+    width: auto;
+    padding: 0 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 13px;
+    background: #f8fafc;
   }
 }

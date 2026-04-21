@@ -128,7 +128,9 @@
   font-size: 13px;
 }
 
-/* RESPONSIVE */
+/* ═══════════════════════════════════════════════
+   RESPONSIVE LAYOUT
+   ═══════════════════════════════════════════════ */
 @media (max-width: 900px) {
   .mc-stats-grid {
     grid-template-columns: 1fr 1fr;
@@ -139,13 +141,90 @@
   }
   .mc-filter-group {
     margin-left: 0;
-    flex-wrap: wrap;
+    width: 100%;
   }
-  .mc-select { width: 100%; }
+  .mc-select { 
+    flex: 1;
+  }
 }
 
-@media (max-width: 600px) {
+/* ── Tối ưu đặc biệt cho Điện thoại (≤768px) ── */
+@media (max-width: 768px) {
+  .mc-header {
+    margin-bottom: 16px;
+  }
+  .mc-header h2 {
+    font-size: 1.25rem;
+  }
+  .mc-header p {
+    font-size: 0.85rem;
+  }
+
+  /* Grid Thống Kê: Giữ 2 cột (2x2) trên mobile để tiết kiệm diện tích */
   .mc-stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-bottom: 20px;
+  }
+
+  .mc-stat-card {
+    padding: 16px 12px;
+    gap: 10px;
+    flex-direction: column;
+    text-align: center;
+    align-items: center;
+  }
+
+  .mc-stat-icon {
+    width: 36px;
+    height: 36px;
+  }
+
+  .mc-stat-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  .mc-stat-label {
+    font-size: 10px;
+    margin-bottom: 4px;
+    letter-spacing: 0;
+  }
+
+  .mc-stat-value {
+    font-size: 1.1rem;
+  }
+
+  /* Filters */
+  .mc-filters {
+    gap: 12px;
+  }
+
+  .search-bar {
+    width: 100%;
+  }
+
+  .mc-filter-group {
+    flex-wrap: nowrap;
+    gap: 8px;
+  }
+
+  .mc-select {
+    padding: 8px;
+    font-size: 0.75rem;
+    min-width: 0; /* Cho phép co lại */
+  }
+
+  /* Table padding */
+  .cf-table th, 
+  .cf-table td {
+    padding: 12px 14px;
+    font-size: 0.85rem;
+  }
+  
+  .mc-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 12px;
   }
 }

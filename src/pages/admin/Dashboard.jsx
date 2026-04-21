@@ -367,7 +367,7 @@ const AdminDashboard = () => {
       </div>
 
       {/* ─── Bottom Grid for Tables ─── */}
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(500px, 1fr))', gap: '24px', marginTop: '24px' }}>
+      <div className="admin-bottom-grid">
         
         {/* ─── Top Campaigns Enhanced ─── */}
         <div className="admin-panel" style={{ margin: 0 }}>

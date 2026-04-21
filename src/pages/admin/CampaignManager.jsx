@@ -159,7 +159,7 @@ export default function AdminCampaignManager() {
       {showAddForm && (
         <form className="campaign-card" style={{ marginBottom: '24px', background: '#F8FAFC' }} onSubmit={handleAddCampaign}>
           <h3 style={{marginTop: 0, marginBottom: '16px', fontSize: '16px', color: '#1E293B'}}>Tạo mới Nguồn Link</h3>
-          <div style={{display: 'flex', gap: '16px', alignItems: 'flex-start'}}>
+          <div className="campaign-form-row">
             <div style={{flex: 1}}>
               <input 
                 type="text" 
@@ -231,94 +231,96 @@ export default function AdminCampaignManager() {
             Chưa có dự án nào được tạo. Nhấn "Thêm Landing Page" ở trên để bắt đầu!
           </div>
         ) : (
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th style={{width: '25%'}}>TÊN DỰ ÁN / KHÓA HỌC</th>
-                <th style={{width: '45%'}}>LINK LANDING PAGE (BASE URL)</th>
-                <th style={{width: '15%'}}>TRẠNG THÁI</th>
-                <th style={{width: '15%', textAlign: 'right'}}>THAO TÁC</th>
-              </tr>
-            </thead>
-            <tbody>
-              {campaigns.map((camp) => (
-                <tr key={camp.id}>
-                  {editingCampaignId === camp.id ? (
-                    <>
-                      <td>
-                        <input 
-                          value={editName} 
-                          onChange={e => setEditName(e.target.value)} 
-                          style={{width:'100%', padding:'8px', border:'1px solid #CBD5E1', borderRadius:'4px', fontSize:'14px'}}
-                        />
-                      </td>
-                      <td>
-                        <input 
-                          value={editUrl} 
-                          onChange={e => setEditUrl(e.target.value)} 
-                          style={{width:'100%', padding:'8px', border:'1px solid #CBD5E1', borderRadius:'4px', fontSize:'14px'}}
-                        />
-                      </td>
-                      <td>
-                        <span className={`status-badge ${camp.status}`}>
-                          {camp.status === 'active' ? 'Đang Chạy' : 'Tạm Dừng'}
-                        </span>
-                      </td>
-                      <td style={{textAlign: 'right'}}>
-                        <div style={{display: 'flex', gap: '8px', justifyContent: 'flex-end'}}>
-                          <button 
-                            onClick={() => saveEdit(camp.id)}
-                            style={{background:'#10B981', color:'white', border:'none', padding:'6px 12px', borderRadius:'4px', cursor:'pointer'}}
-                          >
-                            Lưu
-                          </button>
-                          <button 
-                            onClick={() => setEditingCampaignId(null)}
-                            style={{background:'#64748B', color:'white', border:'none', padding:'6px 12px', borderRadius:'4px', cursor:'pointer'}}
-                          >
-                            Hủy
-                          </button>
-                        </div>
-                      </td>
-                    </>
-                  ) : (
-                    <>
-                      <td>
-                        <div className="campaign-name">{camp.name}</div>
-                      </td>
-                      <td>
-                        <div className="campaign-url flex-align-center" style={{gap: '6px', fontSize: '13px', color: '#64748B', wordBreak: 'break-all'}}>
-                          <LinkIcon size={14} style={{flexShrink: 0}} /> {camp.landing_page_url}
-                        </div>
-                      </td>
-                      <td>
-                        <span 
-                          className={`status-badge ${camp.status}`}
-                          style={{cursor: 'pointer'}}
-                          onClick={() => toggleStatus(camp.id, camp.status)}
-                        >
-                          {camp.status === 'active' ? 'Đang Chạy' : 'Tạm Dừng'}
-                        </span>
-                      </td>
-                      <td style={{textAlign: 'right'}}>
-                        <div style={{display: 'flex', gap: '8px', justifyContent: 'flex-end'}}>
-                          <button className="action-btn" title={camp.status === 'active' ? 'Tạm Dừng' : 'Kích Hoạt'} onClick={() => toggleStatus(camp.id, camp.status)}>
-                            {camp.status === 'active' ? <Pause size={16} /> : <Play size={16} />}
-                          </button>
-                          <button className="action-btn" title="Chỉnh sửa" onClick={() => startEdit(camp)}>
-                            <Edit2 size={16} />
-                          </button>
-                          <button className="action-btn delete" title="Xóa bỏ" onClick={() => deleteCampaign(camp.id)}>
-                            <Trash2 size={16} />
-                          </button>
-                        </div>
-                      </td>
-                    </>
-                  )}
+          <div className="table-responsive">
+            <table className="admin-table">
+              <thead>
+                <tr>
+                  <th style={{width: '25%'}}>TÊN DỰ ÁN / KHÓA HỌC</th>
+                  <th style={{width: '45%'}}>LINK LANDING PAGE (BASE URL)</th>
+                  <th style={{width: '15%'}}>TRẠNG THÁI</th>
+                  <th style={{width: '15%', textAlign: 'right'}}>THAO TÁC</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody>
+                {campaigns.map((camp) => (
+                  <tr key={camp.id}>
+                    {editingCampaignId === camp.id ? (
+                      <>
+                        <td>
+                          <input 
+                            value={editName} 
+                            onChange={e => setEditName(e.target.value)} 
+                            style={{width:'100%', padding:'8px', border:'1px solid #CBD5E1', borderRadius:'4px', fontSize:'14px'}}
+                          />
+                        </td>
+                        <td>
+                          <input 
+                            value={editUrl} 
+                            onChange={e => setEditUrl(e.target.value)} 
+                            style={{width:'100%', padding:'8px', border:'1px solid #CBD5E1', borderRadius:'4px', fontSize:'14px'}}
+                          />
+                        </td>
+                        <td>
+                          <span className={`status-badge ${camp.status}`}>
+                            {camp.status === 'active' ? 'Đang Chạy' : 'Tạm Dừng'}
+                          </span>
+                        </td>
+                        <td style={{textAlign: 'right'}}>
+                          <div style={{display: 'flex', gap: '8px', justifyContent: 'flex-end'}}>
+                            <button 
+                              onClick={() => saveEdit(camp.id)}
+                              style={{background:'#10B981', color:'white', border:'none', padding:'6px 12px', borderRadius:'4px', cursor:'pointer'}}
+                            >
+                              Lưu
+                            </button>
+                            <button 
+                              onClick={() => setEditingCampaignId(null)}
+                              style={{background:'#64748B', color:'white', border:'none', padding:'6px 12px', borderRadius:'4px', cursor:'pointer'}}
+                            >
+                              Hủy
+                            </button>
+                          </div>
+                        </td>
+                      </>
+                    ) : (
+                      <>
+                        <td>
+                          <div className="campaign-name">{camp.name}</div>
+                        </td>
+                        <td>
+                          <div className="campaign-url flex-align-center" style={{gap: '6px', fontSize: '13px', color: '#64748B', wordBreak: 'break-all'}}>
+                            <LinkIcon size={14} style={{flexShrink: 0}} /> {camp.landing_page_url}
+                          </div>
+                        </td>
+                        <td>
+                          <span 
+                            className={`status-badge ${camp.status}`}
+                            style={{cursor: 'pointer'}}
+                            onClick={() => toggleStatus(camp.id, camp.status)}
+                          >
+                            {camp.status === 'active' ? 'Đang Chạy' : 'Tạm Dừng'}
+                          </span>
+                        </td>
+                        <td style={{textAlign: 'right'}}>
+                          <div style={{display: 'flex', gap: '8px', justifyContent: 'flex-end'}}>
+                            <button className="action-btn" title={camp.status === 'active' ? 'Tạm Dừng' : 'Kích Hoạt'} onClick={() => toggleStatus(camp.id, camp.status)}>
+                              {camp.status === 'active' ? <Pause size={16} /> : <Play size={16} />}
+                            </button>
+                            <button className="action-btn" title="Chỉnh sửa" onClick={() => startEdit(camp)}>
+                              <Edit2 size={16} />
+                            </button>
+                            <button className="action-btn delete" title="Xóa bỏ" onClick={() => deleteCampaign(camp.id)}>
+                              <Trash2 size={16} />
+                            </button>
+                          </div>
+                        </td>
+                      </>
+                    )}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         )}
       </div>
     </div>
