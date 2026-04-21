@@ -2,7 +2,7 @@
 // Dùng chung cho tất cả form Lead trên Landing Pages
 // Fire-and-forget: không block UI, không ảnh hưởng UX
 
-const API_BASE = import.meta.env.VITE_API_BASE || (window.location.hostname === 'localhost' ? 'https://click-funnels.vercel.app' : '');
+const API_BASE = import.meta.env.VITE_API_BASE || (window.location.hostname === 'localhost' ? 'https://ai.duhava.com' : '');
 const WEBHOOK_API = '/api/webhook/notify-lead';
 
 /**

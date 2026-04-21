@@ -115,7 +115,7 @@ const AffiliateCampaigns = () => {
 
   const getAffLink = (campaign) => {
     if (!userProfile?.ref_code) return '';
-    const trackingDomain = import.meta.env.VITE_TRACKING_DOMAIN || (window.location.hostname === 'localhost' ? 'https://click-funnels.vercel.app' : window.location.origin);
+    const trackingDomain = import.meta.env.VITE_TRACKING_DOMAIN || (window.location.hostname === 'localhost' ? 'https://ai.duhava.com' : window.location.origin);
     return `${trackingDomain}/go/${userProfile.ref_code}?campaign=${campaign.id}`;
   };
 

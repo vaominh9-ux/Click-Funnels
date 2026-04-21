@@ -7,6 +7,32 @@ const AICoachPage = () => {
 
   const openModal = () => setShowModal(true);
 
+  // Danh sách tên file logo đối tác (30 files)
+  const partnerLogos = [
+    "163997112890.jpeg", "53639333772_5e7495716b.jpg", "600175214_1385844209994023_3396440531865516689_n.jpg", 
+    "Icon-Dai-Ichi.webp", "Logo-DH-Nguyen-Tat-Thanh.webp", "Logo-FPT-Color2.webp", "Logo-Prudential-En-H-1.webp", 
+    "Logo-bieu-tuong-va-Huynh-Anh.png", "Mitsubishi-logo.png", "PTEXIM.jpg", "bannerlogo.png", "htv_logo_vn1.jpg", 
+    "images (1).jpg", "images.jpg", "images.png", "logo (1).png", "logo mau-01.png", "logo-01-20220527042827.png", 
+    "logo-BIDV-dongphucvina.vn_.webp", "logo-caay-thij.png", "logo-fsi2-compressed.webp", "logo-hoang-duc-fb.png", 
+    "logo-vinhomes-2.png", "logo-xanh-la-cap-nhan-1.12.25-01.png", "logo.jpg", "logo.png", "logochaogaudo.png", 
+    "phan-tich-cac-yeu-to-thiet-ke-trong-logo-vnpt-0.png", "smartland-1-1642936357.png", "untitled-1-2234.png"
+  ];
+
+  // Danh sách 32 ảnh thực chiến (Training) phân làm 2 dòng
+  const trainingRow1 = [
+    "492552662_1227646702697936_3497594438060120710_n.jpg", "493403185_1229353382527268_2461051840988853049_n.jpg", "494493850_1236937181768888_7955328787891523460_n.jpg", "495579659_1237849975010942_1410451617846822921_n.jpg", 
+    "500267562_1250021547127118_3381600826981230739_n.jpg", "502399565_1258234002972539_5011806199028027196_n.jpg", "502468195_1258234086305864_6319487566870465950_n.jpg", "502534919_1258234046305868_7051752070850070240_n.jpg", 
+    "502662259_1258233982972541_2629059003435512234_n.jpg", "504915411_1266604662135473_3021813081456368847_n.jpg", "505372414_1266604608802145_6758692710621360626_n.jpg", "505485684_1266604732135466_5772722660527981384_n.jpg", 
+    "505599578_1269138205215452_9204714722928188122_n.jpg", "506506387_1269139011882038_5375807849332097190_n.jpg", "515309622_1287195016743104_1653839118932784470_n.jpg", "518005966_1293145389481400_7369074205193044887_n.jpg"
+  ];
+
+  const trainingRow2 = [
+    "518276714_1295058152623457_2067073073989813957_n.jpg", "547519156_1351201850342420_2777957991506969149_n.jpg", "547989294_1355000663295872_8275444384891716753_n.jpg", "548230908_1351191013676837_460401791316159492_n.jpg", 
+    "548275877_1351191007010171_4449515615118036794_n.jpg", "549633211_1351201853675753_6964300288763343404_n.jpg", "549882936_1355000726629199_859242227222710449_n.jpg", "550724295_1355000716629200_5577827516566997616_n.jpg", 
+    "602988161_1436598285136109_3221736557485605248_n.jpg", "629220699_1475745831221354_8981191475029877965_n.jpg", "630230764_1475730884556182_6424476613284771060_n.jpg", "632245696_1482015047261099_3523584593468023150_n.jpg", 
+    "633551354_1482015083927762_6912985535366424662_n.jpg", "633992123_1486083586854245_4711196357813368697_n.jpg", "655834596_1513817117414225_5987499885961074778_n.jpg", "656857461_1513817144080889_2564696424553016396_n.jpg"
+  ];
+
   return (
     <div className="aicoach-wrapper">
       {/* ============================================================
@@ -14,7 +40,7 @@ const AICoachPage = () => {
           ============================================================ */}
       <section className="aicoach-hero">
         <div className="aicoach-kicker">
-          ⚠️ LƯU Ý: CẦN ĐỌC CẨN THẬN NỘI DUNG BÊN DƯỚI ĐỂ TRÁNH BỎ LỠ CƠ HỘI MỚI TRONG NGÀNH NÀY.
+          ⚠️ CẢNH BÁO: ĐỌC KỸ KẺO LỠ CƠ HỘI MỚI!
         </div>
 
         <h1>
@@ -50,7 +76,7 @@ const AICoachPage = () => {
               </li>
             </ul>
 
-            <button className="aicoach-btn" onClick={openModal}>
+            <button className="aicoach-btn hide-on-mobile" onClick={openModal}>
               📋 TÔI MUỐN ỨNG TUYỂN VÀO AI COACH
             </button>
           </div>
@@ -83,6 +109,29 @@ const AICoachPage = () => {
       </section>
 
       {/* ============================================================
+          1.5. MARQUEE LOGO ĐỐI TÁC (Social Proof)
+          Giải pháp Card Trắng: Xử lý dứt điểm các file có nền cồng kềnh lẫn không nền
+          ============================================================ */}
+      <section className="aicoach-partners-section">
+        <h3 className="partners-title">NIỀM TIN ĐƯỢC CHỨNG THỰC BỞI HÀNG TRĂM DOANH NGHIỆP TRONG VÀ NGOÀI NƯỚC</h3>
+        <div className="partners-marquee-container">
+          <div className="partners-marquee-track">
+            {partnerLogos.map((filename, i) => (
+              <div className="partner-logo-card" key={`org-${i}`}>
+                <img src={`/images/partners/${filename}`} loading="lazy" alt={`Partner ${i}`} />
+              </div>
+            ))}
+            {/* Nhân bản để cuộn vòng lặp không giới hạn */}
+            {partnerLogos.map((filename, i) => (
+              <div className="partner-logo-card" key={`dup-${i}`}>
+                <img src={`/images/partners/${filename}`} loading="lazy" alt={`Partner Dup ${i}`} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ============================================================
           2. STORY — Con Bọ Cánh Cứng (Engage)
           ============================================================ */}
       <section className="aicoach-section-alt">
@@ -103,7 +152,7 @@ const AICoachPage = () => {
             <h3>🐛 Tinh Hoàn Của Bọ Cánh Cứng Dạy Bạn Điều Gì Về Kinh Doanh Online?</h3>
 
             <div className="aicoach-image-container">
-              <img src="/images/course3/beetle.png" alt="Con bọ cánh cứng" className="aicoach-img-styled" style={{maxWidth: '450px'}} />
+              <img src="/images/course3/beetle.png" alt="Con bọ cánh cứng" className="aicoach-img-styled img-canvas" style={{maxWidth: '450px'}} />
             </div>
 
             <p>Sinh vật mạnh nhất hành tinh không phải voi châu Phi — mà là <strong className="aicoach-white">con bọ cánh cứng nhỏ xíu</strong>, với sức mạnh bằng <span className="aicoach-gold">1,141 lần</span> trọng lượng cơ thể.</p>
@@ -215,7 +264,7 @@ const AICoachPage = () => {
             <p>Mặc dù phép toán không sai, nhưng kiếm được hơn 1.000 khách hàng mua ngay một sản phẩm là <strong className="aicoach-white">siêu thử thách</strong>.</p>
             
             <div className="aicoach-image-container">
-              <img src="/images/course3/funnel-math.png" alt="Mô hình phễu kinh doanh" className="aicoach-img-styled" />
+              <img src="/images/course3/funnel-math.png" alt="Mô hình phễu kinh doanh" className="aicoach-img-styled img-canvas" />
             </div>
 
             <p style={{textAlign: 'center', fontSize: '1.2rem', color: '#E5E7EB'}}>
@@ -245,7 +294,7 @@ const AICoachPage = () => {
           </p>
 
           <div className="aicoach-image-container">
-            <img src="/images/course3/funnel.png" alt="Phễu 3 chiến lược sát thủ" className="aicoach-img-styled" style={{maxWidth: '350px'}} />
+            <img src="/images/course3/funnel.png" alt="Phễu 3 chiến lược sát thủ" className="aicoach-img-styled img-canvas" style={{maxWidth: '350px'}} />
           </div>
 
           <div className="aicoach-strategy-card">
@@ -333,6 +382,48 @@ const AICoachPage = () => {
         </div>
       </section>
 
+      <section className="aicoach-training-wall">
+        <h2 style={{ textAlign: 'center', fontSize: '2.5rem', marginBottom: '16px', padding: '0 20px' }}>
+          KHÔNG DẠY LÝ THUYẾT SUÔNG.<br/> <span className="aicoach-gold">CHÚNG TÔI THỰC CHIẾN.</span>
+        </h2>
+        <div className="aicoach-divider" />
+        <p style={{ textAlign: 'center', color: '#9CA3AF', maxWidth: '650px', margin: '0 auto 40px', fontSize: '1.15rem', padding: '0 20px' }}>
+          Hành trình đồng hành và chuyển hóa trực tiếp cùng hàng ngũ CEO, Doanh nhân và Tổ chức. Bức tường này là minh chứng đanh thép nhất cho những gì chúng tôi sẽ chuyển giao cho bạn.
+        </p>
+
+        {/* Tầng 1: Cuộn Trái */}
+        <div className="training-marquee-container">
+          <div className="training-marquee-track scroll-left">
+            {trainingRow1.map((filename, i) => (
+              <div className="training-photo-card" key={`t1-org-${i}`}>
+                <img src={`/images/training/${filename}`} loading="lazy" alt={`Training ${i}`} />
+              </div>
+            ))}
+            {trainingRow1.map((filename, i) => (
+              <div className="training-photo-card" key={`t1-dup-${i}`}>
+                <img src={`/images/training/${filename}`} loading="lazy" alt={`Training Dup ${i}`} />
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Tầng 2: Cuộn Phải */}
+        <div className="training-marquee-container" style={{ marginTop: '20px' }}>
+          <div className="training-marquee-track scroll-right">
+            {trainingRow2.map((filename, i) => (
+              <div className="training-photo-card" key={`t2-org-${i}`}>
+                <img src={`/images/training/${filename}`} loading="lazy" alt={`Training 2 ${i}`} />
+              </div>
+            ))}
+            {trainingRow2.map((filename, i) => (
+              <div className="training-photo-card" key={`t2-dup-${i}`}>
+                <img src={`/images/training/${filename}`} loading="lazy" alt={`Training Dup 2 ${i}`} />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ============================================================
           8. GRAND SLAM OFFER (The Kill)
           ============================================================ */}
@@ -380,8 +471,8 @@ const AICoachPage = () => {
               💰 TIẾT KIỆM 95.003.000₫ (82%)
             </div>
 
-            <button className="aicoach-btn" onClick={openModal} style={{ fontSize: '1.4rem', padding: '24px 48px' }}>
-              👉 ĐĂNG KÝ ỨNG TUYỂN NGAY
+            <button className="aicoach-btn" onClick={openModal}>
+              👉 ĐĂNG KÝ NGAY
             </button>
           </div>
         </div>
@@ -397,20 +488,20 @@ const AICoachPage = () => {
           </h2>
           <div className="aicoach-divider" />
 
-          <div className="aicoach-faq-item">
-            <h4>Q: Tôi có cần kiến thức chuyên sâu trước khi bắt đầu không?</h4>
+          <details className="aicoach-faq-item">
+            <summary>Q: Tôi có cần kiến thức chuyên sâu trước khi bắt đầu không?</summary>
             <p>Chắc chắn có kiến thức sẽ tốt hơn! Nhưng đó không phải yêu cầu bắt buộc. Chúng tôi sẽ chia sẻ các chiến lược được thiết kế không chỉ giúp bạn đạt thu nhập đề ra mà còn phát triển kinh nghiệm trong thị trường sản phẩm thông tin.</p>
-          </div>
+          </details>
 
-          <div className="aicoach-faq-item">
-            <h4>Q: Tôi không thích "nghiên cứu" hoặc sắp xếp thông tin, thì sao?</h4>
+          <details className="aicoach-faq-item">
+            <summary>Q: Tôi không thích "nghiên cứu" hoặc sắp xếp thông tin, thì sao?</summary>
             <p>99.999% mọi người thuộc thể loại này! Giải pháp: Hãy tìm chiến thắng nhỏ đầu tiên và sự yêu thích sẽ tìm đến bạn. Chúng tôi sẽ thiết kế hệ thống giúp bạn có những chiến thắng nhỏ nhưng tràn đầy cảm hứng.</p>
-          </div>
+          </details>
 
-          <div className="aicoach-faq-item">
-            <h4>Q: Mất bao lâu để thấy kết quả?</h4>
+          <details className="aicoach-faq-item">
+            <summary>Q: Mất bao lâu để thấy kết quả?</summary>
             <p>Tùy thuộc vào mức độ nỗ lực, thông thường những học viên cam kết sẽ thấy kết quả đầu tiên trong 30-90 ngày đầu. Hệ thống được thiết kế để bạn có "chiến thắng nhỏ" ngay từ tuần đầu tiên.</p>
-          </div>
+          </details>
 
           {/* Guarantee */}
           <div className="aicoach-guarantee">
@@ -449,6 +540,13 @@ const AICoachPage = () => {
           </div>
         </div>
       </section>
+
+      {/* --- MỎ NEO CHỐT SALE MOBILE BÁM ĐÁY --- */}
+      <div className="mobile-sticky-cta">
+        <button className="aicoach-btn" onClick={openModal}>
+          🚀 TÔI MUỐN ỨNG TUYỂN
+        </button>
+      </div>
 
       {/* LEAD MODAL — Logic giữ nguyên */}
       <LeadModal

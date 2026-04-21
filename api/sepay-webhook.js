@@ -162,7 +162,7 @@ export default async function handler(req, res) {
         // Chỉ gửi email nếu có email hợp lệ (chứa @)
         if (customerEmail && customerEmail.includes('@')) {
           // Gọi API nội bộ gửi email (fire-and-forget)
-          let appUrl = process.env.VITE_APP_URL || 'https://click-funnels.vercel.app';
+          let appUrl = process.env.VITE_APP_URL || 'https://ai.duhava.com';
           if (!appUrl.startsWith('http') && process.env.VERCEL_URL) {
             appUrl = `https://${process.env.VERCEL_URL}`;
           }

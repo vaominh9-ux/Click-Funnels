@@ -13,6 +13,32 @@ const COURSE_INFO = FUNNEL_COURSES['khoa-hoc-1'];
 const Course1 = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
+  // Danh sách tên file logo đối tác (30 files)
+  const partnerLogos = [
+    "163997112890.jpeg", "53639333772_5e7495716b.jpg", "600175214_1385844209994023_3396440531865516689_n.jpg", 
+    "Icon-Dai-Ichi.webp", "Logo-DH-Nguyen-Tat-Thanh.webp", "Logo-FPT-Color2.webp", "Logo-Prudential-En-H-1.webp", 
+    "Logo-bieu-tuong-va-Huynh-Anh.png", "Mitsubishi-logo.png", "PTEXIM.jpg", "bannerlogo.png", "htv_logo_vn1.jpg", 
+    "images (1).jpg", "images.jpg", "images.png", "logo (1).png", "logo mau-01.png", "logo-01-20220527042827.png", 
+    "logo-BIDV-dongphucvina.vn_.webp", "logo-caay-thij.png", "logo-fsi2-compressed.webp", "logo-hoang-duc-fb.png", 
+    "logo-vinhomes-2.png", "logo-xanh-la-cap-nhan-1.12.25-01.png", "logo.jpg", "logo.png", "logochaogaudo.png", 
+    "phan-tich-cac-yeu-to-thiet-ke-trong-logo-vnpt-0.png", "smartland-1-1642936357.png", "untitled-1-2234.png"
+  ];
+
+  // Danh sách 32 ảnh thực chiến (Training) phân làm 2 dòng
+  const trainingRow1 = [
+    "492552662_1227646702697936_3497594438060120710_n.jpg", "493403185_1229353382527268_2461051840988853049_n.jpg", "494493850_1236937181768888_7955328787891523460_n.jpg", "495579659_1237849975010942_1410451617846822921_n.jpg", 
+    "500267562_1250021547127118_3381600826981230739_n.jpg", "502399565_1258234002972539_5011806199028027196_n.jpg", "502468195_1258234086305864_6319487566870465950_n.jpg", "502534919_1258234046305868_7051752070850070240_n.jpg", 
+    "502662259_1258233982972541_2629059003435512234_n.jpg", "504915411_1266604662135473_3021813081456368847_n.jpg", "505372414_1266604608802145_6758692710621360626_n.jpg", "505485684_1266604732135466_5772722660527981384_n.jpg", 
+    "505599578_1269138205215452_9204714722928188122_n.jpg", "506506387_1269139011882038_5375807849332097190_n.jpg", "515309622_1287195016743104_1653839118932784470_n.jpg", "518005966_1293145389481400_7369074205193044887_n.jpg"
+  ];
+
+  const trainingRow2 = [
+    "518276714_1295058152623457_2067073073989813957_n.jpg", "547519156_1351201850342420_2777957991506969149_n.jpg", "547989294_1355000663295872_8275444384891716753_n.jpg", "548230908_1351191013676837_460401791316159492_n.jpg", 
+    "548275877_1351191007010171_4449515615118036794_n.jpg", "549633211_1351201853675753_6964300288763343404_n.jpg", "549882936_1355000726629199_859242227222710449_n.jpg", "550724295_1355000716629200_5577827516566997616_n.jpg", 
+    "602988161_1436598285136109_3221736557485605248_n.jpg", "629220699_1475745831221354_8981191475029877965_n.jpg", "630230764_1475730884556182_6424476613284771060_n.jpg", "632245696_1482015047261099_3523584593468023150_n.jpg", 
+    "633551354_1482015083927762_6912985535366424662_n.jpg", "633992123_1486083586854245_4711196357813368697_n.jpg", "655834596_1513817117414225_5987499885961074778_n.jpg", "656857461_1513817144080889_2564696424553016396_n.jpg"
+  ];
+
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
@@ -72,10 +98,34 @@ const Course1 = () => {
           </button>
         </section>
 
+        {/* ─── PHẦN 1.5: LOGO ĐỐI TÁC (SOCIAL PROOF START) ─── */}
+        <section className="c1-partners-section">
+          <h3 className="c1-partners-title">LUÔN LÀ SỰ LỰA CHỌN ĐÀO TẠO CỦA CÁC THƯƠNG HIỆU HÀNG ĐẦU</h3>
+          <div className="c1-partners-marquee-container">
+            <div className="c1-partners-marquee-track">
+              {partnerLogos.map((filename, i) => (
+                <div className="c1-partner-logo-card" key={`org-${i}`}>
+                  <img src={`/images/partners/${filename}`} loading="lazy" alt={`Partner ${i}`} />
+                </div>
+              ))}
+              {partnerLogos.map((filename, i) => (
+                <div className="c1-partner-logo-card" key={`dup-${i}`}>
+                  <img src={`/images/partners/${filename}`} loading="lazy" alt={`Partner Dup ${i}`} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ─── PHẦN 2: "THE PROBLEM" ─── */}
         <section className="problem-section mt-16">
           <div className="problem-box">
             <h2 className="mb-6 problem-title">BẠN ĐÃ BIẾT DÙNG AI. NHƯNG...</h2>
+
+            <div className="pain-image-wrapper mb-8" style={{borderRadius:'12px',overflow:'hidden',maxWidth:'700px',margin:'0 auto 2rem',boxShadow:'0 10px 40px rgba(255,0,0,0.15)'}}>
+              <img src="/images/course1/pain-point.png" alt="Bế tắc vì không biết kiếm tiền từ AI" style={{width:'100%',display:'block',aspectRatio:'16/9',objectFit:'cover',objectPosition:'center'}} />
+            </div>
+
             <ul className="pain-list">
               <li>
                 <div className="icon-wrap"><XCircle size={22} className="text-red-500" /></div>
@@ -173,10 +223,52 @@ const Course1 = () => {
           </div>
         </section>
 
+        {/* ─── PHẦN 5.5: TRAINING WALL (BỨC TƯỜNG THỰC CHIẾN) ─── */}
+        <section className="c1-training-wall">
+          <h2 className="section-title text-center mb-4">KHÔNG DẠY LÝ THUYẾT SUÔNG. CHÚNG TÔI THỰC CHIẾN.</h2>
+          <p className="text-center text-gray-500 mb-8 max-w-2xl mx-auto px-4">
+            Hành trình đồng hành và chuyển hóa trực tiếp cùng hàng ngũ CEO, Doanh nhân và Tổ chức. Bạn đang được học từ những người đang trực tiếp làm nghề mỗi ngày.
+          </p>
+
+          <div className="c1-training-marquee-container">
+            <div className="c1-training-marquee-track scroll-left">
+              {trainingRow1.map((filename, i) => (
+                <div className="c1-training-photo-card" key={`t1-org-${i}`}>
+                  <img src={`/images/training/${filename}`} loading="lazy" alt={`Training ${i}`} />
+                </div>
+              ))}
+              {trainingRow1.map((filename, i) => (
+                <div className="c1-training-photo-card" key={`t1-dup-${i}`}>
+                  <img src={`/images/training/${filename}`} loading="lazy" alt={`Training Dup ${i}`} />
+                </div>
+              ))}
+            </div>
+          </div>
+
+          <div className="c1-training-marquee-container mt-6">
+            <div className="c1-training-marquee-track scroll-right">
+              {trainingRow2.map((filename, i) => (
+                <div className="c1-training-photo-card" key={`t2-org-${i}`}>
+                  <img src={`/images/training/${filename}`} loading="lazy" alt={`Training 2 ${i}`} />
+                </div>
+              ))}
+              {trainingRow2.map((filename, i) => (
+                <div className="c1-training-photo-card" key={`t2-dup-${i}`}>
+                  <img src={`/images/training/${filename}`} loading="lazy" alt={`Training Dup 2 ${i}`} />
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
         {/* ─── PHẦN 6: "THE GRAND SLAM OFFER" ─── */}
         <section className="offer-section mt-16 mb-16">
           <div className="offer-box">
             <h2 className="section-title text-center text-white mb-8">BẠN SẼ NHẬN ĐƯỢC GÌ HÔM NAY?</h2>
+
+            <div className="offer-image-wrapper mb-8" style={{borderRadius:'16px',overflow:'hidden',maxWidth:'800px',margin:'0 auto 2rem',boxShadow:'0 20px 50px rgba(0,0,0,0.5)'}}>
+              <img src="/images/course1/offer-bundle.png" alt="Toàn bộ giá trị khoá học AI Freelancer" style={{width:'100%',display:'block',aspectRatio:'16/9',objectFit:'cover',objectPosition:'center'}} />
+            </div>
             
             <ul className="value-stack-list">
               <li>

@@ -4,7 +4,7 @@ import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import './WebhookSettings.css';
 
-const API_BASE = import.meta.env.VITE_API_BASE || (window.location.hostname === 'localhost' ? 'https://click-funnels.vercel.app' : '');
+const API_BASE = import.meta.env.VITE_API_BASE || (window.location.hostname === 'localhost' ? 'https://ai.duhava.com' : '');
 
 const WebhookSettings = () => {
   const [loading, setLoading] = useState(true);

@@ -123,7 +123,7 @@ const PaymentSettings = () => {
   };
 
   const qrPreviewUrl = `https://img.vietqr.io/image/${bankId}-${accountNo}-print.png?amount=10000&addInfo=TEST_QR&accountName=${encodeURIComponent(accountName)}`;
-  const webhookUrl = `${window.location.hostname === 'localhost' ? 'https://click-funnels.vercel.app' : window.location.origin}/api/sepay-webhook`;
+  const webhookUrl = `${window.location.hostname === 'localhost' ? 'https://ai.duhava.com' : window.location.origin}/api/sepay-webhook`;
 
   const handleCopyWebhook = () => {
     navigator.clipboard.writeText(webhookUrl);

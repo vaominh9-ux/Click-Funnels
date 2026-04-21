@@ -5,7 +5,7 @@ import { notifyNewLead } from '../utils/notifyWebhook';
 import './FreeLeadModal.css';
 
 const WORKSHOP_API = '/api/email/send-workshop';
-const API_BASE = import.meta.env.VITE_API_BASE || (window.location.hostname === 'localhost' ? 'https://click-funnels.vercel.app' : '');
+const API_BASE = import.meta.env.VITE_API_BASE || (window.location.hostname === 'localhost' ? 'https://ai.duhava.com' : '');
 
 const FreeLeadModal = ({ isOpen, onClose, courseId, courseName }) => {
   const [formData, setFormData] = useState({ name: '', phone: '', email: '' });

@@ -70,7 +70,7 @@ export default function ClickTracker() {
         
         // Tự động override nếu DB lỡ lưu URL gốc là localhost
         if (url.hostname === 'localhost') {
-          url.hostname = 'click-funnels.vercel.app';
+          url.hostname = 'ai.duhava.com';
           url.port = '';
           url.protocol = 'https:';
         }
