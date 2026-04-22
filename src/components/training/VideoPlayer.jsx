@@ -75,18 +75,28 @@ const VideoPlayer = ({ url, title }) => {
   const [showQualityMenu, setShowQualityMenu] = useState(false);
 
   const hideTimer = useRef(null);
+  const readyTimeout = useRef(null);
 
   // Init API and Player
   useEffect(() => {
     loadYTApi();
     const videoId = extractVideoId(url);
     if (!videoId) return;
+    
+    setIsReady(false);
 
     const createPlayer = () => {
       if (playerRef.current) {
-        playerRef.current.destroy();
+        try { playerRef.current.destroy(); } catch (e) {}
       }
-      playerRef.current = new window.YT.Player(playerDivRef.current, {
+      
+      // Safely create a fresh div for YT API to consume
+      if (!playerDivRef.current) return;
+      playerDivRef.current.innerHTML = '';
+      const el = document.createElement('div');
+      playerDivRef.current.appendChild(el);
+
+      playerRef.current = new window.YT.Player(el, {
         videoId,
         width: '100%',
         height: '100%',
@@ -105,7 +115,7 @@ const VideoPlayer = ({ url, title }) => {
           onReady: (e) => {
             setDuration(e.target.getDuration());
             setIsReady(true);
-            // Get available qualities
+            if (readyTimeout.current) clearTimeout(readyTimeout.current);
             const quals = e.target.getAvailableQualityLevels();
             setAvailableQualities(quals || []);
           },
@@ -113,7 +123,6 @@ const VideoPlayer = ({ url, title }) => {
             setIsPlaying(e.data === window.YT.PlayerState.PLAYING);
             if (e.data === window.YT.PlayerState.PLAYING) {
               startProgressTracking();
-              // Re-check available qualities once playing
               const quals = playerRef.current?.getAvailableQualityLevels?.() || [];
               if (quals.length > 0) setAvailableQualities(quals);
             } else {
@@ -125,12 +134,18 @@ const VideoPlayer = ({ url, title }) => {
           },
         },
       });
+      
+      // Fallback: forcefully mark as ready if YT is slow or blocked
+      readyTimeout.current = setTimeout(() => {
+        setIsReady(true);
+      }, 2000);
     };
 
     onApiReady(createPlayer);
 
     return () => {
       stopProgressTracking();
+      if (readyTimeout.current) clearTimeout(readyTimeout.current);
       if (playerRef.current) {
         try { playerRef.current.destroy(); } catch (e) {}
         playerRef.current = null;

@@ -14,7 +14,7 @@
   user-select: none;
 }
 
-/* Iframe Wrapper */
+/* Iframe Wrapper — pointer-events:none blocks ALL YouTube hover/click UI */
 .vp-iframe-wrap {
   position: absolute;
   top: 0;
@@ -22,6 +22,7 @@
   width: 100%;
   height: 100%;
   z-index: 1;
+  pointer-events: none;
 }
 
 .vp-iframe-wrap iframe,
@@ -29,19 +30,44 @@
   width: 100%;
   height: 100%;
   border: 0;
+  pointer-events: none;
 }
 
-/* Click Overlay — sits ON TOP of iframe to block all YouTube links */
+/* Click Overlay — covers 100% of iframe to block ALL YouTube interactions */
 .vp-click-overlay {
   position: absolute;
   top: 0;
   left: 0;
   width: 100%;
-  height: calc(100% - 48px); /* Leave space for controls at bottom */
+  height: 100%;
   z-index: 3;
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+/* Gradient cover — hides YouTube title that briefly appears on pause */
+.vp-yt-cover-top {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to bottom, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 50%, transparent 100%);
+  z-index: 4;
+  pointer-events: none;
+}
+
+/* Gradient cover — hides YouTube logo watermark at bottom-right */
+.vp-yt-cover-bottom {
+  position: absolute;
+  bottom: 0;
+  right: 0;
+  width: 250px;
+  height: 60px;
+  background: linear-gradient(to top left, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.5) 40%, transparent 100%);
+  z-index: 4;
+  pointer-events: none;
 }
 
 /* Big center play button */
