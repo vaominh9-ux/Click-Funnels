@@ -188,19 +188,24 @@ const Course2 = () => {
               </div>
               <div className="c2-step-card c2-glass-panel">
                 <div className="step-watermark text-emerald-100">01</div>
-                <div className="step-content-relative">
-                  <h3 className="step-title text-emerald-800">AUTOMATION & SYSTEM</h3>
-                  <div className="step-badges">
-                    <span className="neo-badge bg-emerald-50 text-emerald-700 border-emerald-200"><Workflow size={14}/> Master n8n Data</span>
-                    <span className="neo-badge bg-emerald-50 text-emerald-700 border-emerald-200"><Cpu size={14}/> AI Agents Tự Suy Luận</span>
-                    <span className="neo-badge bg-emerald-50 text-emerald-700 border-emerald-200"><Zap size={14}/> Build Pipeline Tự Chốt Deal</span>
+                
+                <div className="c2-step-layout">
+                  <div className="c2-step-image">
+                    <img src="/images/course2/c2-automation.png" alt="Automation System" loading="lazy" />
                   </div>
-                  <div className="step-output border-l-4 border-emerald-500 bg-white">
-                    <strong>OUTPUT:</strong> Phễu Automation 10+ luồng sẵn sàng Deploy.
+                  <div className="step-content-relative" style={{flex: 1}}>
+                    <h3 className="step-title text-emerald-800">AUTOMATION & SYSTEM</h3>
+                    <div className="step-badges">
+                      <span className="neo-badge bg-emerald-50 text-emerald-700 border-emerald-200"><Workflow size={14}/> Master n8n Data</span>
+                      <span className="neo-badge bg-emerald-50 text-emerald-700 border-emerald-200"><Cpu size={14}/> AI Agents Tự Suy Luận</span>
+                      <span className="neo-badge bg-emerald-50 text-emerald-700 border-emerald-200"><Zap size={14}/> Build Pipeline Tự Chốt Deal</span>
+                    </div>
+                    <div className="step-output border-l-4 border-emerald-500 bg-white">
+                      <strong>OUTPUT:</strong> Phễu Automation 10+ luồng sẵn sàng Deploy.
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="c2-step-empty"></div>
             </div>
 
             {/* WEEK 2 */}
@@ -210,19 +215,24 @@ const Course2 = () => {
               </div>
               <div className="c2-step-card c2-glass-panel">
                 <div className="step-watermark text-blue-100">02</div>
-                <div className="step-content-relative">
-                  <h3 className="step-title text-blue-800">ADS & TRAFFIC B2B</h3>
-                  <div className="step-badges">
-                    <span className="neo-badge bg-blue-50 text-blue-700 border-blue-200"><Target size={14}/> FB Ads Doanh Nghiệp</span>
-                    <span className="neo-badge bg-blue-50 text-blue-700 border-blue-200"><TrendingUp size={14}/> TikTok Ads 200K Follow</span>
-                    <span className="neo-badge bg-blue-50 text-blue-700 border-blue-200"><Filter size={14}/> Content Lead Gen B2B</span>
+                
+                <div className="c2-step-layout">
+                  <div className="c2-step-image">
+                    <img src="/images/course2/c2-ads.png" alt="Ads B2B" loading="lazy" />
                   </div>
-                  <div className="step-output border-l-4 border-blue-500 bg-white">
-                    <strong>OUTPUT:</strong> 3 luồng Ads chạy máy hút khách hàng B2B.
+                  <div className="step-content-relative" style={{flex: 1}}>
+                    <h3 className="step-title text-blue-800">ADS & TRAFFIC B2B</h3>
+                    <div className="step-badges">
+                      <span className="neo-badge bg-blue-50 text-blue-700 border-blue-200"><Target size={14}/> FB Ads Doanh Nghiệp</span>
+                      <span className="neo-badge bg-blue-50 text-blue-700 border-blue-200"><TrendingUp size={14}/> TikTok Ads 200K Follow</span>
+                      <span className="neo-badge bg-blue-50 text-blue-700 border-blue-200"><Filter size={14}/> Content Lead Gen B2B</span>
+                    </div>
+                    <div className="step-output border-l-4 border-blue-500 bg-white">
+                      <strong>OUTPUT:</strong> 3 luồng Ads chạy máy hút khách hàng B2B.
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="c2-step-empty"></div>
             </div>
 
             {/* WEEK 3 */}
@@ -232,19 +242,24 @@ const Course2 = () => {
               </div>
               <div className="c2-step-card c2-glass-panel">
                 <div className="step-watermark text-indigo-100">03</div>
-                <div className="step-content-relative">
-                  <h3 className="step-title text-indigo-800">AGENCY OPERATION</h3>
-                  <div className="step-badges">
-                    <span className="neo-badge bg-indigo-50 text-indigo-700 border-indigo-200"><Layers size={14}/> Đóng Gói Dịch Vụ Khách</span>
-                    <span className="neo-badge bg-indigo-50 text-indigo-700 border-indigo-200"><Briefcase size={14}/> Onboard & Fulfillment</span>
-                    <span className="neo-badge bg-indigo-50 text-indigo-700 border-indigo-200"><FileText size={14}/> Hợp Đồng & Proposal</span>
+                
+                <div className="c2-step-layout">
+                  <div className="c2-step-image">
+                    <img src="/images/course2/c2-agency.png" alt="Agency Operations" loading="lazy" />
                   </div>
-                  <div className="step-output border-l-4 border-indigo-500 bg-white">
-                    <strong>OUTPUT:</strong> Hồ sơ chuẩn Agency mang đi deal dự án $2,000+.
+                  <div className="step-content-relative" style={{flex: 1}}>
+                    <h3 className="step-title text-indigo-800">AGENCY OPERATION</h3>
+                    <div className="step-badges">
+                      <span className="neo-badge bg-indigo-50 text-indigo-700 border-indigo-200"><Layers size={14}/> Đóng Gói Dịch Vụ Khách</span>
+                      <span className="neo-badge bg-indigo-50 text-indigo-700 border-indigo-200"><Briefcase size={14}/> Onboard & Fulfillment</span>
+                      <span className="neo-badge bg-indigo-50 text-indigo-700 border-indigo-200"><FileText size={14}/> Hợp Đồng & Proposal</span>
+                    </div>
+                    <div className="step-output border-l-4 border-indigo-500 bg-white">
+                      <strong>OUTPUT:</strong> Hồ sơ chuẩn Agency mang đi deal dự án $2,000+.
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="c2-step-empty"></div>
             </div>
 
             {/* WEEK 4 */}
@@ -255,19 +270,24 @@ const Course2 = () => {
               <div className="c2-step-card c2-glass-panel border-premium hover-glow-gold relative overflow-hidden">
                 <div className="c2-shimmer-bg absolute top-0 -left-full w-full h-full opacity-10"></div>
                 <div className="step-watermark text-amber-100 mix-blend-overlay opacity-30">04</div>
-                <div className="step-content-relative">
-                  <h3 className="step-title text-amber-600 drop-shadow-sm">SCALE & MASS MEDIA</h3>
-                  <div className="step-badges">
-                    <span className="neo-badge bg-amber-50 text-amber-800 border-amber-300 shadow-sm"><Video size={14}/> Trăm Mẫu Visual / Ngày</span>
-                    <span className="neo-badge bg-amber-50 text-amber-800 border-amber-300 shadow-sm"><Star size={14}/> A/B Testing Bằng AI</span>
-                    <span className="neo-badge bg-amber-50 text-amber-800 border-amber-300 shadow-sm"><PlayCircle size={14}/> Video Render Chuẩn Studio</span>
+                
+                <div className="c2-step-layout">
+                  <div className="c2-step-image">
+                    <img src="/images/course2/c2-media.png" alt="Scale Mass Media" loading="lazy" />
                   </div>
-                  <div className="step-output-gold bg-gradient-to-r from-amber-50 to-white border-l-4 border-amber-500 text-amber-900 shadow-inner">
-                    <strong>ĐẦU RA BÙNG NỔ:</strong> Khả năng phục vụ &gt;10 Doanh Nghiệp cùng lúc.
+                  <div className="step-content-relative" style={{flex: 1}}>
+                    <h3 className="step-title text-amber-600 drop-shadow-sm">SCALE & MASS MEDIA</h3>
+                    <div className="step-badges">
+                      <span className="neo-badge bg-amber-50 text-amber-800 border-amber-300 shadow-sm"><Video size={14}/> Trăm Mẫu Visual / Ngày</span>
+                      <span className="neo-badge bg-amber-50 text-amber-800 border-amber-300 shadow-sm"><Star size={14}/> A/B Testing Bằng AI</span>
+                      <span className="neo-badge bg-amber-50 text-amber-800 border-amber-300 shadow-sm"><PlayCircle size={14}/> Video Render Chuẩn Studio</span>
+                    </div>
+                    <div className="step-output-gold bg-gradient-to-r from-amber-50 to-white border-l-4 border-amber-500 text-amber-900 shadow-inner">
+                      <strong>ĐẦU RA BÙNG NỔ:</strong> Khả năng phục vụ &gt;10 Doanh Nghiệp cùng lúc.
+                    </div>
                   </div>
                 </div>
               </div>
-              <div className="c2-step-empty"></div>
             </div>
 
           </div>
