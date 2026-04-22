@@ -1,0 +1,238 @@
+/* ============================================
+   TRAINING COURSES — Course Listing Page
+   Prefix: tc-
+   ============================================ */
+
+/* === PAGE HEADER === */
+.tc-page-header {
+  margin-bottom: 32px;
+}
+
+.tc-page-title {
+  font-size: 28px;
+  font-weight: 800;
+  color: #0f172a;
+  letter-spacing: -0.5px;
+  margin-bottom: 4px;
+}
+
+.tc-page-subtitle {
+  font-size: 15px;
+  color: #64748b;
+  font-weight: 400;
+}
+
+/* === COURSE GRID === */
+.tc-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 24px;
+}
+
+/* === COURSE CARD === */
+.tc-card {
+  background: #ffffff;
+  border-radius: 12px;
+  overflow: hidden;
+  border: 1px solid #e2e8f0;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  position: relative;
+}
+
+.tc-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1);
+  border-color: #cbd5e1;
+}
+
+.tc-card-thumb {
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  position: relative;
+  overflow: hidden;
+  background: #1e293b;
+}
+
+.tc-card-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s ease;
+}
+
+.tc-card:hover .tc-card-thumb img {
+  transform: scale(1.05);
+}
+
+/* Lock overlay for courses not purchased */
+.tc-card-lock {
+  position: absolute;
+  inset: 0;
+  background: rgba(15, 23, 42, 0.65);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  backdrop-filter: blur(2px);
+}
+
+.tc-card-lock-icon {
+  width: 48px;
+  height: 48px;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #ffffff;
+}
+
+.tc-card-lock-text {
+  font-size: 13px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.8);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+/* Lesson count badge */
+.tc-card-badge {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 6px;
+}
+
+/* Card body */
+.tc-card-body {
+  padding: 16px 20px 20px;
+}
+
+.tc-card-name {
+  font-size: 16px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.tc-card-tier {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-bottom: 12px;
+}
+
+.tc-tier-starter { color: #10b981; }
+.tc-tier-master { color: #3b82f6; }
+.tc-tier-coach { color: #8b5cf6; }
+.tc-tier-partner { color: #f59e0b; }
+.tc-tier-free { color: #6b7280; }
+
+/* Progress bar */
+.tc-progress-container {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.tc-progress-bar {
+  flex: 1;
+  height: 6px;
+  background: #e2e8f0;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.tc-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+  border-radius: 3px;
+  transition: width 0.6s ease;
+}
+
+.tc-progress-text {
+  font-size: 12px;
+  font-weight: 700;
+  color: #64748b;
+  white-space: nowrap;
+}
+
+/* CTA for locked courses */
+.tc-card-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #3b82f6;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+}
+
+.tc-card-cta:hover {
+  background: #dbeafe;
+  border-color: #93c5fd;
+}
+
+/* === EMPTY STATE === */
+.tc-empty {
+  text-align: center;
+  padding: 80px 24px;
+}
+
+.tc-empty-icon {
+  font-size: 64px;
+  margin-bottom: 16px;
+}
+
+.tc-empty-title {
+  font-size: 20px;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px;
+}
+
+.tc-empty-desc {
+  font-size: 15px;
+  color: #64748b;
+  max-width: 400px;
+  margin: 0 auto;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 1024px) {
+  .tc-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (max-width: 640px) {
+  .tc-grid {
+    grid-template-columns: 1fr;
+    gap: 16px;
+  }
+
+  .tc-page-title {
+    font-size: 22px;
+  }
+
+  .tc-card-body {
+    padding: 14px 16px 16px;
+  }
+}

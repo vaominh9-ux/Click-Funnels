@@ -1,0 +1,193 @@
+/* ============================================
+   TRAINING LAYOUT — Full-Page Course View
+   Prefix: training-
+   ============================================ */
+
+.training-shell {
+  min-height: 100vh;
+  background: #f8fafc;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === TOP NAVIGATION BAR === */
+.training-topbar {
+  height: 64px;
+  background: var(--cf-sidebar-bg);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 32px;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  flex-shrink: 0;
+}
+
+.training-topbar-left {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+
+.training-logo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.training-logo-text {
+  font-size: 18px;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: -0.3px;
+}
+
+.training-logo-text span {
+  font-weight: 400;
+  color: #e5e7eb;
+}
+
+.training-nav {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.training-nav-item {
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: #9ca3af;
+  text-decoration: none;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.training-nav-item:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.training-nav-item.active {
+  color: #ffffff;
+  background: rgba(59, 130, 246, 0.15);
+}
+
+.training-topbar-right {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.training-back-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 7px 14px;
+  font-size: 13px;
+  font-weight: 500;
+  color: #9ca3af;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.training-back-btn:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 255, 255, 0.2);
+}
+
+.training-bell {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #9ca3af;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s ease;
+}
+
+.training-bell:hover {
+  color: #ffffff;
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.training-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  color: #ffffff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.training-avatar:hover {
+  transform: scale(1.08);
+}
+
+.training-avatar img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* === MAIN CONTENT AREA === */
+.training-content {
+  flex: 1;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 32px 24px;
+  display: flex;
+  flex-direction: column;
+}
+
+/* === RESPONSIVE === */
+@media (max-width: 768px) {
+  .training-topbar {
+    padding: 0 16px;
+    gap: 8px;
+  }
+
+  .training-topbar-left {
+    gap: 12px;
+  }
+
+  .training-nav {
+    display: none;
+  }
+
+  .training-back-btn span {
+    display: none;
+  }
+
+  .training-content {
+    padding: 20px 16px;
+  }
+
+  .training-logo-text {
+    font-size: 16px;
+  }
+}

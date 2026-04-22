@@ -310,6 +310,17 @@ button {
   background: var(--cf-border);
 }
 
+[data-theme='dark'] .cf-btn-outline {
+  background: transparent;
+  color: var(--cf-text-main);
+  border-color: var(--cf-border);
+}
+
+[data-theme='dark'] .cf-btn-outline:hover {
+  background: var(--cf-border);
+  color: var(--cf-text-main);
+}
+
 /* Utility classes */
 .flex-between {
   display: flex;

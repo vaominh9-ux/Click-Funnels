@@ -32,6 +32,7 @@ import AdminPaymentSettings from './pages/admin/PaymentSettings';
 import AdminEmailSettings from './pages/admin/EmailSettings';
 import AdminWorkshopSettings from './pages/admin/WorkshopSettings';
 import AdminWebhookSettings from './pages/admin/WebhookSettings';
+import ReplayManager from './pages/admin/ReplayManager';
 
 import ClickTracker from './pages/public/ClickTracker';
 import Checkout from './pages/public/Checkout';
@@ -42,6 +43,10 @@ import Course2 from './pages/funnels/Course2';
 import Course3 from './pages/funnels/Course3';
 import Course4 from './pages/funnels/Course4';
 import Free3Day from './pages/funnels/Free3Day';
+
+// Training Pages
+import TrainingCourses from './pages/training/TrainingCourses';
+import CourseDetail from './pages/training/CourseDetail';
 
 const ZoomController = () => {
   const location = useLocation();
@@ -79,6 +84,20 @@ const App = () => {
           <Route path="/auth/register" element={<Register />} />
 
           {/* Affiliate Portal Routes */}
+          <Route path="/portal/courses" element={
+            <ProtectedRoute>
+              <MainLayout title="Khóa Học Đào Tạo">
+                <TrainingCourses />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+
+          <Route path="/portal/courses/:courseId" element={
+            <ProtectedRoute>
+              <CourseDetail />
+            </ProtectedRoute>
+          } />
+
           <Route path="/portal" element={
             <ProtectedRoute>
               <MainLayout title="Thống Kê Thu Nhập">
@@ -225,6 +244,13 @@ const App = () => {
             <ProtectedRoute requiredRole="admin">
               <MainLayout title="Cấu Hình Webhook (n8n)">
                 <AdminWebhookSettings />
+              </MainLayout>
+            </ProtectedRoute>
+          } />
+          <Route path="/admin/replay-manager" element={
+            <ProtectedRoute requiredRole="admin">
+              <MainLayout title="Quản Lý Video Replay">
+                <ReplayManager />
               </MainLayout>
             </ProtectedRoute>
           } />

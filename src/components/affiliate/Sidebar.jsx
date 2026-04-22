@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Megaphone, Users, Wallet, Settings, Search, Bell, Plus, Hexagon, Settings2, DollarSign, UserCheck, Zap, Link as LinkIcon, LogOut, ContactRound } from 'lucide-react';
+import { LayoutDashboard, Megaphone, Users, Wallet, Settings, Search, Bell, Plus, Hexagon, Settings2, DollarSign, UserCheck, Zap, Link as LinkIcon, LogOut, ContactRound, GraduationCap } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import './Sidebar.css';
 
@@ -79,6 +79,11 @@ const Sidebar = ({ onClose, isOpen }) => {
           <NavLink to="/portal/customers" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={onClose}>
             <Users size={18} />
             <span>Khách Hàng</span>
+          </NavLink>
+
+          <NavLink to="/portal/courses" className={({ isActive }) => `nav-item ${isActive ? 'active' : ''}`} onClick={onClose}>
+            <GraduationCap size={18} />
+            <span>Khóa Học</span>
           </NavLink>
 
           <div className="sidebar-divider"></div>
@@ -194,6 +199,9 @@ const Sidebar = ({ onClose, isOpen }) => {
                 </NavLink>
                 <NavLink to="/admin/webhook-settings" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
                   <span className="nav-sub-item-text">Webhook (n8n → Zalo)</span>
+                </NavLink>
+                <NavLink to="/admin/replay-manager" className={({ isActive }) => `nav-sub-item-tree ${isActive ? 'active' : ''}`} onClick={onClose}>
+                  <span className="nav-sub-item-text">Quản Lý Video</span>
                 </NavLink>
               </div>
             )}
