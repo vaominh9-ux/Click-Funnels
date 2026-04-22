@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Users, DollarSign, UserPlus, Copy, Share2, CheckCircle, XCircle, Clock, Shield } from 'lucide-react';
+import { Users, DollarSign, UserPlus, Copy, Share2, CheckCircle, XCircle, Clock, Shield, Search } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
 import Skeleton from '../../components/common/Skeleton';
@@ -13,6 +13,11 @@ const AffiliateNetwork = () => {
   const [isAdmin, setIsAdmin] = useState(false);
   const [currentUserId, setCurrentUserId] = useState(null);
   const addToast = useToast();
+
+  // Filters state
+  const [searchQuery, setSearchQuery] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
+  const [filterTier, setFilterTier] = useState('all');
 
   useEffect(() => {
     let subscription = null;
@@ -98,6 +103,20 @@ const AffiliateNetwork = () => {
       loadNetwork(currentUserId, isAdmin);
     } else {
       addToast('Lỗi cập nhật trạng thái', 'error');
+    }
+  };
+
+  const handleUpdateTier = async (id, newTier) => {
+    const { error } = await supabase
+      .from('profiles')
+      .update({ tier: newTier })
+      .eq('id', id);
+
+    if (!error) {
+      addToast(`Đã đổi hạng thành ${newTier.toUpperCase()}`, 'success');
+      loadNetwork(currentUserId, isAdmin);
+    } else {
+      addToast('Lỗi cập nhật thứ hạng', 'error');
     }
   };
 
@@ -206,6 +225,41 @@ const AffiliateNetwork = () => {
         </div>
       </div>
 
+      <div className="cf-card mb-6" style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', alignItems: 'center', padding: '16px' }}>
+        <div style={{ flex: '1 1 250px', position: 'relative' }}>
+          <Search size={18} style={{ position: 'absolute', left: 12, top: '50%', transform: 'translateY(-50%)', color: '#9CA3AF' }} />
+          <input 
+            type="text" 
+            placeholder="Tìm theo tên hoặc email..." 
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            style={{ width: '100%', padding: '10px 12px 10px 38px', border: '1px solid var(--cf-border)', borderRadius: '8px', outline: 'none', fontSize: 14, background: 'var(--cf-bg-canvas)', color: 'var(--cf-text-main)' }}
+          />
+        </div>
+        <select 
+          value={filterStatus} 
+          onChange={(e) => setFilterStatus(e.target.value)}
+          style={{ padding: '10px 16px', border: '1px solid var(--cf-border)', borderRadius: '8px', outline: 'none', fontSize: 14, minWidth: 160, background: 'var(--cf-bg-canvas)', color: 'var(--cf-text-main)' }}
+        >
+          <option value="all">Tất cả trạng thái</option>
+          <option value="pending">⏳ Chờ duyệt</option>
+          <option value="active">✅ Hoạt động</option>
+          <option value="rejected">🔒 Bị khóa</option>
+        </select>
+        <select 
+          value={filterTier} 
+          onChange={(e) => setFilterTier(e.target.value)}
+          style={{ padding: '10px 16px', border: '1px solid var(--cf-border)', borderRadius: '8px', outline: 'none', fontSize: 14, minWidth: 150, background: 'var(--cf-bg-canvas)', color: 'var(--cf-text-main)' }}
+        >
+          <option value="all">Tất cả Hạng</option>
+          <option value="free">FREE</option>
+          <option value="starter">STARTER</option>
+          <option value="master">MASTER</option>
+          <option value="coach">AI COACH</option>
+          <option value="partner">AI PARTNER</option>
+        </select>
+      </div>
+
       <div className="cf-card" style={{padding: 0}}>
         <div style={{padding: '16px 24px', borderBottom: '1px solid var(--cf-border)'}}>
           <h3 className="font-bold">{isAdmin ? 'Tất Cả Cộng Tác Viên' : 'Danh Sách Đối Tác F1'}</h3>
@@ -234,55 +288,87 @@ const AffiliateNetwork = () => {
                     {isAdmin && <td><Skeleton width="80px" height="30px" /></td>}
                   </tr>
                 ))
-              ) : downlines.length === 0 ? (
-                <tr>
-                  <td colSpan={isAdmin ? 6 : 5} style={{textAlign: 'center', padding: '48px 20px', color: '#6B7280'}}>
-                    <UserPlus size={36} strokeWidth={1.5} style={{marginBottom: 12, opacity: 0.4}} /><br />
-                    {isAdmin ? 'Chưa có CTV nào đăng ký trên hệ thống.' : 'Chưa có đối tác nào. Chia sẻ link giới thiệu phía trên để xây dựng đội nhóm!'}
-                  </td>
-                </tr>
-              ) : downlines.map((user) => (
-                <tr key={user.id}>
-                  <td>
-                    <div className="font-bold">{user.full_name || 'Chưa cập nhật'}</div>
-                    <div className="text-sm text-muted">{user.email}</div>
-                  </td>
-                  <td>
-                    <span className="badge" style={{backgroundColor: 'rgba(59,130,246,0.1)', color: '#3B82F6'}}>
-                      {(user.tier || 'starter').toUpperCase()}
-                    </span>
-                  </td>
-                  <td>{formatDate(user.created_at)}</td>
-                  <td>{getStatusBadge(user.approval_status)}</td>
-                  <td style={{textAlign: 'right'}} className="font-bold">{formatCurrency(user.total_earned)}</td>
-                  {isAdmin && (
-                    <td style={{textAlign: 'center'}}>
-                      {user.approval_status === 'pending' ? (
-                        <button 
-                          onClick={() => handleApproval(user.id, 'active')}
-                          style={{background: '#059669', color: 'white', border: 'none', padding: '6px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4}}
-                        >
-                          <CheckCircle size={14}/> Duyệt
-                        </button>
-                      ) : user.approval_status === 'active' ? (
-                        <button 
-                          onClick={() => handleApproval(user.id, 'rejected')}
-                          style={{background: '#FEE2E2', color: '#991B1B', border: 'none', padding: '6px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4}}
-                        >
-                          <XCircle size={14}/> Khóa
-                        </button>
-                      ) : (
-                        <button 
-                          onClick={() => handleApproval(user.id, 'active')}
-                          style={{background: '#E0E7FF', color: '#4338CA', border: 'none', padding: '6px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4}}
-                        >
-                          <CheckCircle size={14}/> Mở khóa
-                        </button>
+              ) : (() => {
+                  const filteredDownlines = downlines.filter(user => {
+                    const matchSearch = (user.full_name || '').toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                        (user.email || '').toLowerCase().includes(searchQuery.toLowerCase());
+                    const matchStatus = filterStatus === 'all' || user.approval_status === filterStatus;
+                    const userTier = user.tier || 'starter';
+                    const matchTier = filterTier === 'all' || userTier === filterTier;
+                    
+                    return matchSearch && matchStatus && matchTier;
+                  });
+
+                  if (filteredDownlines.length === 0) {
+                    return (
+                      <tr>
+                        <td colSpan={isAdmin ? 6 : 5} style={{textAlign: 'center', padding: '48px 20px', color: '#6B7280'}}>
+                          <UserPlus size={36} strokeWidth={1.5} style={{marginBottom: 12, opacity: 0.4}} /><br />
+                          {downlines.length === 0 
+                            ? (isAdmin ? 'Chưa có CTV nào đăng ký trên hệ thống.' : 'Chưa có đối tác nào. Chia sẻ link giới thiệu phía trên để xây dựng đội nhóm!')
+                            : 'Không tìm thấy kết quả phù hợp với bộ lọc.'}
+                        </td>
+                      </tr>
+                    );
+                  }
+
+                  return filteredDownlines.map((user) => (
+                    <tr key={user.id}>
+                      <td>
+                        <div className="font-bold">{user.full_name || 'Chưa cập nhật'}</div>
+                        <div className="text-sm text-muted">{user.email}</div>
+                      </td>
+                      <td>
+                        {isAdmin ? (
+                          <select 
+                            value={user.tier || 'starter'}
+                            onChange={(e) => handleUpdateTier(user.id, e.target.value)}
+                            style={{ padding: '4px 8px', borderRadius: '6px', border: '1px solid #D1D5DB', fontSize: '12px', fontWeight: 'bold', outline: 'none', background: '#F9FAFB', cursor: 'pointer', color: '#111827' }}
+                          >
+                            <option value="free">FREE</option>
+                            <option value="starter">STARTER</option>
+                            <option value="master">MASTER</option>
+                            <option value="coach">AI COACH</option>
+                            <option value="partner">AI PARTNER</option>
+                          </select>
+                        ) : (
+                          <span className="badge" style={{backgroundColor: 'rgba(59,130,246,0.1)', color: '#3B82F6'}}>
+                            {(user.tier || 'starter').toUpperCase()}
+                          </span>
+                        )}
+                      </td>
+                      <td>{formatDate(user.created_at)}</td>
+                      <td>{getStatusBadge(user.approval_status)}</td>
+                      <td style={{textAlign: 'right'}} className="font-bold">{formatCurrency(user.total_earned)}</td>
+                      {isAdmin && (
+                        <td style={{textAlign: 'center'}}>
+                          {user.approval_status === 'pending' ? (
+                            <button 
+                              onClick={() => handleApproval(user.id, 'active')}
+                              style={{background: '#059669', color: 'white', border: 'none', padding: '6px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4}}
+                            >
+                              <CheckCircle size={14}/> Duyệt
+                            </button>
+                          ) : user.approval_status === 'active' ? (
+                            <button 
+                              onClick={() => handleApproval(user.id, 'rejected')}
+                              style={{background: '#FEE2E2', color: '#991B1B', border: 'none', padding: '6px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4}}
+                            >
+                              <XCircle size={14}/> Khóa
+                            </button>
+                          ) : (
+                            <button 
+                              onClick={() => handleApproval(user.id, 'active')}
+                              style={{background: '#E0E7FF', color: '#4338CA', border: 'none', padding: '6px 14px', borderRadius: 6, cursor: 'pointer', fontSize: 12, fontWeight: 600, display: 'inline-flex', alignItems: 'center', gap: 4}}
+                            >
+                              <CheckCircle size={14}/> Mở khóa
+                            </button>
+                          )}
+                        </td>
                       )}
-                    </td>
-                  )}
-                </tr>
-              ))}
+                    </tr>
+                  ));
+              })()}
             </tbody>
           </table>
         </div>

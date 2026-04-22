@@ -27,7 +27,7 @@ export const ALL_COURSES = [
     name: 'Automation, Ads & Xây Hệ Thống Agency AI',
     tier: 'MASTER',
     tierClass: 'tc-tier-master',
-    thumbnail: 'https://images.unsplash.com/photo-1556761175-5973dc0f32d7?auto=format&fit=crop&w=800&q=80',
+    thumbnail: 'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=800&q=80',
     landingPage: '/khoa-hoc/khoa-hoc-2',
   },
   {
@@ -79,7 +79,7 @@ const TrainingCourses = () => {
       // Check user role — admins can see all courses
       const { data: profile } = await supabase
         .from('profiles')
-        .select('role')
+        .select('role, tier')
         .eq('id', session.user.id)
         .single();
 
@@ -90,17 +90,33 @@ const TrainingCourses = () => {
         return;
       }
 
-      // For regular users, check their conversions (approved purchases)
+      // 1. Phân quyền truy cập mặc định
+      const courseIds = new Set(['free-3day']);
+
+      // 2. Mở khóa theo hạng (Tier) hiện tại của user trong database profiles
+      if (profile?.tier) {
+        const t = profile.tier.toLowerCase().trim();
+        if (t === 'starter' || t === 'master' || t.includes('coach') || t.includes('partner')) {
+          courseIds.add('khoa-hoc-1');
+        }
+        if (t === 'master' || t.includes('coach') || t.includes('partner')) {
+          courseIds.add('khoa-hoc-2');
+        }
+        if (t.includes('coach') || t.includes('partner')) {
+          courseIds.add('khoa-hoc-3');
+        }
+        if (t.includes('partner')) {
+          courseIds.add('khoa-hoc-4');
+        }
+      }
+
+      // 3. Check historical conversions as fallback
       const { data: conversions } = await supabase
         .from('conversions')
         .select('customer_info')
         .eq('status', 'approved');
 
       if (conversions) {
-        // Extract unique course IDs from customer_info
-        const courseIds = new Set();
-        
-        // Also check if the user's email matches any conversion
         conversions.forEach(conv => {
           if (conv.customer_info) {
             const info = conv.customer_info;
@@ -109,14 +125,9 @@ const TrainingCourses = () => {
             }
           }
         });
-
-        // Free course is always accessible
-        courseIds.add('free-3day');
-        
-        setPurchasedCourses([...courseIds]);
-      } else {
-        setPurchasedCourses(['free-3day']); // At least free course
       }
+      
+      setPurchasedCourses([...courseIds]);
     } catch (err) {
       console.error('Error fetching purchased courses:', err);
       setPurchasedCourses(['free-3day']);
