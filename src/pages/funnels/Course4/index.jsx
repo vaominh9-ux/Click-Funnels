@@ -185,47 +185,76 @@ export default function Course4() {
           </div>
         </section>
 
-        {/* 5. LOGIC / ROADMAP */}
+        {/* 5. LOGIC / ROADMAP (Nexus Center Timeline) */}
         <section className="c4-section-gap">
           <h2 className="c4-heading" style={{ fontSize: '3rem', textAlign: 'center', marginBottom: '16px' }}>Bản Đồ Kẻ Thoát Khổ</h2>
-          <p className="c4-p" style={{ textAlign: 'center', marginBottom: '50px' }}>Lộ trình 30 Ngày "Bắt Tay Kèm Cặp" Lột Xét Doanh Nghiệp Của Bạn</p>
+          <p className="c4-p" style={{ textAlign: 'center', marginBottom: '80px' }}>Lộ trình 30 Ngày "Bắt Tay Kèm Cặp" Lột Xác Doanh Nghiệp Của Bạn</p>
 
-          <div className="c4-roadmap-bento">
-            {/* Thẻ Lộ Trình Bên Trái */}
-            <div className="c4-roadmap-card" data-aos="fade-right">
-              <div className="c4-card-glow"></div>
-              <div className="c4-roadmap-header">
-                <span className="c4-phase-badge">PHASE 1</span>
-                <h4>Giai Đoạn 1: Móng Dày</h4>
-              </div>
-              <div className="c4-timeline">
-                <div className="c4-timeline-item"> <span className="c4-time-badge">Ngày 1</span> <p>Truy Hồi Tư Duy Của Các Đa Triệu Phú Internet</p> </div>
-                <div className="c4-timeline-item"> <span className="c4-time-badge">Ngày 2</span> <p>Xác Lập Mục Tiêu & Cài Đặt Khung Hoạt Động</p> </div>
-                <div className="c4-timeline-item"> <span className="c4-time-badge">Ngày 3</span> <p>Phá Bỏ Rào Cản Tâm Lý Giam Giữ Bạn</p> </div>
-                <div className="c4-timeline-item"> <span className="c4-time-badge">Ngày 4</span> <p>Thiết Kế Mô Hình Kinh Doanh Tái Cấu Trúc 4.0</p> </div>
-                <div className="c4-timeline-item"> <span className="c4-time-badge">Ngày 5</span> <p>Đào Sâu Vùng Thị Trường Siêu Mang Tiền</p> </div>
-                <div className="c4-timeline-item"> <span className="c4-time-badge">Ngày 6</span> <p>Đóng Gói Nhân Hiệu Cấp Độ Nhất Quán</p> </div>
-                <div className="c4-timeline-item"> <span className="c4-time-badge">Ngày 7</span> <p>Chiến Lược Sản Phẩm Dịch Vụ Vô Hình</p> </div>
-              </div>
+          <div className="c4-nexus-roadmap">
+            <div className="c4-nexus-line">
+              <div className="c4-nexus-glow"></div>
             </div>
 
-            {/* Thẻ Lộ Trình Bên Phải */}
-            <div className="c4-roadmap-card" data-aos="fade-left" data-aos-delay="100">
-              <div className="c4-card-glow" style={{ background: 'radial-gradient(circle, rgba(16, 185, 129, 0.25) 0%, transparent 70%)' }}></div>
-              <div className="c4-roadmap-header">
-                <span className="c4-phase-badge" style={{ color: '#10B981', borderColor: 'rgba(16, 185, 129, 0.4)', background: 'rgba(16, 185, 129, 0.1)' }}>PHASE 2</span>
-                <h4>Giai Đoạn 2: Vũ Khí Cuối</h4>
+            {/* PHASE 1 SEPARATOR */}
+            <div className="c4-phase-divider" data-aos="fade-up">
+              <span className="c4-phase-pill">PHASE 1</span>
+              <h3>Giai Đoạn 1: Móng Dày</h3>
+            </div>
+
+            {/* Phase 1 Items */}
+            {[
+              { day: 'Ngày 1', title: 'Truy Hồi Tư Duy Của Các Đa Triệu Phú Internet' },
+              { day: 'Ngày 2', title: 'Xác Lập Mục Tiêu & Cài Đặt Khung Hoạt Động' },
+              { day: 'Ngày 3', title: 'Phá Bỏ Rào Cản Tâm Lý Giam Giữ Bạn' },
+              { day: 'Ngày 4', title: 'Thiết Kế Mô Hình Kinh Doanh Tái Cấu Trúc 4.0' },
+              { day: 'Ngày 5', title: 'Đào Sâu Vùng Thị Trường Siêu Mang Tiền' },
+              { day: 'Ngày 6', title: 'Đóng Gói Nhân Hiệu Cấp Độ Nhất Quán' },
+              { day: 'Ngày 7', title: 'Chiến Lược Sản Phẩm Dịch Vụ Vô Hình' }
+            ].map((item, i) => (
+              <div key={item.day} className={`c4-nexus-row ${i % 2 === 0 ? 'left-aligned' : 'right-aligned'}`}>
+                <div className="c4-nexus-node"></div>
+                <div className="c4-nexus-card" data-aos={i % 2 === 0 ? 'fade-right' : 'fade-left'}>
+                  <div className="c4-nexus-badge">{item.day}</div>
+                  <h4>{item.title}</h4>
+                </div>
               </div>
-              <div className="c4-timeline">
-                <div className="c4-timeline-item"> <span className="c4-time-badge" style={{ borderColor: 'rgba(16,185,129,0.5)', color: '#10B981' }}>Tuần 2</span> <p>Nghệ Thuật Bơm Nội Dung Tự Động Bằng AI</p> </div>
-                <div className="c4-timeline-item"> <span className="c4-time-badge" style={{ borderColor: 'rgba(16,185,129,0.5)', color: '#10B981' }}>Tuần 3</span> <p>Hệ Thống Phễu Lưu Lượng Dẫn Dắt & Gom Cá</p> </div>
-                <div className="c4-timeline-item"> <span className="c4-time-badge" style={{ borderColor: 'rgba(16,185,129,0.5)', color: '#10B981' }}>Tuần 4</span> <p>Tối Ưu Điểm Chạm & Chuyển Đổi Không Lối Thoát</p> </div>
-                <div className="c4-timeline-item highlight-item" style={{ marginTop: '20px', padding: '15px', background: 'rgba(212, 175, 55, 0.05)', border: '1px dashed rgba(212, 175, 55, 0.4)', borderRadius: '12px' }}> 
-                  <span style={{ fontSize: '1.2rem', marginRight: '10px' }}>🎁</span> 
-                  <p style={{ color: 'var(--c4-gold-primary)', fontWeight: 600, display: 'inline-block', margin: 0 }}>Tặng Kèm: Giấy phép AI Tool ADITI + ALADI (Gói Cao Nhất - 1 Năm)</p> 
+            ))}
+
+            {/* PHASE 2 SEPARATOR */}
+            <div className="c4-phase-divider c4-phase-green" data-aos="fade-up" style={{ marginTop: '80px' }}>
+              <span className="c4-phase-pill">PHASE 2</span>
+              <h3>Giai Đoạn 2: Vũ Khí Cuối</h3>
+            </div>
+
+            {/* Phase 2 Items */}
+            {[
+              { day: 'Tuần 2', title: 'Nghệ Thuật Bơm Nội Dung Tự Động Bằng AI' },
+              { day: 'Tuần 3', title: 'Hệ Thống Phễu Lưu Lượng Dẫn Dắt & Gom Cá' },
+              { day: 'Tuần 4', title: 'Tối Ưu Điểm Chạm & Chuyển Đổi Không Lối Thoát' }
+            ].map((item, i) => (
+              <div key={item.day} className={`c4-nexus-row c4-nexus-green ${i % 2 !== 0 ? 'left-aligned' : 'right-aligned'}`}>
+                <div className="c4-nexus-node"></div>
+                <div className="c4-nexus-card" data-aos={i % 2 !== 0 ? 'fade-right' : 'fade-left'}>
+                  <div className="c4-nexus-badge">{item.day}</div>
+                  <h4>{item.title}</h4>
+                </div>
+              </div>
+            ))}
+
+            {/* BONUS VIP TICKET */}
+            <div className="c4-nexus-row center-aligned" style={{ marginTop: '80px' }}>
+              <div className="c4-nexus-node node-gold"></div>
+              <div className="c4-vip-ticket" data-aos="zoom-in">
+                <div className="vip-ticket-cutout left"></div>
+                <div className="vip-ticket-cutout right"></div>
+                <div className="vip-content">
+                  <span style={{ fontSize: '2.5rem', display: 'block', marginBottom: '15px' }}>🎁</span>
+                  <h4>Tặng Kèm: Giấy phép AI Tool ADITI + ALADI</h4>
+                  <p>(Gói Cao Nhất - Dành Riêng 1 Năm)</p>
                 </div>
               </div>
             </div>
+
           </div>
         </section>
 
