@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Menu, Moon, Sun, Search, Bell } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import GlobalSearchModal from './GlobalSearchModal';
 import NotificationDropdown from './NotificationDropdown';
 
 const TopNav = ({ title = "Dashboard", onToggleSidebar }) => {
+  const location = useLocation();
   const [isDark, setIsDark] = useState(false);
   const [profile, setProfile] = useState(null);
   const [avatarUrl, setAvatarUrl] = useState(null);
@@ -64,14 +66,16 @@ const TopNav = ({ title = "Dashboard", onToggleSidebar }) => {
         
         <div className="topbar-actions" style={{display: 'flex', gap: '8px', alignItems: 'center'}}>
           {/* Nút Lấy Link Affiliate - CTA Chuyển đổi */}
-          <button 
-            className="cf-btn-primary"
-            style={{ padding: '6px 10px', fontSize: '13px', borderRadius: '6px', display: 'flex', gap: '4px', alignItems: 'center', marginRight: '4px' }}
-            onClick={() => window.location.href = '/portal/campaigns'}
-          >
-            <span style={{ fontSize: '14px' }}>🚀</span>
-            <span className="hide-on-mobile">Lấy Link Affiliate</span>
-          </button>
+          {location.pathname.includes('/courses') && (
+            <button 
+              className="cf-btn-primary"
+              style={{ padding: '6px 10px', fontSize: '13px', borderRadius: '6px', display: 'flex', gap: '4px', alignItems: 'center', marginRight: '4px' }}
+              onClick={() => window.location.href = '/portal/campaigns'}
+            >
+              <span style={{ fontSize: '14px' }}>🚀</span>
+              <span className="hide-on-mobile">Lấy Link Affiliate</span>
+            </button>
+          )}
 
           {/* Nút Tìm Kiếm Toàn Cục */}
           <button 

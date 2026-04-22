@@ -125,9 +125,39 @@ const AffiliateNetwork = () => {
   };
 
   return (
-    <div className="dashboard-wrapper">
-      <div className="flex-between mb-6">
-        <div>
+    <>
+      <style>{`
+        .network-stats-grid {
+          display: grid;
+          gap: 20px;
+          margin-bottom: 24px;
+        }
+        .network-stats-grid.admin-mode {
+          grid-template-columns: 1fr 1fr 1fr;
+        }
+        .network-stats-grid.user-mode {
+          grid-template-columns: 1fr 1fr;
+        }
+        @media (max-width: 768px) {
+          .network-stats-grid.admin-mode,
+          .network-stats-grid.user-mode {
+            grid-template-columns: 1fr;
+            gap: 16px;
+          }
+          .table-responsive {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 0 -24px;
+            padding: 0 24px;
+          }
+          .cf-table {
+            min-width: 600px;
+          }
+        }
+      `}</style>
+      <div className="dashboard-wrapper">
+        <div className="flex-between mb-6">
+          <div>
           <h2>{isAdmin ? 'Quản Lý Thành Viên CTV' : 'Mạng Lưới Đối Tác'}</h2>
           <p className="text-muted mt-2">
             {isAdmin 
@@ -150,7 +180,7 @@ const AffiliateNetwork = () => {
         </div>
       )}
 
-      <div style={{display: 'grid', gridTemplateColumns: isAdmin ? '1fr 1fr 1fr' : '1fr 1fr', gap: '20px', marginBottom: '24px'}}>
+      <div className={`network-stats-grid ${isAdmin ? 'admin-mode' : 'user-mode'}`}>
         <div className="cf-card" style={{borderTop: '4px solid #3B82F6'}}>
           <h3 className="text-muted text-sm font-bold uppercase mb-2" style={{display:'flex',alignItems:'center',gap:'8px'}}>
             <Users size={16}/> {isAdmin ? 'Tổng CTV' : 'Đối Tác Trực Tiếp (F1)'}
@@ -257,7 +287,8 @@ const AffiliateNetwork = () => {
           </table>
         </div>
       </div>
-    </div>
+      </div>
+    </>
   );
 };
 
