@@ -255,11 +255,11 @@
   .links-header {
     margin-bottom: 20px;
   }
-  
+
   .links-header h1 {
     font-size: 20px;
   }
-  
+
   .links-header p {
     font-size: 13px;
   }
@@ -287,7 +287,7 @@
     font-size: 11px;
   }
 
-  .form-group input, 
+  .form-group input,
   .select-wrapper select {
     padding: 10px 12px;
     font-size: 14px;
@@ -333,11 +333,12 @@
     justify-content: center;
   }
 
-  .stats-table th, 
+  .stats-table th,
   .stats-table td {
     padding: 12px 10px;
     font-size: 13px;
-    white-space: nowrap; /* Bắt buộc để không bị dồn ép cột */
+    white-space: nowrap;
+    /* Bắt buộc để không bị dồn ép cột */
   }
 
   .stats-table th {

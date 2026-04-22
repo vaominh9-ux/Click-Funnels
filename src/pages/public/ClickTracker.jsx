@@ -67,7 +67,7 @@ export default function ClickTracker() {
         setMessage('Đang chuyển đến trang đích...');
 
         const url = new URL(landingUrl);
-        
+
         // Tự động override nếu DB lỡ lưu URL gốc là localhost
         if (url.hostname === 'localhost') {
           url.hostname = 'ai.duhava.com';
@@ -78,7 +78,7 @@ export default function ClickTracker() {
         url.searchParams.set('ref', refCode);
         if (campaignId) url.searchParams.set('camp', campaignId);
         if (data.link_id) url.searchParams.set('link', data.link_id);
-        
+
         // Giữ lại UTM params
         const utmSource = searchParams.get('utm_source');
         if (utmSource) url.searchParams.set('utm_source', utmSource);
@@ -125,7 +125,7 @@ export default function ClickTracker() {
               animation: 'spin 1s linear infinite',
               margin: '0 auto 24px'
             }} />
-            <p style={{color: '#CBD5E1', fontSize: '16px', margin: 0}}>{message}</p>
+            <p style={{ color: '#CBD5E1', fontSize: '16px', margin: 0 }}>{message}</p>
           </>
         ) : status === 'success' ? (
           <>
@@ -139,8 +139,8 @@ export default function ClickTracker() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
               </svg>
             </div>
-            <p style={{color: '#34D399', fontSize: '16px', fontWeight: 600, margin: '0 0 8px'}}>{message}</p>
-            <p style={{color: '#9CA3AF', fontSize: '13px', margin: 0}}>Lượt click đã được ghi nhận vào hệ thống.</p>
+            <p style={{ color: '#34D399', fontSize: '16px', fontWeight: 600, margin: '0 0 8px' }}>{message}</p>
+            <p style={{ color: '#9CA3AF', fontSize: '13px', margin: 0 }}>Lượt click đã được ghi nhận vào hệ thống.</p>
           </>
         ) : (
           <>
@@ -154,8 +154,8 @@ export default function ClickTracker() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
               </svg>
             </div>
-            <p style={{color: '#F87171', fontSize: '16px', margin: '0 0 16px'}}>{message}</p>
-            <a href="/" style={{color: '#6366F1', textDecoration: 'none', fontSize: '14px'}}>
+            <p style={{ color: '#F87171', fontSize: '16px', margin: '0 0 16px' }}>{message}</p>
+            <a href="/" style={{ color: '#6366F1', textDecoration: 'none', fontSize: '14px' }}>
               ← Quay về trang chủ
             </a>
           </>
