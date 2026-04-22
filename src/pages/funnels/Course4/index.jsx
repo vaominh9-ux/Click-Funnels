@@ -2,12 +2,16 @@ import React, { useState, useEffect } from 'react';
 import { Shield, CheckCircle, ChevronRight, Lock, Award, Star, Send, HelpCircle, AlertTriangle } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import LeadModal from '../components/LeadModal';
+import { useFunnelTracking } from '../utils';
 import { FUNNEL_COURSES } from '../config';
 import './Course4.css';
 
 export default function Course4() {
   const navigate = useNavigate();
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Lưu ref/campaign/link từ URL vào localStorage để tracking Lead
+  useFunnelTracking();
 
   useEffect(() => {
     window.scrollTo(0, 0);

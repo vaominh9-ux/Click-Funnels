@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import FreeLeadModal from './FreeLeadModal';
+import { useFunnelTracking } from '../utils';
 import { Calendar, MonitorPlay, UserCheck, ArrowRight, CheckCircle2 } from 'lucide-react';
 import './style.css';
 
@@ -10,6 +11,9 @@ const COURSE_INFO = {
 
 const Free3DayLanding = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  // Lưu ref/campaign/link từ URL vào localStorage để tracking Lead
+  useFunnelTracking();
 
   // Cuộn mượt
   const scrollToTop = () => {

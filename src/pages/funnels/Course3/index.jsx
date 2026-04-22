@@ -1,9 +1,13 @@
 import React, { useState } from 'react';
 import LeadModal from '../components/LeadModal';
+import { useFunnelTracking } from '../utils';
 import './c3-premium.css';
 
 const AICoachPage = () => {
   const [showModal, setShowModal] = useState(false);
+
+  // Lưu ref/campaign/link từ URL vào localStorage để tracking Lead
+  useFunnelTracking();
 
   const openModal = () => setShowModal(true);
 
