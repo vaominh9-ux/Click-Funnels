@@ -3,7 +3,7 @@ import { useParams, useSearchParams, useNavigate } from 'react-router-dom';
 import { FUNNEL_COURSES, BANK_CONFIG } from '../funnels/config';
 import { supabase } from '../../lib/supabase';
 import { useToast } from '../../components/common/Toast';
-import { CheckCircle, Clock, AlertCircle, Loader2, Copy, ShieldCheck } from 'lucide-react';
+import { CheckCircle, Clock, AlertCircle, Loader2, Copy, ShieldCheck, Download } from 'lucide-react';
 import './Checkout.css';
 
 // Sinh mã thanh toán duy nhất: CF + 6 ký tự ngẫu nhiên
@@ -224,7 +224,31 @@ const Checkout = () => {
 
   const handleCopyCode = () => {
     navigator.clipboard.writeText(paymentCode);
-    addToast('Đã sao chép mã thanh toán!', 'success');
+    addToast('Đã sao chép nội dung chuyển khoản!', 'success');
+  };
+
+  const handleCopyField = (text, fieldName) => {
+    navigator.clipboard.writeText(text);
+    addToast(`Đã sao chép ${fieldName}!`, 'success');
+  };
+
+  const handleDownloadQR = async () => {
+    try {
+      const response = await fetch(qrImage);
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = `QR_ThanhToan_${paymentCode}.png`;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+      addToast('Đã tải ảnh QR về máy!', 'success');
+    } catch (err) {
+      window.open(qrImage, '_blank');
+      addToast('Vui lòng lưu ảnh từ trang mới mở.', 'info');
+    }
   };
 
   // Tự động kéo đơn hàng ngầm (Auto-order)
@@ -286,7 +310,12 @@ const Checkout = () => {
         <div className="checkout-left">
           <h2>Tóm tắt đơn hàng</h2>
           
-          <img src={course.checkoutImage} alt="Course" className="course-image" />
+          <img 
+            src={course.checkoutImage} 
+            alt="Course" 
+            className="course-image" 
+            onError={(e) => { e.target.src = '/images/course2/c2-hero.png'; }}
+          />
           
           <div className="order-details">
             <h3 className="course-name">{course.name}</h3>
@@ -310,26 +339,51 @@ const Checkout = () => {
           <h2>Thanh toán qua mã QR</h2>
           <p className="qr-guide">Mở App ngân hàng bất kỳ để quét mã VietQR bên dưới</p>
 
-          <div className="qr-container">
+          <div className="qr-container" style={{marginBottom: '10px'}}>
             <img src={qrImage} alt="VietQR" className="qr-code-img" />
           </div>
+
+          <button 
+            onClick={handleDownloadQR} 
+            style={{display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px', margin: '0 auto 20px', padding: '10px 20px', background: '#ecfdf5', color: '#059669', border: '1px solid #10b981', borderRadius: '8px', fontWeight: '600', cursor: 'pointer', transition: 'all 0.2s', width: '100%'}}
+          >
+            <Download size={18} />
+            Tải ảnh QR về máy
+          </button>
 
           <div className="bank-details">
             <div className="bank-info-row">
               <span>Ngân hàng:</span>
-              <strong>{bankConfig.bankName || 'BIDV'}</strong>
+              <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                <strong>{bankConfig.bankName || 'BIDV'}</strong>
+              </div>
             </div>
             <div className="bank-info-row">
               <span>Chủ tài khoản:</span>
-              <strong>{bankConfig.accountName}</strong>
+              <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                <strong>{bankConfig.accountName}</strong>
+                <button onClick={() => handleCopyField(bankConfig.accountName, 'Chủ tài khoản')} style={{background: 'none', border: 'none', cursor: 'pointer', color: '#6B7280', padding: '4px'}} title="Copy Chủ tài khoản">
+                  <Copy size={16} />
+                </button>
+              </div>
             </div>
             <div className="bank-info-row">
               <span>Số tài khoản:</span>
-              <strong>{bankConfig.accountNo}</strong>
+              <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                <strong>{bankConfig.accountNo}</strong>
+                <button onClick={() => handleCopyField(bankConfig.accountNo, 'Số tài khoản')} style={{background: 'none', border: 'none', cursor: 'pointer', color: '#059669', padding: '4px', background: '#ecfdf5', borderRadius: '4px'}} title="Copy Số tài khoản">
+                  <Copy size={16} />
+                </button>
+              </div>
             </div>
             <div className="bank-info-row">
               <span>Số tiền:</span>
-              <strong className="text-blue">{amount.toLocaleString('vi-VN')} đ</strong>
+              <div style={{display: 'flex', alignItems: 'center', gap: '8px'}}>
+                <strong className="text-blue">{amount.toLocaleString('vi-VN')} đ</strong>
+                <button onClick={() => handleCopyField(amount.toString(), 'Số tiền')} style={{background: 'none', border: 'none', cursor: 'pointer', color: '#3B82F6', padding: '4px', background: '#eff6ff', borderRadius: '4px'}} title="Copy Số tiền">
+                  <Copy size={16} />
+                </button>
+              </div>
             </div>
             <div className="bank-info-row" style={{background: 'rgba(245,158,11,0.1)', padding: '8px 12px', borderRadius: '8px', border: '1px dashed #F59E0B'}}>
               <span>Nội dung CK:</span>

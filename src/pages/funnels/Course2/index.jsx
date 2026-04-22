@@ -6,7 +6,8 @@ import { FUNNEL_COURSES } from '../config';
 import {
   CheckCircle2, XCircle, ArrowRight, ArrowDown,
   ShieldCheck, MonitorPlay, Calendar, Zap, Star,
-  Briefcase, BarChart, Settings, Crown
+  Briefcase, BarChart, Settings, Crown,
+  Workflow, Cpu, Target, TrendingUp, Filter, Layers, FileText, Video, PlayCircle
 } from 'lucide-react';
 
 const COURSE_INFO = FUNNEL_COURSES['khoa-hoc-2'];
@@ -173,65 +174,100 @@ const Course2 = () => {
         </section>
 
         {/* ─── PHẦN 4: LỘ TRÌNH 4 TUẦN (THE VEHICLE) ─── */}
-        <section className="c2-timeline-section mt-32">
-          <h2 className="c2-section-title text-center mb-14">LỘ TRÌNH 4 TUẦN CHIẾN LƯỢC</h2>
-          <div className="c2-timeline-wrapper">
+        <section className="c2-timeline-section mt-32 relative">
+          <h2 className="c2-section-title text-center mb-20">LỘ TRÌNH 4 TUẦN CHIẾN LƯỢC</h2>
+          
+          <div className="c2-stepper-container">
+            {/* The vertical line running through the center */}
+            <div className="c2-stepper-line"></div>
 
-            <div className="c2-module-card c2-glass-panel">
-              <div className="module-week elite-tag text-emerald-800 bg-emerald-100">
-                <span>TUẦN 1: AUTOMATION</span>
+            {/* WEEK 1 */}
+            <div className="c2-step-row">
+              <div className="c2-step-number-container">
+                <div className="c2-step-circle">1</div>
               </div>
-              <div className="module-content">
-                <ul className="module-list">
-                  <li><CheckCircle2 size={18} className="text-emerald-600 icon-check flex-shrink-0" /> Master n8n: Từ cơ bản đến thiết kế phức hợp.</li>
-                  <li><CheckCircle2 size={18} className="text-emerald-600 icon-check flex-shrink-0" /> Xây hệ thống AI Agents tự suy luận (CSKH, chốt sale).</li>
-                  <li><CheckCircle2 size={18} className="text-emerald-600 icon-check flex-shrink-0" /> Build pipeline: Ý tưởng → Sản xuất → Phân phối → Chốt sale.</li>
-                </ul>
-                <div className="module-output-elite"><strong>ĐẦU RA:</strong> Phễu Automation 10+ luồng tự động (Copy-paste deploy).</div>
+              <div className="c2-step-card c2-glass-panel">
+                <div className="step-watermark text-emerald-100">01</div>
+                <div className="step-content-relative">
+                  <h3 className="step-title text-emerald-800">AUTOMATION & SYSTEM</h3>
+                  <div className="step-badges">
+                    <span className="neo-badge bg-emerald-50 text-emerald-700 border-emerald-200"><Workflow size={14}/> Master n8n Data</span>
+                    <span className="neo-badge bg-emerald-50 text-emerald-700 border-emerald-200"><Cpu size={14}/> AI Agents Tự Suy Luận</span>
+                    <span className="neo-badge bg-emerald-50 text-emerald-700 border-emerald-200"><Zap size={14}/> Build Pipeline Tự Chốt Deal</span>
+                  </div>
+                  <div className="step-output border-l-4 border-emerald-500 bg-white">
+                    <strong>OUTPUT:</strong> Phễu Automation 10+ luồng sẵn sàng Deploy.
+                  </div>
+                </div>
               </div>
+              <div className="c2-step-empty"></div>
             </div>
 
-            <div className="c2-module-card c2-glass-panel">
-              <div className="module-week elite-tag text-blue-800 bg-blue-100">
-                <span>TUẦN 2: ADS B2B</span>
+            {/* WEEK 2 */}
+            <div className="c2-step-row c2-row-reverse">
+              <div className="c2-step-number-container">
+                <div className="c2-step-circle">2</div>
               </div>
-              <div className="module-content">
-                <ul className="module-list">
-                  <li><CheckCircle2 size={18} className="text-blue-600 icon-check flex-shrink-0" /> Facebook Ads cho B2B: Targeting doanh nghiệp, CEO, founders.</li>
-                  <li><CheckCircle2 size={18} className="text-blue-600 icon-check flex-shrink-0" /> TikTok Ads: Case study 100K-200K followers/tháng.</li>
-                  <li><CheckCircle2 size={18} className="text-blue-600 icon-check flex-shrink-0" /> Chiến lược content marketing thu thập Leads B2B.</li>
-                </ul>
-                <div className="module-output-elite"><strong>ĐẦU RA:</strong> 3 luồng phễu Ads chạy live + Content plan dài hạn.</div>
+              <div className="c2-step-card c2-glass-panel">
+                <div className="step-watermark text-blue-100">02</div>
+                <div className="step-content-relative">
+                  <h3 className="step-title text-blue-800">ADS & TRAFFIC B2B</h3>
+                  <div className="step-badges">
+                    <span className="neo-badge bg-blue-50 text-blue-700 border-blue-200"><Target size={14}/> FB Ads Doanh Nghiệp</span>
+                    <span className="neo-badge bg-blue-50 text-blue-700 border-blue-200"><TrendingUp size={14}/> TikTok Ads 200K Follow</span>
+                    <span className="neo-badge bg-blue-50 text-blue-700 border-blue-200"><Filter size={14}/> Content Lead Gen B2B</span>
+                  </div>
+                  <div className="step-output border-l-4 border-blue-500 bg-white">
+                    <strong>OUTPUT:</strong> 3 luồng Ads chạy máy hút khách hàng B2B.
+                  </div>
+                </div>
               </div>
+              <div className="c2-step-empty"></div>
             </div>
 
-            <div className="c2-module-card c2-glass-panel">
-              <div className="module-week elite-tag text-indigo-800 bg-indigo-100">
-                <span>TUẦN 3: AGENCY</span>
+            {/* WEEK 3 */}
+            <div className="c2-step-row">
+              <div className="c2-step-number-container">
+                <div className="c2-step-circle">3</div>
               </div>
-              <div className="module-content">
-                <ul className="module-list">
-                  <li><CheckCircle2 size={18} className="text-indigo-600 icon-check flex-shrink-0" /> Đóng gói dịch vụ AI Doanh nghiệp (Basic-Pro-Enterprise).</li>
-                  <li><CheckCircle2 size={18} className="text-indigo-600 icon-check flex-shrink-0" /> Quy trình onboard khách hàng + Fulfillment Delivery.</li>
-                  <li><CheckCircle2 size={18} className="text-indigo-600 icon-check flex-shrink-0" /> Template hợp đồng chuẩn, báo giá, proposal chuyên môn sâu.</li>
-                </ul>
-                <div className="module-output-elite"><strong>ĐẦU RA:</strong> Bộ hồ sơ Agency doanh nghiệp (Mang đi Deal 50-100tr+ ngay).</div>
+              <div className="c2-step-card c2-glass-panel">
+                <div className="step-watermark text-indigo-100">03</div>
+                <div className="step-content-relative">
+                  <h3 className="step-title text-indigo-800">AGENCY OPERATION</h3>
+                  <div className="step-badges">
+                    <span className="neo-badge bg-indigo-50 text-indigo-700 border-indigo-200"><Layers size={14}/> Đóng Gói Dịch Vụ Khách</span>
+                    <span className="neo-badge bg-indigo-50 text-indigo-700 border-indigo-200"><Briefcase size={14}/> Onboard & Fulfillment</span>
+                    <span className="neo-badge bg-indigo-50 text-indigo-700 border-indigo-200"><FileText size={14}/> Hợp Đồng & Proposal</span>
+                  </div>
+                  <div className="step-output border-l-4 border-indigo-500 bg-white">
+                    <strong>OUTPUT:</strong> Hồ sơ chuẩn Agency mang đi deal dự án $2,000+.
+                  </div>
+                </div>
               </div>
+              <div className="c2-step-empty"></div>
             </div>
 
-            <div className="c2-module-card highlight-elite-timeline c2-glass-panel relative overflow-hidden">
-              <div className="c2-shimmer-bg absolute top-0 -left-full w-full h-full opacity-10"></div>
-              <div className="module-week elite-tag text-yellow-900 bg-yellow-200" style={{ background: 'linear-gradient(135deg, #FDE68A 0%, #D97706 100%)', color: '#fff' }}>
-                <span>TUẦN 4: SCALE & MEDIA</span>
+            {/* WEEK 4 */}
+            <div className="c2-step-row c2-row-reverse">
+              <div className="c2-step-number-container">
+                <div className="c2-step-circle-gold">4</div>
               </div>
-              <div className="module-content">
-                <ul className="module-list">
-                  <li><CheckCircle2 size={18} className="text-amber-600 icon-check flex-shrink-0" /> Tối ưu pipeline Media AI: Thiết kế đồ họa bão hòa tự động.</li>
-                  <li><CheckCircle2 size={18} className="text-amber-600 icon-check flex-shrink-0" /> Generative A/B Test: Trăm mẫu Ads Visual mỗi buổi sáng.</li>
-                  <li><CheckCircle2 size={18} className="text-amber-600 icon-check flex-shrink-0" /> Xuất Video Thương Mại phân giải Studio qua AI Renderer.</li>
-                </ul>
-                <div className="module-output-elite bg-amber-50 border-amber-200 text-amber-900 text-gold-shadow"><strong>ĐẦU RA BÙNG NỔ:</strong> Agency siêu tốc, khả năng phục vụ &gt;10+ Corporation.</div>
+              <div className="c2-step-card c2-glass-panel border-premium hover-glow-gold relative overflow-hidden">
+                <div className="c2-shimmer-bg absolute top-0 -left-full w-full h-full opacity-10"></div>
+                <div className="step-watermark text-amber-100 mix-blend-overlay opacity-30">04</div>
+                <div className="step-content-relative">
+                  <h3 className="step-title text-amber-600 drop-shadow-sm">SCALE & MASS MEDIA</h3>
+                  <div className="step-badges">
+                    <span className="neo-badge bg-amber-50 text-amber-800 border-amber-300 shadow-sm"><Video size={14}/> Trăm Mẫu Visual / Ngày</span>
+                    <span className="neo-badge bg-amber-50 text-amber-800 border-amber-300 shadow-sm"><Star size={14}/> A/B Testing Bằng AI</span>
+                    <span className="neo-badge bg-amber-50 text-amber-800 border-amber-300 shadow-sm"><PlayCircle size={14}/> Video Render Chuẩn Studio</span>
+                  </div>
+                  <div className="step-output-gold bg-gradient-to-r from-amber-50 to-white border-l-4 border-amber-500 text-amber-900 shadow-inner">
+                    <strong>ĐẦU RA BÙNG NỔ:</strong> Khả năng phục vụ &gt;10 Doanh Nghiệp cùng lúc.
+                  </div>
+                </div>
               </div>
+              <div className="c2-step-empty"></div>
             </div>
 
           </div>

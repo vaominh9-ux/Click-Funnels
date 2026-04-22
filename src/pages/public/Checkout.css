@@ -194,14 +194,38 @@
 @media (max-width: 768px) {
   .checkout-wrapper {
     grid-template-columns: 1fr;
-    margin-top: 20px;
+    margin-top: 10px;
   }
   .checkout-left {
     border-right: none;
     border-bottom: 1px dashed #CBD5E1;
+    padding: 20px 16px;
+  }
+  .checkout-right {
+    padding: 20px 16px;
   }
   .checkout-container {
+    padding: 0;
+  }
+  .course-image {
+    display: none; /* Ẩn ảnh khóa học trên mobile để tiết kiệm diện tích */
+  }
+  .checkout-wrapper h2 {
+    font-size: 1.25rem;
+    margin-bottom: 15px;
+  }
+  .total-price {
+    font-size: 1.25rem; /* Thu nhỏ font tổng tiền để không bị xuống dòng chữ 'đ' */
+  }
+  .qr-code-img {
+    max-width: 200px; /* Thu nhỏ bớt mã QR */
+  }
+  .qr-container {
     padding: 10px;
+    margin-bottom: 15px;
+  }
+  .bank-details {
+    padding: 16px;
   }
 }
 

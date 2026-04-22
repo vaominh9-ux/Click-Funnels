@@ -969,7 +969,7 @@
   /* 50 giây cuộn 1 vòng tròn, xoay vòng không điểm dừng */
   animation: scrollMarquee 50s linear infinite;
   gap: 30px;
-  padding: 0 15px;
+  padding: 20px 15px;
 }
 
 .partners-marquee-track:hover {
@@ -1020,7 +1020,7 @@
   }
   .partners-marquee-track {
     gap: 20px;
-    padding: 0 10px;
+    padding: 15px 10px;
   }
   @keyframes scrollMarquee {
     to {
@@ -1051,7 +1051,7 @@
   align-items: center;
   width: max-content;
   gap: 20px;
-  padding: 0 10px;
+  padding: 20px 10px;
 }
 
 .training-marquee-track.scroll-left {

@@ -536,7 +536,7 @@
   width: max-content;
   animation: scrollMarquee 50s linear infinite;
   gap: 30px;
-  padding: 0 15px;
+  padding: 20px 15px;
 }
 .c1-partners-marquee-track:hover {
   animation-play-state: paused;
@@ -549,7 +549,7 @@
   align-items: center;
   flex-shrink: 0;
   transition: all 0.4s ease;
-  filter: grayscale(100%) opacity(40%);
+  filter: grayscale(100%) opacity(70%) contrast(1.2);
   mix-blend-mode: multiply; /* Hòa trộn triệt tiêu hoàn toàn nền trắng JPG */
 }
 .c1-partner-logo-card:hover {
@@ -587,7 +587,7 @@
   align-items: center;
   width: max-content;
   gap: 20px;
-  padding: 0 10px;
+  padding: 20px 10px;
 }
 .c1-training-marquee-track.scroll-left {
   animation: scrollLeftMarquee 80s linear infinite;
