@@ -52,25 +52,25 @@ const TopNav = ({ title = "Dashboard", onToggleSidebar }) => {
   return (
     <>
       <header className="topbar">
-        <div style={{display: 'flex', alignItems: 'center'}}>
+        <div style={{display: 'flex', alignItems: 'center', minWidth: 0, flex: 1}}>
           <button 
             className="hamburger-btn" 
             onClick={onToggleSidebar}
           >
             <Menu size={20} />
           </button>
-          <div className="topbar-title">{title}</div>
+          <div className="topbar-title" style={{ whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>{title}</div>
         </div>
         
-        <div className="topbar-actions" style={{display: 'flex', gap: '12px', alignItems: 'center'}}>
+        <div className="topbar-actions" style={{display: 'flex', gap: '8px', alignItems: 'center'}}>
           {/* Nút Lấy Link Affiliate - CTA Chuyển đổi */}
           <button 
             className="cf-btn-primary"
-            style={{ padding: '6px 14px', fontSize: '13px', borderRadius: '6px', display: 'flex', gap: '6px', alignItems: 'center', marginRight: '8px' }}
+            style={{ padding: '6px 10px', fontSize: '13px', borderRadius: '6px', display: 'flex', gap: '4px', alignItems: 'center', marginRight: '4px' }}
             onClick={() => window.location.href = '/portal/campaigns'}
           >
             <span style={{ fontSize: '14px' }}>🚀</span>
-            Lấy Link Affiliate
+            <span className="hide-on-mobile">Lấy Link Affiliate</span>
           </button>
 
           {/* Nút Tìm Kiếm Toàn Cục */}

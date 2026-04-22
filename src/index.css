@@ -427,6 +427,10 @@ button {
     display: block;
   }
   
+  .hide-on-mobile {
+    display: none !important;
+  }
+  
   .topbar {
     padding: 0 16px;
     justify-content: flex-start;
