@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState, useCallback } from 'react';
-import { Play, Pause, Volume2, VolumeX, Maximize, Minimize } from 'lucide-react';
+import { Play, Pause, Volume2, VolumeX, Maximize, Minimize, Settings, Gauge } from 'lucide-react';
 import './VideoPlayer.css';
 
 // Load YouTube IFrame API once
@@ -40,6 +40,18 @@ const formatTime = (sec) => {
   return `${m}:${s.toString().padStart(2, '0')}`;
 };
 
+const SPEED_OPTIONS = [0.5, 0.75, 1, 1.25, 1.5, 2];
+const SPEED_LABELS = { 0.5: '0.5x', 0.75: '0.75x', 1: 'Bình thường', 1.25: '1.25x', 1.5: '1.5x', 2: '2x' };
+
+const QUALITY_MAP = {
+  'hd1080': '1080p',
+  'hd720': '720p',
+  'large': '480p',
+  'medium': '360p',
+  'small': '240p',
+  'default': 'Auto',
+};
+
 const VideoPlayer = ({ url, title }) => {
   const containerRef = useRef(null);
   const playerDivRef = useRef(null);
@@ -54,6 +66,13 @@ const VideoPlayer = ({ url, title }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
   const [isReady, setIsReady] = useState(false);
+
+  // Speed & Quality state
+  const [playbackRate, setPlaybackRate] = useState(1);
+  const [showSpeedMenu, setShowSpeedMenu] = useState(false);
+  const [currentQuality, setCurrentQuality] = useState('default');
+  const [availableQualities, setAvailableQualities] = useState([]);
+  const [showQualityMenu, setShowQualityMenu] = useState(false);
 
   const hideTimer = useRef(null);
 
@@ -86,14 +105,23 @@ const VideoPlayer = ({ url, title }) => {
           onReady: (e) => {
             setDuration(e.target.getDuration());
             setIsReady(true);
+            // Get available qualities
+            const quals = e.target.getAvailableQualityLevels();
+            setAvailableQualities(quals || []);
           },
           onStateChange: (e) => {
             setIsPlaying(e.data === window.YT.PlayerState.PLAYING);
             if (e.data === window.YT.PlayerState.PLAYING) {
               startProgressTracking();
+              // Re-check available qualities once playing
+              const quals = playerRef.current?.getAvailableQualityLevels?.() || [];
+              if (quals.length > 0) setAvailableQualities(quals);
             } else {
               stopProgressTracking();
             }
+          },
+          onPlaybackQualityChange: (e) => {
+            setCurrentQuality(e.data);
           },
         },
       });
@@ -172,14 +200,36 @@ const VideoPlayer = ({ url, title }) => {
     }
   }, []);
 
+  // Speed control
+  const changeSpeed = useCallback((rate) => {
+    if (!playerRef.current) return;
+    playerRef.current.setPlaybackRate(rate);
+    setPlaybackRate(rate);
+    setShowSpeedMenu(false);
+  }, []);
+
+  // Quality control
+  const changeQuality = useCallback((quality) => {
+    if (!playerRef.current) return;
+    playerRef.current.setPlaybackQuality(quality);
+    setCurrentQuality(quality);
+    setShowQualityMenu(false);
+  }, []);
+
+  // Close menus when clicking elsewhere
+  const closeMenus = useCallback(() => {
+    setShowSpeedMenu(false);
+    setShowQualityMenu(false);
+  }, []);
+
   // Auto-hide controls
   const handleMouseMove = useCallback(() => {
     setShowControls(true);
     if (hideTimer.current) clearTimeout(hideTimer.current);
     if (isPlaying) {
-      hideTimer.current = setTimeout(() => setShowControls(false), 3000);
+      hideTimer.current = setTimeout(() => { setShowControls(false); closeMenus(); }, 3000);
     }
-  }, [isPlaying]);
+  }, [isPlaying, closeMenus]);
 
   useEffect(() => {
     const onFsChange = () => setIsFullscreen(!!document.fullscreenElement);
@@ -187,12 +237,15 @@ const VideoPlayer = ({ url, title }) => {
     return () => document.removeEventListener('fullscreenchange', onFsChange);
   }, []);
 
+  // Filter valid qualities (remove 'auto' and unknown)
+  const displayQualities = availableQualities.filter(q => QUALITY_MAP[q]);
+
   return (
     <div 
       className="vp-container" 
       ref={containerRef}
       onMouseMove={handleMouseMove}
-      onMouseLeave={() => isPlaying && setShowControls(false)}
+      onMouseLeave={() => { if (isPlaying) { setShowControls(false); closeMenus(); } }}
     >
       {/* YouTube Player (hidden controls) */}
       <div className="vp-iframe-wrap">
@@ -200,14 +253,12 @@ const VideoPlayer = ({ url, title }) => {
       </div>
 
       {/* Click overlay — blocks ALL YouTube links */}
-      <div className="vp-click-overlay" onClick={togglePlay}>
-        {/* Big center play button when paused */}
+      <div className="vp-click-overlay" onClick={() => { togglePlay(); closeMenus(); }}>
         {!isPlaying && isReady && (
           <div className="vp-big-play">
             <Play fill="white" size={48} />
           </div>
         )}
-        {/* Loading indicator */}
         {!isReady && (
           <div className="vp-loading">Đang tải video...</div>
         )}
@@ -232,6 +283,62 @@ const VideoPlayer = ({ url, title }) => {
         <button className="vp-ctrl-btn" onClick={toggleMute} title={isMuted ? 'Bật âm' : 'Tắt âm'}>
           {isMuted ? <VolumeX size={18} /> : <Volume2 size={18} />}
         </button>
+
+        {/* Speed Control */}
+        <div className="vp-menu-wrapper">
+          <button 
+            className={`vp-ctrl-btn ${playbackRate !== 1 ? 'vp-active-indicator' : ''}`}
+            onClick={(e) => { e.stopPropagation(); setShowSpeedMenu(!showSpeedMenu); setShowQualityMenu(false); }} 
+            title="Tốc độ phát"
+          >
+            <Gauge size={18} />
+          </button>
+          {showSpeedMenu && (
+            <div className="vp-popup-menu">
+              <div className="vp-popup-title">Tốc độ phát</div>
+              {SPEED_OPTIONS.map(rate => (
+                <div 
+                  key={rate} 
+                  className={`vp-popup-item ${playbackRate === rate ? 'active' : ''}`}
+                  onClick={(e) => { e.stopPropagation(); changeSpeed(rate); }}
+                >
+                  {SPEED_LABELS[rate]}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Quality Control */}
+        <div className="vp-menu-wrapper">
+          <button 
+            className="vp-ctrl-btn"
+            onClick={(e) => { e.stopPropagation(); setShowQualityMenu(!showQualityMenu); setShowSpeedMenu(false); }} 
+            title="Chất lượng video"
+          >
+            <Settings size={18} />
+          </button>
+          {showQualityMenu && (
+            <div className="vp-popup-menu">
+              <div className="vp-popup-title">Chất lượng</div>
+              <div 
+                className={`vp-popup-item ${currentQuality === 'default' ? 'active' : ''}`}
+                onClick={(e) => { e.stopPropagation(); changeQuality('default'); }}
+              >
+                Tự động
+              </div>
+              {displayQualities.map(q => (
+                <div 
+                  key={q} 
+                  className={`vp-popup-item ${currentQuality === q ? 'active' : ''}`}
+                  onClick={(e) => { e.stopPropagation(); changeQuality(q); }}
+                >
+                  {QUALITY_MAP[q]}
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
 
         <button className="vp-ctrl-btn" onClick={toggleFullscreen} title="Toàn màn hình">
           {isFullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
