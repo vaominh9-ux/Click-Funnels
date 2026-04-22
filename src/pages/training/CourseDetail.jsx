@@ -177,7 +177,24 @@ const CourseDetail = () => {
 
   if (!videos || videos.length === 0) return (
     <div className="app-container">
+      {/* SIDEBAR */}
+      <div className="cf-sidebar-wrapper" style={{ display: 'contents' }}>
+        <CourseSidebar
+          course={course}
+          topics={[]}
+          currentTopic="top"
+          onTopicSelect={() => {}}
+          isOpen={isSidebarOpen}
+          onClose={() => setIsSidebarOpen(false)}
+        />
+      </div>
+      
       <div className="main-content">
+        <div
+          className={`mobile-overlay ${isSidebarOpen ? 'open' : ''}`}
+          onClick={() => setIsSidebarOpen(false)}
+        ></div>
+        
         <TopNav title={course.name} onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
         <div className="page-wrapper" style={{ padding: 40, textAlign: 'center' }}>
           <h2>Khóa học đang được cập nhật video</h2>
