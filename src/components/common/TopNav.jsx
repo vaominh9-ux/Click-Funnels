@@ -63,6 +63,16 @@ const TopNav = ({ title = "Dashboard", onToggleSidebar }) => {
         </div>
         
         <div className="topbar-actions" style={{display: 'flex', gap: '12px', alignItems: 'center'}}>
+          {/* Nút Lấy Link Affiliate - CTA Chuyển đổi */}
+          <button 
+            className="cf-btn-primary"
+            style={{ padding: '6px 14px', fontSize: '13px', borderRadius: '6px', display: 'flex', gap: '6px', alignItems: 'center', marginRight: '8px' }}
+            onClick={() => window.location.href = '/portal/campaigns'}
+          >
+            <span style={{ fontSize: '14px' }}>🚀</span>
+            Lấy Link Affiliate
+          </button>
+
           {/* Nút Tìm Kiếm Toàn Cục */}
           <button 
             onClick={() => setIsSearchOpen(true)} 

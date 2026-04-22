@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { Play } from 'lucide-react';
+import { Play, CheckCircle } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import TopNav from '../../components/common/TopNav';
 import CourseSidebar from '../../components/training/CourseSidebar';
@@ -18,13 +18,14 @@ const getEmbedUrl = (url) => {
   return videoId ? `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&color=white` : url;
 };
 
-const getMockThumbnail = (id) => {
-  const images = [
-    'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=400&q=80',
-    'https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=400&q=80',
-    'https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=400&q=80'
-  ];
-  return images[id % images.length];
+const getYouTubeThumbnail = (url) => {
+  if (!url) return 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=400&q=80';
+  let videoId = '';
+  if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
+  else if (url.includes('youtube.com/watch?v=')) videoId = url.split('v=')[1].split('&')[0];
+  else if (url.includes('/embed/')) videoId = url.split('/embed/')[1].split('?')[0];
+  
+  return videoId ? `https://img.youtube.com/vi/${videoId}/hqdefault.jpg` : 'https://images.unsplash.com/photo-1611162617474-5b21e879e113?auto=format&fit=crop&w=400&q=80';
 };
 
 const CourseDetail = () => {
@@ -36,6 +37,8 @@ const CourseDetail = () => {
   const [currentVideo, setCurrentVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [completedVideos, setCompletedVideos] = useState(new Set());
+  const [isMarking, setIsMarking] = useState(false);
 
   // Layout states
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
@@ -73,6 +76,18 @@ const CourseDetail = () => {
       if (videoData && videoData.length > 0) {
         setCurrentVideo(videoData[0]);
       }
+
+      // Fetch user progress
+      const { data: { session } } = await supabase.auth.getSession();
+      if (session) {
+        const { data: progress } = await supabase
+          .from('user_video_progress')
+          .select('video_id')
+          .eq('user_id', session.user.id);
+        if (progress) {
+          setCompletedVideos(new Set(progress.map(p => p.video_id)));
+        }
+      }
     } catch (err) {
       console.error('Error fetching course detail:', err);
       setError('Không thể tải khóa học. Có thể bảng chưa được cấu hình.');
@@ -102,6 +117,45 @@ const CourseDetail = () => {
     const el = document.getElementById(`topic-${topicName}`);
     if (el) {
       document.querySelector('.page-wrapper').scrollTo({ top: el.offsetTop - 20, behavior: 'smooth' });
+    }
+  };
+
+  const toggleComplete = async () => {
+    if (!currentVideo) return;
+    setIsMarking(true);
+    try {
+      const { data: { session } } = await supabase.auth.getSession();
+      if (!session) return;
+
+      const isCompleted = completedVideos.has(currentVideo.id);
+
+      if (isCompleted) {
+        await supabase
+          .from('user_video_progress')
+          .delete()
+          .eq('user_id', session.user.id)
+          .eq('video_id', currentVideo.id);
+          
+        const newSet = new Set(completedVideos);
+        newSet.delete(currentVideo.id);
+        setCompletedVideos(newSet);
+      } else {
+        await supabase
+          .from('user_video_progress')
+          .insert({
+            user_id: session.user.id,
+            video_id: currentVideo.id,
+            completed: true
+          });
+          
+        const newSet = new Set(completedVideos);
+        newSet.add(currentVideo.id);
+        setCompletedVideos(newSet);
+      }
+    } catch (err) {
+      console.error('Error toggling progress:', err);
+    } finally {
+      setIsMarking(false);
     }
   };
 
@@ -165,7 +219,18 @@ const CourseDetail = () => {
 
             <div className="cd-hero-info">
               <h2>Đang xem: {currentVideo.title}</h2>
-              <p>{currentVideo.topic} • {currentVideo.duration}</p>
+              <div className="cd-hero-meta-row">
+                <p style={{ margin: 0 }}>{currentVideo.topic} • {currentVideo.duration}</p>
+                
+                <button 
+                  className={`cd-btn-complete ${completedVideos.has(currentVideo.id) ? 'completed' : ''}`}
+                  onClick={toggleComplete}
+                  disabled={isMarking}
+                >
+                  <CheckCircle size={18} />
+                  {completedVideos.has(currentVideo.id) ? 'Đã Hoàn Thành' : 'Đánh Dấu Hoàn Thành'}
+                </button>
+              </div>
             </div>
           </div>
 
@@ -185,13 +250,18 @@ const CourseDetail = () => {
                         onClick={() => handleLessonSelect(video)}
                       >
                         <div className="cd-lesson-thumb">
-                          <img src={getMockThumbnail(video.id)} alt={video.title} loading="lazy" />
+                          <img src={getYouTubeThumbnail(video.youtube_url)} alt={video.title} loading="lazy" />
                           <div className="cd-play-icon">
                             <Play fill="currentColor" size={20} style={{ marginLeft: 2 }} />
                           </div>
                           {video.duration && (
                             <div className="cd-lesson-duration">
                               {video.duration}
+                            </div>
+                          )}
+                          {completedVideos.has(video.id) && (
+                            <div className="cd-completed-badge" title="Đã hoàn thành">
+                              <CheckCircle size={14} />
                             </div>
                           )}
                         </div>

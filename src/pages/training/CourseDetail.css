@@ -5,8 +5,7 @@
 
 /* HERO SECTION - Video Player */
 .cd-hero-full {
-  background: var(--cf-sidebar-bg);
-  /* Dark background for video area to provide contrast */
+  background: var(--cf-bg-surface);
   padding: 32px 40px;
   border-bottom: 1px solid var(--cf-border);
 }
@@ -40,19 +39,19 @@
 .cd-hero-info {
   max-width: 1200px;
   margin: 24px auto 0;
-  color: #ffffff;
+  color: var(--cf-text-main);
 }
 
 .cd-hero-info h2 {
   font-size: 24px;
   font-weight: 800;
   margin-bottom: 8px;
-  color: #ffffff;
+  color: var(--cf-text-main);
 }
 
 .cd-hero-info p {
   font-size: 15px;
-  color: #9CA3AF;
+  color: var(--cf-text-muted);
   font-weight: 600;
 }
 
@@ -198,7 +197,64 @@
     font-size: 20px;
   }
 
-  .cd-lesson-card {
-    flex: 0 0 240px;
-  }
+}
+
+/* ============================================
+   PROGRESS TRACKING STYLES
+   ============================================ */
+.cd-completed-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #10b981;
+  color: white;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+  z-index: 2;
+  border: 2px solid var(--cf-bg-surface);
+}
+
+.cd-hero-meta-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 12px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.cd-btn-complete {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--cf-bg-surface);
+  border: 1px solid var(--cf-border);
+  color: var(--cf-text-main);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-weight: 600;
+  font-size: 14px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cd-btn-complete:hover {
+  background: var(--cf-bg-layer);
+  border-color: #9ca3af;
+}
+
+.cd-btn-complete.completed {
+  background: rgba(16, 185, 129, 0.1);
+  border-color: #10b981;
+  color: #10b981;
+}
+
+.cd-btn-complete:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
 }
