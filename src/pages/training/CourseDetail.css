@@ -5,7 +5,8 @@
 
 /* HERO SECTION - Video Player */
 .cd-hero-full {
-  background: var(--cf-sidebar-bg); /* Dark background for video area to provide contrast */
+  background: var(--cf-sidebar-bg);
+  /* Dark background for video area to provide contrast */
   padding: 32px 40px;
   border-bottom: 1px solid var(--cf-border);
 }
@@ -188,15 +189,15 @@
   .cd-hero-full {
     padding: 20px 16px;
   }
-  
+
   .cd-topics-full {
     padding: 24px 16px;
   }
-  
+
   .cd-topic-title {
     font-size: 20px;
   }
-  
+
   .cd-lesson-card {
     flex: 0 0 240px;
   }

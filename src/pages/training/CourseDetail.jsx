@@ -4,16 +4,18 @@ import { Play } from 'lucide-react';
 import { supabase } from '../../lib/supabase';
 import TopNav from '../../components/common/TopNav';
 import CourseSidebar from '../../components/training/CourseSidebar';
+import VideoPlayer from '../../components/training/VideoPlayer';
 import { ALL_COURSES } from './TrainingCourses';
 import './CourseDetail.css';
 
 const getEmbedUrl = (url) => {
   if (!url) return '';
-  if (url.includes('/embed/')) return url;
   let videoId = '';
   if (url.includes('youtu.be/')) videoId = url.split('youtu.be/')[1].split('?')[0];
   else if (url.includes('youtube.com/watch?v=')) videoId = url.split('v=')[1].split('&')[0];
-  return videoId ? `https://www.youtube.com/embed/${videoId}?rel=0` : url;
+  else if (url.includes('/embed/')) videoId = url.split('/embed/')[1].split('?')[0];
+
+  return videoId ? `https://www.youtube.com/embed/${videoId}?rel=0&modestbranding=1&showinfo=0&iv_load_policy=3&color=white` : url;
 };
 
 const getMockThumbnail = (id) => {
@@ -28,13 +30,13 @@ const getMockThumbnail = (id) => {
 const CourseDetail = () => {
   const { courseId } = useParams();
   const navigate = useNavigate();
-  
+
   const course = ALL_COURSES.find(c => c.id === courseId);
   const [videos, setVideos] = useState([]);
   const [currentVideo, setCurrentVideo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  
+
   // Layout states
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [currentViewTopic, setCurrentViewTopic] = useState('top');
@@ -66,7 +68,7 @@ const CourseDetail = () => {
         .order('created_at', { ascending: true });
 
       if (videoError) throw videoError;
-      
+
       setVideos(videoData || []);
       if (videoData && videoData.length > 0) {
         setCurrentVideo(videoData[0]);
@@ -96,7 +98,7 @@ const CourseDetail = () => {
       }
       return;
     }
-    
+
     const el = document.getElementById(`topic-${topicName}`);
     if (el) {
       document.querySelector('.page-wrapper').scrollTo({ top: el.offsetTop - 20, behavior: 'smooth' });
@@ -106,7 +108,7 @@ const CourseDetail = () => {
   if (loading) return (
     <div className="app-container">
       <div className="main-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{color: '#6b7280'}}>Đang tải nội dung khóa học...</p>
+        <p style={{ color: '#6b7280' }}>Đang tải nội dung khóa học...</p>
       </div>
     </div>
   );
@@ -114,7 +116,7 @@ const CourseDetail = () => {
   if (error || !course) return (
     <div className="app-container">
       <div className="main-content" style={{ display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <p style={{color: '#ef4444'}}>Lỗi: {error || 'Không tìm thấy khóa học'}</p>
+        <p style={{ color: '#ef4444' }}>Lỗi: {error || 'Không tìm thấy khóa học'}</p>
       </div>
     </div>
   );
@@ -135,7 +137,7 @@ const CourseDetail = () => {
     <div className="app-container">
       {/* SIDEBAR */}
       <div className="cf-sidebar-wrapper" style={{ display: 'contents' }}>
-        <CourseSidebar 
+        <CourseSidebar
           course={course}
           topics={topics}
           currentTopic={currentViewTopic}
@@ -147,27 +149,20 @@ const CourseDetail = () => {
 
       {/* MAIN CONTENT */}
       <div className="main-content">
-        <div 
-          className={`mobile-overlay ${isSidebarOpen ? 'open' : ''}`} 
+        <div
+          className={`mobile-overlay ${isSidebarOpen ? 'open' : ''}`}
           onClick={() => setIsSidebarOpen(false)}
         ></div>
-        
+
         <TopNav title={course.name} onToggleSidebar={() => setIsSidebarOpen(!isSidebarOpen)} />
-        
+
         <div className="page-wrapper" style={{ padding: 0 }}>
           {/* Hero Section */}
           <div id="topic-top" className="cd-hero-full">
             <div className="cd-hero-wrapper-full">
-              <div className="cd-video-intrinsic">
-                <iframe 
-                  src={getEmbedUrl(currentVideo.youtube_url)} 
-                  title={currentVideo.title}
-                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
-                  allowFullScreen
-                ></iframe>
-              </div>
+              <VideoPlayer url={currentVideo.youtube_url} title={currentVideo.title} />
             </div>
-            
+
             <div className="cd-hero-info">
               <h2>Đang xem: {currentVideo.title}</h2>
               <p>{currentVideo.topic} • {currentVideo.duration}</p>
@@ -179,20 +174,20 @@ const CourseDetail = () => {
             {topics.map(topic => (
               <div key={topic} id={`topic-${topic}`} className="cd-topic-section">
                 <h3 className="cd-topic-title">{topic}</h3>
-                
+
                 <div className="cd-carousel">
                   {videosByTopic[topic].map((video) => {
                     const isPlaying = currentVideo.id === video.id;
                     return (
-                      <div 
-                        key={video.id} 
+                      <div
+                        key={video.id}
                         className={`cd-lesson-card ${isPlaying ? 'playing' : ''}`}
                         onClick={() => handleLessonSelect(video)}
                       >
                         <div className="cd-lesson-thumb">
                           <img src={getMockThumbnail(video.id)} alt={video.title} loading="lazy" />
                           <div className="cd-play-icon">
-                            <Play fill="currentColor" size={20} style={{marginLeft: 2}} />
+                            <Play fill="currentColor" size={20} style={{ marginLeft: 2 }} />
                           </div>
                           {video.duration && (
                             <div className="cd-lesson-duration">
@@ -209,8 +204,8 @@ const CourseDetail = () => {
                 </div>
               </div>
             ))}
-            
-            <div style={{height: 100}}></div>
+
+            <div style={{ height: 100 }}></div>
           </div>
         </div>
       </div>
