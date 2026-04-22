@@ -113,29 +113,26 @@ const FreeLeadModal = ({ isOpen, onClose, courseId, courseName }) => {
         source: refCode ? 'referral' : 'direct'
       });
 
-      // 4. Gọi API gửi Email Workshop + Lịch .ICS
-      if (formData.email) {
-        try {
-          const response = await fetch(`${API_BASE}${WORKSHOP_API}`, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({
-              name: formData.name,
-              email: formData.email,
-              phone: formData.phone,
-            }),
-          });
-          const result = await response.json();
-          if (result.zaloGroupLink) {
-            setZaloLink(result.zaloGroupLink);
-          }
-        } catch (emailErr) {
-          console.error('Gửi email workshop lỗi:', emailErr);
-        }
-      }
-      
-      // 5. Hiển thị màn hình thành công
+      // 4. Hiển thị màn hình thành công NGAY LẬP TỨC (không chờ email)
       setShowSuccess(true);
+
+      // 5. Gửi Email Workshop + Lịch .ICS chạy ngầm (fire-and-forget, không block UX)
+      if (formData.email) {
+        fetch(`${API_BASE}${WORKSHOP_API}`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            phone: formData.phone,
+          }),
+        })
+          .then(res => res.json())
+          .then(result => {
+            if (result.zaloGroupLink) setZaloLink(result.zaloGroupLink);
+          })
+          .catch(emailErr => console.error('Gửi email workshop lỗi:', emailErr));
+      }
 
     } catch (err) {
       console.error('Lỗi đăng ký Free Lead:', err);
