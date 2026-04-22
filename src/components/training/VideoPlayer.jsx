@@ -66,6 +66,7 @@ const VideoPlayer = ({ url, title }) => {
   const [isFullscreen, setIsFullscreen] = useState(false);
   const [showControls, setShowControls] = useState(true);
   const [isReady, setIsReady] = useState(false);
+  const [hasStarted, setHasStarted] = useState(false);
 
   // Speed & Quality state
   const [playbackRate, setPlaybackRate] = useState(1);
@@ -84,6 +85,8 @@ const VideoPlayer = ({ url, title }) => {
     if (!videoId) return;
     
     setIsReady(false);
+    setHasStarted(false);
+    setIsPlaying(false);
 
     const createPlayer = () => {
       if (playerRef.current) {
@@ -173,15 +176,16 @@ const VideoPlayer = ({ url, title }) => {
     }
   };
 
-  // Controls
   const togglePlay = useCallback(() => {
     if (!playerRef.current) return;
+    if (!hasStarted) setHasStarted(true);
+
     if (isPlaying) {
       playerRef.current.pauseVideo();
     } else {
       playerRef.current.playVideo();
     }
-  }, [isPlaying]);
+  }, [isPlaying, hasStarted]);
 
   const toggleMute = useCallback(() => {
     if (!playerRef.current) return;
@@ -269,13 +273,25 @@ const VideoPlayer = ({ url, title }) => {
 
       {/* Click overlay — blocks ALL YouTube links */}
       <div className="vp-click-overlay" onClick={() => { togglePlay(); closeMenus(); }}>
+        
+        {/* CƠ CHẾ FACADE: Che màn hình bằng ảnh bìa siêu mượt cho đến khi bấm Play */}
+        {!hasStarted && isReady && (
+          <div className="vp-facade" style={{
+            position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+            backgroundImage: `url(https://img.youtube.com/vi/${extractVideoId(url)}/hqdefault.jpg)`,
+            backgroundSize: 'cover', backgroundPosition: 'center', zIndex: 1
+          }}>
+            <div style={{position: 'absolute', inset: 0, background: 'rgba(0,0,0,0.3)'}}></div>
+          </div>
+        )}
+
         {!isPlaying && isReady && (
-          <div className="vp-big-play">
+          <div className="vp-big-play" style={{ zIndex: 2 }}>
             <Play fill="white" size={48} />
           </div>
         )}
         {!isReady && (
-          <div className="vp-loading">Đang tải video...</div>
+          <div className="vp-loading" style={{ zIndex: 2 }}>Đang tải video...</div>
         )}
       </div>
 
