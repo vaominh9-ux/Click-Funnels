@@ -43,6 +43,7 @@ import Course2 from './pages/funnels/Course2';
 import Course3 from './pages/funnels/Course3';
 import Course4 from './pages/funnels/Course4';
 import Free3Day from './pages/funnels/Free3Day';
+import Free3DayV2 from './pages/funnels/Free3DayV2';
 
 // Training Pages
 import TrainingCourses from './pages/training/TrainingCourses';
@@ -72,6 +73,7 @@ const App = () => {
         <Routes>
           {/* Public Routes */}
           <Route path="/khoa-hoc/3-ngay-mien-phi" element={<Free3Day />} />
+          <Route path="/khoa-hoc/3-ngay-v2" element={<Free3DayV2 />} />
           <Route path="/khoa-hoc/khoa-hoc-1" element={<Course1 />} />
           <Route path="/khoa-hoc/khoa-hoc-2" element={<Course2 />} />
           <Route path="/khoa-hoc/khoa-hoc-3" element={<Course3 />} />

@@ -1,0 +1,659 @@
+/* ============================================================
+   FREE 3-DAY CHALLENGE — TEMPLATE 2 
+   Phong cách: 5 Day Lead Challenge (Russell Brunson / ClickFunnels)
+   ──────────────────────────────────────────────────────────
+   Prefix: .f3v2- | Scoped hoàn toàn
+   ============================================================ */
+
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,600;0,700;0,800;0,900;1,600;1,700;1,800;1,900&family=Inter:wght@400;500;600;700&family=Caveat:wght@500;600;700&display=swap');
+
+/* ── ROOT ─────────────────────────────────────── */
+.f3v2-page {
+  --navy: #12284C;
+  --navy-dark: #0C1E3A;
+  --navy-mid: #1A3560;
+  --green: rgb(43, 213, 41);
+  --green-dark: rgb(34, 170, 32);   /* Darker for hover */
+  --green-light: rgb(70, 240, 68);  /* Lighter variation */
+  --bg-main: #FFFFFF;
+  --bg-white: #FFFFFF;
+  --bg-gray: #F4F4F4;
+  --text-dark: #12284C;
+  --text-body: #3A3A3A;
+  --text-light: #6B7B8D;
+  --red-bar: #C02B0A;
+  --yellow-hl: #FFD700;
+  --teal: #1A8A8A;
+
+  font-family: 'Inter', -apple-system, sans-serif;
+  color: var(--text-body);
+  background: var(--bg-main);
+  margin: 0;
+  padding: 0;
+  line-height: 1.65;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.f3v2-page *, .f3v2-page *::before, .f3v2-page *::after { box-sizing: border-box; }
+.f3v2-page h1,.f3v2-page h2,.f3v2-page h3,.f3v2-page h4 { font-family: 'Montserrat', sans-serif; margin: 0; line-height: 1.25; color: var(--navy); }
+.f3v2-page p { margin: 0 0 16px; }
+.f3v2-page img { max-width: 100%; height: auto; display: block; }
+.f3v2-page a { color: var(--navy); }
+.f3v2-hand { font-family: 'Caveat', cursive; }
+
+/* ── CONTAINER ────────────────────────────────── */
+.f3v2-container { max-width: 960px; margin: 0 auto; padding: 0 24px; }
+.f3v2-container-wide { max-width: 1100px; margin: 0 auto; padding: 0 24px; }
+
+/* ── DOT PATTERN (Background decoration) ─────── */
+.f3v2-dots {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  background-image: radial-gradient(circle, rgba(18,40,76,0.08) 2px, transparent 2px);
+  background-size: 14px 14px;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── TOP ANNOUNCEMENT BAR ────────────────────── */
+.f3v2-announce-bar {
+  background: var(--navy);
+  color: white;
+  text-align: center;
+  padding: 10px 16px;
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+}
+.f3v2-announce-bar a { color: var(--green-light); text-decoration: underline; }
+
+/* ── ATTENTION BAR (Red) ─────────────────────── */
+.f3v2-attention-bar {
+  background: linear-gradient(90deg, #C02B0A 0%, #E0452A 50%, #C02B0A 100%);
+  color: white;
+  text-align: center;
+  padding: 12px 20px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  font-style: italic;
+  max-width: 1100px;
+  margin: 0 auto;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+/* ── LOGO HEADER ─────────────────────────────── */
+.f3v2-logo-header {
+  background: var(--bg-main);
+  padding: 24px 0 10px;
+}
+.f3v2-logo-header-inner {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 12px;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 24px;
+}
+.f3v2-page img.f3v2-main-logo {
+  height: 65px;
+  width: auto;
+  display: block;
+}
+
+@media (max-width: 768px) {
+  .f3v2-page img.f3v2-main-logo { height: 45px; }
+}
+
+/* ══════════════════════════════════════════════
+   HERO WRAPPER (FullContainer with Background)
+   ══════════════════════════════════════════════ */
+.f3v2-hero-wrapper {
+  background: radial-gradient(ellipse at center top, #F7FAFC 0%, #D2DEEC 100%);
+  background-size: cover;
+  background-position: center;
+  padding-bottom: 100px;
+}
+
+/* ══════════════════════════════════════════════
+   HERO SECTION — 2 cột: ảnh trái, text phải
+   ══════════════════════════════════════════════ */
+.f3v2-hero {
+  padding: 15px 0 0;
+  position: relative;
+}
+
+.f3v2-hero-grid {
+  display: grid;
+  grid-template-columns: 0.9fr 1.25fr;
+  gap: 30px;
+  align-items: center;
+  position: relative;
+  z-index: 1;
+}
+
+.f3v2-hero-visual {
+  position: relative;
+}
+
+.f3v2-hero-img-frame {
+  overflow: hidden;
+  display: flex;
+  justify-content: flex-start; /* Align flush left with logo */
+  width: 100%;
+}
+
+.f3v2-hero-img-frame img {
+  width: 100%;
+  max-width: 520px;
+  object-fit: contain;
+}
+
+.f3v2-hero-content {
+  position: relative;
+  z-index: 2;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.03); 
+  padding: 30px 20px 40px; 
+  width: 100%; /* Ensure it spans to the right boundary */
+  box-sizing: border-box;
+}
+
+.f3v2-mobile-br {
+  display: none;
+}
+
+.f3v2-hero-headline-top {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 50px;
+  font-weight: 800;
+  line-height: 1.1;
+  color: rgb(27, 44, 78);
+  margin-bottom: 5px;
+}
+
+.f3v2-hero-headline-top .f3v2-green-text {
+  color: rgb(130, 202, 128); 
+}
+
+.f3v2-hero-headline-sub {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 34px;
+  font-weight: 300; 
+  line-height: 1.35;
+  color: rgb(27, 44, 78);
+  margin-bottom: 24px;
+  max-width: 90%;
+}
+
+.f3v2-hero-headline-bold {
+  font-weight: 800;
+}
+
+.f3v2-underline {
+  text-decoration: underline;
+  text-decoration-color: rgb(27, 44, 78);
+  text-decoration-thickness: 3px;
+  text-underline-offset: 4px;
+}
+
+.f3v2-hero-join-box {
+  display: inline-block;
+  background: rgba(130, 202, 128, 0.15); 
+  color: rgb(27, 44, 78);
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.25rem;
+  font-weight: 500;
+  padding: 10px 30px;
+  border-radius: 4px;
+  margin-bottom: 15px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.03); 
+}
+
+.f3v2-hero-join-box strong { font-weight: 800; }
+
+.f3v2-hero-bonus {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: rgb(27, 44, 78);
+  margin-bottom: 25px;
+  line-height: 1.6;
+}
+.f3v2-hero-bonus strong { font-weight: 900; }
+
+/* ── GREEN CTA BUTTON (giống trang gốc) ─────── */
+.f3v2-cta-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--green);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 22px 48px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+  width: 100%;
+  max-width: 600px;
+  box-shadow: 0 4px 15px rgba(102,169,107,0.35);
+}
+
+.f3v2-cta-btn:hover {
+  background: var(--green-dark);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(102,169,107,0.4);
+}
+
+.f3v2-cta-main-text {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 0.3px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.f3v2-cta-sub-text {
+  font-size: 0.78rem;
+  font-weight: 500;
+  opacity: 0.85;
+  margin-top: 4px;
+}
+
+/* ══════════════════════════════════════════════
+   VALUE BANNER (From 5DLC)
+   ══════════════════════════════════════════════ */
+.f3v2-value-banner {
+  background: var(--bg-main);
+  padding: 20px 25px 40px; 
+  position: relative;
+  text-align: center;
+  margin-top: -80px; 
+  z-index: 10;
+  width: 95%;
+  max-width: 1100px;
+  margin-left: auto;
+  margin-right: auto;
+  box-shadow: 0px 5px 30px rgba(0,0,0,0.08); /* Optional to make it pop */
+  border-radius: 6px;
+}
+
+.f3v2-value-icon {
+  margin: 15px auto 20px;
+  color: rgb(27, 44, 78);
+  display: flex;
+  justify-content: center;
+}
+
+.f3v2-value-title-top {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  color: rgb(27, 44, 78);
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 15px;
+}
+
+.f3v2-value-title-highlight {
+  font-family: 'Anton', 'Montserrat', -apple-system, sans-serif;
+  font-size: 72px; /* Scale down so it fits on one line */
+  background-color: rgb(27, 44, 78);
+  display: block; /* Full width within container like 5DLC */
+  line-height: 1.2;
+  padding: 5px 0;
+  margin: 15px 0;
+  font-weight: 700;
+}
+
+.f3v2-highlight-pad {
+  padding: 0 50px;
+  display: inline-block;
+  color: rgb(130, 202, 128) !important; /* Force green color */
+  text-decoration: underline;
+  text-decoration-thickness: 4px;
+  text-underline-offset: 8px;
+}
+
+.f3v2-value-title-bottom {
+  font-family: 'Anton', 'Montserrat', -apple-system, sans-serif;
+  font-size: 68px;
+  color: rgb(27, 44, 78);
+  font-weight: 700;
+  letter-spacing: 1px;
+  line-height: 1;
+  margin-bottom: 20px;
+}
+
+.f3v2-value-desc {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  color: rgb(27, 44, 78);
+  font-weight: 400;
+  line-height: 1.25;
+  margin: 20px auto;
+  max-width: 900px;
+}
+
+.f3v2-divider {
+  width: 50%;
+  height: 2px;
+  background-color: rgba(47, 47, 47, 0.15);
+  margin: 15px auto;
+}
+
+/* ══════════════════════════════════════════════
+   CHALLENGE TITLE
+   ══════════════════════════════════════════════ */
+.f3v2-challenge-main-title {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 60px;
+  font-weight: 700;
+  color: rgb(27, 44, 78);
+  margin: 15px 0;
+}
+
+/* ══════════════════════════════════════════════
+   DAY BREAKDOWN (Left Text, Right Img)
+   ══════════════════════════════════════════════ */
+.f3v2-days-section {
+  padding: 20px 0;
+  background: var(--bg-main);
+  position: relative;
+}
+
+.f3v2-day-row {
+  display: grid;
+  grid-template-columns: 7fr 5fr;
+  gap: 20px;
+  width: 95%;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 20px 25px;
+  background-color: #fff;
+  align-items: center;
+}
+
+.f3v2-day-heading {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 32px;
+  color: rgb(27, 44, 78);
+  font-weight: 400;
+  line-height: 1.3;
+  text-align: left;
+  margin-bottom: 20px;
+}
+
+.f3v2-day-heading strong {
+  font-weight: 700;
+}
+
+.f3v2-day-body {
+  font-family: 'Open Sans', Helvetica, sans-serif;
+  font-size: 18px;
+  color: #333;
+  line-height: 1.6;
+  text-align: left;
+}
+
+.f3v2-placeholder-img {
+  width: 100%;
+  height: 250px;
+  background-color: #f0f0f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #aaa;
+  font-weight: bold;
+  border-radius: 4px;
+}
+
+.f3v2-arrows-divider {
+  width: 60px;
+  height: 60px;
+  margin: 20px auto;
+  background-image: url('//5dayleadchallenge.com/hosted/images/f8/359f229a5341279587d911dbe61808/Arrows.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+/* ══════════════════════════════════════════════
+   GUEST TRAINERS (4 Columns)
+   ══════════════════════════════════════════════ */
+.f3v2-trainers-section {
+  padding: 40px 0;
+}
+
+.f3v2-trainers-title-wrap {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.f3v2-trainers-top {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 30px;
+  color: rgb(27, 44, 78);
+  font-weight: 700;
+  margin: 0;
+  text-transform: capitalize;
+}
+
+.f3v2-trainers-main {
+  font-family: 'Anton', 'Montserrat', sans-serif;
+  font-size: 72px;
+  color: rgb(128, 201, 127);
+  letter-spacing: 2px;
+  margin: 0;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.f3v2-trainers-grid {
+  display: grid;
+  grid-template-columns: 1fr 1.6fr;
+  gap: 50px;
+  margin-top: 40px;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 880px; /* Center layout constraint */
+  align-items: center; /* Vertically center bio with image */
+}
+
+.f3v2-trainer-img-col {
+  padding: 0 10px;
+}
+
+.f3v2-trainer-img-box {
+  width: 100%;
+  aspect-ratio: 1;
+  background-color: #eee;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.f3v2-trainer-text-col {
+  padding: 0 10px;
+}
+
+.f3v2-trainer-role {
+  font-size: 18px;
+  color: rgb(101, 155, 203);
+  font-weight: 700;
+  margin-bottom: 5px;
+}
+
+.f3v2-single-trainer .f3v2-trainer-role {
+  font-size: 22px;
+  font-weight: 800;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
+
+.f3v2-trainer-name {
+  font-size: 28px;
+  color: rgb(27, 44, 78);
+  font-weight: 700;
+  line-height: 1.1;
+  margin-bottom: 15px;
+}
+
+.f3v2-single-trainer .f3v2-trainer-name {
+  font-size: 56px;
+  font-weight: 900;
+  margin-bottom: 25px;
+}
+
+.f3v2-trainer-bio {
+  font-family: 'Open Sans', Helvetica, sans-serif;
+  font-size: 14px;
+  color: rgb(27, 44, 78);
+  font-weight: 500;
+  line-height: 1.5;
+}
+
+.f3v2-single-trainer .f3v2-trainer-bio {
+  font-size: 1.15rem;
+  line-height: 1.7;
+}
+
+.f3v2-bottom-trainers-cta {
+  text-align: center;
+  margin-top: 50px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════════════
+   BOTTOM HERO
+   ══════════════════════════════════════════════ */
+.f3v2-bottom-hero {
+  background-color: #0F3060;
+  background-image: url('//5dayleadchallenge.com/hosted/images/32/228aedc87c4c71b320806451875eb0/BG-Last-Section.png');
+  background-size: cover;
+  background-position: center;
+  padding: 50px 0;
+}
+
+.f3v2-bottom-hero-inner {
+  max-width: 900px;
+  margin: 0 auto;
+  text-align: center;
+  padding: 0 30px;
+}
+
+.f3v2-bottom-headline-top {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 46px;
+  color: rgb(128, 201, 127);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.f3v2-bottom-headline-main {
+  font-family: 'Montserrat', sans-serif;
+  font-size: 34px;
+  color: rgb(255, 255, 255);
+  font-weight: 700;
+  margin-bottom: 20px;
+}
+
+.f3v2-bottom-headline-sub {
+  font-family: 'Lato', Helvetica, sans-serif;
+  font-size: 16px;
+  color: rgb(255, 255, 255);
+  font-weight: 400;
+  line-height: 1.6;
+  margin-bottom: 30px;
+}
+
+.f3v2-bottom-cta-wrap {
+  margin-top: 30px;
+  display: flex;
+  justify-content: center;
+}
+
+/* ── FOOTER ──────────────────────────────────── */
+.f3v2-footer {
+  background: #050D1A;
+  text-align: center;
+  padding: 20px;
+}
+.f3v2-footer p {
+  color: rgba(255,255,255,0.3);
+  font-size: 0.72rem;
+  margin: 0;
+}
+
+/* ══════════════════════════════════════════════
+   SCROLL REVEAL
+   ══════════════════════════════════════════════ */
+.f3v2-reveal {
+  opacity: 0;
+  transform: translateY(25px);
+  transition: all 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.f3v2-reveal.f3v2-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ══════════════════════════════════════════════
+   MID CTA
+   ══════════════════════════════════════════════ */
+.f3v2-mid-cta {
+  padding: 40px 0;
+  display: flex;
+  justify-content: center;
+}
+
+/* ══════════════════════════════════════════════
+   RESPONSIVE
+   ══════════════════════════════════════════════ */
+@media (max-width: 968px) {
+  .f3v2-hero-grid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+  .f3v2-hero-visual {
+    max-width: 420px;
+    margin: 0 auto;
+  }
+  .f3v2-day-row {
+    grid-template-columns: 1fr;
+  }
+  .f3v2-trainers-grid {
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .f3v2-logo-title { font-size: 1.5rem; }
+  .f3v2-hero { padding: 20px 0 30px; }
+  .f3v2-hero-headline { font-size: 1.45rem; }
+  .f3v2-value-title-top { font-size: 24px; }
+  .f3v2-value-title-highlight { font-size: 60px; }
+  .f3v2-value-title-bottom { font-size: 40px; }
+  .f3v2-value-desc { font-size: 20px; }
+  .f3v2-challenge-main-title { font-size: 36px; }
+  .f3v2-day-heading { font-size: 24px; }
+  .f3v2-trainers-grid { grid-template-columns: 1fr; text-align: center; }
+  .f3v2-trainer-img-box { width: 60%; margin: 0 auto; }
+  .f3v2-trainers-top { font-size: 20px; }
+  .f3v2-trainers-main { font-size: 40px; }
+  .f3v2-bottom-headline-top { font-size: 32px; }
+  .f3v2-bottom-headline-main { font-size: 24px; }
+  .f3v2-cta-btn { padding: 18px 24px; font-size: 14px; }
+  .f3v2-cta-main-text { font-size: 0.95rem; }
+}
